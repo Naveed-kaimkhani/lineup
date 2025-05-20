@@ -1,0 +1,169 @@
+import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../../../../service/api/team.dart';
+import '../../../utils/SharedPreferencesUtil.dart';
+import '../../model/player/getPlayerModel.dart';
+import '../../model/positioned.dart';
+import '../../model/teamModel/teamModel.dart';
+import '../getTeamData.dart';
+
+class TeamController extends GetxController {
+  Organizations? selectedOrganization;
+  // Define an RxList to store the teams
+  RxList<Team?> teams = <Team?>[].obs;
+  Rx<TeamData?> teamData = TeamData().obs;
+  RxInt teamDataIndex = 0.obs;
+  RxList<Organizations?> organization = <Organizations?>[].obs;
+  // RxList<Organization?> organization = <Organization?>[].obs;
+  Rx<Organizations> organizationItem = Organizations().obs;
+  List<Position?> teamPositioned = [];
+  Position positioned = Position();
+  RxList<GetPlayer?> getPlayer = <GetPlayer?>[].obs;
+
+  // Called when the controller is initialized
+  @override
+  void onInit() {
+    super.onInit();
+    // Automatically fetch teams when the controller is created
+    // getData();
+  }
+
+  Future<void> getData() async {
+    await Future.delayed(const Duration(seconds: 1)); // Wait 2 seconds
+    fetchTeams();
+    fetchTeamsPositioned();
+    fetchOrganization();
+  }
+
+  Future<void> getSavedTeamData() async {
+    teamData.value = await SharedPreferencesUtil.readObject<TeamData>(
+      'team_data',
+      (json) => TeamData.fromJson(json),
+    );
+
+    if (teamData.value != null) {
+      // print('Team name: ${savedData.name}');
+      // print('Team ID: ${savedData.id}');
+    } else {
+      print('No team data saved');
+    }
+  }
+
+  // Fetch teams from the API and update the teams list
+  Future<void> fetchTeams() async {
+    try {
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getTeam();
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null && response.data!.isNotEmpty) {
+        teams.value = response.data!;
+        teams.refresh();
+      } else {
+        // Handle the case where no teams are returned
+        teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  // void setSelectedOrganization(Organizations? org) {
+  //   selectedOrganization = org;
+  //   update(); // update UI
+  //   organizationId.value=org!.id;
+  //   update();
+  // }
+  Future<void> fetchTeamsPositioned() async {
+    try {
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getTeamPosition();
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null && response.data!.isNotEmpty) {
+        teamPositioned = response.data!;
+      } else {
+        // Handle the case where no teams are returned
+        // teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> fetchGetPlayer(int id) async {
+    try {
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getPlayer(id);
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null && response.data!.isNotEmpty) {
+        getPlayer.value = response.data!;
+      } else {
+        // Handle the case where no teams are returned
+        teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> fetchGetTeamData() async {
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final id = await prefs.getInt('teamInfoId'); // returns null if not found
+      // teamData.clear();
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getTeamData(id!);
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null) {
+        teamData.value = response.data!;
+        ever(teamData, (data) {
+          if (data != null) {
+            SharedPreferencesUtil.saveObject<TeamData>(
+              "teamDataKey",
+              data,
+              (val) => val.toJson(),
+            );
+          }
+        });
+        getData();
+      } else {
+        // Handle the case where no teams are returned
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> fetchOrganization() async {
+    try {
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getOrganization();
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null && response.data!.isNotEmpty) {
+        organization.value = response.data!;
+      } else {
+        // Handle the case where no teams are returned
+        teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  // Save value (for example, save the selected team)
+  void saveSelectedTeam(Team? selectedTeam) {
+    // You can save the selected team or perform any other operation
+    // For demonstration, we'll simply print the selected team.
+    print('Selected Team: $selectedTeam');
+  }
+}
