@@ -1,3 +1,4 @@
+import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/service/api/blolApi.dart';
 import 'package:get/get.dart';
@@ -7,8 +8,6 @@ import '../../utils/snackbarUtils.dart';
 class GlobleController extends GetxController {
   Future<void> teamDelete(int teamId) async {
     final respone = await GlobleApi.deleteTeam(teamId);
-
-    print(respone.message);
 
     if (respone.success!) {
       final TeamController controller = Get.find<TeamController>();
@@ -41,7 +40,13 @@ class GlobleController extends GetxController {
 
     if (respone.success!) {
       final controller = Get.find<TeamController>();
-      await controller.fetchGetTeamData();
+      final controlle = Get.find<NewTeamController>();
+        try {
+          controller.fetchGetTeamData();
+          controlle.getPlayer();
+        }catch(e){
+
+        }
       SnackbarUtils.showSuccess(respone.message.toString());
     }else{
       SnackbarUtils.showErrorr("Something wrong please try again");

@@ -7,12 +7,16 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
+import 'package:gaming_web_app/screens/main_dashboard/slectorgPay.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Base/componant/alertDialog.dart';
 import '../../Base/controller/globleController.dart';
+// import '../../routes/routes_path.dart';
 import '../../routes/routes_path.dart';
+import '../../utils/SharedPreferencesUtil.dart';
+// import '../../routes/routes_path.dart';
 final GlobleController globleController = Get.put(GlobleController());
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({super.key});
@@ -35,7 +39,11 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // controller.fetchGetPlayer( 9);
     return DashboardScaffold(
+      // onTab: (){
+      //   Get.toNamed(RoutesPath.mainDashboardScreen);
+      // },
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
       title: 'Game-Ready',
@@ -79,28 +87,32 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Select Your Teams',
+                        'Select Your Team',
                         style: descriptionHeader.copyWith(
-                          fontSize: isMobile ? 20 : 30,
+                          fontSize: isMobile ?16 : 16,
                           color: AppColors.secondaryColor,
                         ),
                       ),
 
 
-                      PrimaryButton(
-                        width: double.infinity,
-                        onTap: () async {
-                          Get.toNamed(RoutesPath.organizationDashboardScreen);
-
-                        },
-                        radius: 20.r,
-                        textStyle: descriptiveStyle.copyWith(
-                          color: Colors.white,
-                          fontSize: isMobile ? 18 : 30,
-                        ),
-                        title: 'Organization',
-                        backgroundColor: AppColors.secondaryColor,
-                      ),
+                      // PrimaryButton(
+                      //   width: double.infinity,
+                      //   onTap: () async {
+                      //
+                      //     await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.mainDashboardScreen);
+                      //
+                      //
+                      //     Get.toNamed(RoutesPath.organizationDashboardScreen);
+                      //
+                      //   },
+                      //   radius: 20.r,
+                      //   textStyle: descriptiveStyle.copyWith(
+                      //     color: Colors.white,
+                      //     fontSize: isMobile ? 18 : 30,
+                      //   ),
+                      //   title: 'Organization',
+                      //   backgroundColor: AppColors.secondaryColor,
+                      // ),
                       SizedBox(height: 12.h),
                       PrimaryButton(
                         width: double.infinity,
@@ -108,13 +120,13 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           await showDialog(
                             context: context,
                             barrierDismissible: true,
-                            builder: (_) => CreateTeamDialog(),
+                            builder: (_) =>  CreateTeamDialog(),
                           );
                         },
                         radius: 20.r,
                         textStyle: descriptiveStyle.copyWith(
                           color: Colors.white,
-                          fontSize: isMobile ? 18 : 30,
+                          fontSize: isMobile ? 18 :18,
                         ),
                         title: 'Create New Team',
                         backgroundColor: AppColors.secondaryColor,
@@ -126,7 +138,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Select Your Teams',
+                      'Select Your Team',
                       style: descriptionHeader.copyWith(
                         fontSize: isMobile ? 20 : 30,
                         color: AppColors.secondaryColor,
@@ -135,16 +147,17 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     PrimaryButton(
                       width: 300,
                       onTap: () async {
-                        await showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (_) => CreateTeamDialog(),
-                        );
+                        showFullWidthDialogPay(context);
+                        // await showDialog(
+                        //   context: context,
+                        //   barrierDismissible: true,
+                        //   builder: (_) =>  CreateTeamDialog(),
+                        // );
                       },
                       radius: 20.r,
                       textStyle: descriptiveStyle.copyWith(
                         color: Colors.white,
-                        fontSize: isMobile ? 18 : 30,
+                        fontSize: isMobile ? 18 : 18,
                       ),
                       title: 'Create New Team',
                       backgroundColor: AppColors.secondaryColor,
@@ -202,6 +215,7 @@ class _MobileLayout extends StatelessWidget {
                     await prefs.setInt('teamInfoId', team.id!);
                     controller.fetchGetTeamData();
                     await Future.delayed(const Duration(seconds: 1));
+                    // await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
                     Get.toNamed(RoutesPath.teamDashboardScreen);
                   },
                   child: Column(
@@ -414,6 +428,7 @@ class TabletOrWebLayout extends StatelessWidget {
         await prefs.setInt('teamInfoId', team.id!);
         controller.fetchGetTeamData();
         await Future.delayed(const Duration(seconds: 1));
+        await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
         Get.toNamed(RoutesPath.teamDashboardScreen);
       },
       child: Container(

@@ -1,9 +1,13 @@
+
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../../../service/api/team.dart';
 import '../../../utils/SharedPreferencesUtil.dart';
+import '../../api_service.dart';
 import '../../model/player/getPlayerModel.dart';
+import '../../model/playerPositioned.dart';
 import '../../model/positioned.dart';
 import '../../model/teamModel/teamModel.dart';
 import '../getTeamData.dart';
@@ -14,12 +18,19 @@ class TeamController extends GetxController {
   RxList<Team?> teams = <Team?>[].obs;
   Rx<TeamData?> teamData = TeamData().obs;
   RxInt teamDataIndex = 0.obs;
+  TextEditingController codeField = TextEditingController();
+  // TextEditingController code =TextEditingController();
   RxList<Organizations?> organization = <Organizations?>[].obs;
   // RxList<Organization?> organization = <Organization?>[].obs;
   Rx<Organizations> organizationItem = Organizations().obs;
   List<Position?> teamPositioned = [];
   Position positioned = Position();
   RxList<GetPlayer?> getPlayer = <GetPlayer?>[].obs;
+  RxString selectTeam = "".obs;
+  RxMap<int, List<int>> preferredPositionIds = <int, List<int>>{}.obs;
+  RxMap<int, List<int>> restrictedPositionIds = <int, List<int>>{}.obs;
+  final ApiServic apiService = Get.put<ApiServic>(ApiServic());
+  RxList<PlayerPreference> playerPreference = <PlayerPreference>[].obs;
 
   // Called when the controller is initialized
   @override
@@ -34,6 +45,7 @@ class TeamController extends GetxController {
     fetchTeams();
     fetchTeamsPositioned();
     fetchOrganization();
+
   }
 
   Future<void> getSavedTeamData() async {
@@ -84,6 +96,16 @@ class TeamController extends GetxController {
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
         teamPositioned = response.data!;
+        await SharedPreferencesUtil.saveObject<List<Position?>>(
+          "fav",
+          teamPositioned,
+          (list) => {'data': list.map((e) => e?.toJson()).toList()},
+        );
+        await SharedPreferencesUtil.saveObject<List<Position?>>(
+          "res",
+          teamPositioned,
+          (list) => {'data': list.map((e) => e?.toJson()).toList()},
+        );
       } else {
         // Handle the case where no teams are returned
         // teams.value = [];
@@ -93,15 +115,40 @@ class TeamController extends GetxController {
       print('Error fetching teams: $e');
     }
   }
+  // static Future<List<Position?>> readPositionList(String key) async {
+  //   final jsonString = SharedPreferencesUtil.sharedPreferences.getString(key);
+  //   if (jsonString == null) return [];
+  //
+  //   final Map<String, dynamic> decoded = jsonDecode(jsonString);
+  //   final List<dynamic> data = decoded['data'];
+  //
+  //   return data.map<Position?>(
+  //         (e) => e == null ? null : Position.fromJson(e),
+  //   ).toList();
+  // }
 
   Future<void> fetchGetPlayer(int id) async {
     try {
+      print("hvhgmuhyg,k");
+      print(id);
       // Call the API to get the list of teams
+      // final response = await TeamsApi.getPlayer(4);
       final response = await TeamsApi.getPlayer(id);
+      // final response = await TeamsApi.getPlayer(4);
 
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
         getPlayer.value = response.data!;
+        playerPreference.clear();
+        for (int i = 0; i < getPlayer.value.length; i++) {
+          final data = PlayerPreference(
+            playerId: getPlayer.value![i]!.id!,
+            preferredPositionIds: [],
+            restrictedPositionIds: [],
+          );
+
+          playerPreference.add(data);
+        }
       } else {
         // Handle the case where no teams are returned
         teams.value = [];

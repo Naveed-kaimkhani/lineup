@@ -24,15 +24,51 @@ class DioUtil {
       contentType: 'application/json',
       connectTimeout: const Duration(seconds: 15),
       receiveTimeout: const Duration(seconds: 15),
-      sendTimeout: kIsWeb ? null : const Duration(seconds: 15), // Only set on non-web
+      sendTimeout:
+          kIsWeb ? null : const Duration(seconds: 15), // Only set on non-web
     );
 
     final dio = Dio(options);
-    dio.interceptors.addAll([
-      AppInterceptors(dio),
-    ]);
+    dio.interceptors.addAll([AppInterceptors(dio)]);
 
     return dio;
+  }
+
+  // Add this to your DioUtil class if not already present
+  static Future<Map<String, dynamic>> simpleRequest({
+    required String endpoint,
+    required Map<String, dynamic> requestBody,
+    required HttpRequestType httpRequestType,
+  }) async {
+    final dio = Dio();
+
+    try {
+      final response = await dio.request(
+        endpoint,
+        data: requestBody,
+        options: Options(
+          method: httpRequestType == HttpRequestType.post ? 'POST' : 'GET',
+          headers: {"Content-Type": "application/json"},
+             validateStatus: (status) => status != null && status < 500,
+        ),
+        
+      );
+        if (response.statusCode == 200) {
+      return response.data;
+    } else {
+      // It was a 400/401/403/etc
+      return {
+        "success": false,
+        "message": response.data['message'] ?? 'Authentication failed',
+      };
+    }
+    } catch (e) {
+      print("Dio error: $e");
+      return {
+        "success": false,
+        "message": "Something went wrong during login.",
+      };
+    }
   }
 
   static Future<BaseResponse<T>> request<T>({
@@ -60,16 +96,31 @@ class DioUtil {
           break;
         case HttpRequestType.post:
           if (requestBody.containsKey('doc') && requestBody['doc'] != null) {
-            response = await handleMultipleImages(path: path, requestBody: requestBody);
+            response = await handleMultipleImages(
+              path: path,
+              requestBody: requestBody,
+            );
           } else {
-            response = await _dio.post(path, data: requestBody, queryParameters: params);
+            response = await _dio.post(
+              path,
+              data: requestBody,
+              queryParameters: params,
+            );
           }
           break;
         case HttpRequestType.put: // ✅ new put case
-          response = await _dio.put(path, data: requestBody, queryParameters: params);
+          response = await _dio.put(
+            path,
+            data: requestBody,
+            queryParameters: params,
+          );
           break;
         case HttpRequestType.delete:
-          response = await _dio.delete(path, data: requestBody, queryParameters: params);
+          response = await _dio.delete(
+            path,
+            data: requestBody,
+            queryParameters: params,
+          );
           break;
       }
       // switch (httpRequestType) {
@@ -95,9 +146,12 @@ class DioUtil {
       if (response.data is Map<String, dynamic>) {
         baseResponse = BaseResponse<T>.fromJson(
           response.data as Map<String, dynamic>,
-              (json) {
+          (json) {
             if (json is List) {
-              final list = json.map((e) => fromJsonT(e as Map<String, dynamic>)).toList();
+              final list =
+                  json
+                      .map((e) => fromJsonT(e as Map<String, dynamic>))
+                      .toList();
               return cast != null ? cast(list) : list as T;
             } else {
               return fromJsonT(json as Map<String, dynamic>);
@@ -108,13 +162,18 @@ class DioUtil {
         // ✅ Wrap response in Map and pass entire List directly to the callback
         baseResponse = BaseResponse<T>.fromJson(
           {'data': response.data}, // fake wrapping
-              (json) {
-            final list = (json as List).map((e) => fromJsonT(e as Map<String, dynamic>)).toList();
+          (json) {
+            final list =
+                (json as List)
+                    .map((e) => fromJsonT(e as Map<String, dynamic>))
+                    .toList();
             return cast != null ? cast(list) as T : list as T;
           },
         );
       } else {
-        throw Exception('Unsupported response format: ${response.data.runtimeType}');
+        throw Exception(
+          'Unsupported response format: ${response.data.runtimeType}',
+        );
       }
 
       // final baseResponse = BaseResponse<T>.fromJson(
@@ -134,7 +193,10 @@ class DioUtil {
       // );
 
       if (!baseResponse.success!) {
-        return BaseResponse(success: false, message: response.statusMessage ?? 'Request failed');
+        return BaseResponse(
+          success: false,
+          message: response.statusMessage ?? 'Request failed',
+        );
       }
 
       return baseResponse;
@@ -143,11 +205,12 @@ class DioUtil {
       errorMessage = e.message ?? 'An error occurred';
       // print(endpoint);
       print(e.response.toString());
-          if(!e.response!.data["success"]){
-
-            return BaseResponse(success: false, message:e.response!.data["message"] ?? 'Request failed');
-
-          }
+      if (!e.response!.data["success"]) {
+        return BaseResponse(
+          success: false,
+          message: e.response!.data["message"] ?? 'Request failed',
+        );
+      }
       if (e.response != null) {
         final res = e.response!;
         final statusCode = res.statusCode ?? 0;
@@ -218,10 +281,12 @@ class DioUtil {
       for (int i = 0; i < leaveHistoryDocuments.length; i++) {
         final docPath = leaveHistoryDocuments[i]['document'];
         if (docPath != null) {
-          formData.files.add(MapEntry(
-            'LeaveHistoryDocument[$i][document]',
-            await MultipartFile.fromFile(docPath),
-          ));
+          formData.files.add(
+            MapEntry(
+              'LeaveHistoryDocument[$i][document]',
+              await MultipartFile.fromFile(docPath),
+            ),
+          );
         }
       }
     }
@@ -229,7 +294,9 @@ class DioUtil {
     final leaveDates = requestBody['LeaveDate'];
     if (leaveDates is List) {
       for (int i = 0; i < leaveDates.length; i++) {
-        formData.fields.add(MapEntry('LeaveDate[$i][from]', leaveDates[i]['from']));
+        formData.fields.add(
+          MapEntry('LeaveDate[$i][from]', leaveDates[i]['from']),
+        );
         formData.fields.add(MapEntry('LeaveDate[$i][to]', leaveDates[i]['to']));
       }
     }

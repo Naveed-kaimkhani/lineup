@@ -10,7 +10,7 @@ import '../../Base/controller/teamController/createTeamController.dart';
 import '../../Base/controller/teamController/teamController.dart';
 import '../../constants/widgets/buttons/primary_button.dart';
 
-class SetFavoredPositionDialog extends StatelessWidget {
+class SetFavoredPositionDialogg extends StatelessWidget {
   final NewTeamController controller = Get.find<NewTeamController>();
   final TeamController teamController = Get.find<TeamController>();
 

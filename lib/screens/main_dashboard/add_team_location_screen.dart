@@ -25,33 +25,32 @@ class AddTeamLocationScreen extends StatelessWidget {
           ),
         ),
         SizedBox(height: 24.h),
-        Row(
+        Column(
           children: [
-            Expanded(
-              child: PrimaryTextField(
-                controller: controller.countryController,
-                label: 'Country',
-                hintText: 'United Nation',
-              ),
-            ),
+
             SizedBox(width: 10.w),
-            Expanded(
-              child: PrimaryTextField(
+            PrimaryTextField(
                 controller: controller.cityController,
                 label: 'City',
                 hintText: 'Nashvile',
-              ),
+
             ),
-            SizedBox(width: 10.w),
-            Expanded(
-              child: PrimaryTextField(
+            SizedBox(height:16),
+            PrimaryTextField(
                 controller: controller.stateController,
                 label: 'State',
                 hintText: 'TN',
               ),
-            ),
+
           ],
         ),
+        // Expanded(
+        //   child: PrimaryTextField(
+        //     controller: controller.countryController,
+        //     label: 'Country',
+        //     hintText: 'United Nation',
+        //   ),
+        // ),
       ],
     );
   }

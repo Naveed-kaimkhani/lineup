@@ -16,18 +16,24 @@ class APIEndPoints{
   static  const organizations ="/organizations";
   static  const adminOrganizations ="/admin/organizations";
   // static  const organizations ="/organizations";
-  static  const getPlayers ="/teams/{teamId}/players";
+  // static  const getPlayers ="/teams/{teamId}/players";
   static  const addPlayers ="/teams";
   static  const getTeamData ="/teams/";
   static  const addNewGame ="/teams/";
   static  const deleteTeams ="/teams/";
   static  const deletePlayes ="/players/";
+  static  const admin_positions ="/admin/positions";
+  static  const admin_payments ="/admin/payments";
+  static  const getPromoCode ="/admin/promo-codes";
+  static  const getPaymentLink ="/user/subscription/generate-payment-link";
+  static  const reqPromoCode ="/promo-codes/redeem";
   // static  const deletePlayes ="/games/{gameId}/autocomplete-lineup";
-
+  static  const orgCode ="/user/validate-organization-access-code";
 /// payment
   static  const paymentModle= "/teams/";
   /// admin
   static  const adminOrgnization ="/admin/organizations";
-
+  
+  static  const OrgnizationLogin ="$baseUrl/organization-panel/auth/login";
 
 }

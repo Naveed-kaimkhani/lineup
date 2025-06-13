@@ -74,149 +74,160 @@ class AddPlayerInTeamDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     // SingleChildScrollView allows the content to scroll if it's too big for the screen
     return SingleChildScrollView(
-      child: LayoutBuilder(
-        builder: (context, constraints) {
-          final screenWidth = constraints.maxWidth;
-          final isMobile = screenWidth < 600;
-          return Column(
-            children: [
-              // Add some spacing at the top (16 height units)
-              SizedBox(height: 16.h),
+      child: SingleChildScrollView(
+        child: LayoutBuilder(
+          builder: (context, constraints) {
+            final screenWidth = constraints.maxWidth;
+            final isMobile = screenWidth < 600;
+            return Column(
+              children: [
+                // Add some spacing at the top (16 height units)
+                SizedBox(height: 16.h),
 
-              // Dialog title - converted to uppercase for emphasis
-              Row(
-                children: [
-                  Spacer(),
-                  Text(
-                    'Add Player'.toUpperCase(),
-                    style: tableContentHeader.copyWith(
-                      color: AppColors.primaryColor,
-                      fontSize: 25,
+                // Dialog title - converted to uppercase for emphasis
+                Row(
+                  children: [
+                    Text(
+                      'Add Player'.toUpperCase(),
+                      style: tableContentHeader.copyWith(
+                        color: AppColors.primaryColor,
+                        fontSize: 25,
+                      ),
                     ),
-                  ),
-                  Spacer(),
-                  InkWell(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Icon(Icons.cancel, color: Colors.red),
-                  ),
-                ],
-              ),
-              // More vertical spacing (40 height units)
-              SizedBox(height: 25),
+                    Spacer(),
 
-              // First row of input fields (Country, Last Name, Jersey Number)
-              Row(
-                children: [
-                  // Country input field - takes 1/3 of the row width
-                  Expanded(
-                    child: PrimaryTextField(
-                      controller: newTeamController.playerCountryController,
-                      label: 'First Name',
-                      hintText: 'Mick', // Example text shown in empty field
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(Icons.cancel, size: 50, color: Colors.red),
                     ),
-                  ),
+                  ],
+                ),
 
-                  // Horizontal spacing between fields
-                  SizedBox(width: 10),
+                // More vertical spacing (40 height units)
+                SizedBox(height: 25),
 
-                  // Last Name input field - takes 1/3 of the row width
-                  Expanded(
-                    child: PrimaryTextField(
-                      controller: newTeamController.playerLastNameController,
-                      label: 'Last Name',
-                      hintText:
-                          'Johnathan', // Example text shown in empty field
+                // First row of input fields (Country, Last Name, Jersey Number)
+                Row(
+                  children: [
+                    // Country input field - takes 1/3 of the row width
+                    Expanded(
+                      child: PrimaryTextField(
+                        controller: newTeamController.playerCountryController,
+                        label: 'First Name',
+                        hintText: 'Mick', // Example text shown in empty field
+                      ),
                     ),
-                  ),
 
-                  // Horizontal spacing between fields
-                  SizedBox(width: 10),
+                    // Horizontal spacing between fields
+                    SizedBox(width: 10),
 
-                  // Jersey Number input field - takes 1/3 of the row width
-                  Expanded(
-                    child: PrimaryTextField(
-                      controller:
-                          newTeamController.playerJerseyNumberController,
-                      label: 'Jersey Number',
-                      hintText: '89', // Example text shown in empty field
+                    // Last Name input field - takes 1/3 of the row width
+                    Expanded(
+                      child: PrimaryTextField(
+                        controller: newTeamController.playerLastNameController,
+                        label: 'Last Name',
+                        hintText:
+                            'Johnathan', // Example text shown in empty field
+                      ),
                     ),
-                  ),
-                ],
-              ),
 
-              // Second row of input fields (Email, Phone) and Add button
-              Row(
-                children: [
-                  // Email input field - takes 1/3 of the row width
-                  Expanded(
-                    child: PrimaryTextField(
-                      controller: newTeamController.playerEmailController,
-                      label: 'Email (Optional)',
-                      hintText: '', // Example text shown in empty field
+                    // Horizontal spacing between fields
+                    SizedBox(width: 10),
+
+                    // Jersey Number input field - takes 1/3 of the row width
+                    Expanded(
+                      child: PrimaryTextField(
+                        controller:
+                            newTeamController.playerJerseyNumberController,
+                        label: 'Jersey Number',
+                        hintText: '89', // Example text shown in empty field
+                      ),
                     ),
-                  ),
+                  ],
+                ),
 
-                  // Horizontal spacing between fields
-                  SizedBox(width: 10.w),
-
-                  // Phone input field - takes 1/3 of the row width
-                  Expanded(
-                    child: PrimaryTextField(
-                      controller: newTeamController.playerPhoneController,
-                      label: 'Phone (Optional)',
-                      hintText: '', // Example text shown in empty field
+                // Second row of input fields (Email, Phone) and Add button
+                Row(
+                  children: [
+                    // Email input field - takes 1/3 of the row width
+                    Expanded(
+                      child: PrimaryTextField(
+                        controller: newTeamController.playerEmailController,
+                        label: 'Email (Optional)',
+                        hintText: '', // Example text shown in empty field
+                      ),
                     ),
-                  ),
 
-                  // Horizontal spacing between fields
-                  SizedBox(width: 20),
+                    // Horizontal spacing between fields
+                    SizedBox(width: 10.w),
 
-                  // Add Player button - takes 1/3 of the row width
-                  // Expanded(
-                  //   child: PrimaryButton(
-                  //     // When button is tapped, show a dialog to select player position
-                  //     onTap: () async {
-                  //       newTeamController.addPlayer(context);
-                  //       // showDialog creates a popup modal window
-                  //       // await means it will wait for the dialog to close before continuing
-                  //    // test
-                  //    //   newTeamController
-                  //       // await showDialog(
-                  //       //   context: context,
-                  //       //   barrierDismissible: true,  // Allow closing by tapping outside
-                  //       //   builder: (_) => const SetFavoredPositionDialog(),  // Dialog content
-                  //       // );
-                  //     },
-                  //     title: 'Add Player',  // Button text
-                  //     backgroundColor: AppColors.descriptiveTextColor,  // Button color
-                  //   ),
-                  // ),
-                ],
-              ),
-              PrimaryButton(
-                width: MediaQuery.of(context).size.width,
-                // When button is tapped, show a dialog to select player position
-                onTap: () async {
-                  newTeamController.addPlayers(context);
-                },
-                title: 'Add Player', // Button text
-                backgroundColor: AppColors.descriptiveTextColor, // Button color
-              ),
+                    // Phone input field - takes 1/3 of the row width
+                    Expanded(
+                      child: PrimaryTextField(
+                        controller: newTeamController.playerPhoneController,
+                        label: 'Phone (Optional)',
+                        hintText: '', // Example text shown in empty field
+                      ),
+                    ),
 
-              SizedBox(width: 20),
-              // Display the list of existing players
-              PlayerListWidget(),
+                    // Horizontal spacing between fields
+                    SizedBox(width: 20),
+                    PrimaryButton(
+                      // width: MediaQuery.of(context).size.width,
+                      // When button is tapped, show a dialog to select player position
+                      onTap: () async {
+                        newTeamController.addPlayers(context);
+                      },
+                      title: '  Add Player  ', // Button text
+                      backgroundColor:
+                          AppColors.descriptiveTextColor, // Button color
+                    ),
+                    // Add Player button - takes 1/3 of the row width
+                    // Expanded(
+                    //   child: PrimaryButton(
+                    //     // When button is tapped, show a dialog to select player position
+                    //     onTap: () async {
+                    //       newTeamController.addPlayer(context);
+                    //       // showDialog creates a popup modal window
+                    //       // await means it will wait for the dialog to close before continuing
+                    //    // test
+                    //    //   newTeamController
+                    //       // await showDialog(
+                    //       //   context: context,
+                    //       //   barrierDismissible: true,  // Allow closing by tapping outside
+                    //       //   builder: (_) => const SetFavoredPositionDialog(),  // Dialog content
+                    //       // );
+                    //     },
+                    //     title: 'Add Player',  // Button text
+                    //     backgroundColor: AppColors.descriptiveTextColor,  // Button color
+                    //   ),
+                    // ),
+                  ],
+                ),
 
-              // Add spacing at the bottom (20 pixels)
-              SizedBox(height: 20),
-            ],
-          );
-        },
+                //  PrimaryButton(
+                //  width: MediaQuery.of(context).size.width,
+                //   // When button is tapped, show a dialog to select player position
+                //   onTap: () async {
+                //     newTeamController.addPlayer(context);
+                //
+                //   },
+                //   title: 'Add Player',  // Button text
+                //   backgroundColor: AppColors.descriptiveTextColor,  // Button color
+                // ),
+                SizedBox(width: 20),
+                // Display the list of existing players
+                PlayerListWidget(),
+
+                // Add spacing at the bottom (20 pixels)
+                SizedBox(height: 20),
+              ],
+            );
+          },
+        ),
       ),
-
-
     );
   }
 }
@@ -238,63 +249,94 @@ class PlayerListWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     // Card creates a material design card with rounded corners and elevation
     return Card(
-      margin: EdgeInsets.all(16), // Space around the card
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ), // Rounded corners
+      // key: GlobalKey(),
+      elevation: 0,
+      color: Colors.white,
+      // margin: EdgeInsets.all(16),  // Space around the card
+      // shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),  // Rounded corners
       child: Obx(
-        () => ListView.separated(
-          padding: EdgeInsets.all(16), // Space inside the card
-          shrinkWrap: true, // Make the list only as tall as its content
-          itemCount: controller.getPlayer.length, // Number of items to display
-          // Function to build dividers between items
-          separatorBuilder: (_, __) => Divider(), // Simple line divider
-          // Function to build each player item
-          itemBuilder: (context, index) {
-            // Get the current player from the list
-            final player = controller.getPlayer[index];
-            // Create a row with player info and remove button
-            return Row(
-              mainAxisAlignment:
-                  MainAxisAlignment
-                      .spaceBetween, // Space items at opposite ends
-              children: [
-                // Player ID and name display
-                Text(
-                  '${player!.id!}  ${player.firstName}', // Format: #89 Mick Johnathan
-                  style: TextStyle(fontSize: 16),
-                ),
-                // Remove button with red background and icon
-                ElevatedButton.icon(
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.red.shade700, // Dark red background
-                    shape: StadiumBorder(), // Fully rounded sides (pill shape)
-                    padding: EdgeInsets.symmetric(
-                      horizontal: 16,
-                      vertical: 8,
-                    ), // Button padding
-                  ),
-                  icon: Icon(
-                    Icons.close,
-                    size: 16,
-                    color: Colors.white,
-                  ), // X icon
-                  label: Text(
-                    'Remove',
-                    style: TextStyle(color: Colors.white),
-                  ), // Button text
-                  onPressed: () async {
+        () => Container(
+          padding: EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            border: Border.all(
+              color: Colors.black12, // Black border color
+              width: 1.0, // Border width
+            ),
+          ),
+          child: ListView.separated(
+            // padding: EdgeInsets.all(16),  // Space inside the card
+            shrinkWrap: true, // Make the list only as tall as its content
+            itemCount:
+                controller.getPlayer.length, // Number of items to display
+            // Function to build dividers between items
+            separatorBuilder: (_, __) => Divider(), // Simple line divider
+            // Function to build each player item
+            itemBuilder: (context, index) {
+              final player = controller.getPlayer[index];
+              // Create a row with player info and remove button
+              return InkWell(
+                onTap: () {
+                  // showDialog(
+                  //   context: context,
+                  //   barrierDismissible: true,  // Allow closing by tapping outside
+                  //   builder: (_) => SetFavoredPositionDialog(),  // Dialog content
+                  // );
+                  // Get the current player from the list
+                },
 
-                    await globleController.playesDelete(player.id);
-                    await controller.fetchGetTeamData();
-                    Navigator.pop(context);
-                    // This is where you would add code to remove the player
-                    // Currently empty - would need implementation
-                  },
+                child: Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment:
+                          MainAxisAlignment
+                              .spaceBetween, // Space items at opposite ends
+                      children: [
+                        // Player ID and name display
+                        Text(
+                          '# ${player!.id!}     ${player.firstName}', // Format: #89 Mick Johnathan
+                          style: TextStyle(fontSize: 16),
+                        ),
+                        // Remove button with red background and icon
+                        ElevatedButton.icon(
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor:
+                                Colors.red.shade700, // Dark red background
+                            shape:
+                                StadiumBorder(), // Fully rounded sides (pill shape)
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 16,
+                              vertical: 8,
+                            ), // Button padding
+                          ),
+                          icon: Icon(
+                            Icons.close,
+                            size: 16,
+                            color: Colors.white,
+                          ), // X icon
+                          label: Text(
+                            'Remove',
+                            style: TextStyle(color: Colors.white),
+                          ), // Button text
+                          onPressed: () {
+                            controller.getPlayer.clear();
+                            Navigator.pop(context);
+                            final globleController = Get.put(
+                              GlobleController(),
+                            );
+                            globleController.playesDelete(player.id);
+
+                            // This is where you would add code to remove the player
+                            // Currently empty - would need implementation
+                          },
+                        ),
+                      ],
+                    ),
+                    // Divider(color: Colors.grey.shade300),
+                  ],
                 ),
-              ],
-            );
-          },
+              );
+            },
+          ),
         ),
       ),
     );

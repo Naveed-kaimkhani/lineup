@@ -3,12 +3,10 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
-import 'package:gaming_web_app/constants/widgets/buttons/custom_text_button.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import '../../Base/controller/authController/userProfileController.dart';
 import '../../constants/widgets/custom_form.dart';
 import '../../routes/routes_path.dart';
-import '../../utils/SharedPreferencesUtil.dart';
 
 class UserprofileDialog extends StatelessWidget {
   final UserProfileController controller = Get.put(UserProfileController());
@@ -45,16 +43,14 @@ class UserprofileDialog extends StatelessWidget {
                           Column(children: [
 
 
-
-
-                          AbsorbPointer(
-                          child:    Column(
+   Column(
                           children: [
                             // First & Last Name
                             isMobile
                                 ? Column(
                               children: [
                                 PrimaryTextField(
+                                  readAble: true,
                                   controller: controller.firstNameController,
                                   label: 'First Name',
                                 ),
@@ -63,7 +59,7 @@ class UserprofileDialog extends StatelessWidget {
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 )),
                                 SizedBox(height: 10),
-                                PrimaryTextField(
+                                PrimaryTextField(readAble: true,
                                   controller: controller.lastNameController,
                                   label: 'Last Name',
                                 ),
@@ -79,7 +75,7 @@ class UserprofileDialog extends StatelessWidget {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      PrimaryTextField(
+                                      PrimaryTextField(readAble: true,
                                         controller: controller.firstNameController,
                                         label: 'First Name',
                                       ),
@@ -95,7 +91,7 @@ class UserprofileDialog extends StatelessWidget {
                                   child: Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      PrimaryTextField(
+                                      PrimaryTextField(readAble: true,
                                         controller: controller.lastNameController,
                                         label: 'Last Name',
                                       ),
@@ -115,7 +111,7 @@ class UserprofileDialog extends StatelessWidget {
                             isMobile
                                 ? Column(
                               children: [
-                                PrimaryTextField(
+                                PrimaryTextField(readAble: true,
                                   controller: controller.emailController,
                                   label: 'Email',
                                 ),
@@ -124,7 +120,7 @@ class UserprofileDialog extends StatelessWidget {
                                   style: TextStyle(color: Colors.red, fontSize: 12),
                                 )),
                                 SizedBox(height: 10),
-                                PrimaryTextField(
+                                PrimaryTextField(readAble: true,
                                   controller: controller.phoneNumberController,
                                   label: 'Phone',
                                 ),
@@ -137,7 +133,7 @@ class UserprofileDialog extends StatelessWidget {
                                 :  Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      PrimaryTextField(
+                                      PrimaryTextField(readAble: true,
                                         controller: controller.emailController,
                                         label: 'Email',
                                       ),
@@ -148,7 +144,7 @@ class UserprofileDialog extends StatelessWidget {
                                     Column(
                                     crossAxisAlignment: CrossAxisAlignment.start,
                                     children: [
-                                      PrimaryTextField(
+                                      PrimaryTextField(readAble: true,
                                         controller: controller.phoneNumberController,
                                         label: 'Phone',
                                       ),
@@ -156,6 +152,16 @@ class UserprofileDialog extends StatelessWidget {
                                         controller.phoneNumberError.value,
                                         style: TextStyle(color: Colors.red, fontSize: 12),
                                       )),
+                                      PrimaryButton(
+                                        onTap:() async {
+                                          // await SharedPreferencesUtil.clear();
+                                          Get.offAllNamed(RoutesPath.signIn); // Navigates and clears navigation stack
+                                        },
+                                        title: 'Logout',
+                                        width: double.infinity,
+                                        radius: 4.89.r,
+                                        backgroundColor: AppColors.secondaryColor,
+                                      ),
                                     ],
                                   ),
 
@@ -164,70 +170,16 @@ class UserprofileDialog extends StatelessWidget {
 
                             SizedBox(height: 10),
 
-                            // // Password
-                            // PrimaryTextField(
-                            //   controller: controller.passwordController,
-                            //   label: 'Password',
-                            //   obscureText: true,
-                            // ),
-                            // Obx(() => Text(
-                            //   controller.passwordError.value,
-                            //   style: TextStyle(color: Colors.red, fontSize: 12),
-                            // )),
-                            // SizedBox(height: 10),
-                            //
-                            // // Confirm Password
-                            // PrimaryTextField(
-                            //   controller: controller.confirmPasswordController,
-                            //   label: 'Confirm Password',
-                            //   obscureText: true,
-                            // ),
-                            // Obx(() => Text(
-                            //   controller.confirmPasswordError.value,
-                            //   style: TextStyle(color: Colors.red, fontSize: 12),
-                            // )),
-                            // SizedBox(height: 10),
-                            //
-                            // // Submit Button
-                            // PrimaryButton(
-                            //   onTap: controller.validateAndSubmit,
-                            //   title: 'Sign Up',
-                            //   width: double.infinity,
-                            //   radius: 4.89,
-                            //   backgroundColor: AppColors.secondaryColor,
-                            // ),
                             SizedBox(height: 10),
 
-                            // Login Redirect
-                            // Wrap(
-                            //   alignment: WrapAlignment.center,
-                            //   children: [
-                            //     Text('Already Have Account?', style: TextStyle(fontSize: 14)),
-                            //     CustomTextButton(
-                            //       title: ' Click here to Login.',
-                            //       fontSize: 18,
-                            //       onTap: () => Get.back(),
-                            //       hasUnderline: true,
-                            //     ),
-                            //   ],
-                            // ),
                           ],
-                        ),
+
                       )]),
 
 
                   ),
 
-                      PrimaryButton(
-                        onTap:() async {
-                          await SharedPreferencesUtil.clear();
-                          Get.offAllNamed(RoutesPath.signUp); // Navigates and clears navigation stack
-                        },
-                        title: 'Logout',
-                        width: double.infinity,
-                        radius: 4.89.r,
-                        backgroundColor: AppColors.secondaryColor,
-                      ),
+
 
                       ])
               ),

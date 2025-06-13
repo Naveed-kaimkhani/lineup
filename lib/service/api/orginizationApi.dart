@@ -52,6 +52,29 @@ class OrginizationsApi{
 
 
 
+  static Future<BaseResponse<Object>> updateOrginization(
+      OrginizationCreate orginizationCreate) async {
+    try {
+      final response = await DioUtil.request<OrgnizatioResponse>(
+        endpoint: APIEndPoints.adminOrganizations,
+        requestBody: orginizationCreate.toJson(),
+        fromJsonT: OrgnizatioResponse.fromJson,
+        httpRequestType: HttpRequestType.put,
+      );
+
+      return response;
+    } catch (e) {
+      print('Error: $e');
+      return BaseResponse<OrgnizatioResponse>(
+        success: false,
+        message: 'An error occurred: ${e.toString()}',
+        data: null,
+      );
+    }
+  }
+
+
+
 
 
 

@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/cupertino.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:get/get.dart';
@@ -13,19 +11,22 @@ import '../../../utils/SharedPreferencesUtil.dart';
 class SignInController extends GetxController {
   // Controllers for email and password fields
   var emailController = TextEditingController();
+
+  var orgCodeController = TextEditingController();
   var passwordController = TextEditingController();
 
   // Reactive variables for error messages
   var emailError = RxString('');
   var passwordError = RxString('');
 
+  var orgCodeError = RxString('');
   // Reactive variable for the remember me checkbox
   var isRememberMe = RxBool(false);
 
   // Toggle checkbox
   Future<void> toggleRememberMe(bool? value) async {
     isRememberMe.value = value ?? false;
-    if(isRememberMe.value) {
+    if (isRememberMe.value) {
       await saveCredentials();
     }
   }
@@ -49,16 +50,14 @@ class SignInController extends GetxController {
     final savedEmail = prefs.getString('email') ?? '';
     final savedPassword = prefs.getString('password') ?? '';
     final remember = prefs.getBool('remember_me') ?? false;
-       print("1st");
-       print(savedEmail);
+
     if (remember) {
-
-        emailController.text = savedEmail;
-        passwordController.text = savedPassword;
-        isRememberMe.value = remember;
-
+      emailController.text = savedEmail;
+      passwordController.text = savedPassword;
+      isRememberMe.value = remember;
     }
   }
+
   // Save credentials if Remember Me checked
   Future<void> saveCredentials() async {
     final prefs = await SharedPreferences.getInstance();
@@ -72,6 +71,7 @@ class SignInController extends GetxController {
       await prefs.setBool('remember_me', false);
     }
   }
+
   // Sign in function
   Future<void> signIn() async {
     final email = emailController.text.trim();
@@ -88,17 +88,15 @@ class SignInController extends GetxController {
     if (isEmailValid && isPasswordValid) {
       final request = LoginModel(email: email, password: password);
       final response;
-      if(email.toString()=="admin@lineup.com"){
-        response = await AuthAPI.loginAdmin(
-          request,
-        );
-      }else {
+      if (email.toString() == "admin@lineup.com") {
+        response = await AuthAPI.loginAdmin(request);
+      } else {
         response = await AuthAPI.loginUser(
           request,
         ); // Replace with `loginUser()` if needed
       }
       // GetPage(name: RoutesPath.adminDashboardScreen, page: () => AdminDashboardScreen()),
-      if(isRememberMe.value) {
+      if (isRememberMe.value) {
         await saveCredentials();
       }
 
@@ -110,10 +108,10 @@ class SignInController extends GetxController {
         if (response.data!.user!.role_id == 1) {
           Get.toNamed(RoutesPath.adminDashboardScreen);
         } else {
-        await SharedPreferencesUtil.save(
-          SharedPreferencesKeysConstants.isLogin,
-          "1",
-        );
+          await SharedPreferencesUtil.save(
+            SharedPreferencesKeysConstants.isLogin,
+            "1",
+          );
           Get.toNamed(RoutesPath.mainDashboardScreen);
         }
 
@@ -127,6 +125,62 @@ class SignInController extends GetxController {
       if (!isEmailValid) {
         emailError.value = 'Please enter a valid email address';
       }
+      if (!isPasswordValid) passwordError.value = 'Password cannot be empty';
+    }
+  }
+
+  Future<void> organizationSignIn() async {
+    final orgCode = orgCodeController.text.trim();
+    final password = passwordController.text;
+
+    // Clear previous errors
+    orgCodeError.value = '';
+    passwordError.value = '';
+
+    // Validate fields
+    bool isOrgCodeValid = orgCode.isNotEmpty;
+    bool isPasswordValid = password.isNotEmpty;
+    if (true)
+    // if (isOrgCodeValid && isPasswordValid)
+    {
+      try {
+        final response = await AuthAPI.loginOrganization({
+          // "organization_code": orgCode,
+          // "password": password,
+          "organization_code": "ORG-DEJEAW7J",
+          "password": "QfFOq2WQ3VrS",
+        });
+        if (response['success'] == true) {
+          final token = response['data']['access_token'];
+          final orgData = response['data']['organization'];
+
+          // Save token and organization data as needed
+          await SharedPreferencesUtil.save(
+            SharedPreferencesKeysConstants.isLogin,
+            "1",
+          );
+          await SharedPreferencesUtil.save(
+            "org_access_token",
+            token,
+          ); // optional
+          await SharedPreferencesUtil.save(
+            "organization_code",
+            orgData["organization_code"],
+          ); // optional
+
+          // Navigate to organization dashboard
+          Get.toNamed(RoutesPath.organizationDashboardScreen);
+
+          Get.snackbar("Success", "Organization login successful.");
+        } else {
+          Get.snackbar("Login Failed", response["message"] ?? "Unknown error");
+        }
+      } catch (e) {
+        Get.snackbar("Error", "Something went wrong. Please try again.");
+        print("Login error: $e");
+      }
+    } else {
+      if (!isOrgCodeValid) orgCodeError.value = 'Organization code is required';
       if (!isPasswordValid) passwordError.value = 'Password cannot be empty';
     }
   }
@@ -153,95 +207,3 @@ class SignInController extends GetxController {
     // TODO: Add Facebook sign-in
   }
 }
-
-// // SignInController to manage state with GetX instead of setState
-// import 'package:get/get.dart';
-// import 'package:flutter/material.dart';
-// import 'package:gaming_web_app/routes/routes_path.dart';
-//
-//
-// class SignInController extends GetxController {
-//   // Text editing controllers for input fields
-//   final TextEditingController emailController = TextEditingController();
-//   final TextEditingController passwordController = TextEditingController();
-//
-//   // Observable variable to track remember me state (replaces the setState boolean)
-//   final RxBool isRememberMe = false.obs;
-//
-//   // Toggle remember me checkbox state
-//   void toggleRememberMe(bool? value) {
-//     isRememberMe.value = value ?? false;
-//   }
-//
-//   // Navigate to forgot password screen
-//   void goToForgotPassword() {
-//     Get.toNamed(RoutesPath.forgotPassword);
-//   }
-//
-//   // Navigate to main dashboard screen after sign in
-//   void signIn() {
-//     // Here you would typically add authentication logic
-//     // For now, just navigate to dashboard
-//     Get.toNamed(RoutesPath.mainDashboardScreen);
-//   }
-//
-//   // Navigate to sign up screen
-//   void goToSignUp() {
-//     Get.toNamed(RoutesPath.signUp);
-//   }
-//
-//   // Handle social sign in (Gmail)
-//   void signInWithGmail() {
-//     // Implement Gmail sign-in functionality
-//   }
-//
-//   // Handle social sign in (Facebook)
-//   void signInWithFacebook() {
-//     // Implement Facebook sign-in functionality
-//   }
-//
-//   @override
-//   void onClose() {
-//     // Clean up controllers when the controller is removed
-//     emailController.dispose();
-//     passwordController.dispose();
-//     super.onClose();
-//   }
-// }
-//
-//
-//
-// // SIGN UP SCREEN WITH GETX
-// // First, create a controller for SignUp functionality
-// class SignUpController extends GetxController {
-//   // Text editing controllers for all input fields
-//   final TextEditingController firstNameController = TextEditingController();
-//   final TextEditingController lastNameController = TextEditingController();
-//   final TextEditingController emailController = TextEditingController();
-//   final TextEditingController phoneNumberController = TextEditingController();
-//   final TextEditingController passwordController = TextEditingController();
-//   final TextEditingController confirmPasswordController = TextEditingController();
-//
-//   // Handle sign up form submission
-//   void signUp() {
-//     // Implement sign up logic here
-//     // Validation, API calls, etc.
-//   }
-//
-//   // Navigate to login screen
-//   void goToLogin() {
-//     Get.toNamed(RoutesPath.teamDashboardScreen);
-//   }
-//
-//   @override
-//   void onClose() {
-//     // Clean up all controllers when the controller is removed
-//     firstNameController.dispose();
-//     lastNameController.dispose();
-//     emailController.dispose();
-//     phoneNumberController.dispose();
-//     passwordController.dispose();
-//     confirmPasswordController.dispose();
-//     super.onClose();
-//   }
-// }

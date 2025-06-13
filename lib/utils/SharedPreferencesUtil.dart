@@ -4,6 +4,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesUtil {
   static late SharedPreferences sharedPreferences;
 
+
+  static const String _lastRouteKey = 'last_route';
   /// Initialize SharedPreferences instance (must call before use)
   static Future<void> init() async {
     sharedPreferences = await SharedPreferences.getInstance();
@@ -47,4 +49,19 @@ class SharedPreferencesUtil {
   static Future<void> remove(String key) async {
     await sharedPreferences.remove(key);
   }
+
+  static Future<void> saveCurrentRoute(String routeName) async {
+    await save(_lastRouteKey, routeName);
+  }
+
+  static Future<String?> getLastRoute() async {
+    return await read(_lastRouteKey);
+  }
+
+
 }
+
+
+// // Before pushing to next screen
+// await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
+// Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);

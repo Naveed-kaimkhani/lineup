@@ -12,6 +12,7 @@ class UserProfileController extends GetxController {
   final passwordController = TextEditingController();
   final confirmPasswordController = TextEditingController();
 
+  var firstName = ''.obs;
   var firstNameError = ''.obs;
   var lastNameError = ''.obs;
   var emailError = ''.obs;
@@ -32,6 +33,7 @@ class UserProfileController extends GetxController {
     );
     print(user?.toJson());
     if (user != null && user.user != null) {
+      firstName.value=user.user!.firstName ?? '';
       firstNameController.text = user.user!.firstName ?? '';
       lastNameController.text = user.user!.lastName ?? '';
       emailController.text = user.user!.email ?? '';

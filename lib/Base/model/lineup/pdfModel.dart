@@ -71,7 +71,7 @@ class GameDetails {
 }
 
 class PlayerInfo {
-  final int id;
+  final String id;
   final String fullName;
   final String jerseyNumber;
 
@@ -83,7 +83,7 @@ class PlayerInfo {
 
   factory PlayerInfo.fromJson(Map<String, dynamic> json) {
     return PlayerInfo(
-      id: json['id'],
+      id: json['id'].toString(),
       fullName: json['full_name'],
       jerseyNumber: json['jersey_number'],
     );

@@ -5,21 +5,28 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
 
+import '../../../Base/controller/authController/userProfileController.dart';
+import '../../../routes/routes_path.dart';
 import '../../../screens/authentication/userProfile.dart';
+import '../buttons/primary_button.dart';
 
 class DashboardScaffold extends StatelessWidget {
+  final bool bg;
   final String userImage;
   final String userName;
   final Widget? actionWidget;
   final String title;
   final String subtitle;
+  final Function()? onTab;
   final Widget body;
   final Widget? customContent;
   final bool isShowBanner;
   const DashboardScaffold({
     super.key,
     required this.userImage,
+     this.onTab,
     required this.userName,
+     this.bg=true,
     this.actionWidget,
     this.title = '',
     this.subtitle = '',
@@ -30,6 +37,7 @@ class DashboardScaffold extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final UserProfileController controller = Get.put(UserProfileController());
     return Scaffold(
       body:
     //     RefreshIndicator(
@@ -52,6 +60,7 @@ class DashboardScaffold extends StatelessWidget {
 
         return   Row(
               children: [
+
                 Container(
                   width: MediaQuery.of(context).size.width,
                   padding: EdgeInsets.only(left: 117.w, right: 100.w),
@@ -59,11 +68,18 @@ class DashboardScaffold extends StatelessWidget {
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Image.asset(
+                      onTab ==null?SizedBox():   BackButtons(onTab: onTab!,),
+
+                         InkWell(
+                             onTap: (){
+                               Get.toNamed(RoutesPath.mainDashboardScreen);
+                             },
+                             child:
+                      Container(child:   Image.asset(
                         'assets/images/line_up_hero_header.png',
                         width:isMobile ?90: 185.44.w,
                         height: 75.h,
-                      ),
+                      ))),
                       InkWell(
                           onTap: (){
                             Get.dialog(UserprofileDialog());
@@ -73,8 +89,10 @@ class DashboardScaffold extends StatelessWidget {
                         children: [
                           CircleAvatar(
                             radius:isMobile ?20: 30.r,
-                            backgroundColor: AppColors.secondaryColor,
-                            backgroundImage: AssetImage(userImage),
+                            backgroundColor:Colors.grey,
+                            // AppColors.secondaryColor,
+                             child: Icon(Icons.person),
+                            // backgroundImage: AssetImage(userImage),
                           ),
                           SizedBox(width: 10.w),
                           Column(
@@ -86,13 +104,13 @@ class DashboardScaffold extends StatelessWidget {
                                   color: AppColors.primaryColor,
                                 ),
                               ),
-                              Text(
-                                userName.toUpperCase(),
+                              Obx(()=>Text(
+                                controller.firstName.toUpperCase(),
                                 style: descriptionStyle.copyWith(
                                   color: AppColors.descriptiveTextColor,
                                   fontSize: isMobile ? 10:14,
                                 ),
-                              ),
+                              )),
                             ],
                           ),
                         ],
@@ -103,64 +121,64 @@ class DashboardScaffold extends StatelessWidget {
               ],
             );}),
             SizedBox(height: 27.h),
-            if (isShowBanner)
-              SizedBox(
-                height: 406.h,
-                child: Padding(
-                  padding: EdgeInsets.symmetric(horizontal: 100.w),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(16.r),
-                    child: Stack(
-                      fit: StackFit.expand,
-                      children: [
-                        // Background image
-                        Image.asset(
-                          'assets/images/player_banner.jpg',
-                          fit: BoxFit.fill,
-                        ),
-                        Container(
-                          decoration: BoxDecoration(
-                            color: AppColors.secondaryColor.withOpacity(0.5),
-                            borderRadius: BorderRadius.circular(16.r),
-                          ),
-                        ),
-                        if (actionWidget != null)
-                          Positioned(
-                            top: 20.h,
-                            left: 22.w,
-                            child: actionWidget!,
-                          ),
-                        if (customContent != null) customContent!,
-                        if (title.isNotEmpty && subtitle.isNotEmpty)
-                          Positioned(
-                            top: 68.5.h,
-                            left: MediaQuery.of(context).size.width / 3,
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  title.toUpperCase(),
-                                  style: descriptiveStyle.copyWith(
-                                    fontSize: 48.sp,
-                                    color: Colors.white, // Full white
-                                  ),
-                                ),
-                                SizedBox(height: 4.05.h),
-                                Text(
-                                  subtitle.toUpperCase(),
-                                  style: bannerMainLabelStyle.copyWith(
-                                    fontSize: 100.45.sp,
-                                    color: Colors.white, // Full white
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
+            // if (isShowBanner)
+            //   SizedBox(
+            //     height: 406.h,
+            //     child: Padding(
+            //       padding: EdgeInsets.symmetric(horizontal: 100.w),
+            //       child: ClipRRect(
+            //         borderRadius: BorderRadius.circular(16.r),
+            //         child: Stack(
+            //           fit: StackFit.expand,
+            //           children: [
+            //             // Background image
+            //             Image.asset(
+            //               'assets/images/player_banner.jpg',
+            //               fit: BoxFit.fill,
+            //             ),
+            //             Container(
+            //               decoration: BoxDecoration(
+            //                 color: AppColors.secondaryColor.withOpacity(0.5),
+            //                 borderRadius: BorderRadius.circular(16.r),
+            //               ),
+            //             ),
+            //             if (actionWidget != null)
+            //               Positioned(
+            //                 top: 20.h,
+            //                 left: 22.w,
+            //                 child: actionWidget!,
+            //               ),
+            //             if (customContent != null) customContent!,
+            //             if (title.isNotEmpty && subtitle.isNotEmpty)
+            //               Positioned(
+            //                 top: 68.5.h,
+            //                 left: MediaQuery.of(context).size.width / 3,
+            //                 child: Column(
+            //                   crossAxisAlignment: CrossAxisAlignment.center,
+            //                   children: [
+            //                     Text("",
+            //                       // title.toUpperCase(),
+            //                       style: descriptiveStyle.copyWith(
+            //                         fontSize: 48.sp,
+            //                         color: Colors.white, // Full white
+            //                       ),
+            //                     ),
+            //                     SizedBox(height: 4.05.h),
+            //                     Text("",
+            //                       // subtitle.toUpperCase(),
+            //                       style: bannerMainLabelStyle.copyWith(
+            //                         fontSize: 100.45.sp,
+            //                         color: Colors.white, // Full white
+            //                       ),
+            //                     ),
+            //                   ],
+            //                 ),
+            //               ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
             body,
           ],
         ),

@@ -45,9 +45,15 @@ dependencies:
   flutter_easyloading: ^3.0.5
   flutter_spinkit: ^5.2.1
   intl: ^0.18.0
-  flutter_stripe: ^11.5.0
-  flutter_stripe_web: ^6.5.0
-  js: ^0.6.2
+  url_launcher: ^6.3.1
+  screenshot: ^3.0.0
+  pdf: ^3.10.8
+  path_provider: ^2.1.4
+  open_file: ^3.3.2  # To open the PDF after saving
+  universal_html: ^2.2.4  # Use the latest version from pub.dev
+#  flutter_stripe: ^11.5.0
+#  flutter_stripe_web: ^6.5.0
+#  js: ^0.6.2
   webview_flutter: ^4.10.0
   get:
 

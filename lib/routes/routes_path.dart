@@ -11,5 +11,9 @@ class RoutesPath {
   static const String addNewPlayerScreen = '/add-new-screen';
   static const String savePdfScreen = '/save-pdf-screen';
   static const String purchaseTeamScreen = '/purchase-team-screen';
+
+  // static const String organizationDashboardScreen = '/OrganizationDashboardScreen';
+
   static const String adminDashboardScreen = '/adminDashboardScreen';
+  static const String OrganizationSignin = '/OrganizationSignin';
 }

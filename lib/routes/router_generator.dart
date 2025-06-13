@@ -7,6 +7,7 @@ import 'package:gaming_web_app/screens/authentication/welcome_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/main_dashboard_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/purchase_team_screen.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/organization_dashboard_screen.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/organization_signin.dart';
 import 'package:gaming_web_app/screens/team_dashboard/add_new_player_screen.dart';
 import 'package:gaming_web_app/screens/team_dashboard/save_pdf_screen.dart';
 import 'package:gaming_web_app/screens/team_dashboard/team_dashboard_screen.dart';
@@ -28,6 +29,8 @@ class AppPages {
     GetPage(name: RoutesPath.savePdfScreen, page: () => SavePdfScreen()),
     GetPage(name: RoutesPath.purchaseTeamScreen, page: () => PurchaseTeamScreen()),
     GetPage(name: RoutesPath.adminDashboardScreen, page: () => AdminDashboardScreen()),
+
+    GetPage(name: RoutesPath.OrganizationSignin, page: () => OrganizationSignin()),
   ];
 }
 

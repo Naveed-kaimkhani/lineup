@@ -14,6 +14,7 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+// import '../../routes/routes_path.dart';
 import '../../routes/routes_path.dart';
 import '../../utils/SharedPreferencesUtil.dart';
 
@@ -26,7 +27,7 @@ class PreviousGameDialog extends StatelessWidget {
   final GlobleController globleController = Get.put(GlobleController());
   @override
   Widget build(BuildContext context) {
-    final isWideScreen = MediaQuery.of(context).size.width > 600;
+    final isWideScreen = MediaQuery.of(context).size.width > 700;
 
     return Dialog(
       backgroundColor: Colors.transparent,
@@ -41,14 +42,15 @@ class PreviousGameDialog extends StatelessWidget {
           ),
           Center(
             child: Container(
-              width: isWideScreen ? 600 : double.infinity,
+              width: isWideScreen ? 1000 : double.infinity,
               constraints: BoxConstraints(
                 maxHeight: isWideScreen
-                    ? 600
+                    ? 1000
                     : MediaQuery.of(context).size.height * 0.8,
                 maxWidth: isWideScreen
-                    ? 600
-                    : MediaQuery.of(context).size.width * 0.9,
+                    ? 1000
+                    : 700
+                // MediaQuery.of(context).size.width * ,
               ),
               padding: EdgeInsets.symmetric(
                 vertical: isWideScreen ? 40 : 20,
@@ -67,7 +69,7 @@ class PreviousGameDialog extends StatelessWidget {
                     children: [
                       const Spacer(),
                       Text(
-                        'Games'.toUpperCase(),
+                        'Previous Game'.toUpperCase(),
                         style: TextStyle(
                           fontSize: isWideScreen ? 20 : 16,
                           fontWeight: FontWeight.bold,
@@ -101,6 +103,7 @@ class PreviousGameDialog extends StatelessWidget {
                         return InkWell(
                           onTap: () async {
                           await  SharedPreferencesUtil.save('gameID', item.id.toString());
+                          await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
                             Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
                           },
 
@@ -111,13 +114,13 @@ class PreviousGameDialog extends StatelessWidget {
                             mainAxisAlignment:
                             MainAxisAlignment.spaceBetween,
                             children: [
-                              ColoredNameText(name: name,textStyle: DefaultTextStyle.of(context).style.copyWith(fontSize:10),),
+                              ColoredNameText(name: name,textStyle: TextStyle(fontSize: 10,fontWeight: FontWeight.bold),),
                               Row(
                                 children: [
                                   Text(
                                     date.toString(),
                                     style: TextStyle(
-                                      fontSize: 14,
+                                      fontSize:12,
                                       color: Colors.grey.shade700,
                                     ),
                                   ),

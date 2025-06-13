@@ -41,7 +41,7 @@ class SetPlayerPositionScreen extends StatelessWidget {
           children: [
             SizedBox(height: 16.h),
             Text(
-              'SET PLAYER POSITIONS',
+              'PLAYER POSITIONS',
               style: tableContentHeader.copyWith(
                 color: AppColors.primaryColor,
                 fontSize: 25
@@ -49,32 +49,30 @@ class SetPlayerPositionScreen extends StatelessWidget {
             ),
             SizedBox(height: 24.h),
             Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Expanded(
-                  flex: 3,
-                  child: Text(
+                Text(
                     'Position',
                     style: tableLabel.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                       color: Color(0xff555555),
                       fontFamily: 'Poppins',
                     ),
                   ),
-                ),
-                Expanded(
-                  flex: 3,
-                  child: Text(
-                    'Category',
-                    style: tableLabel.copyWith(
+             Spacer(),
+               Text(
+                    'Category    ',
+                    style:tableLabel.copyWith(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
                       color: Color(0xff555555),
                       fontFamily: 'Poppins',
                     ),
                     textAlign: TextAlign.center,
-                  ),
+
                 ),
-                Expanded(
-                  flex: 2,
-                  child: SizedBox(), // Empty for Edit Button title
-                ),
+
               ],
             ),
             SizedBox(height: 16.h),
@@ -85,25 +83,24 @@ class SetPlayerPositionScreen extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          position!.name!,
-                          style: tableContentHeader.copyWith(fontSize: 16),
+                    Text(
+                          "   ${position!.name!}",
+                          style: tableContentHeader.copyWith(fontSize: 18,
+                            fontWeight: FontWeight.normal,),
                         ),
-                      ),
-                      Expanded(
-                        flex: 3,
-                        child: Text(
-                          position.category!,
-                          style: tableContentHeader.copyWith(fontSize: 16),
+                     Spacer(),
+                      Text(
+                          "${position.category!}   ",
+                          style: tableContentHeader.copyWith(fontSize: 18,
+                            fontWeight: FontWeight.normal,),
                           textAlign: TextAlign.center,
                         ),
-                      ),
+
                       // EditPositionButton(),
                     ],
                   ),
                   SizedBox(height: 8.h),
+                  Divider(color: Colors.grey.shade300),
                 ],
               );
             }).toList(),

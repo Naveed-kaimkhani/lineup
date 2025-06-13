@@ -85,7 +85,7 @@ class TeamDashboradForOrganization extends StatelessWidget {
                           color: Colors.white,
                           fontSize: 30.sp,
                         ),
-                        title: 'Previous Game',
+                        title: 'Game',
                         backgroundColor: AppColors.primaryColor,
                       ),
                       const SizedBox(height: 12),
@@ -431,12 +431,12 @@ class _TabletLayout extends StatelessWidget {
           child: Row(
             children: [
               _buildHeader("#", sNo),
-              _buildHeader("Player Name", playerNameWidth),
+              _buildHeader("Player Names", playerNameWidth),
               _buildHeader("% innings played", inningPlayedWidth),
               _buildHeader("Total innings", totalInningsWidth),
               _buildHeader("% INF", infWidth),
               _buildHeader("Favorite Position", favoritePositionWidth),
-              _buildHeader("Average player", averagePlayerWidth),
+              _buildHeader("Average players", averagePlayerWidth),
               SizedBox(width: actionWidth),
             ],
           ),

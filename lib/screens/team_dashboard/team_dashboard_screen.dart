@@ -27,13 +27,20 @@ class TeamDashboardScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     // controller.getData();
     // DashboardScaffold provides the overall structure including header, sidebar, etc.
-    return DashboardScaffold(
+    return
+      Obx(()=>
+      DashboardScaffold(
+        onTab: (){
+          Get.toNamed(RoutesPath.mainDashboardScreen);
+        },
+        isShowBanner:false,
+        bg:false,
       userImage: 'assets/images/dummy_image.png', // Profile image for the user
       userName: 'Test User', // Display name for the user
-      title: 'Game-Ready', // Main title displayed in the header
+      title:controller.selectTeam.value ?? 'Game-Ready', // Main title displayed in the header
       subtitle: 'Lineup', // Subtitle displayed in the header
       body: _TeamDashboardBody(), // Main content of the dashboard
-    );
+    ));
   }
 }
 
@@ -184,7 +191,7 @@ class _TeamDashboardBody extends StatelessWidget {
 
                   // "Previous Game" button with fixed width
                   _buildActionButton(
-                    'Previous Game',
+                    'Previous Games',
                     Color(0xFF9B1C1C), // Dark red color
                     () async {
                       // Show dialog with list of previous games
@@ -403,7 +410,7 @@ class _MobilePlayerList extends StatelessWidget {
                 child: Column(
                   children: [
                     // Player details as rows of label/value pairs
-                    _buildPlayerInfoRow('Player #', player.jerseyNumber),
+                   Expanded(child:  _buildPlayerInfoRow('Player #', player.jerseyNumber),),
                     _buildPlayerInfoRow('Name', player.firstName),
                     _buildPlayerInfoRow(
                       'Innings Played',
@@ -426,34 +433,42 @@ class _MobilePlayerList extends StatelessWidget {
                       player.stats.avgBattingLoc.toString(),
                     ),
                     SizedBox(height: 10.h),
-                    InkWell(
-                      onTap: () {
-                        showCustomDialog(
-                          context: context,
-                          title: 'Delete Player',
-                          description:
-                              'Are you sure you want to delete This Player?',
-                          onOk: () async {
-                            await handleDeleteAndRefresh(player.id!);
-                          },
-                          onCancel: () {
-                            print("Cancel pressed");
-                          },
-                        );
-                      },
-                      child: Image.asset(
-                        'assets/images/delete_icon.png',
-                        height: 36.h,
-                        width: 40.w,
+                    Row(children: [
+                      Spacer(),
+                      InkWell(
+                        onTap: () {
+                          showCustomDialog(
+                            context: context,
+                            title: 'Delete Player',
+                            description:
+                            'Are you sure you want to delete This Player?',
+                            onOk: () async {
+                              await handleDeleteAndRefresh(player.id!);
+                            },
+                            onCancel: () {
+                              print("Cancel pressed");
+                            },
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/delete_icon.png',
+                          height: 36.h,
+                          width: 40.w,
+                        ),
                       ),
-                    ),
+                           SizedBox(width: 20,),
+                      _buildEditButton(context,player),
+                    ],)
+
+
+
                     // Edit and Delete buttons
                     // Row(
                     //   mainAxisAlignment: MainAxisAlignment.end,  // Align to right side
                     //   children: [
                     //     _buildEditButton(context),  // Edit button with pencil icon
                     //     SizedBox(width: 10.w),
-                    //     _buildDeleteButton(),  // Delete button with trash icon
+                    //     // _buildDeleteButton(),  // Delete button with trash icon
                     //   ],
                     // ),
                   ],
@@ -503,27 +518,7 @@ class _MobilePlayerList extends StatelessWidget {
     );
   }
 
-  // Edit button with click handler to show edit dialog
-  Widget _buildEditButton(BuildContext context) {
-    return InkWell(
-      onTap: () async {
-        // Show dialog to edit player details
-        await showDialog(
-          context: context,
-          barrierDismissible: true,
-          builder: (_) => EditPlayerDialog(),
-        );
-      },
-      child: InkWell(
-        child: Image.asset(
-          'assets/images/edit_icon.png', // Pencil icon image
-          height: 18.h,
-          width: 20.w,
-        ),
-        onTap: () {},
-      ),
-    );
-  }
+
 
   // Delete button (currently no action implemented)
   Widget _buildDeleteButton() {
@@ -554,8 +549,10 @@ class _ResponsivePlayerTable extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // Container for the entire table with shadow and rounded corners
-    return Obx(
-      () => Container(
+    return
+      // Obx(
+      // () =>
+          Container(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(8.r), // Rounded corners
           boxShadow: [
@@ -567,7 +564,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
             ),
           ],
         ),
-        child: Column(
+        child:Obx(()=> Column(
           children: [
             // Table Header Row - column titles
             Container(
@@ -583,7 +580,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 children: [
                   // Column headers with flex to control relative widths
                   _buildHeaderCell('#', flex: 1), // Jersey number
-                  _buildHeaderCell('Player Name', flex: 3), // Player name
+                  _buildHeaderCell('Player Names', flex: 3), // Player name
                   _buildHeaderCell(
                     '% innings played',
                     flex: 2,
@@ -597,8 +594,9 @@ class _ResponsivePlayerTable extends StatelessWidget {
                     'Favorite Position',
                     flex: 2,
                   ), // Preferred position
-                  _buildHeaderCell('Average player', flex: 2), // Player rating
-                  _buildHeaderCell('Actions', flex: 2), // Edit/delete buttons
+                  _buildHeaderCell('Average players', flex: 2), // Player rating
+
+                  _buildHeaderCell('Actions', flex: 1), // Edit/delete buttons
                 ],
               ),
             ),
@@ -609,9 +607,9 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 .map((player) => _buildPlayerRow(context, player))
                 .toList(),
           ],
-        ),
-      ),
-    );
+        )),
+      );
+    // );
   }
 
   // Helper method to create consistent header cells
@@ -631,10 +629,16 @@ class _ResponsivePlayerTable extends StatelessWidget {
 
   // Helper method to create a row for each player
   Widget _buildPlayerRow(BuildContext context, TeamPlayer players) {
+    final TeamController controller = Get.find<TeamController>();
     return Column(
       children: [
         // Row content with player data
-        Container(
+        InkWell(
+          onTap: (){
+            // controller.selectTeam.value=players.firstName!.toString();
+          },
+
+            child:Container(
           padding: EdgeInsets.symmetric(horizontal: 16.w, vertical: 12.h),
           color: Colors.white, // White background
           child: Row(
@@ -650,7 +654,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
               // Player name column
               Expanded(
                 flex: 3,
-                child: Text(players.firstName, style: TextStyle(fontSize: 14)),
+                child: Text("${players.firstName} ${players.lastName}", style: TextStyle(fontSize: 14)),
               ),
               // Innings played percentage column
               Expanded(
@@ -683,7 +687,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 flex: 2,
                 child: Text(
                   // player['position'],
-                  players.stats.topPosition.toString(),
+                  players.stats.topPosition ==""?"- -":players.stats.topPosition,
                   style: TextStyle(fontSize: 14),
                 ),
               ),
@@ -697,27 +701,32 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 ),
               ),
               // Actions column (edit and delete buttons)
-              InkWell(
-                onTap: () {
-                  showCustomDialog(
-                    context: context,
-                    title: 'Delete Player',
-                    description: 'Are you sure you want to delete This Team?',
-                    onOk: () {
-                      globleController.playesDelete(players.id!);
-                    },
-                    onCancel: () {
-                      print("Cancel pressed");
-                    },
-                  );
-                },
-                child: Image.asset(
-                  'assets/images/delete_icon.png',
-                  height: 36.h,
-                  width: 40.w,
-                ),
-              ),
 
+              Row(children: [
+
+
+                InkWell(
+                  onTap: () {
+                    showCustomDialog(
+                      context: context,
+                      title: 'Delete Player',
+                      description: 'Are you sure you want to delete This Team?',
+                      onOk: () {
+                        globleController.playesDelete(players.id!);
+                      },
+                      onCancel: () {
+                        print("Cancel pressed");
+                      },
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/images/delete_icon.png',
+                    height: 36.h,
+                    width: 40.w,
+                  ),
+                ),
+                _buildEditButton(context,players),
+              ],)
               /// action button
               // Expanded(
               //   flex: 2,
@@ -747,10 +756,30 @@ class _ResponsivePlayerTable extends StatelessWidget {
               // ),
             ],
           ),
-        ),
+        ) ),
 
         Divider(height: 1, thickness: 1, color: Color(0xFFE5E7EB)),
       ],
     );
   }
+}
+// Edit button with click handler to show edit dialog
+Widget _buildEditButton(BuildContext context,TeamPlayer? players) {
+  return InkWell(
+    onTap: () async {
+      // Show dialog to edit player details
+      await showDialog(
+        context: context,
+        barrierDismissible: true,
+        builder: (_) => EditPlayerDialog(players: players,),
+      );
+    },
+    child:  Image.asset(
+        'assets/images/edit_icon.png', // Pencil icon image
+        height: 36.h,
+        width: 40.w,
+      ),
+
+
+  );
 }

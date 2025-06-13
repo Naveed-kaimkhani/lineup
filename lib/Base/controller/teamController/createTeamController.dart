@@ -4,17 +4,23 @@ import 'package:gaming_web_app/Base/controller/teamController/teamController.dar
 import 'package:get/get_rx/src/rx_types/rx_types.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../../checkout/stripe_checkout.dart';
 import '../../../routes/routes_path.dart';
+import '../../../screens/admin/adminController/orginatizationDialog.dart';
 import '../../../screens/main_dashboard/add_player_dialog.dart';
+import '../../../service/api/adminApi.dart';
 import '../../../service/api/team.dart';
+import '../../../utils/SharedPreferencesUtil.dart';
 import '../../../utils/snabarError.dart';
 import '../../../utils/snackbarUtils.dart';
 import '../../model/game/addNewGame.dart';
 import '../../model/player/addPaler.dart';
 import '../../model/player/addPlayerResponse.dart';
 import '../../model/positioned.dart';
+import '../../model/promoCodeReq.dart';
 import '../../model/teamModel/createModel.dart';
 
 import 'package:flutter/material.dart';
@@ -42,13 +48,15 @@ class NewTeamController extends GetxController {
   final city = ''.obs; // optional
   final state = ''.obs; // optional
   // final organizationId = 0.obs;  // optional
-
+  TextEditingController orgCode = TextEditingController();
+  TextEditingController PromoCode =TextEditingController();
   // TextEditingControllers (for text fields if needed)
   final TextEditingController teamNameController = TextEditingController();
-  RxInt organizationId = 0.obs;
-  final TextEditingController ageGroupController = TextEditingController();
+  int? organizationId ;
+  final TextEditingController ageGroupController = TextEditingController(text: "2025");
+  final TextEditingController enterAgeGroupController = TextEditingController();
   final TextEditingController seasonController = TextEditingController();
-  final TextEditingController countryController = TextEditingController();
+  final TextEditingController countryController = TextEditingController(text: "xyz");
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
 
@@ -72,7 +80,8 @@ class NewTeamController extends GetxController {
       );
       // newTeamController.pageControler(index)
 
-      currentPage++;
+      currentPage.value++;
+      updateDimensions(context);
       updateDimensions(context);
       print(currentPage);
       // _updateDimensions(context);
@@ -80,7 +89,8 @@ class NewTeamController extends GetxController {
   }
   void goToPrevious(BuildContext context) async {
     SnackbarUtils.showErrorr('Please Fill All Next Requirement'.toString());
-    if (currentPage.value > 0) {
+    if (currentPage.value > 0 &&currentPage.value < 6) {
+
       await pageController.previousPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
@@ -107,9 +117,15 @@ class NewTeamController extends GetxController {
     }
 
     if (currentPage.value == 1) {
-      if (teamNameController.text.trim().isEmpty || organizationId.value == 0) {
-        SnackbarUtils.showErrorr('Please set all required values'.toString());
+      if (orgCode.text.trim().isEmpty ||teamNameController.text
+          .trim()
+          .isEmpty) {
+        SnackbarUtils.showErrorr('Please Enter Required Value'.toString());
+
+
       } else {
+        // getOrgCode(context);
+     
         _goToNext(context);
       }
     }
@@ -122,35 +138,37 @@ class NewTeamController extends GetxController {
       }
     }
 
+    if(currentPage.value ==3){
+        if(enterAgeGroupController.text.isEmpty){
+          // _goToNext(context);
+          SnackbarUtils.showErrorr('Please Enter value '.toString());
+        }
+      else{
+          _goToNext(context);
+        }
+    }
 
 
-    if(currentPage.value == 3){
+    if(currentPage.value == 4){
           if(ageGroupController.text.trim().isEmpty ){
             SnackbarUtils.showErrorr('Please Enter value '.toString());
-            // if(ageGroupController.text.length != 4)
-            // {
-            //   SnackbarUtils.showErrorr('Please set values'.toString());
-            // }else{
-            //   SnackbarUtils.showErrorr('Please Enter 4 digit '.toString());
-            //
-            // }
+           
           }else{
 
             if(ageGroupController.text.length == 4)
             {
               _goToNext(context);
-              // SnackbarUtils.showErrorr('Please set values'.toString());
+            
             }else{
               SnackbarUtils.showErrorr('Please Enter 4 digit '.toString());
 
             }
-            // _goToNext(context);
           }
     }
 
 
 
-    if(currentPage.value == 4){
+    if(currentPage.value == 5){
       if(seasonController.text.trim().isEmpty){
         SnackbarUtils.showErrorr('Please select  values'.toString());
       }else{
@@ -160,8 +178,8 @@ class NewTeamController extends GetxController {
 
 
 
-    if(currentPage.value == 5){
-      if(cityController.text.trim().isEmpty ||cityController.text.trim().isEmpty || stateController.text.trim().isEmpty){
+    if(currentPage.value == 6){
+      if(cityController.text.isEmpty  || stateController.text.isEmpty){
         SnackbarUtils.showErrorr('Please select  values'.toString());
       }else{
         // CreateNewTeam(context);
@@ -169,32 +187,43 @@ class NewTeamController extends GetxController {
       }
     }
 
-    if(currentPage.value == 6){
+    if(currentPage.value == 7){
 
         CreateNewTeam(context);
-        // _goToNext(context);
 
     }
 
 
-    if(currentPage.value == 7){
-      // Navigator.pop(context);
+    if(currentPage.value == 8){
+      _goToNext(context);
+
+    }
+    if(currentPage.value ==9){
+
+
+      // playerPreference
+
+      addPsitionedInPlayers(context);
 
 
 
-   // await   paymentController.paymentModel(createTeamResponse.value!.id!); // Pass teamId
-      Get.offNamed(RoutesPath.mainDashboardScreen);
-      // Navigator.pop(context);
-      // teamController.getData();
-      paymentController.paymentModel(context,createTeamResponse.value!.id!);
-      // Get.offNamed(RoutesPath.mainDashboardScreen);
-      // redirectToCheckout(context);
-      // Navigator.pop(context);
-      // CreateNewTeam(context);
-      // _goToNext(context);
 
     }
 
+  }
+
+
+  Future<void> launchPayUrl(String link) async {
+    final Uri url = Uri.parse(link);
+    // final Uri url = Uri.parse('http://18.189.193.38/teams/${createTeamResponse.value?.id}/pay');
+    if (await canLaunchUrl(url)) {
+      await launchUrl(
+        url,
+        mode: LaunchMode.externalApplication, // launches in browser
+      );
+    } else {
+      throw 'Could not launch $url';
+    }
   }
   final paymentController = Get.put(PaymentController());
   // @override
@@ -215,6 +244,27 @@ class NewTeamController extends GetxController {
     updateDimensions(context);
   }
 
+  Future<void> getOrgCode(BuildContext context) async {
+    try {
+      // Call the API to get the list of teams
+      final response = await AdminApi.orgCodeReq(orgCode.text.trim());
+      print(response);
+      // Check if the response contains data and update the teams list
+      if (response.success!) {
+        _goToNext(context);
+        organizationId=response.data!.organizationId;
+        SnackbarUtils.showSuccess(response.message.toString());
+      } else {
+        SnackbarUtils.showErrorr(response.message.toString());
+        // Handle the case where no teams are returned
+        // teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
   void updateDimensions(BuildContext context) {
     final screenSize = MediaQuery.of(context).size;
     final screenWidth = screenSize.width;
@@ -228,25 +278,29 @@ class NewTeamController extends GetxController {
       case 1:
         dialogHeight.value = screenHeight * 0.43;
         break;
-      case 6:
+      case 2:
         dialogHeight.value =
-            screenHeight * 0.65; // Reduced from 0.7 to prevent overflow
+            screenHeight *0.43; // Reduced from 0.7 to prevent overflow
         break;
-      case 7:
+      case 3:
         dialogHeight.value =
-            screenHeight * 0.65; // Reduced from 0.7 to prevent overflow
+            screenHeight * 0.43; // Reduced from 0.7 to prevent overflow
         break;
 
-      case 7:
+      case 4:
         dialogHeight.value =
-            screenHeight * 0.65; // Reduced from 0.7 to prevent overflow
+            screenHeight * 0.43; // Reduced from 0.7 to prevent overflow
         break;
-      case 8:
+      case 5:
         dialogHeight.value =
-            screenHeight * 0.65; // Reduced from 0.7 to prevent overflow
+            screenHeight * 0.43; // Reduced from 0.7 to prevent overflow
+        break;
+      case 6:
+        dialogHeight.value =
+            screenHeight * 0.43; // Reduced from 0.7 to prevent overflow
         break;
       default:
-        dialogHeight.value = screenHeight * 0.33;
+        dialogHeight.value = screenHeight * 0.70;
     }
 
     // Calculate width as percentage of screen width with maximum limits
@@ -258,34 +312,96 @@ class NewTeamController extends GetxController {
         dialogWidth.value = screenWidth * 0.55 > 560 ? 560 : screenWidth * 0.55;
         break;
       case 2:
-        dialogWidth.value = screenWidth * 0.6 > 600 ? 600 : screenWidth * 0.6;
+        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;
       case 5:
-        dialogWidth.value = screenWidth * 0.7 > 800 ? 800 : screenWidth * 0.7;
+        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;
       case 6:
-        dialogWidth.value = screenWidth * 0.75 > 900 ? 900 : screenWidth * 0.75;
+        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;
       case 7:
-        dialogWidth.value = screenWidth * 0.8 > 1000 ? 1000 : screenWidth * 0.8;
+        dialogWidth.value = screenWidth * 0.70 > 1000 ? 1000 : screenWidth * 0.70;
         break;
       default:
-        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
+        dialogWidth.value = screenWidth * 1.2 > 900 ? 900 : screenWidth * 1.2;
     }
   }
+
+
+
+  Future<void> promoCodeReq(BuildContext context) async {
+    try {
+      final request=PromoCodeRequest(code:PromoCode.text.trim(),);
+      // final request=PromoCodeRequest(code:PromoCode.text.trim(), teamId:createTeamResponse.value?.id);
+      // Call the API to get the list of teams
+      final response = await AdminApi.promocodeReq(request);
+         print("heloo Azhar munir");
+         // print(response.data!.organizationAccessCode!);
+      // Check if the response contains data and update the teams list
+      if (response.success!) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+        SnackbarUtils.showSuccess(response.message.toString());
+        });
+      } else {
+        SnackbarUtils.showErrorr(response.message.toString());
+        // Handle the case where no teams are returned
+        // teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+  void promoCodeDialog(BuildContext context) {
+    // final nameController = TextEditingController();
+    // final emailController = TextEditingController();
+
+    Get.dialog(
+      PromoCodeDialog(
+        nameController: PromoCode,
+
+        onSubmit: () {
+          final name =PromoCode.text.trim();
+
+
+          // Perform your validation or logic here
+          if (name.isEmpty) {
+            Get.snackbar("Error", "Please enter a Promo Code");
+          } else {
+            promoCodeReq(context);
+            Get.back(); // Close dialog
+            Get.back(); // Close dialog
+            // Navigator.pop(context);
+            // Navigator.pop(context);
+            // print("Name: $name, Email: $email");
+            // You can call your controller method here
+          }
+        },
+      ),
+    );
+  }
+
+
+
+
+
+
+
+
 
   CreateTeam getCreateTeamModel() {
     return CreateTeam(
       name: teamNameController.text.trim(),
       sportType: sportType.value.toLowerCase(),
       teamType: teamType.value.toLowerCase(),
-      ageGroup: ageGroupController.text,
+      ageGroup: enterAgeGroupController.text,
       season: seasonController.text,
       year: int.parse(ageGroupController.text),
       // year.value,
       city: cityController.text,
       state: countryController.text,
-      organizationId: organizationId.value,
+      organizationId: organizationId,
     );
   }
 
@@ -296,11 +412,7 @@ class NewTeamController extends GetxController {
   Future<void> CreateNewTeam(BuildContext context) async {
     if (true) {
       try {
-        // Show loading indicator (optional)
-        // Get.dialog(Center(child: CircularProgressIndicator()));
-
-        // Make API call here (using Dio or your preferred HTTP client)
-
+     
         final response = await TeamsApi.createTeam(
           getCreateTeamModel(),
         ); // Replace with `loginUser()` if needed
@@ -308,8 +420,9 @@ class NewTeamController extends GetxController {
         if (response.success!) {
           clearTeamFormFields();
           _goToNext(context);
-          createTeamResponse.value = response!.data!;
-          teamController.fetchGetPlayer(createTeamResponse!.value!.id!);
+          teamController.getPlayer.clear();
+          createTeamResponse.value = response.data!;
+          teamController.fetchGetPlayer(createTeamResponse.value!.id!);
           // Get.toNamed(RoutesPath.mainDashboardScreen);
           SnackbarUtils.showSuccess('Create new Team  successfully');
           // Navigate to home or dashboard
@@ -334,10 +447,11 @@ class NewTeamController extends GetxController {
   // var locationType = ''.obs;
   var isHomeSelected = false.obs;
   var isPreviousLineUpTemplate = false.obs;
-  var type = "".obs;
+  var type = "away".obs;
   // Text controllers
   final TextEditingController opponentController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
+  RxString datess ="".obs;
   final TextEditingController insController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
@@ -365,63 +479,53 @@ class NewTeamController extends GetxController {
       innings: int.parse(insController.text.trim()),
       locationType: type.value.trim(),
     );
-
-    final response = await TeamsApi.CreateNewGame(addGame, teamId!);
-
+    final prefs = await SharedPreferences.getInstance();
+    final id = await prefs.getInt('teamInfoId'); // returns null if not found
+    final response = await TeamsApi.CreateNewGame(addGame, id!);
+          print(response.message);
+          print(response.message);
     if (response.success!) {
-      Navigator.pop(context);
       Get.snackbar(
         "Success",
-        "Game info submitted successfully!",
+        response.message.toString(),
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.green,
         colorText: Colors.white,
       );
       clearGameFormFields();
+
+     try {
+       await SharedPreferencesUtil.save('gameID', response.data!.id.toString());
+       await SharedPreferencesUtil.saveCurrentRoute(
+           RoutesPath.teamDashboardScreen);
+       Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
+     }catch(e){
+       Navigator.pop(context);
+     }
+      // Navigator.pop(context);
+
       // Get.back();
     } else {
-      SnackbarUtils.showErrorr(response.message.toString());
-      // Get.snackbar(
-      //   "Error",
-      //   "Failed to submit. Try again.",
-      //   snackPosition: SnackPosition.BOTTOM,
-      //   backgroundColor: Colors.redAccent,
-      //   colorText: Colors.white,
-      // );
-      Get.back();
+     //  print(response.message);
+     //  print(response.message);
+     // SnackbarUtils.showErrorr(response.message.toString());
+     //  Get.snackbar(
+     //    "Error",
+     //    response.message.toString(),
+     //    snackPosition: SnackPosition.BOTTOM,
+     //    backgroundColor: Colors.redAccent,
+     //    colorText: Colors.white,
+     //  );
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        SnackbarUtils.showErrorr(response.message.toString());
+        // Get.back();
+      });
+
+
     }
   }
 
-  // Future<void> CreateNewGame() async {
-  //
-  //   if (true) {
-  //     try {
-  //       // Show loading indicator (optional)
-  //       // Get.dialog(Center(child: CircularProgressIndicator()));
-  //
-  //       // Make API call here (using Dio or your preferred HTTP client)
-  //
-  //
-  //       final response = await TeamsApi.CreateNewTeam(getCreateTeamModel()); // Replace with `loginUser()` if needed
-  //
-  //       if (response.success!) {
-  //         createTeamResponse.value =response!.data!;
-  //         teamController.fetchGetPlayer( createTeamResponse!.value!.id!);
-  //         // Get.toNamed(RoutesPath.mainDashboardScreen);
-  //         Get.snackbar('Success', 'User signed in successfully');
-  //         // Navigate to home or dashboard
-  //         // Get.toNamed(RoutesPath.home);
-  //       } else {
-  //         Get.snackbar('Error', response.message ?? 'Login failed');
-  //       }
-  //     } catch (e) {
-  //       Get.back(); // Close loading dialog
-  //       Get.snackbar('Error', 'Something went wrong: $e');
-  //     }
-  //   } else {
-  //     Get.snackbar('Error', 'Please fill all required fields');
-  //   }
-  // }
+
 
   ///  add paler
   Future<void> addPlayer(BuildContext context, {int? teamId}) async {
@@ -432,7 +536,7 @@ class NewTeamController extends GetxController {
     final phone = playerPhoneController.text;
 
     if (country.isEmpty) {
-      showError(context, 'Please enter player country');
+      SnackbarUtils.showErrorr( 'Please enter player country');
       return;
     }
     if (lastName.isEmpty) {
@@ -440,7 +544,7 @@ class NewTeamController extends GetxController {
       return;
     }
     if (jerseyNumber.isEmpty) {
-      showError(context, 'Please enter jersey number');
+      SnackbarUtils.showErrorr( 'Please enter jersey number');
       return;
     }
     // if (email.isEmpty || !email.contains('@')) {
@@ -470,13 +574,35 @@ class NewTeamController extends GetxController {
       clearPlayerFormFields();
       teamController.fetchGetPlayer(player.id!);
       // Get.toNamed(RoutesPath.mainDashboardScreen);
-      SnackbarUtils.showSuccess('User Add Player in successfully');
+      SnackbarUtils.showSuccess(response.message.toString());
       // Get.snackbar('Success', 'User Add Player in successfully');
       // Navigate to home or dashboard
+    }else{
+
+      SnackbarUtils.showErrorr(response.message.toString());
+
     }
   }
+  void getPlayer(){
 
+    teamController.fetchGetPlayer(createTeamResponse.value!.id!);
+  }
+  Future<void> selectDate(BuildContext context) async {
+    final DateTime? picked = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+    );
 
+    if (picked != null) {
+      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      dateController.text=formattedDate;
+      datess.value=dateController.text.toString();
+      print('Selected date: $formattedDate'); // Output: 09-09-2025
+      // You can now use this formattedDate as needed
+    }
+  }
 
   Future<void> addPlayers(BuildContext context, {int? teamId}) async {
     final country = playerCountryController.text;
@@ -486,7 +612,7 @@ class NewTeamController extends GetxController {
     final phone = playerPhoneController.text;
 
     if (country.isEmpty) {
-      showError(context, 'Please enter player country');
+      SnackbarUtils.showErrorr( 'Please enter player country');
       return;
     }
     if (lastName.isEmpty) {
@@ -494,7 +620,7 @@ class NewTeamController extends GetxController {
       return;
     }
     if (jerseyNumber.isEmpty) {
-      showError(context, 'Please enter jersey number');
+      SnackbarUtils.showErrorr( 'Please enter jersey number');
       return;
     }
     // if (email.isEmpty || !email.contains('@')) {
@@ -524,9 +650,12 @@ class NewTeamController extends GetxController {
       clearPlayerFormFields();
       teamController.fetchGetPlayer(player.id!);
       // Get.toNamed(RoutesPath.mainDashboardScreen);
-      SnackbarUtils.showSuccess('User Add Player in successfully');
+      SnackbarUtils.showSuccess(response.message.toString());
       // Get.snackbar('Success', 'User Add Player in successfully');
       // Navigate to home or dashboard
+    }else{
+
+      SnackbarUtils.showErrorr(response.message.toString());
     }
   }
   void clearPlayerFormFields() {
@@ -544,6 +673,7 @@ class NewTeamController extends GetxController {
   }
 
   void clearTeamFormFields() {
+    orgCode.clear();
     teamNameController.clear();
     sportType.value = '';
     teamType.value = '';
@@ -551,7 +681,19 @@ class NewTeamController extends GetxController {
     seasonController.clear();
     cityController.clear();
     countryController.clear();
-    organizationId.value = 0; // or 0, depending on its type
+    organizationId = null; // or 0, depending on its type
+  }
+  Future<void> addPsitionedInPlayers(BuildContext context) async {
+
+    final response = await TeamsApi.playerPositionedAdd(teamController.playerPreference.value,createTeamResponse?.value!.id);
+    if (response.success!) {
+      SnackbarUtils.showSuccess(response.message!);
+      Navigator.pop(context);
+     
+    } else {
+      SnackbarUtils.showErrorr(response.message.toString());
+      print('No team data saved');
+    }
   }
 
 }

@@ -15,16 +15,16 @@ class PaymentController extends GetxController {
     int amount = double.tryParse(response.data?.amount?.toString() ?? '0')?.toInt() ?? 0;
 
     if (response.success!) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (_) => PaymentIntentWebViewPage(
-            clientSecret: response.data!.clientSecret,
-            amount: amount,
-            currency: response.data!.currency, publishableKey: 'pk_test_51RJ5ROQ7VW5LvG1xARfelRNNUG4uPYklS38PwEuZbH8zi1u8J4jobsmmQpWjPj9mYJ9iU2z2Bo3TfC7IUFDyEYLb00Gi3NvWQA',
-          ),
-        ),
-      );
+      // Navigator.push(
+      //   context,
+      //   MaterialPageRoute(
+      //     builder: (_) => PaymentIntentWebViewPage(
+      //       clientSecret: response.data!.clientSecret,
+      //       amount: amount,
+      //       currency: response.data!.currency, publishableKey: 'pk_test_51RJ5ROQ7VW5LvG1xARfelRNNUG4uPYklS38PwEuZbH8zi1u8J4jobsmmQpWjPj9mYJ9iU2z2Bo3TfC7IUFDyEYLb00Gi3NvWQA',
+      //     ),
+      //   ),
+      // );
     }
   }
 }

@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:gaming_web_app/Base/model/response/base_response.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
@@ -13,8 +13,10 @@ import '../../Base/model/lineup/pdfModel.dart';
 import '../../Base/model/player/addPaler.dart';
 import '../../Base/model/player/addPlayerResponse.dart';
 import '../../Base/model/player/getPlayerModel.dart';
+import '../../Base/model/playerPositioned.dart';
 import '../../Base/model/positioned.dart';
 import '../../Base/model/teamModel/createModel.dart';
+import '../../Base/model/updatePlayer.dart';
 import '../api_end_point.dart';
 import '../dio.dart';
 
@@ -45,7 +47,7 @@ class TeamsApi{
   static Future<BaseResponse<List<GetPlayer?>>> getPlayer(int id) async {
     try {
       final response = await DioUtil.request<List<GetPlayer>>(
-        endpoint:"${APIEndPoints.addPlayers}/$id}/players",
+        endpoint:"${APIEndPoints.addPlayers}/$id/players",
         fromJsonT: GetPlayer.fromJson,
         httpRequestType: HttpRequestType.get,
         cast: (object) {
@@ -137,6 +139,23 @@ class TeamsApi{
 
     return response;
   }
+  static Future<BaseResponse<void>> playerPositionedAdd(
+      List<PlayerPreference> playerPreference,
+      int? teamId,
+      ) async {
+
+    PlayerPreferencesResponse data=PlayerPreferencesResponse(playerPreferences:playerPreference);
+    var jsonString = playerPreference.map((e) => e.toJson()).toList();
+    final response = await DioUtil.request<void>(
+      loadingText: 'Submitting players...',
+      endpoint: "/teams/$teamId/bulk-player-preferences",
+      requestBody: data.toJson(), // ✅ send request body
+      fromJsonT: (_) => {},
+      httpRequestType: HttpRequestType.put,
+    );
+
+    return response;
+  }
 
   static Future<BaseResponse<FetchAutoFillLineups>> submmitLineupData(
       FetchAutoFillLineups autoFillLineups,
@@ -154,6 +173,24 @@ class TeamsApi{
     return response;
   }
 
+
+
+  static Future<BaseResponse<UpdatePlayerModel>> updatePlayer(
+      UpdatePlayerModel updatePlayerModel,
+      int playerId,
+      ) async {
+    print(updatePlayerModel.toJson());
+    final response = await DioUtil.request<UpdatePlayerModel>(
+      loadingText: 'Submitting players...',
+      endpoint: "/players/$playerId",
+      requestBody: updatePlayerModel.toJson(), // ✅ send request body
+      // fromJsonT: (_) => {},
+      fromJsonT: UpdatePlayerModel.fromJson,   // ✅ parse response
+      httpRequestType: HttpRequestType.put,
+    );
+
+    return response;
+  }
 
 
 
@@ -262,6 +299,7 @@ class TeamsApi{
       requestBody: request.toJson(),
       fromJsonT: AddPlayerResponse.fromJson,
       httpRequestType: HttpRequestType.post,
+
     );
 
     return response;

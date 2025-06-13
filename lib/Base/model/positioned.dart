@@ -33,6 +33,28 @@ class Position {
     };
 
   }
+
+
+
+  Position copyWith({
+    int? id,
+    String? name,
+    String? category,
+    String? display_name,
+    int? isEditable,
+  }) {
+    return Position(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      category: category ?? this.category,
+      display_name: display_name ?? this.display_name,
+      isEditable: isEditable ?? this.isEditable,
+    );
+  }
+
+
+
+
   @override
   String toString() {
     // TODO: implement toString

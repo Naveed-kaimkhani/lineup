@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class GetPlayer {
   final int id;
   final int teamId;
@@ -20,6 +22,7 @@ class GetPlayer {
   });
 
   factory GetPlayer.fromJson(Map<String, dynamic> json) {
+
     return GetPlayer(
       id: json['id'] ?? 0,
       teamId: json['team_id'] ?? 0,

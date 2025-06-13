@@ -65,6 +65,8 @@ import 'package:flutter/material.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 
+import '../../../utils/SharedPreferencesUtil.dart';
+
 class PrimaryButton extends StatelessWidget {
   final VoidCallback onTap;
   final String title;
@@ -119,3 +121,54 @@ class PrimaryButton extends StatelessWidget {
     );
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+class BackButtons extends StatelessWidget {
+  final Function() onTab;
+  const BackButtons({required this.onTab});
+
+  @override
+  Widget build(BuildContext context) {
+    return InkWell(
+      onTap: onTab,
+          // _navigateBack(context),
+      child: Container(
+        margin: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(8),
+        decoration: BoxDecoration(
+          color: Colors.indigo,
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: const Icon(Icons.arrow_back, color: Colors.white),
+      ),
+    );
+  }
+
+  void _navigateBack(BuildContext context) async {
+    final lastRoute = await SharedPreferencesUtil.read('last_route');
+    if (lastRoute != null && lastRoute.isNotEmpty) {
+      Navigator.pushNamed(context, lastRoute);
+    } else {
+      Navigator.of(context).pop();
+    }
+  }
+}
+
+
+
+
+
+
+
+

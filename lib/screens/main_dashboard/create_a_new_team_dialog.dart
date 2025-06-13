@@ -6,6 +6,7 @@ import 'package:gaming_web_app/screens/main_dashboard/add_season_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/add_team_location_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/add_team_name_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/add_year_screen.dart';
+import 'package:gaming_web_app/screens/main_dashboard/setFavouritPosition.dart';
 import 'package:gaming_web_app/screens/main_dashboard/set_player_position_screen.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/teamController/createTeamController.dart';
@@ -95,7 +96,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
 
     // Responsive padding
     final verticalPadding = screenSize.height * 0.04; // 4% of screen height
-    final horizontalPadding = screenSize.width * 0.05; // 5% of screen width
+    final horizontalPadding = screenSize.width * 0.01; // 5% of screen width
 
     // Responsive spacing
     final smallSpacing = screenSize.height * 0.01; // 1% of screen height
@@ -103,12 +104,13 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
     final largeSpacing = screenSize.height * 0.03; // 3% of screen height
 
     // Adjust indicator dots size
-    final dotSize = screenSize.width < 600 ? 6.0 : 8.0;
+    final dotSize = screenSize.width < 600 ? 8.0 : 8.0;
     final activeDotSize = screenSize.width < 600 ? 9.0 : 12.0;
     final TeamController teamController = Get.find<TeamController>();
     return Dialog(
       backgroundColor: Colors.transparent,
       insetPadding: EdgeInsets.zero,
+
       child: LayoutBuilder(
         builder: (context, constraints) {
           return Stack(
@@ -120,8 +122,8 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                 ),
               ),
               Center(
-                child: Container(
-                  width: constraints.maxWidth < 750
+                child: Obx(()=>Container(
+                  width: constraints.maxWidth < 700
                       ? constraints.maxWidth // full width for phones
                       : newTeamController.dialogWidth.value, // custom width for tablets/desktops
                   constraints: BoxConstraints(
@@ -162,7 +164,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                             teamController.getData();
                           },
 
-                          child: Icon(Icons.cancel,size: 30,color: Colors.red,),)
+                          child: Icon(Icons.cancel,size: 50,color: Colors.red,),)
 
 
                       ],),
@@ -176,127 +178,123 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                       ),
 
                       // Content - Fixed height container with page view
-                      Container(
+                      Obx(()=> Container(
                         height: newTeamController.dialogHeight.value,
                         constraints: BoxConstraints(
                           // Reduce max height to leave room for buttons and indicators
-                          maxHeight: constraints.maxHeight * 0.6,
+                          // maxHeight: constraints.maxHeight * 0.6,
                         ),
                         child: PageView(
                           controller: newTeamController.pageController,
                           physics: const NeverScrollableScrollPhysics(),
                           children: [
+
                             _buildSportSelection(context),
                             AddTeamNameScreen(),
                             _buildTeamTypeSelection(context),
+                            AdGeGroup(),
                             AddYearScreen(),
                             AddSeasonScreen(),
                             AddTeamLocationScreen(),
                             SetPlayerPositionScreen(onEdit: () {}),
                             AddPlayerDialog(),
-                            AddPlayerDialog(),
+                            SetFavoredPositionDialog(),
                             // SetFavoredPositionDialog(),
                           ],
                         ),
-                      ),
-                    // Spacer(),
+                      )),
+                      // Spacer(),
                       // SizedBox(height: mediumSpacing),
 
                       // Navigation buttons - Different layouts based on current page
                       // if (newTeamController.currentPage > 0 &&
                       //     _currentPage != 6 &&
                       //     _currentPage == 7)
-                        Row(
-                          children: [
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed:
-                                newTeamController.currentPage > 0 ? _goToPrevious : null,
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor:   Colors.indigo,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  padding: EdgeInsets.symmetric(vertical: 12),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed:(){
+                                newTeamController.goToPrevious(context);
+                              },
+                              // newTeamController.currentPage > 0 ? _goToPrevious : null,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor:   AppColors.primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(
-                                  'Back',
-                                  style: TextStyle(
-                                    fontSize: buttonTextSize,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text(
+                                'Back',
+                                style: TextStyle(
+                                  fontSize: buttonTextSize,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
-                            SizedBox(width: screenSize.width * 0.02),
-                            Expanded(
-                              child: ElevatedButton(
-                                onPressed:
-                                    () => {
-                                    newTeamController.pageIndex(context)
-                                      // newTeamController.goToNext(),
-                                      // _currentPage
-                                      // Navigator.pushNamed(
-                                      //   context,
-                                      //   RoutesPath.purchaseTeamScreen,
-                                      // ),
-                                    },
-                                //     Navigator.pushNamed(
-                                //   context,
-                                //   RoutesPath.purchaseTeamScreen,
-                                // ),
-                                style: ElevatedButton.styleFrom(
-                                  backgroundColor: const Color(0xFF003478),
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(8),
-                                  ),
-                                  padding: EdgeInsets.symmetric(vertical: 12),
+                          ),
+                          SizedBox(width: screenSize.width * 0.02),
+                          Expanded(
+                            child: ElevatedButton(
+                              onPressed:
+                                  () => {
+                                newTeamController.pageIndex(context)
+                              
+                              },
+                           
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF003478),
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(8),
                                 ),
-                                child: Text(
-                                  'Next',
-                                  style: TextStyle(
-                                    fontSize: buttonTextSize,
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+                                padding: EdgeInsets.symmetric(vertical: 12),
+                              ),
+                              child: Text(
+                                'Next',
+                                style: TextStyle(
+                                  fontSize: buttonTextSize,
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.w500,
                                 ),
                               ),
                             ),
-                          ],
-                        ),
+                          ),
+                        ],
+                      ),
 
 
                       SizedBox(height: smallSpacing),
 
                       // Page indicator dots
-                     Obx(()=> Container(
-                       height:
-                       dotSize * 1.5, // Fixed height container for dots
-                       child: Row(
-                         mainAxisAlignment: MainAxisAlignment.center,
-                         children: List.generate(
-                           newTeamController.totalPages.value,
-                               (i) => Container(
-                             margin: EdgeInsets.symmetric(horizontal: 4),
-                             width:
-                             i == newTeamController.currentPage.value ? activeDotSize : dotSize,
-                             height:
-                             i == newTeamController.currentPage.value ? activeDotSize : dotSize,
-                             decoration: BoxDecoration(
-                               color:
-                               i <= newTeamController.currentPage.value
-                                   ? const Color(0xFFB00020)
-                                   : Colors.grey.shade300,
-                               shape: BoxShape.circle,
-                             ),
-                           ),
-                         ),
-                       ),
-                     )),
+                      Obx(()=> Container(
+                        height:
+                        dotSize * 1.5, // Fixed height container for dots
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: List.generate(
+                            newTeamController.totalPages.value,
+                                (i) => Container(
+                              margin: EdgeInsets.symmetric(horizontal: 4),
+                              width:
+                              i == newTeamController.currentPage.value ? activeDotSize : dotSize,
+                              height:
+                              i == newTeamController.currentPage.value ? activeDotSize : dotSize,
+                              decoration: BoxDecoration(
+                                color:
+                                i <= newTeamController.currentPage.value
+                                    ? const Color(0xFFB00020)
+                                    : Colors.grey.shade300,
+                                shape: BoxShape.circle,
+                              ),
+                            ),
+                          ),
+                        ),
+                      )),
                     ],
                   ),
-                ),
+                )),
               ),
             ],
           );
@@ -416,7 +414,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
       children: [
         SizedBox(height: screenSize.height * 0.02),
         Text(
-          'ENTER SPORT',
+          'SELECT TEAM TYPE',
           style: TextStyle(
             color: AppColors.primaryColor,
             fontSize: screenSize.width < 600 ? 18.0 : 25.0,

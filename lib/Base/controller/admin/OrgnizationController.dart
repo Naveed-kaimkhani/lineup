@@ -3,7 +3,6 @@ import '../../../service/api/team.dart';
 
 import '../../model/teamModel/teamModel.dart';
 import '../getTeamData.dart';
-import '../teamController/teamController.dart';
 
 class OrganizationController extends GetxController {
 
@@ -44,16 +43,10 @@ class OrganizationController extends GetxController {
     try {
       // Call the API to get the list of teams
       final response = await TeamsApi.getOrganizationTeam(orgnizationId);
-      print("in function ");
-      print("in function ");
-      print(response.data);
-      print(response.data);
+     
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
-        print("in function ");
-        print("in function ");
-        print(response.data);
-        print(response.data);
+   
         teamData.value = response.data!;
         teamData.refresh();
         update();

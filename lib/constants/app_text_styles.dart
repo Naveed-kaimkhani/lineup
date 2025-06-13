@@ -25,7 +25,6 @@ TextStyle descriptionStyle = TextStyle(
 );
 TextStyle fieldLabelStyle = TextStyle(
   fontSize: 22.57.sp,
-  // fontSize: 19.57.sp,
   fontWeight: FontWeight.w400,
   fontFamily: 'Poppins',
 );

@@ -1,6 +1,6 @@
 class AutoFillLineups {
   final List<int>? playersInGame;
-  final Map<String, Map<String, String>>? fixedAssignments;
+   Map<String, Map<String, String>>? fixedAssignments;
   final List<Lineup>? lineup;
 
   AutoFillLineups({

@@ -64,28 +64,32 @@ class AddNewGameDialog extends StatelessWidget {
                       ),
                       child: Padding(
                         padding: EdgeInsets.all(16),
-                        child: Column(
+                        child: Container(
+
+                          width: 600,
+                          child: Column(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                           Row(children: [
-                             Spacer(),
-                             Text(
-                               'Add New Game'.toUpperCase(),
-                               style: formHeaderStyle.copyWith(
-                                 color: AppColors.secondaryColor,
-                               ),
-                               textAlign: TextAlign.center,
-                             ),
-                             Spacer(),
-                             InkWell(
-                               onTap: (){
-                                 Navigator.pop(context);
-                               },
+                            Row(
+                              children: [
+                                Spacer(),
+                                Text(
+                                  'Add New Game'.toUpperCase(),
+                                  style: formHeaderStyle.copyWith(
+                                    color: AppColors.secondaryColor,
+                                  ),
+                                  textAlign: TextAlign.center,
+                                ),
+                                Spacer(),
+                                InkWell(
+                                  onTap: () {
+                                    Navigator.pop(context);
+                                  },
 
-                               child: Icon(Icons.cancel, color: Colors.red,),),
-
-
-                           ],),
+                                  child: Icon(Icons.cancel, color: Colors.red),
+                                ),
+                              ],
+                            ),
                             SizedBox(height: 40.h),
                             Padding(
                               padding: EdgeInsets.symmetric(horizontal: 20.w),
@@ -101,26 +105,117 @@ class AddNewGameDialog extends StatelessWidget {
                               label: 'Opponent Name',
                               hintText: 'Tiger',
                             ),
-                            Row(
-                              children: [
-                                Expanded(
-                                  child: PrimaryTextField(
-                                    controller: teamController.dateController,
-                                    label: 'DATE',
-                                    hintText: 'April 03 2025',
-                                  ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Expanded(
-                                  child: PrimaryTextField(
-                                    controller: teamController.insController,
-                                    label: 'INS\'S',
-                                    hintText: '06',
-                                  ),
-                                ),
-                              ],
+                            SizedBox(height: 5,),
+                            Align(
+                              alignment: Alignment.centerLeft, // Aligns to start (left)
+                              child: Text(
+                                "              Select Date",
+                                style: TextStyle(color: Colors.grey),
+                              ),
                             ),
-                            Row(
+                            InkWell(
+                              onTap: () {
+                                teamController.selectDate(context);
+                              },
+                              child: Container(
+                                width: 500,
+                                padding: EdgeInsets.all(
+                                  8,
+                                ), // Optional: Add padding around text
+                                decoration: BoxDecoration(
+                                  color:
+                                  Colors
+                                      .white, // Optional: background color
+                                  borderRadius: BorderRadius.all(
+                                    Radius.circular(5),
+                                  ),
+                                  border: Border.all(
+                                    color:
+                                    Colors
+                                        .black.withOpacity(0.2), // Change this to your desired border color
+                                    width:
+                                    1.5, // Optional: thickness of the border
+                                  ),
+                                ),
+                                child:Obx(()=> Row(
+                                  children: [
+                                    teamController.datess.value ==""?    Text("Select Date"):Text(teamController.datess.value.toString()),
+                                    Spacer(),
+                                    Icon(Icons.arrow_drop_down),
+                                  ],
+                                )),
+                              ),
+                            ),
+
+
+
+                         SizedBox(height: 10,),
+                            PrimaryTextField(
+                              controller: teamController.insController,
+                              label: 'INS\'S',
+                              hintText: '06',
+                            ),
+
+
+                            // Checkbox(
+                            //   value: teamController.isHomeSelected.value,
+                            //   onChanged: (val) {
+                            //     teamController.isHomeSelected.value =
+                            //     !teamController.isHomeSelected.value;
+                            //     teamController.type.value =
+                            //     teamController.isHomeSelected.value
+                            //         ? "home"
+                            //         : "away";
+                            //   },
+                            // )
+                            // Column(
+                            //   children: [
+                            //     Expanded(
+                            //       child: InkWell(
+                            //         onTap: () {
+                            //           teamController.selectDate(context);
+                            //         },
+                            //         child: Container(
+                            //           padding: EdgeInsets.all(
+                            //             8,
+                            //           ), // Optional: Add padding around text
+                            //           decoration: BoxDecoration(
+                            //             color:
+                            //                 Colors
+                            //                     .white, // Optional: background color
+                            //             borderRadius: BorderRadius.all(
+                            //               Radius.circular(8),
+                            //             ),
+                            //             border: Border.all(
+                            //               color:
+                            //                   Colors
+                            //                       .black.withOpacity(0.2), // Change this to your desired border color
+                            //               width:
+                            //                   1.5, // Optional: thickness of the border
+                            //             ),
+                            //           ),
+                            //           child:Obx(()=> Row(
+                            //             children: [
+                            //               teamController.datess.value ==""?    Text("Select Date"):Text(teamController.datess.value.toString()),
+                            //               Spacer(),
+                            //               Icon(Icons.arrow_drop_down),
+                            //             ],
+                            //           )),
+                            //         ),
+                            //       ),
+                            //
+                            //     ),
+                            //     SizedBox(width: 10.w),
+                            //     // Expanded(
+                            //     //   child: PrimaryTextField(
+                            //     //     controller: teamController.insController,
+                            //     //     label: 'INS\'S',
+                            //     //     hintText: '06',
+                            //     //   ),
+                            //     // ),
+                            //   ],
+                            // ),
+                             Row(
                               children: [
                                 Theme(
                                   data: Theme.of(context).copyWith(
@@ -129,21 +224,21 @@ class AddNewGameDialog extends StatelessWidget {
                                         borderRadius: BorderRadius.circular(4),
                                       ),
                                       fillColor:
-                                          MaterialStateProperty.resolveWith<
-                                            Color
-                                          >((states) {
-                                            if (states.contains(
-                                              MaterialState.selected,
-                                            )) {
-                                              return Colors.white;
-                                            }
-                                            return Colors.white;
-                                          }),
+                                      MaterialStateProperty.resolveWith<
+                                          Color
+                                      >((states) {
+                                        if (states.contains(
+                                          MaterialState.selected,
+                                        )) {
+                                          return Colors.white;
+                                        }
+                                        return Colors.white;
+                                      }),
                                       checkColor: MaterialStateProperty.all(
                                         Colors.blue,
                                       ),
                                       side: MaterialStateBorderSide.resolveWith(
-                                        (states) {
+                                            (states) {
                                           if (states.contains(
                                             MaterialState.selected,
                                           )) {
@@ -160,102 +255,105 @@ class AddNewGameDialog extends StatelessWidget {
                                       ),
                                     ),
                                   ),
-                                  child: Checkbox(
+                                  child: Container(
+                                    margin: EdgeInsets.only(left: 50),
+
+                                    child: Checkbox(
                                     value: teamController.isHomeSelected.value,
                                     onChanged: (val) {
                                       teamController.isHomeSelected.value =
-                                          !teamController.isHomeSelected.value;
+                                      !teamController.isHomeSelected.value;
                                       teamController.type.value =
-                                          teamController.isHomeSelected.value
-                                              ? "home"
-                                              : "away";
+                                      teamController.isHomeSelected.value
+                                          ? "home"
+                                          : "away";
                                     },
-                                  ),
+                                  ),),
                                 ),
                                 SizedBox(width: 10.w),
                                 Text('Home', style: fieldLabelStyle),
                               ],
                             ),
-                            SizedBox(height: 20.h),
-                            Row(
-                              children: [
-                                Theme(
-                                  data: Theme.of(context).copyWith(
-                                    checkboxTheme: CheckboxThemeData(
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(4),
-                                      ),
-                                      fillColor:
-                                          MaterialStateProperty.resolveWith<
-                                            Color
-                                          >((states) {
-                                            if (states.contains(
-                                              MaterialState.selected,
-                                            )) {
-                                              return Colors.white;
-                                            }
-                                            return Colors.white;
-                                          }),
-                                      checkColor: MaterialStateProperty.all(
-                                        Colors.blue,
-                                      ),
-                                      side: MaterialStateBorderSide.resolveWith(
-                                        (states) {
-                                          if (states.contains(
-                                            MaterialState.selected,
-                                          )) {
-                                            return BorderSide(
-                                              color: Colors.blue,
-                                              width: 2,
-                                            );
-                                          }
-                                          return BorderSide(
-                                            color: Colors.grey.shade400,
-                                            width: 1,
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  child: Checkbox(
-                                    value:
-                                        teamController
-                                            .isPreviousLineUpTemplate
-                                            .value,
-                                    onChanged: (val) {
-                                      teamController
-                                          .isPreviousLineUpTemplate
-                                          .value = !teamController
-                                              .isPreviousLineUpTemplate
-                                              .value;
-                                      teamController.type.value =
-                                          teamController
-                                                  .isPreviousLineUpTemplate
-                                                  .value
-                                              ? "away"
-                                              : "home";
-                                      // teamController.isPreviousLineUpTemplate= teamController.isPreviousLineUpTemplate;
-                                    },
-                                  ),
-                                ),
-                                SizedBox(width: 10.w),
-                                Text(
-                                  'Use previous lineup as template',
-                                  style: fieldLabelStyle,
-                                ),
-                              ],
-                            ),
-                            if (teamController
-                                .isPreviousLineUpTemplate
-                                .value) ...[
-                              SizedBox(height: 20),
-                              CustomDropdown(
-                                hintText: 'At Commanders April 06 2025',
-                                items: ['Baseball', 'Softball'],
-                                onChanged: (value) {},
-                                itemLabelBuilder: (item) => item,
-                              ),
-                            ],
+                            // SizedBox(height: 20.h),
+                            // Row(
+                            //   children: [
+                            //     Theme(
+                            //       data: Theme.of(context).copyWith(
+                            //         checkboxTheme: CheckboxThemeData(
+                            //           shape: RoundedRectangleBorder(
+                            //             borderRadius: BorderRadius.circular(4),
+                            //           ),
+                            //           fillColor:
+                            //               MaterialStateProperty.resolveWith<
+                            //                 Color
+                            //               >((states) {
+                            //                 if (states.contains(
+                            //                   MaterialState.selected,
+                            //                 )) {
+                            //                   return Colors.white;
+                            //                 }
+                            //                 return Colors.white;
+                            //               }),
+                            //           checkColor: MaterialStateProperty.all(
+                            //             Colors.blue,
+                            //           ),
+                            //           side: MaterialStateBorderSide.resolveWith(
+                            //             (states) {
+                            //               if (states.contains(
+                            //                 MaterialState.selected,
+                            //               )) {
+                            //                 return BorderSide(
+                            //                   color: Colors.blue,
+                            //                   width: 2,
+                            //                 );
+                            //               }
+                            //               return BorderSide(
+                            //                 color: Colors.grey.shade400,
+                            //                 width: 1,
+                            //               );
+                            //             },
+                            //           ),
+                            //         ),
+                            //       ),
+                            //       child: Checkbox(
+                            //         value:
+                            //             teamController
+                            //                 .isPreviousLineUpTemplate
+                            //                 .value,
+                            //         onChanged: (val) {
+                            //           teamController
+                            //               .isPreviousLineUpTemplate
+                            //               .value = !teamController
+                            //                   .isPreviousLineUpTemplate
+                            //                   .value;
+                            //           teamController.type.value =
+                            //               teamController
+                            //                       .isPreviousLineUpTemplate
+                            //                       .value
+                            //                   ? "away"
+                            //                   : "home";
+                            //           // teamController.isPreviousLineUpTemplate= teamController.isPreviousLineUpTemplate;
+                            //         },
+                            //       ),
+                            //     ),
+                            //     SizedBox(width: 10.w),
+                            //     // Text(
+                            //     //   'Use previous lineup as template',
+                            //     //   style: fieldLabelStyle,
+                            //     // ),
+                            //   ],
+                            // ),
+                            // if (teamController
+                            //     .isPreviousLineUpTemplate
+                            //     .value) ...[
+                            //   SizedBox(height: 20),
+                            //   CustomDropdown(
+                            //     hintText: 'At Commanders April 06 2025',
+                            //     items: ['Baseball', 'Softball'],
+                            //     onChanged: (value) {},
+                            //     itemLabelBuilder: (item) => item,
+                            //   ),
+                            // ],
                             SizedBox(height: 50.h),
                             Row(
                               children: [
@@ -271,10 +369,10 @@ class AddNewGameDialog extends StatelessWidget {
                                   child: PrimaryButton(
                                     onTap:
                                         () => teamController
-                                            .validateAndSubmitAddGame(
-                                              context,
-                                              controller.teamDataIndex.value,
-                                            ),
+                                        .validateAndSubmitAddGame(
+                                      context,
+                                      controller.teamDataIndex.value,
+                                    ),
                                     title: 'Create',
                                     backgroundColor: AppColors.activeGreenColor,
                                   ),
@@ -282,7 +380,7 @@ class AddNewGameDialog extends StatelessWidget {
                               ],
                             ),
                           ],
-                        ),
+                        ),),
                       ),
                     ),
                   ),

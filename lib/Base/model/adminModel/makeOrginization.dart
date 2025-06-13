@@ -1,11 +1,13 @@
 class OrginizationCreate {
   final String? name;
   final String? email;
+  final String? organization_code;
   final String? id;
 
   OrginizationCreate({
     this.name,
     this.email,
+    this.organization_code,
     this.id,
   });
 
@@ -13,6 +15,7 @@ class OrginizationCreate {
   factory OrginizationCreate.fromJson(Map<String, dynamic> json) {
     return OrginizationCreate(
       name: json['name'] as String?,
+      organization_code: json['organization_code'] as String?,
       email: json['email'] as String?,
       id: json['id'] as String?,
     );
@@ -21,6 +24,7 @@ class OrginizationCreate {
   Map<String, dynamic> toJson() {
     return {
       'name': name,
+      'organization_code': organization_code,
       'email': email,
       'id': id,
     };

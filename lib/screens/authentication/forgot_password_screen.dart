@@ -44,9 +44,11 @@ class ForgotPasswordScreen extends StatelessWidget {
                               controller: controller.otpController,
                               label: 'OTP ',
                             ),PrimaryTextField(
+                              obscureText: true,
                               controller: controller.password,
                               label: 'Password ',
                             ),PrimaryTextField(
+                              obscureText: true,
                               controller: controller.passwordConfirmation,
                               label: 'Confirm Password ',
                             ),
@@ -63,7 +65,7 @@ class ForgotPasswordScreen extends StatelessWidget {
                         //   context,
                         //   RoutesPath.organizationDashboardScreen,
                         // ),
-                        title: 'Send Code',
+                        title:controller.isMail.value?"Update" :'Send Code',
                         width: 540.4,
                         radius: 4.89.r,
                         backgroundColor: AppColors.secondaryColor,

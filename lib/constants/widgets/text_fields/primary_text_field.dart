@@ -1,7 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
+
+import '../../../Base/model/positioned.dart';
 
 class PrimaryTextField extends StatelessWidget {
   final TextEditingController? controller;
@@ -64,7 +66,7 @@ class PrimaryTextField extends StatelessWidget {
                   prefixIcon: prefixIcon,
                   suffixIcon: suffixIcon,
                   filled: true,
-                  hintText: hintText,
+                  // hintText: hintText,
                   hintStyle: tableLabel.copyWith(color: Colors.black26),
                   fillColor: Colors.white,
                   contentPadding: EdgeInsets.symmetric(
@@ -101,8 +103,135 @@ class PrimaryTextField extends StatelessWidget {
     );
   }
 }
+var textFieldKey=[];
 
+int textFieldIndex=0;
+int foc=1;
+class LineupTextField extends StatelessWidget {
+  final TextEditingController? controller;
+  final bool obscureText;
+  final bool isLable;
+  final TextInputType keyboardType;
+  final Widget? prefixIcon;
+  final Widget? suffixIcon;
+  List<Position?> positions;
+  final ValueChanged<String>? onChanged; // <- this is the parameter
+  final String? Function(String?)? validator;
+  final int maxLines;
 
+  final double borderRadius;
+  final String? hintText;
+  final bool readAble;
 
+  LineupTextField({
+    super.key,
+    this.controller,
+    required this.positions,
+    this.onChanged,
+    this.isLable = false,
+    this.obscureText = false,
+    this.keyboardType = TextInputType.text,
+    this.prefixIcon,
+    this.suffixIcon,
+    this.validator,
+    this.maxLines = 1,
+    this.borderRadius = 12.0,
 
+    this.hintText,
+    this.readAble = false,
+  });
 
+  @override
+  Widget build(BuildContext context) {
+    var key =GlobalKey();
+     foc=foc+1;
+    textFieldKey.add(key);
+    return Padding(
+
+      padding: EdgeInsets.only(bottom: 0),
+      child: SizedBox(
+        width: 60,
+        // height: 100,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            SizedBox(
+              height: 30, // responsive height
+              child: TextFormField(
+                // focusNode: focusNode[foc], // Make sure this line exists!
+                onTap: (){
+                 print(key);
+                 print(foc);
+                 int index = textFieldKey.indexOf(key);
+                 textFieldIndex=index;
+                },
+                key: key,
+                onChanged: onChanged,
+                readOnly: readAble,
+                controller: controller,
+                obscureText: obscureText,
+                keyboardType: keyboardType,
+                maxLines: obscureText ? 1 : maxLines,
+                validator: validator,
+                style: tableLabel.copyWith(
+                  fontSize: isLable ? 16 : 14,
+                  fontWeight: isLable ? FontWeight.bold : FontWeight.normal,
+                  color:
+                      filterPositionsByNameMatch(positions, controller!.text)
+                          ? AppColors.primaryColor
+                          : Colors.black,
+                ),
+                decoration: InputDecoration(
+                  prefixIcon: prefixIcon,
+                  suffixIcon: suffixIcon,
+                  filled: true,
+                  hintText: "--",
+                  hintStyle: tableLabel.copyWith(color: Colors.black26),
+                  fillColor: Colors.white,
+                      // isLable
+                      //     ? Colors.green
+                      //     : controller?.text != ""
+                      //     ? Colors.amber.withOpacity(0.5)
+                      //     : Colors.white,
+                  // contentPadding: EdgeInsets.symmetric(
+                  //   vertical: isMobile ? 14.h : 18.h,
+                  //   horizontal: 20.w,
+                  // ),
+                  enabledBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(2),
+                    borderSide: const BorderSide(
+                      color: Color(0xB0DEDEDE),
+                      width: 1.22,
+                    ),
+                  ),
+                  focusedBorder: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: const BorderSide(
+                      color: Color(0xFFDEDEDE),
+                      width: 1.5,
+                    ),
+                  ),
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(0),
+                    borderSide: const BorderSide(
+                      color: Color(0xB0DEDEDE),
+                      width: 1.22,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+bool filterPositionsByNameMatch(List<Position?> positions, String query) {
+  return positions.any((position) {
+    final name = position?.name?.toLowerCase() ?? '';
+    return name == query.toLowerCase(); // Exact match
+  });
+}

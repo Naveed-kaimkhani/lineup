@@ -239,3 +239,31 @@ class Organizations {
     };
   }
 }
+
+
+
+
+
+class OrganizationCodes {
+  final int organizationId;
+  final String organizationName;
+
+  OrganizationCodes({
+    required this.organizationId,
+    required this.organizationName,
+  });
+
+  factory OrganizationCodes.fromJson(Map<String, dynamic> json) {
+    return OrganizationCodes(
+      organizationId: json['organization_id'] as int,
+      organizationName: json['organization_name'] as String,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'organization_id': organizationId,
+      'organization_name': organizationName,
+    };
+  }
+}
