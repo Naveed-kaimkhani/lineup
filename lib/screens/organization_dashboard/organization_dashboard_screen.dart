@@ -1,17 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/org_controller/org_teams_controller.dart';
+import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
+import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
+import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
+import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/show_renewal_dialogue.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
+import 'package:gaming_web_app/service/api/adminApi.dart';
+import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:get/get.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../Base/componant/alertDialog.dart';
 
 class OrganizationDashboardScreen extends StatelessWidget {
-  const OrganizationDashboardScreen({super.key});
-
+  OrganizationDashboardScreen({super.key});
+  final controlle = Get.find<NewTeamController>();
   @override
   Widget build(BuildContext context) {
     return DashboardScaffold(
@@ -42,6 +51,77 @@ class OrganizationDashboardScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             SizedBox(height: 50.h),
+
+            // Align(
+            //   alignment: AlignmentDirectional.centerEnd,
+            //   child: PrimaryButton(
+            //     width: 280.w, // You can adjust this as needed
+            //     onTap: () async {
+            //       showRenewalPaymentDialog(
+            //         context,
+            //         PromoCode: () {
+            //           // Navigator.pop(context);
+            //           controlle.promoCodeDialog(context);
+            //           // Handle Promo Code selection
+            //           print('Promo Code selected');
+            //           // optional: close dialog after selection
+            //         },
+            //         OnlinePayment: () async {
+            //           final response = await AdminApi.getRenewalPaymentLink();
+            //         },
+            //       );
+            //     },
+            //     radius: 20.r,
+            //     textStyle: descriptiveStyle.copyWith(
+            //       color: Colors.white,
+            //       fontSize: 18,
+            //     ),
+            //     title: 'Renew Subscription',
+            //     backgroundColor: AppColors.secondaryColor,
+            //   ),
+            // ),
+            LayoutBuilder(
+              builder: (context, constraints) {
+                bool isMobile = constraints.maxWidth < 600;
+
+                return Align(
+                  alignment:
+                      isMobile
+                          ? Alignment
+                              .center // Center on mobile
+                          : AlignmentDirectional.centerEnd, // Right on desktop
+                  child: Padding(
+                    padding: EdgeInsets.only(
+                      right: isMobile ? 0 : 0,
+                      bottom: isMobile ? 16 : 0,
+                    ),
+                    child: PrimaryButton(
+                      width: isMobile ? double.infinity : 280.w,
+                      onTap: () async {
+                        showRenewalPaymentDialog(
+                          context,
+                          PromoCode: () {
+                            controlle.promoCodeDialog(context);
+                          },
+                          OnlinePayment: () async {
+                            final response =
+                                await AdminApi.getRenewalPaymentLink();
+                          },
+                        );
+                      },
+                      radius: 20.r,
+                      textStyle: descriptiveStyle.copyWith(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                      title: 'Renew Subscription',
+                      backgroundColor: AppColors.secondaryColor,
+                    ),
+                  ),
+                );
+              },
+            ),
+
             LayoutBuilder(
               builder: (context, constraints) {
                 bool isMobile = constraints.maxWidth < 600;
@@ -123,21 +203,6 @@ class TeamTable extends StatelessWidget {
               }
             },
           ),
-          //           LayoutBuilder(
-          //   builder: (context, constraints) {
-          //     final width = constraints.maxWidth;
-
-          //     if (width < 600) {
-          //       return Obx(() => OrgTeamMobileLayout(teams: controller.teams));
-          //     } else if (width < 1024) {
-          //       return Obx(() => _TabletLayout(teams: controller.teams));
-          //     } else {
-          //       return Obx(() => _WebLayout(teams: controller.teams));
-          //     }
-          //   },
-          // ),
-
-          // if (controller.lastPage)
           if (true)
             TextButton(
               onPressed: controller.loadMore,
@@ -157,6 +222,7 @@ class _WebLayout extends StatelessWidget {
   final List<OrgTeamModel> teams;
   final OrgTeamsController controller = Get.find<OrgTeamsController>();
 
+  final TeamController teamController = Get.find<TeamController>();
   _WebLayout({required this.teams});
 
   @override
@@ -166,44 +232,95 @@ class _WebLayout extends StatelessWidget {
         _buildHeaderRow(),
         const SizedBox(height: 8),
         ...teams.map((team) {
-          return Container(
-            padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            margin: const EdgeInsets.only(top: 8),
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Row(
-              children: [
-                Expanded(child: Text(team.name, style: fieldLabelStyle)),
-
-                Expanded(child: Text(team.year, style: fieldLabelStyle)),
-                Expanded(child: Text(team.season, style: fieldLabelStyle)),
-                Expanded(child: Text(team.ageGroup, style: fieldLabelStyle)),
-                SizedBox(
-                  width: 80,
-                  child: InkWell(
-                    onTap: () {
-                      showCustomDialog(
-                        context: context,
-                        title: 'Delete Team',
-                        description:
-                            'Are you sure you want to delete this team?',
-                        onOk: () async {
-                          Get.back();
-                          await controller.deleteTeam(team.id);
-                        },
-                        onCancel: () => Get.back(),
-                      );
-                    },
-                    child: Image.asset(
-                      'assets/images/delete_icon.png',
-                      height: 36.h,
-                      width: 40.w,
+          return InkWell(
+            onTap: () async {
+              
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder:
+                      (context) =>
+                          TeamDetailsScreen(teamId: team.id), // Example ID
+                ),
+              );
+            },
+            child: Container(
+              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+              margin: const EdgeInsets.only(top: 8),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      team.name,
+                      style: fieldLabelStyle.copyWith(
+                        color: AppColors.descriptiveTextColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
                   ),
-                ),
-              ],
+
+                  Expanded(
+                    child: Text(
+                      team.year,
+                      style: fieldLabelStyle.copyWith(
+                        color: AppColors.descriptiveTextColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+
+                  // Expanded(child: Text("team.year", style: fieldLabelStyle)),
+                  Expanded(
+                    child: Text(
+                      team.season,
+                      style: fieldLabelStyle.copyWith(
+                        color: AppColors.descriptiveTextColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  Expanded(
+                    child: Text(
+                      team.ageGroup,
+                      style: fieldLabelStyle.copyWith(
+                        color: AppColors.descriptiveTextColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  SizedBox(
+                    width: 80,
+                    child: InkWell(
+                      onTap: () {
+                        showCustomDialog(
+                          context: context,
+                          title: 'Delete Team',
+                          description:
+                              'Are you sure you want to delete this team?',
+                          onOk: () async {
+                            Get.back();
+                            await controller.deleteTeam(team.id);
+                          },
+                          onCancel: () => Get.back(),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/delete_icon.png',
+                        height: 36.h,
+                        width: 40.w,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         }),

@@ -14,6 +14,13 @@ class RoutesPath {
 
   // static const String organizationDashboardScreen = '/OrganizationDashboardScreen';
 
+
+  static const String teamDetailsScreen = '/TeamDetailsScreen';
+
+  static const String signUpScreen = '/SignUpScreen';
+
   static const String adminDashboardScreen = '/adminDashboardScreen';
+
+  static const String paymentHistoryScreen = '/PaymentHistoryScreen';
   static const String OrganizationSignin = '/OrganizationSignin';
 }

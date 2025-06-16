@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../../../constants/app_colors.dart';
-import '../../../constants/app_text_styles.dart';
 import '../../../constants/widgets/buttons/primary_button.dart';
 
 class NameEmailDialog extends StatelessWidget {
@@ -138,10 +137,6 @@ class FCreatePromoCodeDialog extends StatelessWidget {
         ],
       ),
 
-      // Padding(padding:EdgeInsets.all(20) ,child: Text("Enter Organizations Details",style: descriptionHeader.copyWith(
-      //   fontSize:  20 ,
-      //   color: AppColors.secondaryColor,
-      // ),),),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -467,69 +462,3 @@ void showPaymentDialog(
         ],),
   );
 }
-// void showPaymentDialog(
-//   BuildContext context, {
-//   required VoidCallback PromoCode,
-//   required VoidCallback OnlinePayment,
-// }) {
-//   showDialog(
-//     context: context,
-//     // barrierColor: Colors.white,
-//     builder:
-//         (context) => AlertDialog(
-//           backgroundColor: Colors.white,
-//           title: Row(
-//             children: [
-//               Text(
-//                 '  Select Payment Type',
-//                 style: TextStyle(
-//                   fontSize: 20,
-//                   fontWeight: FontWeight.bold,
-//                   color: AppColors.secondaryColor,
-//                 ),
-//               ),
-//               Spacer(),
-//               // Spacer(),
-//               InkWell(
-//                 onTap: () {
-//                   Get.back();
-//                 },
-//
-//                 child: Icon(Icons.cancel, size: 50, color: Colors.red),
-//               ),
-//             ],
-//           ),
-//           content: Column(
-//             mainAxisSize: MainAxisSize.min,
-//             children: [
-//               const Text('We want to select a payment type'),
-//               SizedBox(height: 20),
-//             ],
-//           ),
-//
-//           actions: [
-//             Row(
-//               children: [
-//                 Expanded(
-//                   child: PrimaryButton(
-//                     width: double.infinity,
-//                     onTap: PromoCode,
-//                     title: '  Promo Code   ',
-//                     backgroundColor: AppColors.primaryColor,
-//                   ),
-//                 ),
-//                 const SizedBox(width: 30),
-//                 Expanded(
-//                   child: PrimaryButton(
-//                     width: double.infinity,
-//                     onTap: OnlinePayment,
-//                     title: '  Online Payment  ',
-//                     backgroundColor: AppColors.descriptiveTextColor,
-//                   ),
-//                 ),
-//               ],
-//             ),
-//           ],
-//         ),
-//   );
-// }

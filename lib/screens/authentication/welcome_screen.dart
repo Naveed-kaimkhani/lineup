@@ -211,12 +211,16 @@ class _WelcomeScreenState extends State<WelcomeScreen> {
                           ),
                           SizedBox(width: buttonSpacing),
                           PrimaryButton(
-                            // onTap: () => Navigator.pushNamed(context, RoutesPath.signIn),
                             onTap:
                                 () => Navigator.pushNamed(
                                   context,
-                                  RoutesPath.OrganizationSignin,
+                                  RoutesPath.signIn,
                                 ),
+                            // onTap:
+                            //     () => Navigator.pushNamed(
+                            //       context,
+                            //       RoutesPath.OrganizationSignin,
+                            //     ),
                             width: buttonWidth,
                             title: '  Already a Coach? Login  ',
                             labelColor: Colors.black,

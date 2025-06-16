@@ -21,7 +21,6 @@ class GlobleController extends GetxController {
   Future<void> gameDelete(int gameId) async {
     final respone = await GlobleApi.deleteGame(gameId);
 
-    print(respone.message);
 
     if (respone.success!) {
       final TeamController controller = Get.find<TeamController>();
@@ -36,7 +35,6 @@ class GlobleController extends GetxController {
   Future<void> playesDelete(int playerId) async {
     final respone = await GlobleApi.deletePlayes(playerId);
 
-    print(respone.message);
 
     if (respone.success!) {
       final controller = Get.find<TeamController>();

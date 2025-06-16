@@ -8,7 +8,7 @@ class OrgTeamModel {
   final String season;
   final String city;
   final String state;
-  final String country;
+  // final String country;
 
   OrgTeamModel({
     required this.id,
@@ -18,7 +18,7 @@ class OrgTeamModel {
     required this.city,
     required this.ageGroup,
     required this.state,
-    required this.country,
+    // required this.country,
   });
 
   factory OrgTeamModel.fromJson(Map<String, dynamic> json) {
@@ -31,7 +31,7 @@ class OrgTeamModel {
       ageGroup: json['age_group'],
       city: json['city'],
       state: json['state'],
-      country: json['country'],
+      // country: json['country'],
     );
   }
 }

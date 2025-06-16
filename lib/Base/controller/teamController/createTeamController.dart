@@ -1,16 +1,11 @@
-import 'dart:developer';
 
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
-import 'package:get/get_rx/src/rx_types/rx_types.dart';
-import 'package:get/get_state_manager/src/simple/get_controllers.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-import '../../../checkout/stripe_checkout.dart';
 import '../../../routes/routes_path.dart';
 import '../../../screens/admin/adminController/orginatizationDialog.dart';
-import '../../../screens/main_dashboard/add_player_dialog.dart';
 import '../../../service/api/adminApi.dart';
 import '../../../service/api/team.dart';
 import '../../../utils/SharedPreferencesUtil.dart';
@@ -19,13 +14,11 @@ import '../../../utils/snackbarUtils.dart';
 import '../../model/game/addNewGame.dart';
 import '../../model/player/addPaler.dart';
 import '../../model/player/addPlayerResponse.dart';
-import '../../model/positioned.dart';
 import '../../model/promoCodeReq.dart';
 import '../../model/teamModel/createModel.dart';
 
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:dio/dio.dart';
 
 import '../paymantContrller.dart'; // Import Dio for API call
 
@@ -49,14 +42,18 @@ class NewTeamController extends GetxController {
   final state = ''.obs; // optional
   // final organizationId = 0.obs;  // optional
   TextEditingController orgCode = TextEditingController();
-  TextEditingController PromoCode =TextEditingController();
+  TextEditingController PromoCode = TextEditingController();
   // TextEditingControllers (for text fields if needed)
   final TextEditingController teamNameController = TextEditingController();
-  int? organizationId ;
-  final TextEditingController ageGroupController = TextEditingController(text: "2025");
+  int? organizationId;
+  final TextEditingController ageGroupController = TextEditingController(
+    text: "2025",
+  );
   final TextEditingController enterAgeGroupController = TextEditingController();
   final TextEditingController seasonController = TextEditingController();
-  final TextEditingController countryController = TextEditingController(text: "xyz");
+  final TextEditingController countryController = TextEditingController(
+    text: "xyz",
+  );
   final TextEditingController cityController = TextEditingController();
   final TextEditingController stateController = TextEditingController();
 
@@ -83,31 +80,29 @@ class NewTeamController extends GetxController {
       currentPage.value++;
       updateDimensions(context);
       updateDimensions(context);
-      print(currentPage);
       // _updateDimensions(context);
     }
   }
+
   void goToPrevious(BuildContext context) async {
     SnackbarUtils.showErrorr('Please Fill All Next Requirement'.toString());
-    if (currentPage.value > 0 &&currentPage.value < 6) {
-
+    if (currentPage.value > 0 && currentPage.value < 6) {
       await pageController.previousPage(
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
 
-        currentPage.value --;
-        updateDimensions(context);
+      currentPage.value--;
+      updateDimensions(context);
     }
   }
+
   @override
   void onInit() {
     super.onInit();
   }
 
   Future<void> pageIndex(BuildContext context) async {
-    print(currentPage);
-    print(teamNameController.value);
     if (currentPage.value == 0) {
       if (sportType.value.isEmpty) {
         SnackbarUtils.showErrorr('Please set all required values'.toString());
@@ -117,15 +112,12 @@ class NewTeamController extends GetxController {
     }
 
     if (currentPage.value == 1) {
-      if (orgCode.text.trim().isEmpty ||teamNameController.text
-          .trim()
-          .isEmpty) {
+      if (orgCode.text.trim().isEmpty ||
+          teamNameController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please Enter Required Value'.toString());
-
-
       } else {
         // getOrgCode(context);
-     
+
         _goToNext(context);
       }
     }
@@ -138,80 +130,57 @@ class NewTeamController extends GetxController {
       }
     }
 
-    if(currentPage.value ==3){
-        if(enterAgeGroupController.text.isEmpty){
-          // _goToNext(context);
-          SnackbarUtils.showErrorr('Please Enter value '.toString());
-        }
-      else{
-          _goToNext(context);
-        }
-    }
-
-
-    if(currentPage.value == 4){
-          if(ageGroupController.text.trim().isEmpty ){
-            SnackbarUtils.showErrorr('Please Enter value '.toString());
-           
-          }else{
-
-            if(ageGroupController.text.length == 4)
-            {
-              _goToNext(context);
-            
-            }else{
-              SnackbarUtils.showErrorr('Please Enter 4 digit '.toString());
-
-            }
-          }
-    }
-
-
-
-    if(currentPage.value == 5){
-      if(seasonController.text.trim().isEmpty){
-        SnackbarUtils.showErrorr('Please select  values'.toString());
-      }else{
+    if (currentPage.value == 3) {
+      if (enterAgeGroupController.text.isEmpty) {
+        // _goToNext(context);
+        SnackbarUtils.showErrorr('Please Enter value '.toString());
+      } else {
         _goToNext(context);
       }
     }
 
+    if (currentPage.value == 4) {
+      if (ageGroupController.text.trim().isEmpty) {
+        SnackbarUtils.showErrorr('Please Enter value '.toString());
+      } else {
+        if (ageGroupController.text.length == 4) {
+          _goToNext(context);
+        } else {
+          SnackbarUtils.showErrorr('Please Enter 4 digit '.toString());
+        }
+      }
+    }
 
-
-    if(currentPage.value == 6){
-      if(cityController.text.isEmpty  || stateController.text.isEmpty){
+    if (currentPage.value == 5) {
+      if (seasonController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please select  values'.toString());
-      }else{
+      } else {
+        _goToNext(context);
+      }
+    }
+
+    if (currentPage.value == 6) {
+      if (cityController.text.isEmpty || stateController.text.isEmpty) {
+        SnackbarUtils.showErrorr('Please select  values'.toString());
+      } else {
         // CreateNewTeam(context);
         _goToNext(context);
       }
     }
 
-    if(currentPage.value == 7){
-
-        CreateNewTeam(context);
-
+    if (currentPage.value == 7) {
+      CreateNewTeam(context);
     }
 
-
-    if(currentPage.value == 8){
+    if (currentPage.value == 8) {
       _goToNext(context);
-
     }
-    if(currentPage.value ==9){
-
-
+    if (currentPage.value == 9) {
       // playerPreference
 
       addPsitionedInPlayers(context);
-
-
-
-
     }
-
   }
-
 
   Future<void> launchPayUrl(String link) async {
     final Uri url = Uri.parse(link);
@@ -225,16 +194,9 @@ class NewTeamController extends GetxController {
       throw 'Could not launch $url';
     }
   }
+
   final paymentController = Get.put(PaymentController());
-  // @override
-  // void onClose() {
-  //   nameController.dispose();
-  //   seasonController.dispose();
-  //   yearController.dispose();
-  //   cityController.dispose();
-  //   stateController.dispose();
-  //   super.onClose();
-  // }
+
 
   RxDouble dialogHeight = 0.0.obs;
   RxDouble dialogWidth = 0.0.obs;
@@ -248,11 +210,11 @@ class NewTeamController extends GetxController {
     try {
       // Call the API to get the list of teams
       final response = await AdminApi.orgCodeReq(orgCode.text.trim());
-      print(response);
+
       // Check if the response contains data and update the teams list
       if (response.success!) {
         _goToNext(context);
-        organizationId=response.data!.organizationId;
+        organizationId = response.data!.organizationId;
         SnackbarUtils.showSuccess(response.message.toString());
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
@@ -280,7 +242,7 @@ class NewTeamController extends GetxController {
         break;
       case 2:
         dialogHeight.value =
-            screenHeight *0.43; // Reduced from 0.7 to prevent overflow
+            screenHeight * 0.43; // Reduced from 0.7 to prevent overflow
         break;
       case 3:
         dialogHeight.value =
@@ -321,49 +283,43 @@ class NewTeamController extends GetxController {
         dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;
       case 7:
-        dialogWidth.value = screenWidth * 0.70 > 1000 ? 1000 : screenWidth * 0.70;
+        dialogWidth.value =
+            screenWidth * 0.70 > 1000 ? 1000 : screenWidth * 0.70;
         break;
       default:
         dialogWidth.value = screenWidth * 1.2 > 900 ? 900 : screenWidth * 1.2;
     }
   }
 
-
-
   Future<void> promoCodeReq(BuildContext context) async {
     try {
-      final request=PromoCodeRequest(code:PromoCode.text.trim(),);
+      final request = PromoCodeRequest(code: PromoCode.text.trim());
       // final request=PromoCodeRequest(code:PromoCode.text.trim(), teamId:createTeamResponse.value?.id);
       // Call the API to get the list of teams
-      final response = await AdminApi.promocodeReq(request);
-         print("heloo Azhar munir");
-         // print(response.data!.organizationAccessCode!);
-      // Check if the response contains data and update the teams list
-      if (response.success!) {
-        WidgetsBinding.instance.addPostFrameCallback((_) {
-        SnackbarUtils.showSuccess(response.message.toString());
-        });
-      } else {
-        SnackbarUtils.showErrorr(response.message.toString());
-        // Handle the case where no teams are returned
-        // teams.value = [];
-      }
+      final response = await AdminApi.promocodeRenewalReq(request);
+  
+      // if (response.success!) {
+      //   WidgetsBinding.instance.addPostFrameCallback((_) {
+      //     SnackbarUtils.showSuccess(response.message.toString());
+      //   });
+      // } else {
+      //   SnackbarUtils.showErrorr(response.message.toString());
+      
+      // }
     } catch (e) {
       // Handle any errors that occur
       print('Error fetching teams: $e');
     }
   }
-  void promoCodeDialog(BuildContext context) {
-    // final nameController = TextEditingController();
-    // final emailController = TextEditingController();
 
+  void promoCodeDialog(BuildContext context) {
+   
     Get.dialog(
       PromoCodeDialog(
         nameController: PromoCode,
 
         onSubmit: () {
-          final name =PromoCode.text.trim();
-
+          final name = PromoCode.text.trim();
 
           // Perform your validation or logic here
           if (name.isEmpty) {
@@ -372,23 +328,12 @@ class NewTeamController extends GetxController {
             promoCodeReq(context);
             Get.back(); // Close dialog
             Get.back(); // Close dialog
-            // Navigator.pop(context);
-            // Navigator.pop(context);
-            // print("Name: $name, Email: $email");
-            // You can call your controller method here
+        
           }
         },
       ),
     );
   }
-
-
-
-
-
-
-
-
 
   CreateTeam getCreateTeamModel() {
     return CreateTeam(
@@ -398,10 +343,10 @@ class NewTeamController extends GetxController {
       ageGroup: enterAgeGroupController.text,
       season: seasonController.text,
       year: int.parse(ageGroupController.text),
-      // year.value,
+     
       city: cityController.text,
       state: countryController.text,
-      organizationId: organizationId,
+      organizationId: orgCode.text,
     );
   }
 
@@ -412,7 +357,6 @@ class NewTeamController extends GetxController {
   Future<void> CreateNewTeam(BuildContext context) async {
     if (true) {
       try {
-     
         final response = await TeamsApi.createTeam(
           getCreateTeamModel(),
         ); // Replace with `loginUser()` if needed
@@ -451,7 +395,7 @@ class NewTeamController extends GetxController {
   // Text controllers
   final TextEditingController opponentController = TextEditingController();
   final TextEditingController dateController = TextEditingController();
-  RxString datess ="".obs;
+  RxString datess = "".obs;
   final TextEditingController insController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
@@ -482,8 +426,7 @@ class NewTeamController extends GetxController {
     final prefs = await SharedPreferences.getInstance();
     final id = await prefs.getInt('teamInfoId'); // returns null if not found
     final response = await TeamsApi.CreateNewGame(addGame, id!);
-          print(response.message);
-          print(response.message);
+
     if (response.success!) {
       Get.snackbar(
         "Success",
@@ -494,38 +437,28 @@ class NewTeamController extends GetxController {
       );
       clearGameFormFields();
 
-     try {
-       await SharedPreferencesUtil.save('gameID', response.data!.id.toString());
-       await SharedPreferencesUtil.saveCurrentRoute(
-           RoutesPath.teamDashboardScreen);
-       Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
-     }catch(e){
-       Navigator.pop(context);
-     }
+      try {
+        await SharedPreferencesUtil.save(
+          'gameID',
+          response.data!.id.toString(),
+        );
+        await SharedPreferencesUtil.saveCurrentRoute(
+          RoutesPath.teamDashboardScreen,
+        );
+        Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
+      } catch (e) {
+        Navigator.pop(context);
+      }
       // Navigator.pop(context);
 
       // Get.back();
     } else {
-     //  print(response.message);
-     //  print(response.message);
-     // SnackbarUtils.showErrorr(response.message.toString());
-     //  Get.snackbar(
-     //    "Error",
-     //    response.message.toString(),
-     //    snackPosition: SnackPosition.BOTTOM,
-     //    backgroundColor: Colors.redAccent,
-     //    colorText: Colors.white,
-     //  );
       WidgetsBinding.instance.addPostFrameCallback((_) {
         SnackbarUtils.showErrorr(response.message.toString());
         // Get.back();
       });
-
-
     }
   }
-
-
 
   ///  add paler
   Future<void> addPlayer(BuildContext context, {int? teamId}) async {
@@ -536,7 +469,7 @@ class NewTeamController extends GetxController {
     final phone = playerPhoneController.text;
 
     if (country.isEmpty) {
-      SnackbarUtils.showErrorr( 'Please enter player country');
+      SnackbarUtils.showErrorr('Please enter player country');
       return;
     }
     if (lastName.isEmpty) {
@@ -544,7 +477,7 @@ class NewTeamController extends GetxController {
       return;
     }
     if (jerseyNumber.isEmpty) {
-      SnackbarUtils.showErrorr( 'Please enter jersey number');
+      SnackbarUtils.showErrorr('Please enter jersey number');
       return;
     }
     // if (email.isEmpty || !email.contains('@')) {
@@ -577,16 +510,15 @@ class NewTeamController extends GetxController {
       SnackbarUtils.showSuccess(response.message.toString());
       // Get.snackbar('Success', 'User Add Player in successfully');
       // Navigate to home or dashboard
-    }else{
-
+    } else {
       SnackbarUtils.showErrorr(response.message.toString());
-
     }
   }
-  void getPlayer(){
 
+  void getPlayer() {
     teamController.fetchGetPlayer(createTeamResponse.value!.id!);
   }
+
   Future<void> selectDate(BuildContext context) async {
     final DateTime? picked = await showDatePicker(
       context: context,
@@ -597,8 +529,8 @@ class NewTeamController extends GetxController {
 
     if (picked != null) {
       String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
-      dateController.text=formattedDate;
-      datess.value=dateController.text.toString();
+      dateController.text = formattedDate;
+      datess.value = dateController.text.toString();
       print('Selected date: $formattedDate'); // Output: 09-09-2025
       // You can now use this formattedDate as needed
     }
@@ -612,7 +544,7 @@ class NewTeamController extends GetxController {
     final phone = playerPhoneController.text;
 
     if (country.isEmpty) {
-      SnackbarUtils.showErrorr( 'Please enter player country');
+      SnackbarUtils.showErrorr('Please enter player country');
       return;
     }
     if (lastName.isEmpty) {
@@ -620,7 +552,7 @@ class NewTeamController extends GetxController {
       return;
     }
     if (jerseyNumber.isEmpty) {
-      SnackbarUtils.showErrorr( 'Please enter jersey number');
+      SnackbarUtils.showErrorr('Please enter jersey number');
       return;
     }
     // if (email.isEmpty || !email.contains('@')) {
@@ -638,7 +570,7 @@ class NewTeamController extends GetxController {
       playerJerseyNumber: jerseyNumber,
       playerEmail: email,
       playerPhone: phone,
-      id:teamController.teamData.value!.id!,
+      id: teamController.teamData.value!.id!,
     );
 
     final response = await TeamsApi.addPlayer(
@@ -653,11 +585,11 @@ class NewTeamController extends GetxController {
       SnackbarUtils.showSuccess(response.message.toString());
       // Get.snackbar('Success', 'User Add Player in successfully');
       // Navigate to home or dashboard
-    }else{
-
+    } else {
       SnackbarUtils.showErrorr(response.message.toString());
     }
   }
+
   void clearPlayerFormFields() {
     playerCountryController.clear();
     playerLastNameController.clear();
@@ -665,6 +597,7 @@ class NewTeamController extends GetxController {
     playerEmailController.clear();
     playerPhoneController.clear();
   }
+
   void clearGameFormFields() {
     opponentController.clear();
     dateController.clear();
@@ -683,17 +616,18 @@ class NewTeamController extends GetxController {
     countryController.clear();
     organizationId = null; // or 0, depending on its type
   }
-  Future<void> addPsitionedInPlayers(BuildContext context) async {
 
-    final response = await TeamsApi.playerPositionedAdd(teamController.playerPreference.value,createTeamResponse?.value!.id);
+  Future<void> addPsitionedInPlayers(BuildContext context) async {
+    final response = await TeamsApi.playerPositionedAdd(
+      teamController.playerPreference.value,
+      createTeamResponse?.value!.id,
+    );
     if (response.success!) {
       SnackbarUtils.showSuccess(response.message!);
       Navigator.pop(context);
-     
     } else {
       SnackbarUtils.showErrorr(response.message.toString());
       print('No team data saved');
     }
   }
-
 }

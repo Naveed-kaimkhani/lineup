@@ -11,7 +11,7 @@ class CreateTeam {
   int year;
   String? city;  // Nullable field
   String? state; // Nullable field
-  int? organizationId;
+  String organizationId;
 
   CreateTeam({
     required this.name,
@@ -22,7 +22,7 @@ class CreateTeam {
     required this.year,
     this.city,  // Optional field
     this.state, // Optional field
-     this.organizationId,
+    required this.organizationId,
   });
 
   factory CreateTeam.fromJson(Map<String, dynamic> json) {
@@ -36,7 +36,7 @@ class CreateTeam {
       year: json['year'] as int? ?? 0, // Default value if missing
       city: json['city'] as String?, // Optional field
       state: json['state'] as String?, // Optional field
-      organizationId: json['organization_id'] as int? ?? 0, // Default value if missing
+      organizationId: json['organization_code'] , // Default value if missing
     );
   }
 
@@ -52,7 +52,7 @@ class CreateTeam {
       'year': year,
       'city': city, // Nullable field
       'state': state, // Nullable field
-      'organization_id': organizationId,
+      'organization_code': organizationId,
     };
   }
 }

@@ -29,16 +29,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
 
   void _goToPrevious() async {
     SnackbarUtils.showErrorr('Please Fill All Next Requirement'.toString());
-    // if (_currentPage > 0) {
-    //   await _pageController.previousPage(
-    //     duration: const Duration(milliseconds: 300),
-    //     curve: Curves.easeInOut,
-    //   );gfdg
-    //   setState(() {
-    //     _currentPage--;
-    //     _updateDimensions(context);
-    //   });
-    // }
+   
   }
 
   // final int totalPages = 11; // total number of pages
@@ -47,20 +38,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
   // String addPositionLabel = 'Add Position';
   String continueLabel = 'Continue';
 
-  // void _goToNext() async {
-  //   if (_currentPage < totalPages - 1) {
-  //     await _pageController.nextPage(
-  //       duration: const Duration(milliseconds: 300),
-  //       curve: Curves.easeInOut,
-  //     );
-  //     newTeamController.pageControler(index)
-  //     setState(() {
-  //       _currentPage++;
-  //       print(_currentPage);
-  //       _updateDimensions(context);
-  //     });
-  //   }
-  // }
 
   final TextEditingController _teamNameController = TextEditingController();
   final TextEditingController _organizationNameController =
@@ -203,13 +180,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                           ],
                         ),
                       )),
-                      // Spacer(),
-                      // SizedBox(height: mediumSpacing),
-
-                      // Navigation buttons - Different layouts based on current page
-                      // if (newTeamController.currentPage > 0 &&
-                      //     _currentPage != 6 &&
-                      //     _currentPage == 7)
+                    
                       Row(
                         children: [
                           Expanded(

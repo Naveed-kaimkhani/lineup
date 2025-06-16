@@ -1,4 +1,3 @@
-
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -45,7 +44,6 @@ class TeamController extends GetxController {
     fetchTeams();
     fetchTeamsPositioned();
     fetchOrganization();
-
   }
 
   Future<void> getSavedTeamData() async {
@@ -129,8 +127,6 @@ class TeamController extends GetxController {
 
   Future<void> fetchGetPlayer(int id) async {
     try {
-      print("hvhgmuhyg,k");
-      print(id);
       // Call the API to get the list of teams
       // final response = await TeamsApi.getPlayer(4);
       final response = await TeamsApi.getPlayer(id);

@@ -10,14 +10,13 @@ import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.d
 import 'package:gaming_web_app/screens/main_dashboard/slectorgPay.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
 import '../../Base/componant/alertDialog.dart';
 import '../../Base/controller/globleController.dart';
-// import '../../routes/routes_path.dart';
 import '../../routes/routes_path.dart';
 import '../../utils/SharedPreferencesUtil.dart';
-// import '../../routes/routes_path.dart';
+
 final GlobleController globleController = Get.put(GlobleController());
+
 class MainDashboardScreen extends StatefulWidget {
   const MainDashboardScreen({super.key});
 
@@ -35,41 +34,16 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
       controller.fetchTeams();
     });
   }
-  // final TeamController controller = Get.put(TeamController());
 
   @override
   Widget build(BuildContext context) {
-    // controller.fetchGetPlayer( 9);
     return DashboardScaffold(
-      // onTab: (){
-      //   Get.toNamed(RoutesPath.mainDashboardScreen);
-      // },
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
       title: 'Game-Ready',
       subtitle: 'Lineup',
-      actionWidget: Column(
-        children: [
-          // PrimaryButton(
-          //   width: 208.w,
-          //   onTap: () {},
-          //   radius: 80.r,
-          //   textStyle: descriptiveStyle.copyWith(
-          //     color: Colors.white,
-          //     fontSize: 22.sp,
-          //   ),
-          //   title: 'Basic Plan',
-          //   backgroundColor: const Color(0xff8B3A3A),
-          // ),
-          // SizedBox(height: 17.h),
-          // CustomTextButton(
-          //   title: 'Upgrade Your Plan',
-          //   onTap: () {},
-          //   fontFamily: 'Poppins',
-          //   fontSize: 14.sp,
-          //   textColor: Colors.white,
-          //   hasUnderline: true,
-          // ),
+      actionWidget: Column(children: [
+
         ],
       ),
       body: Padding(
@@ -89,30 +63,11 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                       Text(
                         'Select Your Team',
                         style: descriptionHeader.copyWith(
-                          fontSize: isMobile ?16 : 16,
+                          fontSize: isMobile ? 16 : 16,
                           color: AppColors.secondaryColor,
                         ),
                       ),
 
-
-                      // PrimaryButton(
-                      //   width: double.infinity,
-                      //   onTap: () async {
-                      //
-                      //     await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.mainDashboardScreen);
-                      //
-                      //
-                      //     Get.toNamed(RoutesPath.organizationDashboardScreen);
-                      //
-                      //   },
-                      //   radius: 20.r,
-                      //   textStyle: descriptiveStyle.copyWith(
-                      //     color: Colors.white,
-                      //     fontSize: isMobile ? 18 : 30,
-                      //   ),
-                      //   title: 'Organization',
-                      //   backgroundColor: AppColors.secondaryColor,
-                      // ),
                       SizedBox(height: 12.h),
                       PrimaryButton(
                         width: double.infinity,
@@ -120,15 +75,31 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           await showDialog(
                             context: context,
                             barrierDismissible: true,
-                            builder: (_) =>  CreateTeamDialog(),
+                            builder: (_) => CreateTeamDialog(),
                           );
                         },
                         radius: 20.r,
                         textStyle: descriptiveStyle.copyWith(
                           color: Colors.white,
-                          fontSize: isMobile ? 18 :18,
+                          fontSize: isMobile ? 18 : 18,
                         ),
+
                         title: 'Create New Team',
+                        backgroundColor: AppColors.secondaryColor,
+                      ),
+
+                      SizedBox(height: 12.h),
+                      PrimaryButton(
+                        width: double.infinity,
+                        onTap: () async {
+                          Get.toNamed(RoutesPath.paymentHistoryScreen);
+                        },
+                        radius: 20.r,
+                        textStyle: descriptiveStyle.copyWith(
+                          color: Colors.white,
+                          fontSize: isMobile ? 18 : 18,
+                        ),
+                        title: 'Payment History',
                         backgroundColor: AppColors.secondaryColor,
                       ),
                     ],
@@ -144,23 +115,38 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                         color: AppColors.secondaryColor,
                       ),
                     ),
-                    PrimaryButton(
-                      width: 300,
-                      onTap: () async {
-                        showFullWidthDialogPay(context);
-                        // await showDialog(
-                        //   context: context,
-                        //   barrierDismissible: true,
-                        //   builder: (_) =>  CreateTeamDialog(),
-                        // );
-                      },
-                      radius: 20.r,
-                      textStyle: descriptiveStyle.copyWith(
-                        color: Colors.white,
-                        fontSize: isMobile ? 18 : 18,
-                      ),
-                      title: 'Create New Team',
-                      backgroundColor: AppColors.secondaryColor,
+                    Row(
+                      children: [
+                        PrimaryButton(
+                          width: 300,
+                          onTap: () async {
+                            Get.toNamed(RoutesPath.paymentHistoryScreen);
+                          },
+                          radius: 20.r,
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: isMobile ? 18 : 18,
+                          ),
+
+                          title: 'Payment History',
+                          backgroundColor: AppColors.secondaryColor,
+                        ),
+                        SizedBox(width: 10),
+                        PrimaryButton(
+                          width: 300,
+                          onTap: () async {
+                            showFullWidthDialogPay(context);
+                          },
+                          radius: 20.r,
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: isMobile ? 18 : 18,
+                          ),
+
+                          title: 'Create New Team',
+                          backgroundColor: AppColors.secondaryColor,
+                        ),
+                      ],
                     ),
                   ],
                 );
@@ -210,9 +196,9 @@ class _MobileLayout extends StatelessWidget {
                 ),
                 child: InkWell(
                   onTap: () async {
-                    controller.teamDataIndex.value = team.id!;
+                    controller.teamDataIndex.value = team.id;
                     final prefs = await SharedPreferences.getInstance();
-                    await prefs.setInt('teamInfoId', team.id!);
+                    await prefs.setInt('teamInfoId', team.id);
                     controller.fetchGetTeamData();
                     await Future.delayed(const Duration(seconds: 1));
                     // await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
@@ -227,57 +213,27 @@ class _MobileLayout extends StatelessWidget {
                       _buildInfoRow("Season", team.season),
                       _buildInfoRow("Age Group", team.ageGroup),
                       const SizedBox(height: 10),
-                  InkWell(
-                          onTap: () {
-
-                            showCustomDialog(
-                              context: context,
-                              title: 'Delete Team',
-                              description: 'Are you sure you want to delete This Team?',
-                              onOk: () async {
-                           await  globleController.teamDelete(team.id!);
-
-                              },
-                              onCancel: () {
-                                print("Cancel pressed");
-                              },
-                            );
-
-
-                          },
-                          child: Image.asset(
-                            'assets/images/delete_icon.png',
-                            height: 36.h,
-                            width: 40.w,
-                          ),
+                      InkWell(
+                        onTap: () {
+                          showCustomDialog(
+                            context: context,
+                            title: 'Delete Team',
+                            description:
+                                'Are you sure you want to delete This Team?',
+                            onOk: () async {
+                              await globleController.teamDelete(team.id!);
+                            },
+                            onCancel: () {
+                              print("Cancel pressed");
+                            },
+                          );
+                        },
+                        child: Image.asset(
+                          'assets/images/delete_icon.png',
+                          height: 36.h,
+                          width: 40.w,
                         ),
-
-                      // Row(
-                      //   children: [
-                      //     ElevatedButton(
-                      //       onPressed: () {},
-                      //       style: ElevatedButton.styleFrom(
-                      //         backgroundColor: AppColors.activeGreenColor,
-                      //         shape: RoundedRectangleBorder(
-                      //           borderRadius: BorderRadius.circular(5),
-                      //         ),
-                      //       ),
-                      //       child: Text(
-                      //         'Edit Team',
-                      //         style: fieldLabelStyle.copyWith(color: Colors.white),
-                      //       ),
-                      //     ),
-                      //     const SizedBox(width: 10),
-                      //     InkWell(
-                      //       onTap: () {},
-                      //       child: Image.asset(
-                      //         'assets/images/delete_icon.png',
-                      //         height: 36.h,
-                      //         width: 40.w,
-                      //       ),
-                      //     ),
-                      //   ],
-                      // ),
+                      ),
                     ],
                   ),
                 ),
@@ -370,23 +326,8 @@ class TabletOrWebLayout extends StatelessWidget {
                         child: _buildHeader("Age Group", ageGroupWidth),
                       ),
                       _buildHeader("Action", ageGroupWidth),
-
-                      // SizedBox(width: actionWidth),
-                      // Expanded(
-                      //     flex: 3,
-                      //     child: SizedBox())
                     ],
                   ),
-
-                  // Row(
-                  //   children: [
-                  //     _buildHeader("Team Name", teamNameWidth),
-                  //     _buildHeader("Year", yearWidth),
-                  //     _buildHeader("Season", seasonWidth),
-                  //     _buildHeader("Age Group", ageGroupWidth),
-                  //     SizedBox(width: actionWidth),
-                  //   ],
-                  // ),
                 ),
               ),
               const SizedBox(height: 8),
@@ -417,18 +358,18 @@ class TabletOrWebLayout extends StatelessWidget {
     );
   }
 
-
   Widget _buildRow(BuildContext context, Team team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
       onTap: () async {
-        controller.teamDataIndex.value = team.id!;
-        controller.teamDataIndex.value = team.id!;
+        controller.teamDataIndex.value = team.id;
         final prefs = await SharedPreferences.getInstance();
-        await prefs.setInt('teamInfoId', team.id!);
+        await prefs.setInt('teamInfoId', team.id);
         controller.fetchGetTeamData();
         await Future.delayed(const Duration(seconds: 1));
-        await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
+        await SharedPreferencesUtil.saveCurrentRoute(
+          RoutesPath.teamDashboardScreen,
+        );
         Get.toNamed(RoutesPath.teamDashboardScreen);
       },
       child: Container(
@@ -466,50 +407,6 @@ class TabletOrWebLayout extends StatelessWidget {
                 width: 40.w,
               ),
             ),
-            // Expanded(
-            //     flex: 2,
-            //     child: SizedBox()),
-            // Expanded(
-            //   flex: 2,
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: Container()
-            //
-            //         // ElevatedButton(
-            //         //   onPressed: () {},
-            //         //   style: ElevatedButton.styleFrom(
-            //         //     backgroundColor: AppColors.activeGreenColor,
-            //         //     shape: RoundedRectangleBorder(
-            //         //       borderRadius: BorderRadius.circular(5),
-            //         //     ),
-            //         //   ),
-            //         //   child:FittedBox(
-            //         //     fit: BoxFit.scaleDown,
-            //         //     child: Center(
-            //         //       child: Text(
-            //         //         'Edit Team',
-            //         //         style: fieldLabelStyle.copyWith(color: Colors.white),
-            //         //         textAlign: TextAlign.center,
-            //         //       ),
-            //         //     ),
-            //         //   )
-            //         // ),
-            //       ),
-            //       const SizedBox(width: 10),
-            //       // InkWell(
-            //       //   onTap: () {
-            //       //     // Delete logic
-            //       //   },
-            //       //   child: Image.asset(
-            //       //     'assets/images/delete_icon.png',
-            //       //     height: 36.h,
-            //       //     width: 40.w,
-            //       //   ),
-            //       // ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),
@@ -530,5 +427,3 @@ class TabletOrWebLayout extends StatelessWidget {
     );
   }
 }
-
-

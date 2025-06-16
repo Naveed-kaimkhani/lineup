@@ -37,9 +37,7 @@ class LineupController extends GetxController {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-        print('Saved Game ID: $gameId');
       } else {
-        print('Game ID not found');
       }
 
       // Call the API to get the list of teams
@@ -159,18 +157,12 @@ class LineupController extends GetxController {
       if(fixedAssignments !=null){
         autoFillLineups.value.fixedAssignments=fixedAssignments;
       }
-      // autoFillLineups.value.fixedAssignments=fixedAssignments;
-
-      // print(fixedAssignments);
-      print(autoFillLineups.value.toJson());
       // Call the API to get the list of teams
       final response = await TeamsApi.autolinupSubmitPlayesId(
         autoFillLineups.value,
         int.parse(gameId!),
       );
-      print("response.data      hghjhg   gfhyjumn hytu7yujb                     hgghj");
-      print(response.data?.toJson());
-      print(response.data);
+      
       // Check if the response contains data and update the teams list
       if (response.data != null) {
         // lineupp.value.clear();
@@ -180,10 +172,7 @@ class LineupController extends GetxController {
 
         fetchAutoFillLineups.refresh();
         lineupp.value=response.data!.lineupp!;
-        print(lineupp![0].innings);
-        print(lineupp![1].innings);
-        print(lineupp![2].innings);
-        print(lineupp![3].innings?.length);
+   
         // print(fetchAutoFillLineups.value.playersInGame!.length);
 
           for (int inning = 1; inning <gameData.value.players!.length; inning++) {
@@ -329,9 +318,7 @@ class LineupController extends GetxController {
       playingTimePercent: playingTimePercent,
     );
     statsList.value.add(data);
-     print(data);
-     print("az");
-     print(data);
+   
     refresh();
     statsList[0].topPosition;
     statsList.refresh();

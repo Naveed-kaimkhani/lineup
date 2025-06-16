@@ -496,7 +496,6 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                             }
                           }catch(e){
 
-                             print(e.toString());
                           }
                         },
                         radius: 20.r,

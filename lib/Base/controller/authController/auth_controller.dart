@@ -1,10 +1,9 @@
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/SharedPreferencesKeysConstants.dart';
 import '../../../routes/routes_path.dart';
-import '../../../screens/authentication/sign_up_screen.dart';
 import '../../../service/api/authApi.dart';
 import '../../../utils/SharedPreferencesUtil.dart';
 
@@ -22,6 +21,7 @@ class SignInController extends GetxController {
   var orgCodeError = RxString('');
   // Reactive variable for the remember me checkbox
   var isRememberMe = RxBool(false);
+  var isLoading = false.obs;
 
   // Toggle checkbox
   Future<void> toggleRememberMe(bool? value) async {
@@ -95,6 +95,7 @@ class SignInController extends GetxController {
           request,
         ); // Replace with `loginUser()` if needed
       }
+
       // GetPage(name: RoutesPath.adminDashboardScreen, page: () => AdminDashboardScreen()),
       if (isRememberMe.value) {
         await saveCredentials();
@@ -140,16 +141,21 @@ class SignInController extends GetxController {
     // Validate fields
     bool isOrgCodeValid = orgCode.isNotEmpty;
     bool isPasswordValid = password.isNotEmpty;
-    if (true)
-    // if (isOrgCodeValid && isPasswordValid)
-    {
+    // if (true)
+    if (isOrgCodeValid && isPasswordValid) {
       try {
+        Get.dialog(
+          const Center(child: CircularProgressIndicator()),
+          barrierDismissible: false,
+        );
+
         final response = await AuthAPI.loginOrganization({
-          // "organization_code": orgCode,
-          // "password": password,
-          "organization_code": "ORG-DEJEAW7J",
-          "password": "QfFOq2WQ3VrS",
+          "organization_code": orgCode,
+          "password": password,
         });
+        isLoading.value = false;
+        if (Get.isDialogOpen ?? false) Get.back(); // Close dialog
+
         if (response['success'] == true) {
           final token = response['data']['access_token'];
           final orgData = response['data']['organization'];
@@ -196,7 +202,11 @@ class SignInController extends GetxController {
   }
 
   void goToSignUp() {
-    Get.to(() => const SignUpScreen());
+    // Get.to(() => const SignUpScreen());
+
+     Get.toNamed(
+                                          RoutesPath.signUpScreen,
+                                        );
   }
 
   void signInWithGmail() {
