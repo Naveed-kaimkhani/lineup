@@ -131,14 +131,14 @@ class SetFavoredPositionDialogg extends StatelessWidget {
                                               ),
                                               const SizedBox(height: 10),
                                               DynamicDropdownList<Position?>(
-                                                items: teamController.teamPositioned!,
+                                                items: teamController.teamPositioned,
                                                 selectedItem: teamController.positioned,
                                                 itemLabelBuilder: (item) => item?.name ?? 'N/A',
                                                 dropdownWidth: 200,
                                                 onChanged: (value) {},
                                               ),
                                               DynamicDropdownList<Position?>(
-                                                items: teamController.teamPositioned!,
+                                                items: teamController.teamPositioned,
                                                 selectedItem: teamController.positioned,
                                                 itemLabelBuilder: (item) => item?.category ?? 'N/A',
                                                 dropdownWidth: 200,

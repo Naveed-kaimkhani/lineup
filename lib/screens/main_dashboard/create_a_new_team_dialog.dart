@@ -39,17 +39,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
   String continueLabel = 'Continue';
 
 
-  final TextEditingController _teamNameController = TextEditingController();
-  final TextEditingController _organizationNameController =
-      TextEditingController();
-  final TextEditingController _ageGroupController = TextEditingController();
-  final TextEditingController _seasonController = TextEditingController();
-  final TextEditingController _countryController = TextEditingController();
-  final TextEditingController _cityController = TextEditingController();
-  final TextEditingController _stateController = TextEditingController();
-  final TextEditingController _positionNameController = TextEditingController();
-  final TextEditingController _positionCategoryController =
-      TextEditingController();
 
   Widget positionWidget = SetPlayerPositionScreen(onEdit: () {});
 
@@ -140,10 +129,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                             Get.back();
                             teamController.getData();
                           },
-
                           child: Icon(Icons.cancel,size: 50,color: Colors.red,),)
-
-
                       ],),
 
                       SizedBox(height: smallSpacing),
@@ -283,14 +269,14 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
     final NewTeamController controller = Get.find<NewTeamController>();
 
     // Responsive dimensions
-    final iconSize = screenSize.width < 600 ? screenSize.width * 0.08 : 80.0;
+    // final iconSize = screenSize.width < 600 ? screenSize.width * 0.08 : 80.0;
     final iconContainerPadding = screenSize.width < 600 ? 15.0 : 20.0;
-    final fontSizeLabel = screenSize.width < 600 ? 12.0 : 14.0;
+    // final fontSizeLabel = screenSize.width < 600 ? 12.0 : 14.0;
 
     return LayoutBuilder(
         builder: (context, constraints) {
-          final screenWidth = constraints.maxWidth;
-          final isMobile = screenWidth < 600;
+          // final screenWidth = constraints.maxWidth;
+          // final isMobile = screenWidth < 600;
 
           return Column(
       mainAxisSize: MainAxisSize.min,

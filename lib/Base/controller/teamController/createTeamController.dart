@@ -75,12 +75,10 @@ class NewTeamController extends GetxController {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
-      // newTeamController.pageControler(index)
 
       currentPage.value++;
       updateDimensions(context);
       updateDimensions(context);
-      // _updateDimensions(context);
     }
   }
 
@@ -619,8 +617,8 @@ class NewTeamController extends GetxController {
 
   Future<void> addPsitionedInPlayers(BuildContext context) async {
     final response = await TeamsApi.playerPositionedAdd(
-      teamController.playerPreference.value,
-      createTeamResponse?.value!.id,
+      teamController.playerPreference,
+      createTeamResponse.value!.id,
     );
     if (response.success!) {
       SnackbarUtils.showSuccess(response.message!);
@@ -630,4 +628,7 @@ class NewTeamController extends GetxController {
       print('No team data saved');
     }
   }
+
+
+
 }

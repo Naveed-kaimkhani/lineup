@@ -14,6 +14,8 @@ class PlayerPreferencesResponse {
   Map<String, dynamic> toJson() => {
     'player_preferences': playerPreferences.map((e) => e.toJson()).toList(),
   };
+
+
 }
 
 class PlayerPreference {

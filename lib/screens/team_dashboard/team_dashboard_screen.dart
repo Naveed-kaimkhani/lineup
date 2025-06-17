@@ -16,17 +16,12 @@ import 'addPlayes.dart';
 
 final GlobleController globleController = Get.put(GlobleController());
 
-// Main TeamDashboardScreen widget - entry point for the team dashboard
-// Uses DashboardScaffold for consistent layout and navigation
 class TeamDashboardScreen extends StatelessWidget {
   TeamDashboardScreen({super.key});
-  // final TeamController controller = Get.put<TeamController>(TeamController());
   final TeamController controller = Get.find<TeamController>();
 
   @override
   Widget build(BuildContext context) {
-    // controller.getData();
-    // DashboardScaffold provides the overall structure including header, sidebar, etc.
     return
       Obx(()=>
       DashboardScaffold(
@@ -268,98 +263,10 @@ class _TeamDashboardBody extends StatelessWidget {
       backgroundColor: color,
     );
   }
-
-  // This method builds the players table/list section
-  // Uses responsive design to show either a table or cards based on screen width
   Widget _buildPlayersTable(BuildContext context) {
     final TeamController controller = Get.find<TeamController>();
     // final TeamController controller = Get.put(TeamController());
     controller.fetchGetTeamData();
-    // final TeamController controller = Get.find<TeamController>();
-    // Sample player data - in a real app would come from a database or API
-    final List<Map<String, dynamic>> players = [
-      {
-        'number': '89',
-        'name': 'Mick Johnathan',
-        'inningsPlayed': '50%',
-        'totalInnings': '25',
-        'inf': '25%',
-        'position': 'P',
-        'average': '8.5',
-      },
-      {
-        'number': '92',
-        'name': 'Sara Williams',
-        'inningsPlayed': '55%',
-        'totalInnings': '75',
-        'inf': '30%',
-        'position': 'LF',
-        'average': '9.0',
-      },
-      {
-        'number': '85',
-        'name': 'John Smith',
-        'inningsPlayed': '45%',
-        'totalInnings': '78',
-        'inf': '20%',
-        'position': 'RF',
-        'average': '7.0',
-      },
-      {
-        'number': '95',
-        'name': 'Emily Davis',
-        'inningsPlayed': '60%',
-        'totalInnings': '75',
-        'inf': '35%',
-        'position': 'SS',
-        'average': '10.0',
-      },
-      {
-        'number': '92',
-        'name': 'Ella Fitzgerald',
-        'inningsPlayed': '55%',
-        'totalInnings': '60',
-        'inf': '30%',
-        'position': 'CF',
-        'average': '9.0',
-      },
-      {
-        'number': '76',
-        'name': 'John Doe',
-        'inningsPlayed': '45%',
-        'totalInnings': '70',
-        'inf': '20%',
-        'position': '1B',
-        'average': '7.5',
-      },
-      {
-        'number': '85',
-        'name': 'Sarah Connor',
-        'inningsPlayed': '52%',
-        'totalInnings': '70',
-        'inf': '28%',
-        'position': '2B',
-        'average': '8.0',
-      },
-      {
-        'number': '91',
-        'name': 'Leonardo DiCaprio',
-        'inningsPlayed': '60%',
-        'totalInnings': '75',
-        'inf': '40%',
-        'position': '3B',
-        'average': '9.5',
-      },
-      {
-        'number': '88',
-        'name': 'Jane Smith',
-        'inningsPlayed': '48%',
-        'totalInnings': '55',
-        'inf': '35%',
-        'position': 'LF',
-        'average': '8.2',
-      },
-    ];
 
     // LayoutBuilder to create responsive UI based on available width
     return LayoutBuilder(
@@ -379,14 +286,12 @@ class _TeamDashboardBody extends StatelessWidget {
   }
 }
 
-// Widget for displaying players as a list of cards on mobile devices
-// Each player gets their own card with all details stacked vertically
+
 class _MobilePlayerList extends StatelessWidget {
   final TeamController controller = Get.find<TeamController>();
   _MobilePlayerList();
   @override
   Widget build(BuildContext context) {
-    // Create a column of player cards
     return Obx(
       () => Column(
         children:
@@ -443,7 +348,7 @@ class _MobilePlayerList extends StatelessWidget {
                             description:
                             'Are you sure you want to delete This Player?',
                             onOk: () async {
-                              await handleDeleteAndRefresh(player.id!);
+                              await handleDeleteAndRefresh(player.id);
                             },
                             onCancel: () {
                               print("Cancel pressed");
@@ -462,15 +367,6 @@ class _MobilePlayerList extends StatelessWidget {
 
 
 
-                    // Edit and Delete buttons
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.end,  // Align to right side
-                    //   children: [
-                    //     _buildEditButton(context),  // Edit button with pencil icon
-                    //     SizedBox(width: 10.w),
-                    //     // _buildDeleteButton(),  // Delete button with trash icon
-                    //   ],
-                    // ),
                   ],
                 ),
               );

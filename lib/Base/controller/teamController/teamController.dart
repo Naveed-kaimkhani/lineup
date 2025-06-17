@@ -22,16 +22,27 @@ class TeamController extends GetxController {
   RxList<Organizations?> organization = <Organizations?>[].obs;
   // RxList<Organization?> organization = <Organization?>[].obs;
   Rx<Organizations> organizationItem = Organizations().obs;
+
+
+
+
+
+
   List<Position?> teamPositioned = [];
+  
+  
+  
+  
+  
   Position positioned = Position();
   RxList<GetPlayer?> getPlayer = <GetPlayer?>[].obs;
   RxString selectTeam = "".obs;
   RxMap<int, List<int>> preferredPositionIds = <int, List<int>>{}.obs;
   RxMap<int, List<int>> restrictedPositionIds = <int, List<int>>{}.obs;
   final ApiServic apiService = Get.put<ApiServic>(ApiServic());
+
   RxList<PlayerPreference> playerPreference = <PlayerPreference>[].obs;
 
-  // Called when the controller is initialized
   @override
   void onInit() {
     super.onInit();
@@ -80,12 +91,6 @@ class TeamController extends GetxController {
     }
   }
 
-  // void setSelectedOrganization(Organizations? org) {
-  //   selectedOrganization = org;
-  //   update(); // update UI
-  //   organizationId.value=org!.id;
-  //   update();
-  // }
   Future<void> fetchTeamsPositioned() async {
     try {
       // Call the API to get the list of teams
@@ -113,18 +118,8 @@ class TeamController extends GetxController {
       print('Error fetching teams: $e');
     }
   }
-  // static Future<List<Position?>> readPositionList(String key) async {
-  //   final jsonString = SharedPreferencesUtil.sharedPreferences.getString(key);
-  //   if (jsonString == null) return [];
-  //
-  //   final Map<String, dynamic> decoded = jsonDecode(jsonString);
-  //   final List<dynamic> data = decoded['data'];
-  //
-  //   return data.map<Position?>(
-  //         (e) => e == null ? null : Position.fromJson(e),
-  //   ).toList();
-  // }
 
+  
   Future<void> fetchGetPlayer(int id) async {
     try {
       // Call the API to get the list of teams
@@ -138,7 +133,7 @@ class TeamController extends GetxController {
         playerPreference.clear();
         for (int i = 0; i < getPlayer.value.length; i++) {
           final data = PlayerPreference(
-            playerId: getPlayer.value![i]!.id!,
+            playerId: getPlayer.value![i]!.id,
             preferredPositionIds: [],
             restrictedPositionIds: [],
           );

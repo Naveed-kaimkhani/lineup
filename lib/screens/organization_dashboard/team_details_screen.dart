@@ -4,7 +4,6 @@ import 'package:gaming_web_app/Base/controller/org_controller/team_detail_contro
 import 'package:gaming_web_app/Base/model/teamModel/player_stats.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 class TeamDetailsScreen extends StatelessWidget {
   final int teamId;

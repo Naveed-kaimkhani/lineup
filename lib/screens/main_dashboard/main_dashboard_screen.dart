@@ -221,7 +221,7 @@ class _MobileLayout extends StatelessWidget {
                             description:
                                 'Are you sure you want to delete This Team?',
                             onOk: () async {
-                              await globleController.teamDelete(team.id!);
+                              await globleController.teamDelete(team.id);
                             },
                             onCancel: () {
                               print("Cancel pressed");
