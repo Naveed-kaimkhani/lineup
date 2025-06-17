@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,7 +7,6 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/lineupController.dart';
-import '../../Base/model/lineup/fetchAutoLinup.dart';
 import '../../Base/model/positioned.dart';
 import '../../constants/widgets/text_fields/primary_text_field.dart';
 import '../../routes/routes_path.dart';
@@ -27,49 +28,26 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
     });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   Future.delayed(Duration(seconds: 1), () {
-    //     controller.fetchTeamsPositioned();
-    //     controller.getGamePlayer();
-    // });
-    // });
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   controller.fetchTeamsPositioned();
-    //   controller.getGamePlayer();
-    // });
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _focusNode.requestFocus();
     });
   }
+
   void _handleKey(RawKeyEvent event) {
     if (event is RawKeyDownEvent) {
       // Check if Enter key is pressed
       if (event.logicalKey == LogicalKeyboardKey.enter ||
           event.logicalKey == LogicalKeyboardKey.numpadEnter) {
         checkFocus();
-        // textFieldKey
-        // checkFocus()
-        // print('Enter key pressed!');
-        // Add your custom logic here
       }
     }
   }
 
-
-
   void checkFocus() {
     print(textFieldKey[textFieldIndex]);
     print("az");
-
-    // Use the focusNode list instead of widget state
-    // if (focusNode[textFieldIndex].hasFocus) {
-    //   print('TextField is focused!');
-    // } else {
-    //   print('TextField is not focused.');
-    // }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -81,9 +59,10 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
       body: RawKeyboardListener(
-    focusNode: _focusNode,
-    onKey: _handleKey,
-    child: LineupWidget()),
+        focusNode: _focusNode,
+        onKey: _handleKey,
+        child: LineupWidget(),
+      ),
       customContent: Center(
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -169,47 +148,18 @@ class _LineupWidgetState extends State<LineupWidget> {
           _buildPositionChips(),
           const SizedBox(height: 16),
 
-          // ? SizedBox()
-          // :
           Column(
             children: [
-              // Main lineup tables
-              // LayoutBuilder(
-              //   builder: (context, constraints) {
-              //     bool isWideScreen = constraints.maxWidth > 900;
-              //     return
-              //       (controller.gameData.value.isNull ||
-              //           controller.gameData.value.players == null)? SizedBox():
-              //
-              //       isWideScreen
-              //         ? _buildWideScreenLayout()
-              //         : _buildNarrowScreenLayout();
-              //   },
-              // ),
-              // Obx(() {
-              //   final gameData = controller.gameData.value;
-              //   if (gameData == null || gameData.players == null) {
-              //     return SizedBox();
-              //   }
-
-                // return
               LayoutBuilder(
-                  builder: (context, constraints) {
-                    // Avoid calling setState or updating observables here directly
-                    final isWideScreen = constraints.maxWidth > 900;
+                builder: (context, constraints) {
+                  // Avoid calling setState or updating observables here directly
+                  final isWideScreen = constraints.maxWidth > 900;
 
-                    // If you need to update something based on constraints, do it after build
-                    // WidgetsBinding.instance.addPostFrameCallback((_) {
-                    //   controller.fetchTeamsPositioned();
-                    //   controller.getGamePlayer();
-                    // });
-
-                    return isWideScreen
-                        ? _buildWideScreenLayout()
-                        : _buildNarrowScreenLayout();
-                  },
-                ),
-
+                  return isWideScreen
+                      ? _buildWideScreenLayout()
+                      : _buildNarrowScreenLayout();
+                },
+              ),
 
               const SizedBox(height: 24),
 
@@ -234,71 +184,8 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  Widget _buildDateAndButtons() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          'APRIL 03 2025',
-          style: TextStyle(
-            color: const Color(0xFF2B4582),
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Row(
-          children: [
-            // ElevatedButton(
-            //   onPressed: () {},
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: const Color(0xFFA33838),
-            //     foregroundColor: Colors.white,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(15),
-            //     ),
-            //     padding: const EdgeInsets.symmetric(
-            //       horizontal: 16,
-            //       vertical: 20,
-            //     ),
-            //   ),
-            //   child: const Text('Previous Game'),
-            // ),
-            const SizedBox(width: 12),
-            // ElevatedButton(
-            //   onPressed: () {},
-            //   style: ElevatedButton.styleFrom(
-            //     backgroundColor: const Color(0xFF2B4582),
-            //     foregroundColor: Colors.white,
-            //     shape: RoundedRectangleBorder(
-            //       borderRadius: BorderRadius.circular(15),
-            //     ),
-            //     padding: const EdgeInsets.symmetric(
-            //       horizontal: 16,
-            //       vertical: 20,
-            //     ),
-            //   ),
-            //   child: const Text('Add New Game'),
-            // ),
-          ],
-        ),
-      ],
-    );
-  }
-
   Widget _buildPositionChips() {
     final LineupController controller = Get.find<LineupController>();
-    final List<Map<String, String>> positions = [
-      {'label': 'Pitcher = P', 'color': 'white'},
-      {'label': 'Catcher = C', 'color': 'white'},
-      {'label': '1st Base = 1B', 'color': 'white'},
-      {'label': '2nd Base = 2B', 'color': 'white'},
-      {'label': '3rd Base = 3B', 'color': 'white'},
-      {'label': 'Short Stop = SS', 'color': 'white'},
-      {'label': 'Left Field = LF', 'color': 'white'},
-      {'label': 'Right Field = RF', 'color': 'white'},
-      {'label': 'Center Field = CF', 'color': 'white'},
-      {'label': 'Bench = OUT', 'color': 'red'},
-    ];
 
     return Obx(
       () =>
@@ -342,10 +229,15 @@ class _LineupWidgetState extends State<LineupWidget> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Left Table (Main lineup)
-            Expanded(flex: 3, child:
-       Obx(()=>controller.isLoading.value?     _buildMainLineupTable():SizedBox())
-
-
+            Expanded(
+              flex: 3,
+              child: Obx(
+                () =>
+                    controller.isLoading.value
+                        ? _buildMainLineupTable()
+                        // ? SizedBox()
+                        : SizedBox(),
+              ),
             ),
 
             const SizedBox(width: 16),
@@ -371,458 +263,724 @@ class _LineupWidgetState extends State<LineupWidget> {
 
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
-    // controller.statsList.clear();
-    // Mock player data
-    final players = [
-      {
-        'number': '01',
-        'name': 'Mick Johnathan',
-        'jersey': '89',
-        'position': 'CF',
-      },
-      {
-        'number': '02',
-        'name': 'Sophia Martinez',
-        'jersey': '90',
-        'position': 'C',
-      },
-      {
-        'number': '03',
-        'name': 'Liam Johnson',
-        'jersey': '91',
-        'position': '3B',
-      },
-      {'number': '04', 'name': 'Emma Brown', 'jersey': '92', 'position': 'SS'},
-      {'number': '05', 'name': 'Noah Davis', 'jersey': '93', 'position': 'CF'},
-      {
-        'number': '06',
-        'name': 'Olivia Wilson',
-        'jersey': '94',
-        'position': 'RF',
-      },
-    ];
-
-    // !controller.isAuto.value
-
-    // controller.isLoading.value ? controller.autoFillData.value = controller.generateAutoFillLineups(
-    //       playerCount: controller.gameData.value.players!.length!,
-    //       inningsCount: controller.gameData.value.innings!,
-    //     )
-    //     : "";
 
     int i = 1;
 
     // final inningsCount = controller.gameData.value.innings ?? 0;
     // final lineup = controller.fetchAutoFillLineups.value.lineup;
-    return  ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: Column(
-          children: [
-            // Header row
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Obx(()=>Container(
-              width: 1400,
-              color: Colors.white,
-              child: Container(
-              padding: const EdgeInsets.symmetric(
-              vertical: 12,
-              horizontal: 16,
-              ),
-          color: Colors.grey[200],
-          child: Row(
-            children: [
-              SizedBox(
-                width: 60,
-                child: Text(
-                  'Lineup',
-                  style: TextStyle(
-                    color: const Color(0xFF8B3A3A),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Column(
+        children: [
+          // Header row
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Obx(
+              () => Container(
+                width: 1400,
+                color: Colors.white,
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
                   ),
-                ),
-              ),
-              SizedBox(
-                width: 140,
-                child: Text(
-                  'Player Name',
-                  style: TextStyle(
-                    color: const Color(0xFF8B3A3A),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              SizedBox(
-                width: 40,
-                child: Text(
-                  '#      ',
-                  style: TextStyle(
-                    color: const Color(0xFF8B3A3A),
-                    fontSize: 14,
-                    fontWeight: FontWeight.w600,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 45),
-              Container(
-                child: Row(
-                  children: List.generate(
-                    controller.gameData.value.innings!,
-                        (i) => Container(
-                      width:75,
-                      child: Text(
-                        '${i + 1}',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: const Color(0xFF8B3A3A),
-                          fontSize: 14,
-                          fontWeight: FontWeight.w600,
+                  color: Colors.grey[200],
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 60,
+                        child: Text(
+                          'Lineup',
+                          style: TextStyle(
+                            color: const Color(0xFF8B3A3A),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
                         ),
                       ),
-                    ),
+                      SizedBox(
+                        width: 140,
+                        child: Text(
+                          'Player Name',
+                          style: TextStyle(
+                            color: const Color(0xFF8B3A3A),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      SizedBox(
+                        width: 40,
+                        child: Text(
+                          '#      ',
+                          style: TextStyle(
+                            color: const Color(0xFF8B3A3A),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 45),
+                      Row(
+                        children: List.generate(
+                          controller.gameData.value.innings!,
+                          (i) => SizedBox(
+                            width: 75,
+                            child: Text(
+                              '${i + 1}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color(0xFF8B3A3A),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
                 ),
               ),
-            ],
-          ),
-        ),
-    )),
             ),
-            // SizedBox(height: 5),
+          ),
+          // SizedBox(height: 5),
 
-            // Table rows
-            SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Obx(()=>controller.gameData.value.players!.isNotEmpty?Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                Container(
-                  alignment: Alignment.bottomLeft,
-                  width: 1400,
-                  color: Colors.white,
-                  child:
-                  controller.gameData.isNull
-                      ? SizedBox()
-                      : controller.gameData.value.players == null
-                      ? SizedBox()
-                      :
-
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: List.generate(
-                      controller.gameData.value.players!.length,
-                      // players.length,
-                          (index) {
-                        if (controller.playersOut.contains(
-                          controller.gameData.value.players![index],
-                        )) {
-                          return SizedBox();
-                        } else {
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 0,
-                              horizontal:0,
-                            ),
-                            decoration: BoxDecoration(
-                              border: Border(
-                                bottom: BorderSide(
-                                  color: Colors.grey.shade200,
-                                ),
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  width: 60,
-                                  child: Text(
-                                    '${index + 1}',
-                                    // '${i++}',
-                                    textAlign: TextAlign.center,
-                                    style: TextStyle(
-                                      color: const Color(0xFF8B3A3A),
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 140,
-                                  child: Text(
-                                    "${controller.gameData.value.players![index].firstName!} ${controller.gameData.value.players![index].lastName}",
-                                    style: const TextStyle(
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 14
-                                    ),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                SizedBox(
-                                  width: 40,
-                                  child: Text(
-                                    controller
-                                        .gameData
-                                        .value
-                                        .players![index]
-                                        .jerseyNumber
-                                        .toString(),
-                                  ),
-                                ),
-
-                                // Status chip
-                                InkWell(
-                                  onTap: () {
-
-                                    print("name");
-                                    final player =
-                                    controller
-                                        .gameData
-                                        .value
-                                        .players?[index];
-                                    final exists =
-                                        controller.playersOut.value
-                                            ?.any(
-                                              (p) => p.id == player!.id,
-                                        ) ??
-                                            false;
-
-                                    if (!exists) {
-                                      controller.playersOut.value?.add(
-                                        player!,
-                                      );
-                                      print("Player added.");
-                                    } else {
-                                      print("Player already exists.");
-                                    }
-
-                                    print(
-                                      controller
-                                          .playersOut
-                                          .value
-                                          ?.length ??
-                                          0,
-                                    );
-                                    controller.playersOut.refresh();
-
-                                    i = 1;
-
-                                    // setState(() {
-                                    //
-                                    // });
-                                    // controller.gameData.refresh();
-                                  },
-
-                                  child: SizedBox(
-                                    width: 70,
-                                    child: Container(
-                                      padding:
-                                      const EdgeInsets.symmetric(
-                                        horizontal: 8,
-                                        vertical: 4,
-                                      ),
-                                      decoration: BoxDecoration(
-                                        color: const Color(0xFFA33838),
-                                        borderRadius:
-                                        BorderRadius.circular(4),
-                                      ),
-                                      child: const Text(
-                                        'Out',
-                                        textAlign: TextAlign.center,
-                                        style: TextStyle(
-                                          color: Colors.white,
-                                          fontSize: 12,
-                                          fontWeight: FontWeight.w500,
-                                        ),
-                                      ),
-                                    ),
-                                  ),
-                                ),
-
-                                controller.isAuto.value
-                                    ? Center(
-
-                                  // alignment: Alignment.bottomLeft,
-                                  child:Text("helo")
-                                )
-                                    : Obx(
-                                      () =>
-                                  controller
-                                      .autoFillData
-                                      .value ==
-                                      null
-                                      ? Column(children: [])
-                                      : Container(
-
-                                    child:
-
-
-                                    Column(
-                                      mainAxisAlignment: MainAxisAlignment.start,
-                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                      children: List.generate(1, (
-                                          i,
-                                          ) {
-                                        final a =
+          // Table rows
+          SingleChildScrollView(
+            scrollDirection: Axis.horizontal,
+            child: Obx(
+              () =>
+                  controller.gameData.value.players!.isNotEmpty
+                      ? Column(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Container(
+                            alignment: Alignment.bottomLeft,
+                            width: 1400,
+                            color: Colors.white,
+                            child:
+                                controller.gameData.isNull
+                                    ? SizedBox()
+                                    : controller.gameData.value.players == null
+                                    ? SizedBox()
+                                    : Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      children: List.generate(
+                                        controller
+                                            .gameData
+                                            .value
+                                            .players!
+                                            .length,
+                                        (index) {
+                                          if (controller.playersOut.contains(
                                             controller
-                                                .autoFillData
-                                                .value!
-                                                .lineupp;
-                                        final valuesList =
-                                            controller
-                                                .autoFillData
-                                                .value!
-                                                .lineupp![index]
-                                                .innings!
-                                                .keys;
-
-
-                                        return Row(
-                                          mainAxisAlignment: MainAxisAlignment.start,
-                                          crossAxisAlignment: CrossAxisAlignment.start,
-                                          children:
-                                          valuesList.map((
-                                              inningNumber,
-                                              ) {
-                                            bool
-                                            isLable =
-                                            false;
-                                            TextEditingController
-                                            textEditingController =
-                                            TextEditingController();
-                                            return
-
-                                              Focus(
-                                              onFocusChange: (
-                                                  hasFocus,
-                                                  ) async {
-                                                if (!hasFocus) {
-                                                  yourFunction(
-                                                    index,
-                                                  );
-                                                  // controller.teamPositioned
-                                                  String
-                                                  result = await filterPositionsByNamePrefix(
-                                                    controller!.teamPositioned.value!,
-                                                    controller.enerLable.value,
-                                                  );
-                                                  print(
-                                                    "Matched name: $result",
-                                                  );
-                                                  if (result !=
-                                                      "") {
-                                                    controller.autoFillData.value!.lineupp![index].innings![inningNumber] =
-                                                        result;
-                                                    controller.autoFillData.refresh();
-                                                    textEditingController.text =
-                                                        result;
-                                                    // setState(() {
-                                                    isLable =
-                                                    true;
-
-                                                    // controller.fixedAssignments!.add({});
-                                                 controller.addFixedAssignment(
-                                                     controller
-                                                         .gameData
-                                                         .value
-                                                         .players![index].id.toString()
-                                                 , '${inningNumber}', result);
-
-
-                                                    // });
-                                                  }
-                                                  // The widget lost focus, run your function here
-                                                  print(
-                                                    'Widget unfocused — run your function',
-                                                  );
-                                                }
-                                              },
-                                              child:
-
-                                              Container(
-                                                padding:
-                                                const EdgeInsets.all(
-                                                  8,
-                                                ),
-                                                color:
-                                                Colors.white,
-                                                child:
-
-                                                LineupTextField(
-                                                  positions:
-                                                  controller!.teamPositioned.value!,
-                                                  controller: TextEditingController(
-                                                    text:
-                                                    controller.autoFillData.value!.lineupp![index].innings![inningNumber],
+                                                .gameData
+                                                .value
+                                                .players![index],
+                                          )) {
+                                            return SizedBox();
+                                          } else {
+                                            return Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                    vertical: 0,
+                                                    horizontal: 0,
                                                   ),
-                                                  // textEditingController,
-                                                  isLable: filterPositionsByNameMatch(
-                                                    controller!.teamPositioned.value!,
-                                                    textEditingController.text,
+                                              decoration: BoxDecoration(
+                                                border: Border(
+                                                  bottom: BorderSide(
+                                                    color: Colors.grey.shade200,
                                                   ),
-                                                  onChanged: (
-                                                      val,
-                                                      ) {
-
-                                                    print("heloo");
-
-                                                    controller.enerLable.value =
-                                                        val.toString();
-                                                    print(
-                                                      "inningNumber.toString()",
-                                                    );
-                                                    print(
-                                                      controller.autoFillData.value!.lineupp![index].innings!.keys,
-                                                    );
-                                                    print(
-                                                      inningNumber.toString(),
-                                                    );
-                                                    // ✅ Only update the specific inning number (key)
-                                                    // int inningKey = int.parse(inningNumber); // or get this dynamically based on UI
-                                                    controller.autoFillData.value!.lineupp![index].innings![inningNumber] =
-                                                        val;
-                                                    print(
-                                                      controller.autoFillData.toJson(),
-                                                    );
-                                                  },
                                                 ),
-                                                //   position,
-                                                //   style: const TextStyle(
-                                                //     fontSize: 16,
-                                                //     color: Colors.black87,
-                                                //   ),
-                                                // ),
+                                              ),
+                                              child: Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.start,
+                                                crossAxisAlignment:
+                                                    CrossAxisAlignment.center,
+                                                children: [
+                                                  SizedBox(
+                                                    width: 60,
+                                                    child: Text(
+                                                      '${index + 1}',
+                                                      // '${i++}',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: TextStyle(
+                                                        color: const Color(
+                                                          0xFF8B3A3A,
+                                                        ),
+                                                        fontSize: 14,
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 140,
+                                                    child: Text(
+                                                      "${controller.gameData.value.players![index].firstName!} ${controller.gameData.value.players![index].lastName}",
+                                                      style: const TextStyle(
+                                                        fontWeight:
+                                                            FontWeight.bold,
+                                                        fontSize: 14,
+                                                      ),
+                                                      overflow:
+                                                          TextOverflow.ellipsis,
+                                                    ),
+                                                  ),
+                                                  SizedBox(
+                                                    width: 40,
+                                                    child: Text(
+                                                      controller
+                                                          .gameData
+                                                          .value
+                                                          .players![index]
+                                                          .jerseyNumber
+                                                          .toString(),
+                                                    ),
+                                                  ),
+
+                                                  // Status chip
+                                                  InkWell(
+                                                    onTap: () {
+                                                      final player =
+                                                          controller
+                                                              .gameData
+                                                              .value
+                                                              .players?[index];
+                                                      final exists =
+                                                          controller
+                                                              .playersOut
+                                                              .value
+                                                              ?.any(
+                                                                (p) =>
+                                                                    p.id ==
+                                                                    player!.id,
+                                                              ) ??
+                                                          false;
+
+                                                      if (!exists) {
+                                                        controller
+                                                            .playersOut
+                                                            .value
+                                                            ?.add(player!);
+                                                        print("Player added.");
+                                                      } else {
+                                                        print(
+                                                          "Player already exists.",
+                                                        );
+                                                      }
+
+                                                      print(
+                                                        controller
+                                                                .playersOut
+                                                                .value
+                                                                ?.length ??
+                                                            0,
+                                                      );
+                                                      controller.playersOut
+                                                          .refresh();
+
+                                                      i = 1;
+
+                                                      // setState(() {
+                                                      //
+                                                      // });
+                                                      // controller.gameData.refresh();
+                                                    },
+
+                                                    child: SizedBox(
+                                                      width: 70,
+                                                      child: Container(
+                                                        padding:
+                                                            const EdgeInsets.symmetric(
+                                                              horizontal: 8,
+                                                              vertical: 4,
+                                                            ),
+                                                        decoration: BoxDecoration(
+                                                          color: const Color(
+                                                            0xFFA33838,
+                                                          ),
+                                                          borderRadius:
+                                                              BorderRadius.circular(
+                                                                4,
+                                                              ),
+                                                        ),
+                                                        child: const Text(
+                                                          'Out',
+                                                          textAlign:
+                                                              TextAlign.center,
+                                                          style: TextStyle(
+                                                            color: Colors.white,
+                                                            fontSize: 12,
+                                                            fontWeight:
+                                                                FontWeight.w500,
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  ),
+
+                                                  controller.isAuto.value
+                                                      ? Center(
+                                                        // alignment: Alignment.bottomLeft,
+                                                        child: Text("helo"),
+                                                      )
+                                                      : Obx(
+                                                        () =>
+                                                            controller
+                                                                        .autoFillData
+                                                                        .value ==
+                                                                    null
+                                                                ? Column(
+                                                                  children: [],
+                                                                )
+                                                                : Column(
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment
+                                                                          .start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment
+                                                                          .start,
+                                                                  children: List.generate(1, (
+                                                                    i,
+                                                                  ) {
+                                                                    final valuesList =
+                                                                        controller
+                                                                            .autoFillData
+                                                                            .value!
+                                                                            .lineupp![index]
+                                                                            .innings
+                                                                            .keys;
+
+                                                                    return Row(
+                                                                      mainAxisAlignment:
+                                                                          MainAxisAlignment
+                                                                              .start,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment
+                                                                              .start,
+                                                                      children:
+                                                                          valuesList.map((
+                                                                            inningNumber,
+                                                                          ) {
+                                                                            bool
+                                                                            isLable =
+                                                                                false;
+                                                                            TextEditingController
+                                                                            textEditingController =
+                                                                                TextEditingController();
+                                                                            return Focus(
+                                                                              onFocusChange: (
+                                                                                hasFocus,
+                                                                              ) async {
+                                                                                if (!hasFocus) {
+                                                                                  yourFunction(
+                                                                                    index,
+                                                                                  );
+                                                                                  // controller.teamPositioned
+                                                                                  String result = await filterPositionsByNamePrefix(
+                                                                                    controller.teamPositioned,
+                                                                                    controller.enerLable.value,
+                                                                                  );
+                                                                                  print(
+                                                                                    "Matched name: $result",
+                                                                                  );
+                                                                                  if (result !=
+                                                                                      "") {
+                                                                                    controller.autoFillData.value!.lineupp![index].innings![inningNumber] =
+                                                                                        result;
+                                                                                    controller.autoFillData.refresh();
+                                                                                    textEditingController.text = result;
+                                                                                    // setState(() {
+                                                                                    isLable =
+                                                                                        true;
+
+                                                                                    // controller.fixedAssignments!.add({});
+                                                                                    controller.addFixedAssignment(
+                                                                                      controller.gameData.value.players![index].id.toString(),
+                                                                                      '${inningNumber}',
+                                                                                      result,
+                                                                                    );
+
+                                                                                    // });
+                                                                                  }
+                                                                                  // The widget lost focus, run your function here
+                                                                                  print(
+                                                                                    'Widget unfocused — run your function',
+                                                                                  );
+                                                                                }
+                                                                              },
+
+                                                                              // onFocusChange: (
+                                                                              //   hasFocus,
+                                                                              // ) async {
+                                                                              //   if (!hasFocus) {
+                                                                              //     String val =
+                                                                              //         textEditingController.text.trim();
+                                                                              //     log(
+                                                                              //       val,
+                                                                              //     );
+                                                                              //     if (val ==
+                                                                              //         "OUT") {
+                                                                              //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                              //           "OUT";
+                                                                              //       controller.autoFillData.refresh();
+                                                                              //       return;
+                                                                              //     } else {
+                                                                              //       bool isDuplicate = isDuplicateInColumn(
+                                                                              //         val,
+                                                                              //         controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                              //             "",
+                                                                              //         index,
+                                                                              //       );
+                                                                              //       if (isDuplicate) {
+                                                                              //         // Show dialog
+                                                                              //         showDialog(
+                                                                              //           context:
+                                                                              //               context,
+                                                                              //           builder:
+                                                                              //               (
+                                                                              //                 _,
+                                                                              //               ) => AlertDialog(
+                                                                              //                 title: Text(
+                                                                              //                   "Duplicate Position",
+                                                                              //                 ),
+                                                                              //                 content: Text(
+                                                                              //                   "This position is already used in this inning (column). Duplicate values are not allowed.",
+                                                                              //                 ),
+                                                                              //                 actions: [
+                                                                              //                   TextButton(
+                                                                              //                     onPressed: () {
+                                                                              //                       Navigator.pop(
+                                                                              //                         context,
+                                                                              //                       );
+                                                                              //                       textEditingController.clear(); // optional: clear on error
+                                                                              //                     },
+                                                                              //                     child: Text(
+                                                                              //                       "OK",
+                                                                              //                     ),
+                                                                              //                   ),
+                                                                              //                 ],
+                                                                              //               ),
+                                                                              //         );
+
+                                                                              //         return;
+                                                                              //       }
+                                                                              //     }
+
+                                                                              //     // Only now update model
+                                                                              //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                              //         val;
+                                                                              //     controller.autoFillData.refresh();
+                                                                              //     // log(
+                                                                              //     //   "ab kya data agyaaa",
+                                                                              //     // );
+                                                                              //     // log(
+                                                                              //     //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                              //     //       "",
+                                                                              //     // );
+
+                                                                              //     // existing auto-fill logic below...
+                                                                              //     String result = await filterPositionsByNamePrefix(
+                                                                              //       controller.teamPositioned,
+                                                                              //       controller.enerLable.value,
+                                                                              //     );
+
+                                                                              //     if (result !=
+                                                                              //         "") {
+                                                                              //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                              //           result;
+                                                                              //       controller.autoFillData.refresh();
+                                                                              //       textEditingController.text = result;
+                                                                              //       isLable =
+                                                                              //           true;
+                                                                              //       controller.addFixedAssignment(
+                                                                              //         controller.gameData.value.players![index].id.toString(),
+                                                                              //         '${inningNumber}',
+                                                                              //         result,
+                                                                              //       );
+                                                                              //     }
+
+                                                                              //     print(
+                                                                              //       'Widget unfocused — run your function',
+                                                                              //     );
+                                                                              //   }
+                                                                              // },
+                                                                              child: Container(
+                                                                                padding: const EdgeInsets.all(
+                                                                                  8,
+                                                                                ),
+                                                                                color:
+                                                                                    Colors.white,
+                                                                                child: LineupTextField(
+                                                                                  positions:
+                                                                                      controller.teamPositioned,
+                                                                                  controller: TextEditingController(
+                                                                                    text:
+                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                  ),
+                                                                                  // textEditingController,
+                                                                                  isLable: filterPositionsByNameMatch(
+                                                                                    controller.teamPositioned,
+                                                                                    textEditingController.text,
+                                                                                  ),
+
+                                                                                  onChanged: (
+                                                                                    val,
+                                                                                  ) {
+                                                                                    log(
+                                                                                      "valueee dt ytrrr",
+                                                                                    );
+                                                                                    log(
+                                                                                      val,
+                                                                                    );
+                                                                                    controller.enerLable.value = val.toString();
+                                                                                  },
+
+                                                                                  ///////////
+                                                                                  // onFieldSubmitted: (
+                                                                                  //   val,
+                                                                                  // ) async {
+                                                                                  //   log(
+                                                                                  //     "inings ka data",
+                                                                                  //   );
+                                                                                  //   log(
+                                                                                  //     controller.autoFillData.value!.lineupp![index].innings.toString(),
+                                                                                  //   );
+                                                                                  //   val =
+                                                                                  //       val.trim();
+                                                                                  //   log(
+                                                                                  //     "Submitted. Value: $val",
+                                                                                  //   );
+
+                                                                                  //   if (val.toUpperCase() ==
+                                                                                  //       "OUT") {
+                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                  //         "OUT";
+                                                                                  //     controller.autoFillData.refresh();
+                                                                                  //     return;
+                                                                                  //   }
+
+                                                                                  //   bool isDuplicate = isDuplicateInColumn(
+                                                                                  //     val,
+                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                  //         "",
+                                                                                  //     index,
+                                                                                  //   );
+                                                                                  //   log(
+                                                                                  //     "duplicate hy kyaaa",
+                                                                                  //   );
+                                                                                  //   print(
+                                                                                  //     isDuplicate,
+                                                                                  //   );
+                                                                                  //   if (isDuplicate) {
+                                                                                  //     showDialog(
+                                                                                  //       context:
+                                                                                  //           context,
+                                                                                  //       builder:
+                                                                                  //           (
+                                                                                  //             _,
+                                                                                  //           ) => AlertDialog(
+                                                                                  //             title: const Text(
+                                                                                  //               "Duplicate Position",
+                                                                                  //             ),
+                                                                                  //             content: const Text(
+                                                                                  //               "This position is already used in this inning (column). Duplicate values are not allowed.",
+                                                                                  //             ),
+                                                                                  //             actions: [
+                                                                                  //               TextButton(
+                                                                                  //                 onPressed: () {
+                                                                                  //                   Navigator.pop(
+                                                                                  //                     context,
+                                                                                  //                   );
+                                                                                  //                   textEditingController.clear();
+                                                                                  //                 },
+                                                                                  //                 child: const Text(
+                                                                                  //                   "OK",
+                                                                                  //                 ),
+                                                                                  //               ),
+                                                                                  //             ],
+                                                                                  //           ),
+                                                                                  //     );
+                                                                                  //     return;
+                                                                                  //   }
+
+                                                                                  //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                  //       val;
+                                                                                  //   controller.autoFillData.refresh();
+
+                                                                                  //   String result = await filterPositionsByNamePrefix(
+                                                                                  //     controller.teamPositioned,
+                                                                                  //     controller.enerLable.value,
+                                                                                  //   );
+
+                                                                                  //   if (result !=
+                                                                                  //       "") {
+                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                  //         result;
+                                                                                  //     controller.autoFillData.refresh();
+                                                                                  //     textEditingController.text = result;
+                                                                                  //     controller.addFixedAssignment(
+                                                                                  //       controller.gameData.value.players![index].id.toString(),
+                                                                                  //       '$inningNumber',
+                                                                                  //       result,
+                                                                                  //     );
+                                                                                  //   }
+                                                                                  // },
+                                                                                  onFieldSubmitted: (
+                                                                                    val,
+                                                                                  ) async {
+                                                                                    val =
+                                                                                        val.trim().toUpperCase(); // Normalize for consistent matching
+                                                                                    log(
+                                                                                      "Submitted. Value: $val",
+                                                                                    );
+
+                                                                                    // Allow OUT always
+                                                                                    if (val ==
+                                                                                        "OUT") {
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                          "OUT";
+                                                                                      controller.autoFillData.refresh();
+                                                                                      return;
+                                                                                    }
+
+                                                                                    // ✅ Get all values in current inning column
+                                                                                    final allLineups =
+                                                                                        controller.autoFillData.value?.lineupp ??
+                                                                                        [];
+                                                                                    final inningValues =
+                                                                                        allLineups
+                                                                                            .asMap()
+                                                                                            .entries
+                                                                                            .where(
+                                                                                              (
+                                                                                                e,
+                                                                                              ) =>
+                                                                                                  e.key !=
+                                                                                                  index,
+                                                                                            ) // Exclude current row
+                                                                                            .map(
+                                                                                              (
+                                                                                                e,
+                                                                                              ) =>
+                                                                                                  e.value.innings[inningNumber]?.trim().toUpperCase(),
+                                                                                            )
+                                                                                            .toList();
+
+                                                                                    // ✅ Check for duplicate (excluding empty and OUT)
+                                                                                    if (inningValues.contains(
+                                                                                      val,
+                                                                                    )) {
+                                                                                      showDialog(
+                                                                                        context:
+                                                                                            context,
+                                                                                        builder:
+                                                                                            (
+                                                                                              _,
+                                                                                            ) => AlertDialog(
+                                                                                              title: const Text(
+                                                                                                "Duplicate Position",
+                                                                                              ),
+                                                                                              content: const Text(
+                                                                                                "This position is already used in this inning (column). Duplicate values are not allowed.",
+                                                                                              ),
+                                                                                              actions: [
+                                                                                                TextButton(
+                                                                                                  onPressed: () {
+                                                                                                    Navigator.pop(
+                                                                                                      context,
+                                                                                                    );
+                                                                                                    textEditingController.clear();
+                                                                                                  },
+                                                                                                  child: const Text(
+                                                                                                    "OK",
+                                                                                                  ),
+                                                                                                ),
+                                                                                              ],
+                                                                                            ),
+                                                                                      );
+                                                                                      return;
+                                                                                    }
+
+                                                                                    // ✅ Save entered value
+                                                                                    controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                        val;
+                                                                                    controller.autoFillData.refresh();
+
+                                                                                    // Optional auto-fill from team positions
+                                                                                    String result = await filterPositionsByNamePrefix(
+                                                                                      controller.teamPositioned,
+                                                                                      controller.enerLable.value,
+                                                                                    );
+
+                                                                                    if (result !=
+                                                                                        "") {
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                          result;
+                                                                                      controller.autoFillData.refresh();
+                                                                                      textEditingController.text = result;
+                                                                                      controller.addFixedAssignment(
+                                                                                        controller.gameData.value.players![index].id.toString(),
+                                                                                        '$inningNumber',
+                                                                                        result,
+                                                                                      );
+                                                                                    }
+                                                                                  },
+
+                                                                                  ////////////////////////////////////////////
+                                                                                ),
+                                                                              ),
+                                                                            );
+                                                                          }).toList(),
+                                                                    );
+                                                                  }),
+                                                                ),
+                                                      ),
+                                                ],
                                               ),
                                             );
-                                          }).toList(),
-                                        );
-                                      }),
+                                          }
+                                        },
+                                      ),
                                     ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
 
-                  //     ),
-                  //   ),
-                  // ),
-                  //     ),
-
-                )
-              ],):SizedBox()),
+                            //     ),
+                            //   ),
+                            // ),
+                            //     ),
+                          ),
+                        ],
+                      )
+                      : SizedBox(),
             ),
-          ],
-        ),
-      )
-    ;
+          ),
+        ],
+      ),
+    );
+  }
+
+  bool isDuplicateInColumn(
+    String position,
+    String inningNumber,
+    int currentRowIndex,
+  ) {
+    final allLineups = controller.autoFillData.value?.lineupp ?? [];
+
+    int count = 0;
+    for (int i = 0; i < allLineups.length; i++) {
+      if (i == currentRowIndex) continue; // Skip current row
+      final existingValue = allLineups[i].innings?[inningNumber] ?? '';
+      if (existingValue.trim().toUpperCase() == position.trim().toUpperCase()) {
+        count++;
+      }
+    }
+    return count > 0;
   }
 
   Future<String> filterPositionsByNamePrefix(
@@ -843,48 +1001,9 @@ class _LineupWidgetState extends State<LineupWidget> {
     print('Function called for index $index');
   }
 
-  // Container(
-  // child: Column(
-  // children: List.generate(9, (i) {
-  // // final valuesList =
-  // //     lineup![index].innings!.values.toList();
-  //
-  // return Row(
-  // mainAxisSize: MainAxisSize.max,
-  // mainAxisAlignment:
-  // MainAxisAlignment.spaceBetween,
-  // children:
-  // valuesList.map((position) {
-  // return
-  // Container(
-  // padding: const EdgeInsets.all(8),
-  // color: Colors.white,
-  // child: LineupTextField(onChanged: (val){
-  //
-  // },)
-  // //   position,
-  // //   style: const TextStyle(
-  // //     fontSize: 16,
-  // //     color: Colors.black87,
-  // //   ),
-  // // ),
-  // );
-  // }).toList(),
-  // );
-  // }),
-  // ),
-  // ),
-
   Widget _buildStatsTable() {
     // Mock data for playing time and positions
-    final stats = [
-      {'time': '45%', 'position': 'CF'},
-      {'time': '75%', 'position': 'C'},
-      {'time': '45%', 'position': '3B'},
-      {'time': '45%', 'position': 'SS'},
-      {'time': '45%', 'position': 'CF'},
-      {'time': '45%', 'position': 'RF'},
-    ];
+
     final LineupController controller = Get.find<LineupController>();
     // controller.statsList.clear();
     return ClipRRect(
@@ -1036,25 +1155,16 @@ class _LineupWidgetState extends State<LineupWidget> {
             borderRadius: BorderRadius.circular(15),
           ),
         ),
-        child: const Text('Submit Lineup'),
+        child: const Text(' Submit Lineup'),
       ),
     );
   }
 
   Widget _buildOutSection() {
     int i = 1;
-    // Mock bench players
-    final benchPlayers = [
-      {'number': '01', 'name': 'Mick Johnathan'},
-      {'number': '02', 'name': 'Sophie Turner'},
-      {'number': '03', 'name': 'Lucas Grey'},
-    ];
+
     final LineupController controller = Get.find<LineupController>();
 
-    // controller.autoFillData.value!
-    //     .lineupp!
-    //     .where((lineup) => lineup.isOut)
-    //     .length
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,

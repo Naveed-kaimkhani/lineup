@@ -1,6 +1,7 @@
-
 import 'package:flutter/material.dart';
+import 'package:gaming_web_app/Base/controller/teamController/fav_position_controller_single_user.dart';
 import 'package:gaming_web_app/Base/controller/teamController/favoritPositionedConteroller.dart';
+import 'package:gaming_web_app/Base/controller/teamController/player_position_controller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/player/getPlayerModel.dart';
 import 'package:gaming_web_app/Base/model/playerPositioned.dart';
@@ -8,6 +9,7 @@ import 'package:gaming_web_app/Base/model/positioned.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/screens/main_dashboard/setFavouritPosition.dart';
+import 'package:gaming_web_app/service/api/player_service_api.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
 
@@ -24,8 +26,9 @@ class EditSinglePlayerPositionDialog extends StatefulWidget {
 class _EditSinglePlayerPositionDialogState
     extends State<EditSinglePlayerPositionDialog> {
   final TeamController teamController = Get.find<TeamController>();
+final PlayerPositionController positionController = Get.put(PlayerPositionController());
 
-  late FavoritePositionedController controller;
+  late FavPositionControllerSingleUser controller; //yahn
 
   final List<Position> dummyPositions = [
     Position(id: 1, name: 'P'),
@@ -39,13 +42,32 @@ class _EditSinglePlayerPositionDialogState
     Position(id: 9, name: 'CF'),
     Position(id: 10, name: 'OUT'),
   ];
-
+void _loadPlayerPositions() async {
+  try {
+    final preference = await PlayerService.fetchPlayerPreferences(widget.player.id);
+    
+    controller.setInitialPositions(
+      allPositions: dummyPositions,
+      preferredIds: preference.preferredPositionIds,
+      restrictedIds: preference.restrictedPositionIds,
+    );
+  } catch (e) {
+    print("Error loading player preferences: $e");
+    SnackbarUtils.showErrorr("Failed to load player positions.");
+  }
+}
   @override
   void initState() {
     super.initState();
-    controller = Get.put(FavoritePositionedController(), tag: 'single_player');
+    controller = Get.put(
+      FavPositionControllerSingleUser(),
+      tag: 'single_player',
+    ); //yahn
     controller.fav.clear();
     controller.res.clear();
+
+  _loadPlayerPositions();
+
   }
 
   @override
@@ -59,7 +81,7 @@ class _EditSinglePlayerPositionDialogState
           color: Colors.white,
           borderRadius: BorderRadius.circular(16),
         ),
-        child: GetBuilder<FavoritePositionedController>(
+        child: GetBuilder<FavPositionControllerSingleUser>(
           tag: 'single_player',
           builder: (controller) {
             return SingleChildScrollView(
@@ -76,7 +98,7 @@ class _EditSinglePlayerPositionDialogState
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "${widget.player.firstName}'s Positions",
+                    "${widget.player.firstName}'s Positions ${widget.player.id}",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -94,43 +116,63 @@ class _EditSinglePlayerPositionDialogState
                   PrimaryButton(
                     title: "Save",
                     width: double.infinity,
-                    onTap: () {
-                      List<int> favIds =
-                          controller.fav
-                              .where((p) => p?.id != null)
-                              .map((p) => p!.id!)
-                              .toList();
+                    // onTap: () {
+                    //   List<int> favIds =
+                    //       controller.fav
+                    //           .where((p) => p?.id != null)
+                    //           .map((p) => p!.id!)
+                    //           .toList();
 
-                      List<int> resIds =
-                          controller.res
-                              .where((p) => p?.id != null)
-                              .map((p) => p!.id!)
-                              .toList();
+                    //   List<int> resIds =
+                    //       controller.res
+                    //           .where((p) => p?.id != null)
+                    //           .map((p) => p!.id!)
+                    //           .toList();
 
-                      final index = teamController.playerPreference.indexWhere(
-                        (e) => e.playerId == widget.player.id,
-                      );
+                    //   final index = teamController.playerPreference.indexWhere(
+                    //     (e) => e.playerId == widget.player.id,
+                    //   );
 
-                      if (index != -1) {
-                        teamController
-                            .playerPreference[index]
-                            .preferredPositionIds = favIds;
-                        teamController
-                            .playerPreference[index]
-                            .restrictedPositionIds = resIds;
-                      } else {
-                        teamController.playerPreference.add(
-                          PlayerPreference(
-                            playerId: widget.player.id,
-                            preferredPositionIds: favIds,
-                            restrictedPositionIds: resIds,
-                          ),
-                        );
-                      }
+                    //   if (index != -1) {
+                    //     teamController
+                    //         .playerPreference[index]
+                    //         .preferredPositionIds = favIds;
+                    //     teamController
+                    //         .playerPreference[index]
+                    //         .restrictedPositionIds = resIds;
+                    //   } else {
+                    //     teamController.playerPreference.add(
+                    //       PlayerPreference(
+                    //         playerId: widget.player.id,
+                    //         preferredPositionIds: favIds,
+                    //         restrictedPositionIds: resIds,
+                    //       ),
+                    //     );
+                    //   }
 
-                      SnackbarUtils.showSuccess("Player position updated");
-                      Navigator.pop(context);
-                    },
+                    //   SnackbarUtils.showSuccess("Player position updated");
+                    //   Navigator.pop(context);
+                    // },
+
+                    onTap: () async {
+  List<int> favIds = controller.fav.where((p) => p?.id != null).map((p) => p!.id!).toList();
+  List<int> resIds = controller.res.where((p) => p?.id != null).map((p) => p!.id!).toList();
+
+  final preference = PlayerPreference(
+    playerId: widget.player.id,
+    preferredPositionIds: favIds,
+    restrictedPositionIds: resIds,
+  );
+
+  try {
+    await positionController.savePreference(preference);
+    SnackbarUtils.showSuccess("Player position updated");
+    Navigator.pop(context);
+  } catch (e) {
+    SnackbarUtils.showErrorr("Error: ${e.toString()}");
+  }
+},
+
                     backgroundColor: AppColors.primaryColor,
                   ),
                 ],

@@ -87,8 +87,6 @@ void showFullWidthDialogPay(BuildContext context) {
                           PromoCode: () {
                             // Navigator.pop(context);
                             controlle.promoCodeDialog(context);
-                            // Handle Promo Code selection
-                            print('Promo Code selected');
                             // optional: close dialog after selection
                           },
                           OnlinePayment: () async {

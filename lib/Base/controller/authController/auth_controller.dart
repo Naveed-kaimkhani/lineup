@@ -84,9 +84,18 @@ class SignInController extends GetxController {
     // Validate fields
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
+    if (true)
+    // if (isEmailValid && isPasswordValid)
+    {
+      // final request = LoginModel(email: email, password: password);
 
-    if (isEmailValid && isPasswordValid) {
-      final request = LoginModel(email: email, password: password);
+      // final request = LoginModel(email: "shahbazmusheer@gmail.com", password: "12345678");
+
+      final request = LoginModel(
+        email: "shahbazvidicraze@gmail.com",
+        password: "12345678",
+      );
+
       final response;
       if (email.toString() == "admin@lineup.com") {
         response = await AuthAPI.loginAdmin(request);
@@ -204,9 +213,7 @@ class SignInController extends GetxController {
   void goToSignUp() {
     // Get.to(() => const SignUpScreen());
 
-     Get.toNamed(
-                                          RoutesPath.signUpScreen,
-                                        );
+    Get.toNamed(RoutesPath.signUpScreen);
   }
 
   void signInWithGmail() {

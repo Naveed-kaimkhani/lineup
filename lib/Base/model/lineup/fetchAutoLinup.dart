@@ -1,9 +1,6 @@
 // models/lineup_model.dart
 import 'package:get/get.dart';
 
-// models/lineup_model.dart
-import 'package:get/get.dart';
-
 class FetchAutoFillLineups {
   final List<Lineupp>? lineupp;
   final List<int>? playersInGame;

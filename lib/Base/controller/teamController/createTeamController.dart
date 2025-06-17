@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:intl/intl.dart';
@@ -195,7 +196,6 @@ class NewTeamController extends GetxController {
 
   final paymentController = Get.put(PaymentController());
 
-
   RxDouble dialogHeight = 0.0.obs;
   RxDouble dialogWidth = 0.0.obs;
   void initDimensions(BuildContext context) {
@@ -290,20 +290,10 @@ class NewTeamController extends GetxController {
   }
 
   Future<void> promoCodeReq(BuildContext context) async {
+    log("in promo codeee renew ");
     try {
       final request = PromoCodeRequest(code: PromoCode.text.trim());
-      // final request=PromoCodeRequest(code:PromoCode.text.trim(), teamId:createTeamResponse.value?.id);
-      // Call the API to get the list of teams
       final response = await AdminApi.promocodeRenewalReq(request);
-  
-      // if (response.success!) {
-      //   WidgetsBinding.instance.addPostFrameCallback((_) {
-      //     SnackbarUtils.showSuccess(response.message.toString());
-      //   });
-      // } else {
-      //   SnackbarUtils.showErrorr(response.message.toString());
-      
-      // }
     } catch (e) {
       // Handle any errors that occur
       print('Error fetching teams: $e');
@@ -311,7 +301,6 @@ class NewTeamController extends GetxController {
   }
 
   void promoCodeDialog(BuildContext context) {
-   
     Get.dialog(
       PromoCodeDialog(
         nameController: PromoCode,
@@ -326,7 +315,6 @@ class NewTeamController extends GetxController {
             promoCodeReq(context);
             Get.back(); // Close dialog
             Get.back(); // Close dialog
-        
           }
         },
       ),
@@ -341,7 +329,7 @@ class NewTeamController extends GetxController {
       ageGroup: enterAgeGroupController.text,
       season: seasonController.text,
       year: int.parse(ageGroupController.text),
-     
+
       city: cityController.text,
       state: countryController.text,
       organizationId: orgCode.text,
@@ -628,7 +616,4 @@ class NewTeamController extends GetxController {
       print('No team data saved');
     }
   }
-
-
-
 }

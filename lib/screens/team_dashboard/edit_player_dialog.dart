@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/playerEditController.dart';
 import 'package:gaming_web_app/Base/model/player/getPlayerModel.dart';
+import 'package:gaming_web_app/Base/model/playerPositioned.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
@@ -230,8 +231,9 @@ class _EditPlayerDialogState extends State<EditPlayerDialog> {
                                     },
                                   ),
                                 ),
-                                ElevatedButton(
-                                  onPressed: () {
+                                PrimaryButton(
+                                  width: 200,
+                                  onTap: () {
                                     showDialog(
                                       context: context,
                                       builder:
@@ -240,10 +242,15 @@ class _EditPlayerDialogState extends State<EditPlayerDialog> {
                                                 convertTeamPlayerToGetPlayer(
                                                   widget.players!,
                                                 ),
+                                            //                                        onSave: (PlayerPreference preference) {
+                                            //   // Save directly to API or local state
+                                            //   print(preference.preferredPositionIds);
+                                            //   print(preference.restrictedPositionIds);
+                                            // },
                                           ),
                                     );
                                   },
-                                  child: const Text("Edit Positions"),
+                                  title: "Edit Positions",
                                 ),
                               ],
                             ),

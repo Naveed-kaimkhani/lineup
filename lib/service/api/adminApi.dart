@@ -42,7 +42,6 @@ class AdminApi {
       return null;
     }
   }
- 
 
   static Future<BaseResponse<List<Position?>>> adminPosition() async {
     try {
@@ -82,15 +81,17 @@ class AdminApi {
       return BaseResponse(data: null);
     }
   }
- static Future<List<ActivationRecord>> fetchHistory() async {
-  String? token = await SharedPreferencesUtil.read(SharedPreferencesKeysConstants.bearerToken);
-    final response = await http.get(
-      Uri.parse(APIEndPoints.activationHistory),
-      headers: {
-        'Authorization': 'Bearer $token',
-      },
+
+  static Future<List<ActivationRecord>> fetchHistory() async {
+    String? token = await SharedPreferencesUtil.read(
+      SharedPreferencesKeysConstants.bearerToken,
     );
 
+    final response = await http.get(
+      Uri.parse(APIEndPoints.activationHistory),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    log(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();
@@ -98,6 +99,7 @@ class AdminApi {
       throw Exception('Failed to load activation history');
     }
   }
+
   static Future<BaseResponse<Position>> updatePosition(Position request) async {
     try {
       final response = await DioUtil.request<Position>(
@@ -189,10 +191,9 @@ class AdminApi {
       log(response.statusCode.toString());
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
-     final paymentUrl = jsonData['data']?['payment_url'];
-      log("Payment URL: $paymentUrl");
-     launchPayUrl(paymentUrl);
-        
+        final paymentUrl = jsonData['data']?['payment_url'];
+        log("Payment URL: $paymentUrl");
+        launchPayUrl(paymentUrl);
       } else {
         final jsonData = jsonDecode(response.body);
         final message = jsonData['message'] ?? 'Unknown error occurred';
@@ -204,7 +205,8 @@ class AdminApi {
       // return BaseResponse(data: null);
     }
   }
- static Future<void> launchPayUrl(String link) async {
+
+  static Future<void> launchPayUrl(String link) async {
     final Uri url = Uri.parse(link);
     // final Uri url = Uri.parse('http://18.189.193.38/teams/${createTeamResponse.value?.id}/pay');
     if (await canLaunchUrl(url)) {
@@ -216,6 +218,7 @@ class AdminApi {
       throw 'Could not launch $url';
     }
   }
+
   static Future<BaseResponse<PromoCodeResponse>> createPromotoCode({
     PromoCodeResponse? request,
     bool? isBody,

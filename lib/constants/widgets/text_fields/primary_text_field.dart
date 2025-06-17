@@ -122,10 +122,14 @@ class LineupTextField extends StatelessWidget {
   final double borderRadius;
   final String? hintText;
   final bool readAble;
+  final void Function(String)? onFieldSubmitted;
+
 
   LineupTextField({
     super.key,
     this.controller,
+      this.onFieldSubmitted,
+
     required this.positions,
     this.onChanged,
     this.isLable = false,
@@ -169,6 +173,8 @@ class LineupTextField extends StatelessWidget {
                 key: key,
                 onChanged: onChanged,
                 readOnly: readAble,
+                onFieldSubmitted: onFieldSubmitted,
+
                 controller: controller,
                 obscureText: obscureText,
                 keyboardType: keyboardType,
@@ -189,15 +195,7 @@ class LineupTextField extends StatelessWidget {
                   hintText: "--",
                   hintStyle: tableLabel.copyWith(color: Colors.black26),
                   fillColor: Colors.white,
-                      // isLable
-                      //     ? Colors.green
-                      //     : controller?.text != ""
-                      //     ? Colors.amber.withOpacity(0.5)
-                      //     : Colors.white,
-                  // contentPadding: EdgeInsets.symmetric(
-                  //   vertical: isMobile ? 14.h : 18.h,
-                  //   horizontal: 20.w,
-                  // ),
+               
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(2),
                     borderSide: const BorderSide(
