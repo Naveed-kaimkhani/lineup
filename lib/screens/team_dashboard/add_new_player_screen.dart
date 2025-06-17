@@ -733,105 +733,10 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                   onChanged: (
                                                                                     val,
                                                                                   ) {
-                                                                                    log(
-                                                                                      "valueee dt ytrrr",
-                                                                                    );
-                                                                                    log(
-                                                                                      val,
-                                                                                    );
-                                                                                    controller.enerLable.value = val.toString();
+                                                                                    // controller.enerLable.value = val.toString();
                                                                                   },
 
-                                                                                  ///////////
-                                                                                  // onFieldSubmitted: (
-                                                                                  //   val,
-                                                                                  // ) async {
-                                                                                  //   log(
-                                                                                  //     "inings ka data",
-                                                                                  //   );
-                                                                                  //   log(
-                                                                                  //     controller.autoFillData.value!.lineupp![index].innings.toString(),
-                                                                                  //   );
-                                                                                  //   val =
-                                                                                  //       val.trim();
-                                                                                  //   log(
-                                                                                  //     "Submitted. Value: $val",
-                                                                                  //   );
-
-                                                                                  //   if (val.toUpperCase() ==
-                                                                                  //       "OUT") {
-                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                  //         "OUT";
-                                                                                  //     controller.autoFillData.refresh();
-                                                                                  //     return;
-                                                                                  //   }
-
-                                                                                  //   bool isDuplicate = isDuplicateInColumn(
-                                                                                  //     val,
-                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                  //         "",
-                                                                                  //     index,
-                                                                                  //   );
-                                                                                  //   log(
-                                                                                  //     "duplicate hy kyaaa",
-                                                                                  //   );
-                                                                                  //   print(
-                                                                                  //     isDuplicate,
-                                                                                  //   );
-                                                                                  //   if (isDuplicate) {
-                                                                                  //     showDialog(
-                                                                                  //       context:
-                                                                                  //           context,
-                                                                                  //       builder:
-                                                                                  //           (
-                                                                                  //             _,
-                                                                                  //           ) => AlertDialog(
-                                                                                  //             title: const Text(
-                                                                                  //               "Duplicate Position",
-                                                                                  //             ),
-                                                                                  //             content: const Text(
-                                                                                  //               "This position is already used in this inning (column). Duplicate values are not allowed.",
-                                                                                  //             ),
-                                                                                  //             actions: [
-                                                                                  //               TextButton(
-                                                                                  //                 onPressed: () {
-                                                                                  //                   Navigator.pop(
-                                                                                  //                     context,
-                                                                                  //                   );
-                                                                                  //                   textEditingController.clear();
-                                                                                  //                 },
-                                                                                  //                 child: const Text(
-                                                                                  //                   "OK",
-                                                                                  //                 ),
-                                                                                  //               ),
-                                                                                  //             ],
-                                                                                  //           ),
-                                                                                  //     );
-                                                                                  //     return;
-                                                                                  //   }
-
-                                                                                  //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                  //       val;
-                                                                                  //   controller.autoFillData.refresh();
-
-                                                                                  //   String result = await filterPositionsByNamePrefix(
-                                                                                  //     controller.teamPositioned,
-                                                                                  //     controller.enerLable.value,
-                                                                                  //   );
-
-                                                                                  //   if (result !=
-                                                                                  //       "") {
-                                                                                  //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                  //         result;
-                                                                                  //     controller.autoFillData.refresh();
-                                                                                  //     textEditingController.text = result;
-                                                                                  //     controller.addFixedAssignment(
-                                                                                  //       controller.gameData.value.players![index].id.toString(),
-                                                                                  //       '$inningNumber',
-                                                                                  //       result,
-                                                                                  //     );
-                                                                                  //   }
-                                                                                  // },
+                                                                                
                                                                                   onFieldSubmitted: (
                                                                                     val,
                                                                                   ) async {
@@ -905,6 +810,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                               ],
                                                                                             ),
                                                                                       );
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber];
                                                                                       return;
                                                                                     }
 
@@ -912,6 +818,13 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                         val;
                                                                                     controller.autoFillData.refresh();
+                                                                                    log(
+                                                                                      "updated positions",
+                                                                                    );
+                                                                                    log(
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                          "",
+                                                                                    );
 
                                                                                     // Optional auto-fill from team positions
                                                                                     String result = await filterPositionsByNamePrefix(
@@ -933,7 +846,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     }
                                                                                   },
 
-                                                                                  ////////////////////////////////////////////
                                                                                 ),
                                                                               ),
                                                                             );
