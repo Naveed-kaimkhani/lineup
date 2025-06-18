@@ -92,20 +92,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   : AppColors.secondaryColor,
                         ),
                         SizedBox(width: 16),
-                        // PrimaryButton(
-                        //   // width: 300,
-                        //   onTap: () async {
-                        //     // showNameEmailDialog();
-                        //   },
-                        //   radius: 20.r,
-                        //   textStyle: descriptiveStyle.copyWith(
-                        //     color: Colors.white,
-                        //     fontSize: 18,
-                        //   ),
-                        //   title: '  Create Organization  ',
-                        //   backgroundColor: AppColors.secondaryColor,
-                        // ),
-                        // SizedBox(width: 16),
+                      
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {

@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:gaming_web_app/Base/model/response/base_response.dart';
 import '../../Base/model/authModel/redisterResponse.dart';
@@ -36,7 +37,6 @@ class AuthAPI {
       requestBody: request,
       httpRequestType: HttpRequestType.post,
     );
-    print(response);
     return response;
   }
 

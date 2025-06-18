@@ -91,8 +91,7 @@ void showFullWidthDialogPay(BuildContext context) {
                           },
                           OnlinePayment: () async {
                             final response = await AdminApi.getPaymentLink();
-                            print(response);
-
+                        
                             if (response.success!) {
                               // Navigator.pop(context);
                               SnackbarUtils.showSuccess(

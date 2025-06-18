@@ -144,9 +144,7 @@ class SignUpController extends GetxController {
       } else {
         Get.snackbar('Error', response.message.toString());
       }
-      print(response.success);
-      print(response.message);
-      print(response.data);
+  
     }
   }
 

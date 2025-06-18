@@ -99,7 +99,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           color: Colors.white,
                           fontSize: isMobile ? 18 : 18,
                         ),
-                        title: 'Payment History',
+                        title: 'Activation History',
                         backgroundColor: AppColors.secondaryColor,
                       ),
                     ],
@@ -128,7 +128,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                             fontSize: isMobile ? 18 : 18,
                           ),
 
-                          title: 'Payment History',
+                          title: 'Activation History',
                           backgroundColor: AppColors.secondaryColor,
                         ),
                         SizedBox(width: 10),

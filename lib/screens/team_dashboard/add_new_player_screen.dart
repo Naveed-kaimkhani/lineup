@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -47,13 +46,11 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   }
 
   void checkFocus() {
-    print(textFieldKey[textFieldIndex]);
-    print("az");
+
   }
 
   @override
   Widget build(BuildContext context) {
-    // controller.statsList.clear();
     return DashboardScaffold(
       onTab: () {
         Get.toNamed(RoutesPath.teamDashboardScreen);
@@ -298,8 +295,6 @@ class _LineupWidgetState extends State<LineupWidget> {
 
     int i = 1;
 
-    // final inningsCount = controller.gameData.value.innings ?? 0;
-    // final lineup = controller.fetchAutoFillLineups.value.lineup;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(
@@ -500,7 +495,18 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                             .playersOut
                                                             .value
                                                             ?.add(player!);
-                                                        print("Player added.");
+                                                        // 2. Remove from players list
+
+                                                        controller
+                                                            .autoFillData
+                                                            .value!
+                                                            .lineupp![index]
+                                                            .isOut = true;
+
+                                                        controller.playersOut
+                                                            .refresh();
+                                                        controller.gameData
+                                                            .refresh();
                                                       } else {
                                                         print(
                                                           "Player already exists.",
@@ -625,10 +631,10 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                   );
                                                                                   if (result !=
                                                                                       "") {
-                                                                                    controller.autoFillData.value!.lineupp![index].innings![inningNumber] =
-                                                                                        result;
-                                                                                    controller.autoFillData.refresh();
-                                                                                    textEditingController.text = result;
+                                                                                    // controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                    //     result;
+                                                                                    // controller.autoFillData.refresh();
+                                                                                    // textEditingController.text = result;
                                                                                     // setState(() {
                                                                                     isLable =
                                                                                         true;
@@ -891,24 +897,7 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  bool isDuplicateInColumn(
-    String position,
-    String inningNumber,
-    int currentRowIndex,
-  ) {
-    final allLineups = controller.autoFillData.value?.lineupp ?? [];
-
-    int count = 0;
-    for (int i = 0; i < allLineups.length; i++) {
-      if (i == currentRowIndex) continue; // Skip current row
-      final existingValue = allLineups[i].innings?[inningNumber] ?? '';
-      if (existingValue.trim().toUpperCase() == position.trim().toUpperCase()) {
-        count++;
-      }
-    }
-    return count > 0;
-  }
-
+  //
   Future<String> filterPositionsByNamePrefix(
     List<Position?> positions,
     String query,
@@ -939,6 +928,7 @@ class _LineupWidgetState extends State<LineupWidget> {
           // Header
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+            // padding: const EdgeInsets.symmetric(horizontal: 16),
             color: Colors.grey[200],
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -981,7 +971,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                           controller.statsList.length,
                           (index) => Container(
                             padding: const EdgeInsets.symmetric(
-                              vertical: 8,
+                              vertical: 12.7,
                               horizontal: 16,
                             ),
                             decoration: BoxDecoration(
@@ -1170,8 +1160,23 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                 i = 1;
                                                 controller.playersOut.value
                                                     .remove(player);
+                                                final indexInLineup = controller
+                                                    .autoFillData
+                                                    .value!
+                                                    .lineupp!
+                                                    .indexWhere(
+                                                      (p) =>
+                                                          p.playerId ==
+                                                          player.id,
+                                                    );
+                                                if (indexInLineup != -1) {
+                                                  controller
+                                                      .autoFillData
+                                                      .value!
+                                                      .lineupp![indexInLineup]
+                                                      .isOut = false;
+                                                }
                                                 controller.playersOut.refresh();
-                                                // controller.gameData.refresh();
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: const Color(

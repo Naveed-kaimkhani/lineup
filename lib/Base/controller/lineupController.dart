@@ -22,19 +22,14 @@ class LineupController extends GetxController {
   RxBool isPayment = false.obs;
   RxBool isLoading = false.obs;
   RxList<Position?> teamPositioned = <Position?>[].obs;
+
   Rx<AutoFillLineups> autoFillLineups = AutoFillLineups().obs;
+
   Rx<GameData> gameData = GameData().obs;
   Rx<PDFMODEL> pDFMODEL = PDFMODEL().obs;
 
-
-
-
   Rx<FetchAutoFillLineups> fetchAutoFillLineups = FetchAutoFillLineups().obs;
-  
-  
-  
-  
-  
+
   RxString enerLable = "".obs;
   var autoFillData = Rxn<FetchAutoFillLineups>();
   final Map<String, TextEditingController> textControllers = {};
@@ -63,7 +58,6 @@ class LineupController extends GetxController {
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
     }
   }
 
@@ -127,7 +121,6 @@ class LineupController extends GetxController {
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
     }
   }
 
@@ -151,7 +144,6 @@ class LineupController extends GetxController {
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
     }
   }
 
@@ -176,6 +168,8 @@ class LineupController extends GetxController {
       if (response.data != null) {
         // lineupp.value.clear();
         // teamPositioned.value = response.data!;
+
+        log("lineup data settt");
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
@@ -353,8 +347,7 @@ class LineupController extends GetxController {
     print("1");
     int playedInnings = 0;
     Map<String, int> positionCount = {};
-    // print(lineupp![index].innings.values);
-    print(totalInnings);
+
     lineupp![index].innings!.forEach((inning, position) {
       final pos = position.toUpperCase();
       if (pos != 'OUT' && pos != 'BENCH') {
@@ -362,7 +355,6 @@ class LineupController extends GetxController {
         positionCount[pos] = (positionCount[pos] ?? 0) + 1;
       }
     });
-    print("totalInnings");
     // Calculate percentage
     double percentage =
         totalInnings > 0 ? (playedInnings / totalInnings) * 100 : 0;

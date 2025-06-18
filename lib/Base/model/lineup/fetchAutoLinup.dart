@@ -55,10 +55,11 @@ class FetchAutoFillLineups {
     );
   }
 }
+
 class Lineupp {
   final String playerId;
   final String? battingOrder;
-  final bool isOut;
+  bool isOut;
   final Map<int, String> innings;
 
   Lineupp({
@@ -70,9 +71,7 @@ class Lineupp {
 
   factory Lineupp.fromJson(Map<String, dynamic>? json) {
     if (json == null) {
-      return Lineupp(
-        playerId: '',
-      );
+      return Lineupp(playerId: '');
     }
 
     return Lineupp(
@@ -85,10 +84,9 @@ class Lineupp {
 
   static Map<int, String> _parseInnings(dynamic json) {
     if (json is! Map) return {};
-    return json.map((k, v) => MapEntry(
-      int.tryParse(k.toString()) ?? 0,
-      v?.toString() ?? '',
-    ));
+    return json.map(
+      (k, v) => MapEntry(int.tryParse(k.toString()) ?? 0, v?.toString() ?? ''),
+    );
   }
 
   Map<String, dynamic> toJson() => {
@@ -112,6 +110,7 @@ class Lineupp {
     );
   }
 }
+
 enum BaseballPosition {
   pitcher('P'),
   catcher('C'),
@@ -131,5 +130,3 @@ enum BaseballPosition {
     return values.firstWhereOrNull((e) => e.abbreviation == abbr);
   }
 }
-
-

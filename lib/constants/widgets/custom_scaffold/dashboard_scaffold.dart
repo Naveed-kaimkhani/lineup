@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
 
 import '../../../Base/controller/authController/userProfileController.dart';
 import '../../../routes/routes_path.dart';
@@ -40,13 +39,6 @@ class DashboardScaffold extends StatelessWidget {
     final UserProfileController controller = Get.put(UserProfileController());
     return Scaffold(
       body:
-    //     RefreshIndicator(
-    //     onRefresh: (){
-    //
-    //
-    //       print("dffdjk");
-    // },
-    //     child:
 
 
       SingleChildScrollView(
@@ -121,64 +113,7 @@ class DashboardScaffold extends StatelessWidget {
               ],
             );}),
             SizedBox(height: 27.h),
-            // if (isShowBanner)
-            //   SizedBox(
-            //     height: 406.h,
-            //     child: Padding(
-            //       padding: EdgeInsets.symmetric(horizontal: 100.w),
-            //       child: ClipRRect(
-            //         borderRadius: BorderRadius.circular(16.r),
-            //         child: Stack(
-            //           fit: StackFit.expand,
-            //           children: [
-            //             // Background image
-            //             Image.asset(
-            //               'assets/images/player_banner.jpg',
-            //               fit: BoxFit.fill,
-            //             ),
-            //             Container(
-            //               decoration: BoxDecoration(
-            //                 color: AppColors.secondaryColor.withOpacity(0.5),
-            //                 borderRadius: BorderRadius.circular(16.r),
-            //               ),
-            //             ),
-            //             if (actionWidget != null)
-            //               Positioned(
-            //                 top: 20.h,
-            //                 left: 22.w,
-            //                 child: actionWidget!,
-            //               ),
-            //             if (customContent != null) customContent!,
-            //             if (title.isNotEmpty && subtitle.isNotEmpty)
-            //               Positioned(
-            //                 top: 68.5.h,
-            //                 left: MediaQuery.of(context).size.width / 3,
-            //                 child: Column(
-            //                   crossAxisAlignment: CrossAxisAlignment.center,
-            //                   children: [
-            //                     Text("",
-            //                       // title.toUpperCase(),
-            //                       style: descriptiveStyle.copyWith(
-            //                         fontSize: 48.sp,
-            //                         color: Colors.white, // Full white
-            //                       ),
-            //                     ),
-            //                     SizedBox(height: 4.05.h),
-            //                     Text("",
-            //                       // subtitle.toUpperCase(),
-            //                       style: bannerMainLabelStyle.copyWith(
-            //                         fontSize: 100.45.sp,
-            //                         color: Colors.white, // Full white
-            //                       ),
-            //                     ),
-            //                   ],
-            //                 ),
-            //               ),
-            //           ],
-            //         ),
-            //       ),
-            //     ),
-            //   ),
+           
             body,
           ],
         ),

@@ -517,7 +517,6 @@ class NewTeamController extends GetxController {
       String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
       dateController.text = formattedDate;
       datess.value = dateController.text.toString();
-      print('Selected date: $formattedDate'); // Output: 09-09-2025
       // You can now use this formattedDate as needed
     }
   }

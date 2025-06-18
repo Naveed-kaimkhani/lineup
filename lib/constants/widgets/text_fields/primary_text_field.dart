@@ -165,8 +165,7 @@ class LineupTextField extends StatelessWidget {
               child: TextFormField(
                 // focusNode: focusNode[foc], // Make sure this line exists!
                 onTap: (){
-                 print(key);
-                 print(foc);
+                
                  int index = textFieldKey.indexOf(key);
                  textFieldIndex=index;
                 },

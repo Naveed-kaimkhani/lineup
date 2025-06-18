@@ -9,7 +9,7 @@ class APIEndPoints {
 
   static const register = "/user/auth/register";
   static const login = "/user/auth/login";
-  static const admin = "/admin/auth/login";
+  static const admin = "/auth/login";
   static const getTeams = "/teams";
   static const teamPositions = "/positions";
   static const organizations = "/organizations";

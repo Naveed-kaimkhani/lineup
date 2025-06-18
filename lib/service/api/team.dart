@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 
 import 'package:gaming_web_app/Base/model/response/base_response.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
@@ -66,14 +67,12 @@ class TeamsApi {
       return BaseResponse<List<GetPlayer>>(data: []);
     }
   }
+
   static Future<BaseResponse<TeamData?>> getTeamDataFromOrg(int id) async {
-  String? token = await SharedPreferencesUtil.read(
-      "org_access_token",
-    ); 
+    String? token = await SharedPreferencesUtil.read("org_access_token");
     try {
       final url = Uri.parse("${APIEndPoints.addPlayers}/$id");
 
-    
       final response = await http.get(
         url,
         headers: {
@@ -101,6 +100,7 @@ class TeamsApi {
       return BaseResponse<TeamData>(data: null);
     }
   }
+
   static Future<BaseResponse<TeamData?>> getTeamData(int id) async {
     try {
       final response = await DioUtil.request<TeamData>(
@@ -182,7 +182,7 @@ class TeamsApi {
     final response = await DioUtil.request<void>(
       loadingText: 'Submitting players...',
       endpoint: "/teams/$teamId/bulk-player-preferences",
-      requestBody: data.toJson(), 
+      requestBody: data.toJson(),
       fromJsonT: (_) => {},
       httpRequestType: HttpRequestType.put,
     );
@@ -194,7 +194,7 @@ class TeamsApi {
     FetchAutoFillLineups autoFillLineups,
     int gameId,
   ) async {
-    print(autoFillLineups.toJson());
+    log(autoFillLineups.toJson().toString());
     final response = await DioUtil.request<FetchAutoFillLineups>(
       loadingText: 'Submitting players...',
       endpoint: "/games/$gameId/lineup",
@@ -210,7 +210,6 @@ class TeamsApi {
     UpdatePlayerModel updatePlayerModel,
     int playerId,
   ) async {
-    print(updatePlayerModel.toJson());
     final response = await DioUtil.request<UpdatePlayerModel>(
       loadingText: 'Submitting players...',
       endpoint: "/players/$playerId",
@@ -301,7 +300,6 @@ class TeamsApi {
       fromJsonT: CreateTeamResponse.fromJson,
       httpRequestType: HttpRequestType.post,
     );
-    print(request.toJson());
     return response;
   }
 

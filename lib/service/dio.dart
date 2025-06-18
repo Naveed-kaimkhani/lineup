@@ -49,19 +49,18 @@ class DioUtil {
         options: Options(
           method: httpRequestType == HttpRequestType.post ? 'POST' : 'GET',
           headers: {"Content-Type": "application/json"},
-             validateStatus: (status) => status != null && status < 500,
+          validateStatus: (status) => status != null && status < 500,
         ),
-        
       );
-        if (response.statusCode == 200) {
-      return response.data;
-    } else {
-      // It was a 400/401/403/etc
-      return {
-        "success": false,
-        "message": response.data['message'] ?? 'Authentication failed',
-      };
-    }
+      if (response.statusCode == 200) {
+        return response.data;
+      } else {
+        // It was a 400/401/403/etc
+        return {
+          "success": false,
+          "message": response.data['message'] ?? 'Authentication failed',
+        };
+      }
     } catch (e) {
       print("Dio error: $e");
       return {
@@ -123,24 +122,7 @@ class DioUtil {
           );
           break;
       }
-      // switch (httpRequestType) {
-      //   case HttpRequestType.get:
-      //     response = await _dio.get(path, queryParameters: params);
-      //     break;
-      //   case HttpRequestType.post:
-      //     if (requestBody.containsKey('doc') && requestBody['doc'] != null) {
-      //       response = await handleMultipleImages(path: path, requestBody: requestBody);
-      //     } else {
-      //       response = await _dio.post(path, data: requestBody, queryParameters: params);
-      //     }
-      //     break;
-      // }
 
-      print(endpoint);
-      print("endpointhgjhhgjygutrriyjurtoyjujgtry98uugitgjy098ughjgyuht");
-      print(endpoint);
-      print(response.data);
-      print("endpointhgjhhgjygutrriyjurtoyjujgtry98uugitgjy098ughjgyuht");
       late final BaseResponse<T> baseResponse;
       toggleLoader(false);
       if (response.data is Map<String, dynamic>) {

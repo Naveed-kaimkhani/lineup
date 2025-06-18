@@ -31,14 +31,12 @@ class UserProfileController extends GetxController {
       SharedPreferencesKeysConstants.user_response,
           (json) => UserResponse.fromJson(json),
     );
-    print(user?.toJson());
     if (user != null && user.user != null) {
       firstName.value=user.user!.firstName ?? '';
       firstNameController.text = user.user!.firstName ?? '';
       lastNameController.text = user.user!.lastName ?? '';
       emailController.text = user.user!.email ?? '';
       phoneNumberController.text = user.user!.phone ?? '';
-      print("User loaded: ${user.user!.firstName} ${user.user!.lastName}");
     } else {
       print("No user data found in SharedPreferences");
     }

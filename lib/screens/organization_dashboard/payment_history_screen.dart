@@ -1,9 +1,200 @@
+// import 'package:flutter/material.dart';
+// import 'package:get/get.dart';
+// import 'package:gaming_web_app/Base/controller/org_controller/payment_history_controller.dart';
+// import 'package:gaming_web_app/constants/app_colors.dart';
+// import 'package:gaming_web_app/constants/app_text_styles.dart';
+// import 'package:gaming_web_app/Base/model/teamModel/activation_history_model.dart';
+
+// class PaymentHistoryScreen extends StatelessWidget {
+//   PaymentHistoryScreen({super.key});
+
+//   final controller = Get.put(ActivationHistoryController());
+
+//   @override
+//   Widget build(BuildContext context) {
+//     controller.fetchHistory();
+
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: const Text("Activation History"),
+//         automaticallyImplyLeading: false,
+//       ),
+//       body: Obx(() {
+//         if (controller.isLoading.value) {
+//           return const Center(child: CircularProgressIndicator());
+//         }
+
+//         return LayoutBuilder(
+//           builder: (context, constraints) {
+//             final isMobile = constraints.maxWidth < 600;
+
+//             return Padding(
+//               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+//               child:
+//                   isMobile
+//                       ? ListView.builder(
+//                         itemCount: controller.history.length,
+//                         itemBuilder:
+//                             (context, index) =>
+//                                 _buildMobileCard(controller.history[index]),
+//                       )
+//                       : Align(
+//                         alignment: Alignment.topCenter, // ✅ starts from the top
+
+//                         child: SizedBox(
+//                           width: MediaQuery.of(context).size.width * 0.85,
+//                           child: SingleChildScrollView(
+//                             child: Column(
+//                               crossAxisAlignment: CrossAxisAlignment.start,
+//                               children: [
+//                                 _buildHeaderRow(),
+//                                 const SizedBox(height: 8),
+//                                 ...controller.history
+//                                     .map(_buildDataRow)
+//                                     .toList(),
+//                               ],
+//                             ),
+//                           ),
+//                         ),
+//                       ),
+//             );
+//           },
+//         );
+//       }),
+//     );
+//   }
+
+//   // Desktop/tablet header row
+//   Widget _buildHeaderRow() {
+//     return Container(
+//       decoration: BoxDecoration(
+//         color: const Color(0xffE6E6E6),
+//         borderRadius: BorderRadius.circular(8),
+//       ),
+//       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+//       child: Row(
+//         children: const [
+//           _TableHeaderCell(title: "Record ID", flex: 1),
+//           _TableHeaderCell(title: "Org Name", flex: 2),
+//           _TableHeaderCell(title: "Org Code", flex: 2),
+//           _TableHeaderCell(title: "Promo Code", flex: 2),
+//           _TableHeaderCell(title: "Activated At", flex: 2),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Desktop/tablet data row
+//   Widget _buildDataRow(ActivationRecord record) {
+//     return Container(
+//       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+//       margin: const EdgeInsets.symmetric(vertical: 6),
+//       decoration: const BoxDecoration(color: Colors.white),
+//       child: Row(
+//         children: [
+//           _TableDataCell(content: record.recordId.toString(), flex: 1),
+//           _TableDataCell(content: record.organizationName, flex: 2),
+//           _TableDataCell(content: record.organizationCode, flex: 2),
+//           _TableDataCell(content: record.promoCode ?? "", flex: 2),
+//           _TableDataCell(content: record.activatedAt, flex: 2),
+//         ],
+//       ),
+//     );
+//   }
+
+//   // Mobile card view
+//   Widget _buildMobileCard(ActivationRecord record) {
+//     return Container(
+//       margin: const EdgeInsets.symmetric(vertical: 8),
+//       padding: const EdgeInsets.all(12),
+//       decoration: BoxDecoration(
+//         color: Colors.white,
+//         border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
+//         borderRadius: BorderRadius.circular(8),
+//       ),
+//       child: Column(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           _buildMobileItem("Record ID", record.recordId.toString()),
+//           _buildMobileItem("Org Name", record.organizationName),
+//           _buildMobileItem("Org Code", record.organizationCode),
+//           _buildMobileItem("Promo Code", record.promoCode ?? ""),
+//           _buildMobileItem("Activated At", record.activatedAt),
+//         ],
+//       ),
+//     );
+//   }
+
+//   Widget _buildMobileItem(String label, String value) {
+//     return Padding(
+//       padding: const EdgeInsets.symmetric(vertical: 4),
+//       child: Row(
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           Text(
+//             "$label: ",
+//             style: tableLabel.copyWith(fontWeight: FontWeight.w600),
+//           ),
+//           Expanded(
+//             child: Text(
+//               value,
+//               style: fieldLabelStyle.copyWith(fontWeight: FontWeight.w400),
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
+
+// class _TableHeaderCell extends StatelessWidget {
+//   final String title;
+//   final int flex;
+
+//   const _TableHeaderCell({required this.title, required this.flex});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       flex: flex,
+//       child: Text(
+//         title,
+//         style: tableLabel.copyWith(color: AppColors.primaryColor, fontSize: 14),
+//       ),
+//     );
+//   }
+// }
+
+// class _TableDataCell extends StatelessWidget {
+//   final String content;
+//   final int flex;
+
+//   const _TableDataCell({required this.content, required this.flex});
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Expanded(
+//       flex: flex,
+//       child: Text(
+//         content,
+//         style: fieldLabelStyle.copyWith(
+//           color: AppColors.descriptiveTextColor,
+//           fontSize: 18,
+//           fontWeight: FontWeight.bold,
+//         ),
+//       ),
+//     );
+//   }
+// }
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gaming_web_app/Base/controller/org_controller/payment_history_controller.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/Base/model/teamModel/activation_history_model.dart';
+import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
+import 'package:gaming_web_app/routes/routes_path.dart';
 
 class PaymentHistoryScreen extends StatelessWidget {
   PaymentHistoryScreen({super.key});
@@ -14,57 +205,66 @@ class PaymentHistoryScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     controller.fetchHistory();
 
-    return Scaffold(
-      appBar: AppBar(
-        title: const Text("Activation History"),
-        automaticallyImplyLeading: false,
-      ),
-      body: Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: CircularProgressIndicator());
-        }
+    return DashboardScaffold(
+      onTab: () {
+        // Get.offAllNamed(RoutesPath.mainDashboardScreen);
 
-        return LayoutBuilder(
-          builder: (context, constraints) {
-            final isMobile = constraints.maxWidth < 600;
-
-            return Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
-              child:
-                  isMobile
-                      ? ListView.builder(
-                        itemCount: controller.history.length,
-                        itemBuilder:
-                            (context, index) =>
-                                _buildMobileCard(controller.history[index]),
-                      )
-                      : Align(
-                        alignment: Alignment.topCenter, // ✅ starts from the top
-
-                        child: SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.85,
-                          child: SingleChildScrollView(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                _buildHeaderRow(),
-                                const SizedBox(height: 8),
-                                ...controller.history
-                                    .map(_buildDataRow)
-                                    .toList(),
-                              ],
-                            ),
-                          ),
-                        ),
-                      ),
-            );
-          },
-        );
-      }),
+        // Get.toNamed(RoutesPath.mainDashboardScreen);
+        // Navigator.pop(context);
+        Get.back();
+      },
+      isShowBanner: false,
+      bg: false,
+      userImage: 'assets/images/dummy_image.png',
+      userName: 'Test User',
+      title: 'Game-Ready',
+      subtitle: 'Activation History',
+      body: _buildBody(context),
     );
   }
 
-  // Desktop/tablet header row
+  Widget _buildBody(BuildContext context) {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: CircularProgressIndicator());
+      }
+
+      return LayoutBuilder(
+        builder: (context, constraints) {
+          final isMobile = constraints.maxWidth < 600;
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+            child:
+                isMobile
+                    ? ListView.builder(
+                      itemCount: controller.history.length,
+                      itemBuilder:
+                          (context, index) =>
+                              _buildMobileCard(controller.history[index]),
+                    )
+                    : Align(
+                      alignment: Alignment.topCenter,
+                      child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.85,
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              _buildHeaderRow(),
+                              const SizedBox(height: 8),
+                              ...controller.history.map(_buildDataRow).toList(),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ),
+          );
+        },
+      );
+    });
+  }
+
   Widget _buildHeaderRow() {
     return Container(
       decoration: BoxDecoration(
@@ -84,7 +284,6 @@ class PaymentHistoryScreen extends StatelessWidget {
     );
   }
 
-  // Desktop/tablet data row
   Widget _buildDataRow(ActivationRecord record) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -102,7 +301,6 @@ class PaymentHistoryScreen extends StatelessWidget {
     );
   }
 
-  // Mobile card view
   Widget _buildMobileCard(ActivationRecord record) {
     return Container(
       margin: const EdgeInsets.symmetric(vertical: 8),
