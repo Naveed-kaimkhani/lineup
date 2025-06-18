@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/model/player/getPlayerModel.dart';
@@ -111,7 +110,6 @@ class _SetFavoredPositionDialogState extends State<SetFavoredPositionDialog> {
   }
 
   var addResKeys = GlobalKey();
-
 }
 
 void keyAddRes() {
@@ -139,8 +137,11 @@ class PlayerFavWidget extends StatefulWidget {
 
 class _PlayerFavWidgetState extends State<PlayerFavWidget> {
   int isShow = 0;
-  final GlobalKey addFavKeys = GlobalKey();
+
+  // final GlobalKey addFavKeys = GlobalKey();
+
   final TeamController teamController = Get.find<TeamController>();
+
   @override
   Widget build(BuildContext context) {
     final player = widget.player;
@@ -250,6 +251,8 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           isShow == 1
               ? DynamicDropdownList<Position?>(
                 key: addFavKeys,
+
+                // key: GlobalKey(), // 👈 Yeh har bar rebuild ko force karega
                 items: controller.favPositioned,
                 selectedItem: controller.selectedFavPosition ?? null,
                 itemLabelBuilder: (item) => item?.name ?? 'N/A',
@@ -274,7 +277,7 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
                       if (!exists) {
                         controller.fav.add(value);
                         int index = controller.favPositioned.indexWhere(
-                          (position) => position?.id == value!.id,
+                          (position) => position?.id == value.id,
                         );
                         if (index != -1) {
                           controller.resPositioned.removeAt(index);
@@ -341,7 +344,7 @@ class PlayerResWidget extends StatefulWidget {
 }
 
 class _PlayerResWidgetState extends State<PlayerResWidget> {
-  final GlobalKey addResKeys = GlobalKey();
+  // final GlobalKey addResKeys = GlobalKey();
   int isShow = 0;
   final TeamController teamController = Get.find<TeamController>();
   @override
@@ -463,6 +466,8 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
           isShow == 1
               ? DynamicDropdownList<Position?>(
                 key: addResKeys,
+
+                // key: GlobalKey(), // 👈 Yeh har bar rebuild ko force karega
                 items: controller.resPositioned,
                 selectedItem:
                     controller.selectedResPosition ??
