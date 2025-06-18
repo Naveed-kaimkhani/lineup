@@ -23,7 +23,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   final LineupController controller = Get.put(LineupController());
   FocusNode _focusNode = FocusNode();
 
-
   @override
   void initState() {
     super.initState();
@@ -128,9 +127,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
 PlayerStat? sates;
 
 class LineupWidget extends StatefulWidget {
-
   const LineupWidget({super.key});
-
 
   @override
   State<LineupWidget> createState() => _LineupWidgetState();
@@ -142,21 +139,32 @@ class _LineupWidgetState extends State<LineupWidget> {
   late List<TextEditingController> controllers;
 
   Timer? _debounce;
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-       final fieldCount = controller.autoFillData.value?.lineupp?.length ?? 0;
+  //   @override
+  // void dispose() {
+  //   for (final node in focusNodes) {
+  //     node.dispose();
+  //   }
+  //   for (final controller in controllers) {
+  //     controller.dispose();
+  //   }
+  //   super.dispose();
+  // }
 
-    focusNodes = List.generate(fieldCount, (_) => FocusNode());
+  // @override
+  // void initState() {
+  //   // TODO: implement initState
+  //   super.initState();
+  //      final fieldCount = controller.autoFillData.value?.lineupp?.length ?? 0;
 
-    controllers = List.generate(
-      fieldCount,
-      (i) => TextEditingController(
-        text: controller.autoFillData.value!.lineupp![i].innings[inningNumber],
-      ),
-    );
-  }
+  //   focusNodes = List.generate(fieldCount, (_) => FocusNode());
+
+  //   controllers = List.generate(
+  //     fieldCount,
+  //     (i) => TextEditingController(
+  //       text: controller.autoFillData.value!.lineupp![i].innings[inningNumber],
+  //     ),
+  //   );
+  // }
   @override
   Widget build(BuildContext context) {
     textFieldKey.clear();
@@ -768,6 +776,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                             "",
                                                                                       );
                                                                                       // return;
+                                                                                      // controller.againCalculateStatsandTopPositions();
+                                                                                      // controller.recalculatePlayerStats(index);
                                                                                     } else {
                                                                                       final allLineups =
                                                                                           controller.autoFillData.value?.lineupp ??
@@ -961,7 +971,7 @@ class _LineupWidgetState extends State<LineupWidget> {
             color: Colors.white,
             child: Obx(
               () =>
-                  controller.statsList.value.isEmpty
+                  controller.statsList.isEmpty
                       ? SizedBox()
                       : Column(
                         children: List.generate(
