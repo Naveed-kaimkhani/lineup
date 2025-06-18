@@ -231,26 +231,26 @@ class _EditPlayerDialogState extends State<EditPlayerDialog> {
                                     },
                                   ),
                                 ),
-                                PrimaryButton(
-                                  width: 200,
-                                  onTap: () {
-                                    showDialog(
-                                      context: context,
-                                      builder:
-                                          (_) => EditSinglePlayerPositionDialog(
-                                            player:
-                                                convertTeamPlayerToGetPlayer(
-                                                  widget.players!,
-                                                ),
-                                            //                                        onSave: (PlayerPreference preference) {
-                                            //   // Save directly to API or local state
-                                            //   print(preference.preferredPositionIds);
-                                            //   print(preference.restrictedPositionIds);
-                                            // },
-                                          ),
-                                    );
-                                  },
-                                  title: "Edit Positions",
+                                Padding(
+                                  padding: const EdgeInsets.only(top: 20.0),
+                                  child: PrimaryButton(
+                                    width: 200,
+                                    onTap: () {
+                                      showDialog(
+                                        context: context,
+                                        builder:
+                                            (
+                                              _,
+                                            ) => EditSinglePlayerPositionDialog(
+                                              player:
+                                                  convertTeamPlayerToGetPlayer(
+                                                    widget.players!,
+                                                  ),
+                                            ),
+                                      );
+                                    },
+                                    title: "Edit Positions",
+                                  ),
                                 ),
                               ],
                             ),

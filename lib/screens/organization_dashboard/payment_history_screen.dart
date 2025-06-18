@@ -38,7 +38,9 @@ class PaymentHistoryScreen extends StatelessWidget {
                             (context, index) =>
                                 _buildMobileCard(controller.history[index]),
                       )
-                      : Center(
+                      : Align(
+                        alignment: Alignment.topCenter, // ✅ starts from the top
+
                         child: SizedBox(
                           width: MediaQuery.of(context).size.width * 0.85,
                           child: SingleChildScrollView(

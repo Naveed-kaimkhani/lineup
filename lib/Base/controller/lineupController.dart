@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -22,10 +23,18 @@ class LineupController extends GetxController {
   RxBool isLoading = false.obs;
   RxList<Position?> teamPositioned = <Position?>[].obs;
   Rx<AutoFillLineups> autoFillLineups = AutoFillLineups().obs;
-  // Rx<FetchAutoFillLineups> fetchAutoFillLineups = FetchAutoFillLineups().obs;
   Rx<GameData> gameData = GameData().obs;
   Rx<PDFMODEL> pDFMODEL = PDFMODEL().obs;
+
+
+
+
   Rx<FetchAutoFillLineups> fetchAutoFillLineups = FetchAutoFillLineups().obs;
+  
+  
+  
+  
+  
   RxString enerLable = "".obs;
   var autoFillData = Rxn<FetchAutoFillLineups>();
   final Map<String, TextEditingController> textControllers = {};
@@ -109,7 +118,7 @@ class LineupController extends GetxController {
           fixedAssignments: {}, // or null or your data here
         );
         autoFillData.value = generateAutoFillLineups(
-          playerCount: gameData.value.players!.length!,
+          playerCount: gameData.value.players!.length,
           inningsCount: gameData.value.innings!,
         );
       } else {
@@ -194,68 +203,67 @@ class LineupController extends GetxController {
       print('Error fetching teams: $e');
     }
   }
-// void againCalculateStatsandTopPositions(){
-//   //  for (
-//   //         int inning = 0;
-//   //         inning < gameData.value.players!.length;
-//   //         inning++
-//   //       ) {
-//   //         calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-//   //       }
-//     calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-// }
+  // void againCalculateStatsandTopPositions(){
+  //   //  for (
+  //   //         int inning = 0;
+  //   //         inning < gameData.value.players!.length;
+  //   //         inning++
+  //   //       ) {
+  //   //         calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+  //   //       }
+  //     calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+  // }
 
+  void recalculatePlayerStats(int index) {
+    int playedInnings = 0;
+    Map<String, int> positionCount = {};
 
-
-void recalculatePlayerStats(int index) {
-  int playedInnings = 0;
-  Map<String, int> positionCount = {};
-
-  lineupp![index].innings!.forEach((inning, position) {
-    final pos = position.toUpperCase();
-    if (pos != 'OUT' && pos != 'BENCH') {
-      playedInnings++;
-      positionCount[pos] = (positionCount[pos] ?? 0) + 1;
-    }
-  });
-
-  double percentage =
-      lineupp![index].innings!.length > 0 ? (playedInnings / lineupp![index].innings!.length) * 100 : 0;
-  String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
-
-  String topPosition = "OUT";
-  if (positionCount.isNotEmpty) {
-    int maxCount = 0;
-    List<String> topPositions = [];
-
-    positionCount.forEach((pos, count) {
-      if (count > maxCount) {
-        maxCount = count;
-        topPositions = [pos];
-      } else if (count == maxCount) {
-        topPositions.add(pos);
+    lineupp![index].innings!.forEach((inning, position) {
+      final pos = position.toUpperCase();
+      if (pos != 'OUT' && pos != 'BENCH') {
+        playedInnings++;
+        positionCount[pos] = (positionCount[pos] ?? 0) + 1;
       }
     });
 
-    topPosition = topPositions.join(' / ');
+    double percentage =
+        lineupp![index].innings!.length > 0
+            ? (playedInnings / lineupp![index].innings!.length) * 100
+            : 0;
+    String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
+
+    String topPosition = "OUT";
+    if (positionCount.isNotEmpty) {
+      int maxCount = 0;
+      List<String> topPositions = [];
+
+      positionCount.forEach((pos, count) {
+        if (count > maxCount) {
+          maxCount = count;
+          topPositions = [pos];
+        } else if (count == maxCount) {
+          topPositions.add(pos);
+        }
+      });
+
+      topPosition = topPositions.join(' / ');
+    }
+
+    final updatedStats = PlayerPositionStats(
+      topPosition: topPosition,
+      playingTimePercent: playingTimePercent,
+    );
+
+    // Replace stats at the correct index
+    if (index < statsList.length) {
+      statsList[index] = updatedStats;
+    } else {
+      statsList.add(updatedStats);
+    }
+
+    statsList.refresh();
+    log("stats recalculateddd");
   }
-
-  final updatedStats = PlayerPositionStats(
-    topPosition: topPosition,
-    playingTimePercent: playingTimePercent,
-  );
-
-  // Replace stats at the correct index
-  if (index < statsList.length) {
-    statsList[index] = updatedStats;
-  } else {
-    statsList.add(updatedStats);
-  }
-
-  statsList.refresh();
-}
-
-
 
   Future<void> submmitLineupDataPlayesId() async {
     try {

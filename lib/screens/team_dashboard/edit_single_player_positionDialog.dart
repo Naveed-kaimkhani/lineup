@@ -26,7 +26,9 @@ class EditSinglePlayerPositionDialog extends StatefulWidget {
 class _EditSinglePlayerPositionDialogState
     extends State<EditSinglePlayerPositionDialog> {
   final TeamController teamController = Get.find<TeamController>();
-final PlayerPositionController positionController = Get.put(PlayerPositionController());
+  final PlayerPositionController positionController = Get.put(
+    PlayerPositionController(),
+  );
 
   late FavPositionControllerSingleUser controller; //yahn
 
@@ -42,20 +44,23 @@ final PlayerPositionController positionController = Get.put(PlayerPositionContro
     Position(id: 9, name: 'CF'),
     Position(id: 10, name: 'OUT'),
   ];
-void _loadPlayerPositions() async {
-  try {
-    final preference = await PlayerService.fetchPlayerPreferences(widget.player.id);
-    
-    controller.setInitialPositions(
-      allPositions: dummyPositions,
-      preferredIds: preference.preferredPositionIds,
-      restrictedIds: preference.restrictedPositionIds,
-    );
-  } catch (e) {
-    print("Error loading player preferences: $e");
-    SnackbarUtils.showErrorr("Failed to load player positions.");
+  void _loadPlayerPositions() async {
+    try {
+      final preference = await PlayerService.fetchPlayerPreferences(
+        widget.player.id,
+      );
+
+      controller.setInitialPositions(
+        allPositions: dummyPositions,
+        preferredIds: preference.preferredPositionIds,
+        restrictedIds: preference.restrictedPositionIds,
+      );
+    } catch (e) {
+      print("Error loading player preferences: $e");
+      SnackbarUtils.showErrorr("Failed to load player positions.");
+    }
   }
-}
+
   @override
   void initState() {
     super.initState();
@@ -66,8 +71,7 @@ void _loadPlayerPositions() async {
     controller.fav.clear();
     controller.res.clear();
 
-  _loadPlayerPositions();
-
+    _loadPlayerPositions();
   }
 
   @override
@@ -98,7 +102,7 @@ void _loadPlayerPositions() async {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    "${widget.player.firstName}'s Positions ${widget.player.id}",
+                    "${widget.player.firstName}'s Positions",
                     textAlign: TextAlign.center,
                     style: const TextStyle(
                       fontSize: 20,
@@ -116,62 +120,43 @@ void _loadPlayerPositions() async {
                   PrimaryButton(
                     title: "Save",
                     width: double.infinity,
-                    // onTap: () {
-                    //   List<int> favIds =
-                    //       controller.fav
-                    //           .where((p) => p?.id != null)
-                    //           .map((p) => p!.id!)
-                    //           .toList();
-
-                    //   List<int> resIds =
-                    //       controller.res
-                    //           .where((p) => p?.id != null)
-                    //           .map((p) => p!.id!)
-                    //           .toList();
-
-                    //   final index = teamController.playerPreference.indexWhere(
-                    //     (e) => e.playerId == widget.player.id,
-                    //   );
-
-                    //   if (index != -1) {
-                    //     teamController
-                    //         .playerPreference[index]
-                    //         .preferredPositionIds = favIds;
-                    //     teamController
-                    //         .playerPreference[index]
-                    //         .restrictedPositionIds = resIds;
-                    //   } else {
-                    //     teamController.playerPreference.add(
-                    //       PlayerPreference(
-                    //         playerId: widget.player.id,
-                    //         preferredPositionIds: favIds,
-                    //         restrictedPositionIds: resIds,
-                    //       ),
-                    //     );
-                    //   }
-
-                    //   SnackbarUtils.showSuccess("Player position updated");
-                    //   Navigator.pop(context);
-                    // },
-
                     onTap: () async {
-  List<int> favIds = controller.fav.where((p) => p?.id != null).map((p) => p!.id!).toList();
-  List<int> resIds = controller.res.where((p) => p?.id != null).map((p) => p!.id!).toList();
+                      showDialog(
+                        context: context,
+                        barrierDismissible:
+                            false, // Prevent dismiss on tap outside
+                        builder:
+                            (_) => const Center(
+                              child: CircularProgressIndicator(),
+                            ),
+                      );
+                      List<int> favIds =
+                          controller.fav
+                              .where((p) => p?.id != null)
+                              .map((p) => p!.id!)
+                              .toList();
+                      List<int> resIds =
+                          controller.res
+                              .where((p) => p?.id != null)
+                              .map((p) => p!.id!)
+                              .toList();
 
-  final preference = PlayerPreference(
-    playerId: widget.player.id,
-    preferredPositionIds: favIds,
-    restrictedPositionIds: resIds,
-  );
+                      final preference = PlayerPreference(
+                        playerId: widget.player.id,
+                        preferredPositionIds: favIds,
+                        restrictedPositionIds: resIds,
+                      );
 
-  try {
-    await positionController.savePreference(preference);
-    SnackbarUtils.showSuccess("Player position updated");
-    Navigator.pop(context);
-  } catch (e) {
-    SnackbarUtils.showErrorr("Error: ${e.toString()}");
-  }
-},
+                      try {
+                        await positionController.savePreference(preference);
+                        SnackbarUtils.showSuccess("Player position updated");
+                        Navigator.pop(context);
+                        Navigator.pop(context);
+                      } catch (e) {
+                        Navigator.pop(context);
+                        SnackbarUtils.showErrorr("Error: ${e.toString()}");
+                      }
+                    },
 
                     backgroundColor: AppColors.primaryColor,
                   ),

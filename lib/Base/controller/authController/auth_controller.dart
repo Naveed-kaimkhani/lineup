@@ -84,18 +84,15 @@ class SignInController extends GetxController {
     // Validate fields
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
-    if (true)
+    // if (true)
     // if (isEmailValid && isPasswordValid)
-    {
+    if (true) {
       // final request = LoginModel(email: email, password: password);
-
-      // final request = LoginModel(email: "shahbazmusheer@gmail.com", password: "12345678");
 
       final request = LoginModel(
         email: "shahbazvidicraze@gmail.com",
         password: "12345678",
       );
-
       final response;
       if (email.toString() == "admin@lineup.com") {
         response = await AuthAPI.loginAdmin(request);
@@ -104,8 +101,6 @@ class SignInController extends GetxController {
           request,
         ); // Replace with `loginUser()` if needed
       }
-
-      // GetPage(name: RoutesPath.adminDashboardScreen, page: () => AdminDashboardScreen()),
       if (isRememberMe.value) {
         await saveCredentials();
       }
