@@ -113,7 +113,9 @@ class NewTeamController extends GetxController {
     if (currentPage.value == 1) {
       if (orgCode.text.trim().isEmpty ||
           teamNameController.text.trim().isEmpty) {
-        SnackbarUtils.showErrorr('Please Enter Required Value'.toString());
+        SnackbarUtils.showErrorr(
+          'Please Enter Required Value'.toString(),
+        );
       } else {
         // getOrgCode(context);
 

@@ -67,7 +67,7 @@ class AdminController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
-        teamPositioned.value = response!.data!.cast<Position>();
+        teamPositioned.value = response.data!.cast<Position>();
         teamPositioned.refresh();
         debugger();
         update();
@@ -88,7 +88,7 @@ class AdminController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
-        paymentModel.value = response!.data!.cast<PaymentModel>();
+        paymentModel.value = response.data!.cast<PaymentModel>();
 
         debugger();
         update();
@@ -110,7 +110,7 @@ class AdminController extends GetxController {
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
         teamPositioned.refresh();
-        promoCodeResponse.value = response!.data!.cast<PromoCodeResponse>();
+        promoCodeResponse.value = response.data!.cast<PromoCodeResponse>();
         update();
       } else {
         // Handle the case where no teams are returned
