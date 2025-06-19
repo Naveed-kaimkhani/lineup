@@ -192,32 +192,68 @@ class SignInScreen extends StatelessWidget {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                'Don\'t have an account?',
-                                                // style: descriptionStyle,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Don\'t have an account?',
+                                                    // style: descriptionStyle,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  CustomTextButton(
+                                                    title:
+                                                        ' Click here to sign up',
+                                                    fontSize: 8,
+                                                    onTap:
+                                                        controller.goToSignUp,
+                                                    hasUnderline: true,
+                                                  ),
+                                                ],
                                               ),
+
+                                              SizedBox(height: 10),
                                               CustomTextButton(
-                                                title:
-                                                    ' Click here to sign up.',
+                                                title: ' Organization SignIn',
                                                 fontSize: 16,
-                                                onTap: controller.goToSignUp,
+                                                onTap:
+                                                    controller
+                                                        .organizationSignup,
                                                 hasUnderline: true,
                                               ),
                                             ],
                                           )
-                                          : Row(
+                                          : Column(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Text(
-                                                'Don\'t have an account?',
-                                                // style: descriptionStyle,
+                                              Row(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Don\'t have an account?',
+                                                    // style: descriptionStyle,
+                                                  ),
+                                                  SizedBox(width: 10),
+                                                  CustomTextButton(
+                                                    title:
+                                                        ' Click here to sign up',
+                                                    fontSize: 8,
+                                                    onTap:
+                                                        controller.goToSignUp,
+                                                    hasUnderline: true,
+                                                  ),
+                                                ],
                                               ),
+
+                                              SizedBox(height: 10),
                                               CustomTextButton(
-                                                title:
-                                                    ' Click here to sign up.',
+                                                title: ' Organization SignIn',
                                                 fontSize: 16,
-                                                onTap: controller.goToSignUp,
+                                                onTap:
+                                                    controller
+                                                        .organizationSignup,
                                                 hasUnderline: true,
                                               ),
                                             ],

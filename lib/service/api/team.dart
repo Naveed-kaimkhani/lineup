@@ -92,11 +92,9 @@ class TeamsApi {
           return BaseResponse<TeamData>(data: null);
         }
       } else {
-        print("Failed with status code: ${response.statusCode}");
         return BaseResponse<TeamData>(data: null);
       }
     } catch (e) {
-      print('HTTP Error: $e');
       return BaseResponse<TeamData>(data: null);
     }
   }

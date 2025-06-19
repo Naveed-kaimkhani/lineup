@@ -68,7 +68,8 @@ class NameEmailDialog extends StatelessWidget {
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
-          ), const SizedBox(height: 16),
+          ),
+          const SizedBox(height: 16),
 
           TextField(
             controller: orgCodeController,
@@ -164,7 +165,8 @@ class FCreatePromoCodeDialog extends StatelessWidget {
           TextField(
             controller: expires_at,
             decoration: const InputDecoration(
-              labelText: 'Expires At', labelStyle: TextStyle(color: Colors.grey), // Change this color
+              labelText: 'Expires At',
+              labelStyle: TextStyle(color: Colors.grey), // Change this color
 
               border: OutlineInputBorder(),
             ),
@@ -183,17 +185,10 @@ class FCreatePromoCodeDialog extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-          // TextField(
-          //   controller: use_count,
-          //   decoration: const InputDecoration(
-          //     labelText: 'use_count',
-          //     border: OutlineInputBorder(),
-          //   ),
-          //   keyboardType: TextInputType.number,
-          // ),
+         
           const SizedBox(height: 16),
           TextField(
-            controller: use_count,
+            controller: max_uses_per_user,
             decoration: const InputDecoration(
               labelText: 'max_uses_per_user',
               labelStyle: TextStyle(color: Colors.grey), // Change this color
@@ -254,10 +249,6 @@ class PosisionedDialog extends StatelessWidget {
         ],
       ),
 
-      // Padding(padding:EdgeInsets.all(20) ,child: Text("Enter Organizations Details",style: descriptionHeader.copyWith(
-      //   fontSize:  20 ,
-      //   color: AppColors.secondaryColor,
-      // ),),),
       content: Column(
         mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.start,
@@ -343,24 +334,22 @@ class PromoCodeDialog extends StatelessWidget {
       content: SizedBox(
         width: 700,
         height: 300,
-        child:
-
-      Column(
-        mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          TextField(
-            controller: nameController,
-            decoration: const InputDecoration(
-              labelText: 'Enter a Promo Code',
-              border: OutlineInputBorder(),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Enter a Promo Code',
+                border: OutlineInputBorder(),
+              ),
             ),
-          ),
-          const SizedBox(height: 16),
-        ],
-      )
-        ,),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
       actions: [
         PrimaryButton(
           width: double.infinity,
@@ -372,93 +361,93 @@ class PromoCodeDialog extends StatelessWidget {
     );
   }
 }
+
 void showPaymentDialog(
-    BuildContext context, {
-      required VoidCallback PromoCode,
-      required VoidCallback OnlinePayment,
-    }) {
+  BuildContext context, {
+  required VoidCallback PromoCode,
+  required VoidCallback OnlinePayment,
+}) {
   final screenWidth = MediaQuery.of(context).size.width;
   final dialogWidth = screenWidth < 700 ? screenWidth : 700.0;
 
   showDialog(
     context: context,
-    builder: (context) =>
-
-        Column(
+    builder:
+        (context) => Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-          Container(
-                width: dialogWidth,
-                // margin: EdgeInsets.all(20), // optional: margin around dialog
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(8),
-                ),
-                child: AlertDialog(
-                  backgroundColor: Colors.white,
-                  title: Row(
-                    children: [
-                      Text(
-                        '  Select Payment Type',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: AppColors.secondaryColor,
-                        ),
+            Container(
+              width: dialogWidth,
+              // margin: EdgeInsets.all(20), // optional: margin around dialog
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
+              ),
+              child: AlertDialog(
+                backgroundColor: Colors.white,
+                title: Row(
+                  children: [
+                    Text(
+                      '  Select Payment Type',
+                      style: TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.secondaryColor,
                       ),
-                      Spacer(),
-                      InkWell(
-                        onTap: () {
-                          Get.back();
-                        },
-                        child: Icon(Icons.cancel, size: 50, color: Colors.red),
-                      ),
-                    ],
-                  ),
-                  content:Container(
-                    width: dialogWidth,
-                    // margin: EdgeInsets.all(20), // optional: margin around dialog
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(8),
                     ),
-                    child: Column(
+                    Spacer(),
+                    InkWell(
+                      onTap: () {
+                        Get.back();
+                      },
+                      child: Icon(Icons.cancel, size: 50, color: Colors.red),
+                    ),
+                  ],
+                ),
+                content: Container(
+                  width: dialogWidth,
+                  // margin: EdgeInsets.all(20), // optional: margin around dialog
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(8),
+                  ),
+                  child: Column(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       SizedBox(height: 20),
                       // const Text('We want to select a payment type'),
                       SizedBox(height: 20),
                     ],
-                  )),
-                  actions: [
-                    Row(
-                      children: [
-                        Expanded(
-                          child: PrimaryButton(
-                            width: double.infinity,
-                            onTap: PromoCode,
-                            title: '    Promo Code      ',
-                            backgroundColor: AppColors.primaryColor,
-                          ),
-                        ),
-                        const SizedBox(width: 30),
-                        Expanded(
-                          child: PrimaryButton(
-                            width: double.infinity,
-                            onTap: OnlinePayment,
-                            title: '    Online Payment    ',
-                            backgroundColor: AppColors.descriptiveTextColor,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
+                  ),
                 ),
+                actions: [
+                  Row(
+                    children: [
+                      Expanded(
+                        child: PrimaryButton(
+                          width: double.infinity,
+                          onTap: PromoCode,
+                          title: '    Promo Code      ',
+                          backgroundColor: AppColors.primaryColor,
+                        ),
+                      ),
+                      const SizedBox(width: 30),
+                      Expanded(
+                        child: PrimaryButton(
+                          width: double.infinity,
+                          onTap: OnlinePayment,
+                          title: '    Online Payment    ',
+                          backgroundColor: AppColors.descriptiveTextColor,
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
               ),
-
-
-        ],),
+            ),
+          ],
+        ),
   );
 }

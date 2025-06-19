@@ -10,6 +10,7 @@ import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaff
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart' show DateFormat;
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../Base/componant/alertDialog.dart';
@@ -64,9 +65,9 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SizedBox(height: 50.h),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  final isMobile = constraints.maxWidth < 600;
-                  final isDesktop = constraints.maxWidth > 1024;
-                  double width = constraints.maxWidth;
+                  // final isMobile = constraints.maxWidth < 600;
+                  // final isDesktop = constraints.maxWidth > 1024;
+                  // double width = constraints.maxWidth;
 
                   return SizedBox(
                     height: 50, // Set height based on button size
@@ -92,7 +93,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   : AppColors.secondaryColor,
                         ),
                         SizedBox(width: 16),
-                      
+
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
@@ -316,7 +317,6 @@ class _MobileLayoutState extends State<_MobileLayout> {
           } else {
             adminController.adminCreateOrganization();
             Navigator.pop(context);
-            print("Name: $name, Email: $email");
             // You can call your controller method here
           }
         },
@@ -383,7 +383,6 @@ class _MobileLayoutState extends State<_MobileLayout> {
                                   globleController.teamDelete(team.id!);
                                 },
                                 onCancel: () {
-                                  print("Cancel pressed");
                                 },
                               );
                             },
@@ -441,7 +440,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
   final double seasonWidth = 100;
   final double ageGroupWidth = 100;
   final double actionWidth = 190;
-  PromoCodeResponse promoCode=PromoCodeResponse();
+  PromoCodeResponse promoCode = PromoCodeResponse();
   @override
   Widget build(BuildContext context) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
@@ -465,9 +464,8 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                         onTap: () async {
                           try {
                             final response = await AdminApi.createPromotoCode(
-                               isBody: false
+                              isBody: false,
                             );
-
 
                             if (response.success!) {
                               adminController.fetchPromoCode(); // reload data
@@ -481,9 +479,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                                 response.message ?? "Update failed",
                               );
                             }
-                          }catch(e){
-
-                          }
+                          } catch (e) {}
                         },
                         radius: 20.r,
                         textStyle: descriptiveStyle.copyWith(
@@ -493,11 +489,14 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                         title: '  Auto Generated  ',
                         backgroundColor: AppColors.secondaryColor,
                       ),
-                    SizedBox(width: 30,),
+                      SizedBox(width: 30),
                       PrimaryButton(
                         // width: 300,
                         onTap: () async {
-                          adminController.showCreatePromoCodeDialog(context, promoCode);
+                          adminController.showCreatePromoCodeDialog(
+                            context,
+                            promoCode,
+                          );
                           // adminController.showUpdatePromoCodeDialog(context);
                         },
                         radius: 20.r,
@@ -540,7 +539,6 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                           flex: 1,
                           child: _buildHeader("Expires At", seasonWidth),
                         ),
-
 
                         Expanded(
                           flex: 1,
@@ -607,16 +605,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
   Widget _buildRowPRomoCode(BuildContext context, PromoCodeResponse team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -634,7 +623,10 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
             ),
             Expanded(
               flex: 1,
-              child: _buildCell(team.expiresAt.toString(), seasonWidth),
+              child: _buildCell(
+                formatExpiresAt(team.expiresAt ?? ""),
+                seasonWidth,
+              ),
             ),
 
             Expanded(
@@ -651,21 +643,10 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
               flex: 1,
               child: _buildCell(team.maxUsesPerUser.toString(), seasonWidth),
             ),
-            // Expanded(
-            //   flex: 1,
-            //   child: _buildCell(team.createdAt.toString(), seasonWidth),
-            // ),
 
             InkWell(
               onTap: () async {
                 adminController.showUpdatePromoCodeDialog(context, team);
-                // adminController.createPositionedDialog(context);
-                // Show dialog to edit player details
-                // await showDialog(
-                //   context: context,sd
-                //   barrierDismissible: true, builder: (BuildContext context) { return  SizedBox(); },
-                //   // builder: (_) => EditPlayerDialog(players: players,),
-                // );
               },
               child: Image.asset(
                 'assets/images/edit_icon.png', // Pencil icon image
@@ -682,16 +663,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
   Widget _buildRowPositioned(BuildContext context, Position team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -711,58 +683,19 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
               flex: 1,
               child: _buildCell(team.category.toString(), seasonWidth),
             ),
-
-            // Expanded(
-            //   flex: 1,
-            //   child: _buildCell(team..toString(), seasonWidth),
-            // ),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildRowUser(BuildContext context, UserListResponse team) {
-    final double maxWidth = MediaQuery.of(context).size.width * 0.85;
-    return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
-      child: Container(
-        width: maxWidth,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: _buildCell(team.firstName.toString(), teamNameWidth),
-            ),
-            Expanded(
-              flex: 1,
-              child: _buildCell(team.email.toString(), yearWidth),
-            ),
-            Expanded(
-              flex: 1,
-              child: _buildCell(team.phone.toString(), seasonWidth),
-            ),
-
-            Expanded(
-              flex: 1,
-              child: _buildCell(team.createdAt.toString(), seasonWidth),
-            ),
-          ],
-        ),
-      ),
-    );
+  String formatExpiresAt(String dateStr) {
+    try {
+      DateTime dateTime = DateTime.parse(dateStr);
+      return DateFormat('dd MMM yyyy').format(dateTime); // no time part
+    } catch (e) {
+      return dateStr; // fallback
+    }
   }
 
   Widget _buildHeader(String title, double width) {
@@ -782,16 +715,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
   Widget _buildRow(BuildContext context, Organizations team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -859,26 +783,17 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           final org = adminController.organization_code.text.trim();
 
           // Perform your validation or logic here
-          if (name.isEmpty || email.isEmpty ||org.isEmpty) {
+          if (name.isEmpty || email.isEmpty || org.isEmpty) {
             Get.snackbar("Error", "Please enter both name and email");
           } else {
             adminController.adminCreateOrganization();
             Navigator.pop(context);
-            print("Name: $name, Email: $email");
             // You can call your controller method here
           }
         },
       ),
     );
   }
-
-
-
-
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -1031,8 +946,6 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
             // _buildEditButton(context,),
             InkWell(
               onTap: () async {
-                print("gngvnghbvhnvhygvhjgjhgjhgjhguyjh");
-               // adminController. updateOrganization(team);
                 orginizationUpateDialog(team);
                 // orginizationUpateDialog(team);
                 // Show dialog to edit player details
@@ -1053,12 +966,17 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
       ),
     );
   }
+
   void orginizationUpateDialog(var team) {
     // final nameController = TextEditingController();
     // final emailController = TextEditingController();
     final AdminController adminController = Get.find<AdminController>();
-    adminController!.orginizationNameController=TextEditingController(text:team.display_name);
-    adminController!.orginizationEmail=TextEditingController(text:team.email);
+    adminController!.orginizationNameController = TextEditingController(
+      text: team.display_name,
+    );
+    adminController!.orginizationEmail = TextEditingController(
+      text: team.email,
+    );
     Get.dialog(
       NameEmailDialog(
         nameController: adminController.orginizationNameController,
@@ -1075,7 +993,6 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           } else {
             adminController.adminCreateOrganization();
             Navigator.pop(context);
-            print("Name: $name, Email: $email");
             // You can call your controller method here
           }
         },

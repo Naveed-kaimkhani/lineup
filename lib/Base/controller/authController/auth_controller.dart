@@ -1,3 +1,5 @@
+// import 'dart:ui' as html;
+
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:get/get.dart';
@@ -6,6 +8,7 @@ import '../../../constants/SharedPreferencesKeysConstants.dart';
 import '../../../routes/routes_path.dart';
 import '../../../service/api/authApi.dart';
 import '../../../utils/SharedPreferencesUtil.dart';
+import 'dart:html' as html;
 
 class SignInController extends GetxController {
   // Controllers for email and password fields
@@ -87,12 +90,12 @@ class SignInController extends GetxController {
 
     // if (isEmailValid && isPasswordValid)
     if (true) {
-      // final request = LoginModel(email: email, password: password);
+      final request = LoginModel(email: email, password: password);
 
-      final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
-        password: "12345678",
-      );
+      // final request = LoginModel(
+      //   email: "shahbazvidicraze@gmail.com",
+      //   password: "12345678",
+      // );
       final response;
       if (email.toString() == "admin@lineup.com")
       // if (true)
@@ -211,6 +214,10 @@ class SignInController extends GetxController {
     // Get.to(() => const SignUpScreen());
 
     Get.toNamed(RoutesPath.signUpScreen);
+  }
+
+  void organizationSignup() {
+    html.window.location.href = 'http://18.189.193.38/web/#/OrganizationSignin';
   }
 
   void signInWithGmail() {

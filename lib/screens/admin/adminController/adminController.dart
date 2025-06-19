@@ -17,7 +17,13 @@ import '../../../utils/snackbarUtils.dart';
 import 'orginatizationDialog.dart';
 
 class AdminController extends GetxController {
+
+
+
   var organization = <Organizations?>[].obs; // flat list of Organizations
+  
+  
+  
   Organizations? selectedOrganization;
   RxList<TeamData?> teamData = <TeamData?>[].obs;
  var  orginizationNameController = TextEditingController();
@@ -135,6 +141,7 @@ class AdminController extends GetxController {
       print('Error fetching teams: $e');
     }
   }
+
   Future<void> updateOrganization(var team) async {
 
     try {
@@ -284,8 +291,6 @@ class AdminController extends GetxController {
               Get.snackbar("Error", response.message.toString());
             }
 
-            // print("Name: $name, Email: $email");
-            // You can call your controller method here
           }
         },
       ),
@@ -329,11 +334,7 @@ class AdminController extends GetxController {
           final useCount = useCountController.text.trim();
           final maxUsesPerUser = maxUsesPerUserController.text.trim();
 
-          // if (code.isEmpty || description.isEmpty || expiresAt.isEmpty || maxUses.isEmpty || useCount.isEmpty || maxUsesPerUser.isEmpty) {
-          //   Navigator.pop(context);
-          //   Get.snackbar("Error", "Please fill in all fields.");
-          //   return;
-          // }
+          
 
           final updatedPromoCode = PromoCodeResponse(
             id: promoCode.id,

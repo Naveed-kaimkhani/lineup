@@ -25,8 +25,6 @@ class PlayerService {
       },
       body: jsonEncode(preference.toJson()),
     );
-    log(response.body);
-    // print(response.body);
     if (response.statusCode != 200) {
       throw Exception('Failed to update player preferences: ${response.body}');
     }

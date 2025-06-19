@@ -62,7 +62,6 @@ class DioUtil {
         };
       }
     } catch (e) {
-      print("Dio error: $e");
       return {
         "success": false,
         "message": "Something went wrong during login.",
@@ -85,7 +84,7 @@ class DioUtil {
     Response<dynamic> response;
     late String errorMessage;
     String path = item != null ? '$endpoint/$item' : endpoint;
-    print(endpoint);
+
     try {
       toggleLoader(true);
       requestBody ??= {};
@@ -185,8 +184,7 @@ class DioUtil {
     } on DioException catch (e) {
       toggleLoader(false);
       errorMessage = e.message ?? 'An error occurred';
-      // print(endpoint);
-      print(e.response.toString());
+
       if (!e.response!.data["success"]) {
         return BaseResponse(
           success: false,
@@ -211,10 +209,7 @@ class DioUtil {
 
         if (enableLogger) {
           toggleLoader(false);
-          log('DioUtil::URL: ${res.realUri}');
-          log('DioUtil::Status Code: $statusCode');
-          log('DioUtil::Request Data: ${res.requestOptions.data}');
-          log('DioUtil::Response Data: ${res.data}');
+       
         }
 
         if (res.statusMessage == "Found") {
@@ -239,7 +234,6 @@ class DioUtil {
         }
 
         if (enableLogger) {
-          log('DioUtil::Error Message: ${e.message}');
         }
       }
     } catch (e) {
@@ -289,8 +283,6 @@ class DioUtil {
       }
     });
 
-    log("FormData files: ${formData.files}");
-    log("FormData fields: ${formData.fields}");
 
     return await _dio.post(path, data: formData, queryParameters: params);
   }

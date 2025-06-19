@@ -397,7 +397,6 @@ class TabletOrWebLayout extends StatelessWidget {
                     globleController.teamDelete(team.id!);
                   },
                   onCancel: () {
-                    print("Cancel pressed");
                   },
                 );
               },

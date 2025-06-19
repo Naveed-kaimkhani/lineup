@@ -64,10 +64,8 @@ class TeamController extends GetxController {
     );
 
     if (teamData.value != null) {
-      // print('Team name: ${savedData.name}');
-      // print('Team ID: ${savedData.id}');
+
     } else {
-      print('No team data saved');
     }
   }
 
@@ -194,7 +192,6 @@ class TeamController extends GetxController {
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
     }
   }
 
@@ -202,6 +199,5 @@ class TeamController extends GetxController {
   void saveSelectedTeam(Team? selectedTeam) {
     // You can save the selected team or perform any other operation
     // For demonstration, we'll simply print the selected team.
-    print('Selected Team: $selectedTeam');
   }
 }

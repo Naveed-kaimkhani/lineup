@@ -8,14 +8,11 @@ import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
-import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/show_renewal_dialogue.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
-import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:get/get.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../Base/componant/alertDialog.dart';
 
 class OrganizationDashboardScreen extends StatelessWidget {
@@ -101,7 +98,7 @@ class OrganizationDashboardScreen extends StatelessWidget {
                         showRenewalPaymentDialog(
                           context,
                           PromoCode: () {
-                            controlle.promoCodeDialog(context);
+                            controlle.promoCodeRenewalRequest(context);
                           },
                           OnlinePayment: () async {
                             final response =

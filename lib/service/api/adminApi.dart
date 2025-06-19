@@ -91,7 +91,6 @@ class AdminApi {
       Uri.parse(APIEndPoints.activationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
-    log(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();
@@ -112,7 +111,6 @@ class AdminApi {
 
       return response;
     } catch (e) {
-      print('Error: $e');
       return BaseResponse(data: null);
     }
   }
@@ -188,11 +186,10 @@ class AdminApi {
         },
       );
 
-      log(response.statusCode.toString());
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final paymentUrl = jsonData['data']?['payment_url'];
-        log("Payment URL: $paymentUrl");
+     
         launchPayUrl(paymentUrl);
       } else {
         final jsonData = jsonDecode(response.body);
@@ -232,7 +229,6 @@ class AdminApi {
         httpRequestType: HttpRequestType.post,
         fromJsonT: PromoCodeResponse.fromJson, // ✅ Use POST instead of GET
       );
-
       return response;
     } catch (e) {
       print('Error: $e');
@@ -312,7 +308,6 @@ class AdminApi {
 
       if (response.statusCode == 200) {
         if (responseData['success'] == true) {
-          // Success logic (if any)
           SnackbarUtils.showSuccess(responseData['message'] ?? 'Success');
         } else {
           // Show failure message from API

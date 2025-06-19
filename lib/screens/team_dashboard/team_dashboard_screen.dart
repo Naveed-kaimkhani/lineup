@@ -351,7 +351,6 @@ class _MobilePlayerList extends StatelessWidget {
                               await handleDeleteAndRefresh(player.id);
                             },
                             onCancel: () {
-                              print("Cancel pressed");
                             },
                           );
                         },
@@ -611,7 +610,6 @@ class _ResponsivePlayerTable extends StatelessWidget {
                         globleController.playesDelete(players.id!);
                       },
                       onCancel: () {
-                        print("Cancel pressed");
                       },
                     );
                   },

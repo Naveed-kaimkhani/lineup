@@ -29,10 +29,10 @@ class UserProfileController extends GetxController {
   Future<void> loadUserData() async {
     final user = await SharedPreferencesUtil.readObject<UserResponse>(
       SharedPreferencesKeysConstants.user_response,
-          (json) => UserResponse.fromJson(json),
+      (json) => UserResponse.fromJson(json),
     );
     if (user != null && user.user != null) {
-      firstName.value=user.user!.firstName ?? '';
+      firstName.value = user.user!.firstName ?? '';
       firstNameController.text = user.user!.firstName ?? '';
       lastNameController.text = user.user!.lastName ?? '';
       emailController.text = user.user!.email ?? '';
@@ -92,7 +92,6 @@ class UserProfileController extends GetxController {
 
     if (isValid) {
       // Call your submit or API logic here
-      print("Form is valid, proceed to submit...");
     }
   }
 

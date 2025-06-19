@@ -66,8 +66,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
 
     // Responsive spacing
     final smallSpacing = screenSize.height * 0.01; // 1% of screen height
-    final mediumSpacing = screenSize.height * 0.02; // 2% of screen height
-    final largeSpacing = screenSize.height * 0.03; // 3% of screen height
 
     // Adjust indicator dots size
     final dotSize = screenSize.width < 600 ? 8.0 : 8.0;
@@ -162,7 +160,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                             SetPlayerPositionScreen(onEdit: () {}),
                             AddPlayerDialog(),
                             SetFavoredPositionDialog(),
-                            // SetFavoredPositionDialog(),
                           ],
                         ),
                       )),

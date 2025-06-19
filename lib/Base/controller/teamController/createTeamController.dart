@@ -290,7 +290,16 @@ class NewTeamController extends GetxController {
   }
 
   Future<void> promoCodeReq(BuildContext context) async {
-    log("in promo codeee renew ");
+    try {
+      final request = PromoCodeRequest(code: PromoCode.text.trim());
+      final response = await AdminApi.promocodeReq(request);
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> promoCodeRenewalRequest(BuildContext context) async {
     try {
       final request = PromoCodeRequest(code: PromoCode.text.trim());
       final response = await AdminApi.promocodeRenewalReq(request);

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class SubscriptionInfo {
   final String? organizationAccessCode;
   final String? subscriptionExpiresAt;
@@ -8,8 +10,9 @@ class SubscriptionInfo {
   });
 
   factory SubscriptionInfo.fromJson(Map<String, dynamic> json) {
+
     return SubscriptionInfo(
-      organizationAccessCode: json['organization_access_code'] as String,
+      organizationAccessCode: json['organization_code'] as String,
       subscriptionExpiresAt: json['subscription_expires_at'] as String,
     );
   }

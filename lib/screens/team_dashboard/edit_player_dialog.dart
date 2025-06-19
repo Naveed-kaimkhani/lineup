@@ -43,8 +43,6 @@ class _EditPlayerDialogState extends State<EditPlayerDialog> {
 
     // Initialize text controllers with existing player data
     if (widget.players != null) {
-      print("iddd kya arhi hyyyy");
-      print(widget.players!.id.toString());
       _firstNameController.text = widget.players!.firstName.toString();
       _lastNameController.text = widget.players!.lastName;
       _numberController.text = widget.players!.jerseyNumber;

@@ -56,7 +56,6 @@ class _EditSinglePlayerPositionDialogState
         restrictedIds: preference.restrictedPositionIds,
       );
     } catch (e) {
-      print("Error loading player preferences: $e");
       SnackbarUtils.showErrorr("Failed to load player positions.");
     }
   }

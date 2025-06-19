@@ -124,7 +124,6 @@ class SignUpController extends GetxController {
 
   // Sign up button logic
   Future<void> signUp() async {
-    print("nfkjgfhkjghgkj");
     if (validateFields()) {
       final request = UserModel(
         firstName: firstNameController.text,

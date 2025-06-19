@@ -508,18 +508,10 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                         controller.gameData
                                                             .refresh();
                                                       } else {
-                                                        print(
-                                                          "Player already exists.",
-                                                        );
+                                                       
                                                       }
 
-                                                      print(
-                                                        controller
-                                                                .playersOut
-                                                                .value
-                                                                ?.length ??
-                                                            0,
-                                                      );
+                                                      
                                                       controller.playersOut
                                                           .refresh();
 
@@ -913,7 +905,6 @@ class _LineupWidgetState extends State<LineupWidget> {
 
   void yourFunction(int index) {
     // Your custom logic here
-    print('Function called for index $index');
   }
 
   Widget _buildStatsTable() {
