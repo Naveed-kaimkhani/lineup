@@ -8,12 +8,10 @@ class SnackbarUtils {
       message,
       backgroundColor: Colors.red,
       colorText: Colors.white,
-      // snackPosition: SnackPosition.BOTTOM,
-            snackPosition: SnackPosition.TOP,
-      maxWidth: 300, // Limit width to look like a left notification
+      snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(12),
       borderRadius: 8,
-    
+
       duration: const Duration(seconds: 3),
     );
   }
@@ -24,7 +22,7 @@ class SnackbarUtils {
       message,
       backgroundColor: Colors.green,
       colorText: Colors.white,
-      snackPosition: SnackPosition.,
+      snackPosition: SnackPosition.BOTTOM,
       margin: const EdgeInsets.all(12),
       borderRadius: 8,
       duration: const Duration(seconds: 3),
@@ -44,4 +42,3 @@ class SnackbarUtils {
     );
   }
 }
-
