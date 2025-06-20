@@ -100,15 +100,18 @@ class LineupAssignment {
   final String playerId;
   final Map<int, String> innings;
 
-  LineupAssignment({required this.playerId, required this.innings});
+  bool? isOut;
+  LineupAssignment({required this.playerId, required this.innings, this.isOut});
 
   factory LineupAssignment.fromJson(Map<String, dynamic> json) {
     final inningsMap = (json['innings'] as Map<String, dynamic>).map(
       (key, value) => MapEntry(int.parse(key), value.toString()),
     );
 
-    return LineupAssignment(playerId: json['player_id'], innings: inningsMap);
+    return LineupAssignment(playerId: json['player_id'], innings: inningsMap, isOut: json['isOut']);
   }
+  
+
 
   Map<String, dynamic> toJson() => {
     'player_id': playerId,

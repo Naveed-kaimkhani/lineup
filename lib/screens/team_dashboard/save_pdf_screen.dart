@@ -48,12 +48,13 @@ class _LineupWidget extends StatefulWidget {
 
 class _LineupWidgetState extends State<_LineupWidget> {
   final LineupController controller = Get.put(LineupController());
+
   final ScreenshotController screenshotController = ScreenshotController();
 
   @override
   void initState() {
     super.initState();
-    controller.getPDF();
+    // controller.getPDF();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getPDF();
       controller.fetchTeamsPositioned();
@@ -66,8 +67,10 @@ class _LineupWidgetState extends State<_LineupWidget> {
     try {
       toggleLoader(true);
       // Capture the widget as an image
+      controller.previewText.value = '';
       final image = await screenshotController.capture();
 
+      controller.previewText.value = 'PREVIEW       ';
       if (image == null) {
         Get.snackbar('Error', 'Failed to capture screenshot');
         return;
@@ -219,7 +222,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
   }
 
   Widget _buildMainLineupTable() {
-    final LineupController controller = Get.find<LineupController>();
+    // final LineupController controller = Get.find<LineupController>();
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -269,6 +272,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
                   width: 1300,
                   child: Row(
                     children: List.generate(
+                      // controller.gameData.i
                       controller.gameData.value.innings ?? 0,
                       (i) => Container(
                         width: 75,
@@ -349,41 +353,54 @@ class _LineupWidgetState extends State<_LineupWidget> {
                                     .innings
                                     .values;
 
-                            return Row(
-                              children:
-                                  valuesList.map((inningNumber) {
-                                    TextEditingController
-                                    textEditingController =
-                                        TextEditingController();
-                                    return Focus(
-                                      onFocusChange: (hasFocus) async {},
-                                      child: Container(
-                                        padding: const EdgeInsets.all(8),
-                                        color: Colors.white,
-                                        child: LineupTextField(
-                                          readAble: true,
-                                          positions:
-                                              controller!.teamPositioned.value!,
-                                          controller: TextEditingController(
-                                            text: inningNumber,
-                                          ),
+                            // final validInningsValues =
+                            //     controller.pDFMODEL.value.lineupAssignments!
+                            //         .where((e) => e.isOut == false)
+                            //         .expand((e) => e.innings.values)
+                            //         .toList();
+                            // log(validInningsValues.toString());
+                            return controller
+                                    .pDFMODEL
+                                    .value
+                                    .lineupAssignments![index]
+                                    .isOut!
+                                ? SizedBox()
+                                : Row(
+                                  children:
+                                      valuesList.map((inningNumber) {
+                                        TextEditingController
+                                        textEditingController =
+                                            TextEditingController();
+                                        return Focus(
+                                          onFocusChange: (hasFocus) async {},
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            color: Colors.white,
+                                            child: LineupTextField(
+                                              readAble: true,
+                                              positions:
+                                                  controller.teamPositioned,
+                                              controller: TextEditingController(
+                                                text: inningNumber,
+                                              ),
 
-                                          isLable: filterPositionsByNameMatch(
-                                            controller.teamPositioned,
-                                            textEditingController.text,
+                                              isLable:
+                                                  filterPositionsByNameMatch(
+                                                    controller.teamPositioned,
+                                                    textEditingController.text,
+                                                  ),
+                                              onChanged: (val) {},
+                                            ),
+                                            //   position,
+                                            //   style: const TextStyle(
+                                            //     fontSize: 16,
+                                            //     color: Colors.black87,
+                                            //   ),
+                                            // ),
                                           ),
-                                          onChanged: (val) {},
-                                        ),
-                                        //   position,
-                                        //   style: const TextStyle(
-                                        //     fontSize: 16,
-                                        //     color: Colors.black87,
-                                        //   ),
-                                        // ),
-                                      ),
-                                    );
-                                  }).toList(),
-                            );
+                                        );
+                                      }).toList(),
+                                );
                           }),
                         ),
                       ),
@@ -426,9 +443,19 @@ class _LineupWidgetState extends State<_LineupWidget> {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Text(
-            'PREVIEW       ',
-            style: descriptionHeader.copyWith(color: AppColors.secondaryColor),
+          // Text(
+          //   'PREVIEW       ',
+          //   style: descriptionHeader.copyWith(color: AppColors.secondaryColor),
+          // ),
+          Obx(
+            () => Text(
+              controller
+                  .previewText
+                  .value, // Assuming you have an RxString in your controller
+              style: descriptionHeader.copyWith(
+                color: AppColors.secondaryColor,
+              ),
+            ),
           ),
           Row(
             mainAxisSize: MainAxisSize.min,

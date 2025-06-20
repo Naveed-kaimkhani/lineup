@@ -1,5 +1,4 @@
-import 'dart:developer';
-
+import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -113,16 +112,21 @@ class NewTeamController extends GetxController {
     if (currentPage.value == 1) {
       if (orgCode.text.trim().isEmpty ||
           teamNameController.text.trim().isEmpty) {
-        SnackbarUtils.showErrorr(
-          'Please Enter Required Value'.toString(),
-        );
+        SnackbarUtils.showErrorr('Please enter required fields');
       } else {
-        // getOrgCode(context);
+        final loader = Get.find<LoaderController>();
+        loader.isLoading.value = true; // 🔵 Show GlobalLoader
 
-        _goToNext(context);
+        final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
+        loader.isLoading.value = false; // 🔵 Hide GlobalLoader
+
+        if (isValid) {
+          _goToNext(context); // Continue to next step
+        } else {
+          // SnackbarUtils.showErrorr('Invalid Organization Code');
+        }
       }
     }
-
     if (currentPage.value == 2) {
       if (teamType.value.isEmpty) {
         SnackbarUtils.showErrorr('Please set values'.toString());
@@ -295,6 +299,9 @@ class NewTeamController extends GetxController {
     try {
       final request = PromoCodeRequest(code: PromoCode.text.trim());
       final response = await AdminApi.promocodeReq(request);
+      if (response.success == true) {
+        SnackbarUtils.showSuccess(response.message ?? "");
+      }
     } catch (e) {
       // Handle any errors that occur
       print('Error fetching teams: $e');

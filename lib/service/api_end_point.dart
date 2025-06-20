@@ -10,6 +10,8 @@ class APIEndPoints {
   static const register = "/user/auth/register";
   static const login = "/user/auth/login";
   static const admin = "http://18.189.193.38/api/v1/auth/login";
+  
+  static const validatePromo = "http://18.189.193.38/api/v1/organizations/by-code";
   static const getTeams = "/teams";
   static const teamPositions = "/positions";
   static const organizations = "/organizations";

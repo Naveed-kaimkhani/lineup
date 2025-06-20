@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/model/player/getPlayerModel.dart';
+import 'package:gaming_web_app/screens/main_dashboard/custom_editable_dropdown.dart';
 import 'package:get/get.dart';
 import 'package:gaming_web_app/Base/model/positioned.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -171,6 +172,7 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
             ),
           ),
           SizedBox(height: 10),
+
           // Display favorite items
           controller.fav.isNotEmpty
               ? Column(
@@ -184,31 +186,35 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         // Item display container
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
+                        GestureDetector(
+                          onTap: () {},
+                          child: Container(
+                            height: 50,
+                            width: 200,
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.black),
+                              borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    item.name ?? 'No Name',
-                                    style: TextStyle(fontSize: 16),
-                                    overflow: TextOverflow.ellipsis,
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 8.0,
+                              ),
+                              child: Row(
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      item.name ?? 'No Name',
+                                      style: TextStyle(fontSize: 16),
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
                                   ),
-                                ),
-                                Icon(Icons.arrow_drop_down),
-                              ],
+                                  Icon(Icons.arrow_drop_down),
+                                ],
+                              ),
                             ),
                           ),
                         ),
+
                         SizedBox(width: 20),
                         // Delete button
                         InkWell(
@@ -245,14 +251,85 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
                   );
                 }),
               )
-              : SizedBox(),
-          SizedBox(height: 10),
-          // Restricted Position Dropdown
+              : SizedBox(height: 10),
+          // controller.fav.isNotEmpty
+          //     ? Column(
+          //       children: List.generate(controller.fav.length, (index) {
+          //         final item = controller.fav[index];
+
+          //         return Padding(
+          //           padding: const EdgeInsets.symmetric(vertical: 8.0),
+          //           child: Row(
+          //             children: [
+          //               // Editable Custom Dropdown - NOW WITH UNIQUE SELECTION
+          //               ConflictFreeDropdown<Position>(
+          //                 key: ValueKey(
+          //                   'fav_dropdown_$index',
+          //                 ), // Unique key for each
+          //                 items:
+          //                     controller.favPositioned
+          //                         .where(
+          //                           (p) =>
+          //                               // Show all available + currently selected item
+          //                               !controller.fav.any(
+          //                                 (f) => f.id == p?.id,
+          //                               ) ||
+          //                               p?.id == item.id,
+          //                         )
+          //                         .toList(),
+          //                 selectedItem: item, // Use the item from fav list
+          //                 itemLabelBuilder: (item) => item?.name ?? "na",
+          //                 onChanged: (newValue) {
+          //                   if (newValue == null) return;
+
+          //                   setState(() {
+          //                     // 1. Add old item back to available pool
+          //                     controller.favPositioned.add(item);
+
+          //                     // 2. Update the fav list with new selection
+          //                     controller.fav[index] = newValue;
+
+          //                     // 3. Remove new selection from available pool
+          //                     controller.favPositioned.removeWhere(
+          //                       (p) => p?.id == newValue.id,
+          //                     );
+          //                   });
+          //                 },
+          //                 width: 200,
+          //               ),
+
+          //               SizedBox(width: 20),
+          //               // Delete Button remains same
+          //               InkWell(
+          //                 onTap: () {
+          //                   setState(() {
+          //                     controller.resPositioned.add(item);
+          //                     controller.favPositioned.add(item);
+
+          //                     controller.fav.removeAt(index);
+
+          //                     controller.resPositioned.removeAt(index);
+          //                   });
+          //                 },
+          //                 child: Container(
+          //                   height: 50,
+          //                   width: 50,
+          //                   decoration: BoxDecoration(
+          //                     color: AppColors.primaryColor,
+          //                     borderRadius: BorderRadius.circular(5),
+          //                   ),
+          //                   child: Icon(Icons.close, color: Colors.white),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         );
+          //       }),
+          //     )
+          //     : SizedBox(height: 10),
           isShow == 1
               ? DynamicDropdownList<Position?>(
                 key: addFavKeys,
-
-                // key: GlobalKey(), // 👈 Yeh har bar rebuild ko force karega
                 items: controller.favPositioned,
                 selectedItem: controller.selectedFavPosition ?? null,
                 itemLabelBuilder: (item) => item?.name ?? 'N/A',
@@ -350,11 +427,6 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
   @override
   void initState() {
     super.initState();
-    // Initialize your controller, e.g.,
-    // teamController = Get.find<TeamController>();
-    // Or pass it as a parameter if needed.
-    // For example:
-    // this.teamController = widget.controller;
   }
 
   @override
@@ -460,6 +532,73 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                 }),
               )
               : SizedBox(),
+          // controller.res.isNotEmpty
+          //     ? Column(
+          //       children: List.generate(controller.res.length, (index) {
+          //         final item = controller.res[index];
+          //         return Padding(
+          //           padding: const EdgeInsets.symmetric(vertical: 8.0),
+          //           child: Row(
+          //             children: [
+          //               // Editable Dropdown for restricted position
+          //               ConflictFreeDropdown<Position>(
+          //                 key: ValueKey('res_dropdown_$index'),
+          //                 items:
+          //                     controller.resPositioned
+          //                         .where(
+          //                           (p) =>
+          //                               !controller.res.any(
+          //                                 (r) => r.id == p?.id,
+          //                               ) ||
+          //                               p?.id == item.id,
+          //                         )
+          //                         .toList(),
+          //                 selectedItem: item,
+          //                 itemLabelBuilder: (item) => item?.name ?? 'N/A',
+          //                 onChanged: (newValue) {
+          //                   if (newValue == null) return;
+
+          //                   setState(() {
+          //                     // Add old item back to available list
+          //                     controller.resPositioned.add(item);
+
+          //                     // Update with new selection
+          //                     controller.res[index] = newValue;
+
+          //                     // Remove new selection from available list
+          //                     controller.resPositioned.removeWhere(
+          //                       (p) => p?.id == newValue.id,
+          //                     );
+          //                   });
+          //                 },
+          //                 width: 200,
+          //               ),
+          //               SizedBox(width: 20),
+          //               // Delete button
+          //               InkWell(
+          //                 onTap: () {
+          //                   setState(() {
+          //                     controller.resPositioned.add(item);
+          //                     controller.favPositioned.add(item);
+          //                     controller.res.removeAt(index);
+          //                   });
+          //                 },
+          //                 child: Container(
+          //                   height: 50,
+          //                   width: 50,
+          //                   decoration: BoxDecoration(
+          //                     color: AppColors.primaryColor,
+          //                     borderRadius: BorderRadius.circular(5),
+          //                   ),
+          //                   child: Icon(Icons.close, color: Colors.white),
+          //                 ),
+          //               ),
+          //             ],
+          //           ),
+          //         );
+          //       }),
+          //     )
+          //     : SizedBox(),
           SizedBox(height: 10),
 
           /// Restricted Position Dropdown
@@ -481,7 +620,7 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                       isShow = 0;
                     });
                     bool existsInFav = controller.fav.any(
-                      (item) => item.id == value!.id,
+                      (item) => item.id == value.id,
                     );
                     if (existsInFav) {
                       SnackbarUtils.showErrorr(
@@ -489,7 +628,7 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                       );
                     } else {
                       bool existsInRes = controller.res.any(
-                        (item) => item.id == value!.id,
+                        (item) => item.id == value.id,
                       );
                       if (!existsInRes) {
                         controller.res.add(value);

@@ -37,7 +37,6 @@ class PlayerService {
     final uri = Uri.parse(
       'http://18.189.193.38/api/v1/players/$playerId/preferences',
     );
-
     final response = await http.get(
       uri,
       headers: {
@@ -46,6 +45,7 @@ class PlayerService {
       },
     );
 
+    log(response.body);
     if (response.statusCode != 200) {
       throw Exception("Failed to load player preferences");
     }

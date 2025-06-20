@@ -18,6 +18,8 @@ import '../model/positioned.dart';
 
 class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
+  final previewText = 'PREVIEW       '.obs;
+
   Map<String, Map<String, String>>? fixedAssignments;
   RxBool isPayment = false.obs;
   RxBool isLoading = false.obs;
@@ -26,6 +28,7 @@ class LineupController extends GetxController {
   Rx<AutoFillLineups> autoFillLineups = AutoFillLineups().obs;
 
   Rx<GameData> gameData = GameData().obs;
+
   Rx<PDFMODEL> pDFMODEL = PDFMODEL().obs;
 
   Rx<FetchAutoFillLineups> fetchAutoFillLineups = FetchAutoFillLineups().obs;
@@ -85,9 +88,7 @@ class LineupController extends GetxController {
       isLoading.value = false;
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-        print('Saved Game ID: $gameId');
       } else {
-        print('Game ID not found');
       }
 
       // Call the API to get the list of teams
@@ -151,7 +152,6 @@ class LineupController extends GetxController {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-        print('Saved Game ID: $gameId');
       } else {
         print('Game ID not found');
       }
@@ -169,7 +169,7 @@ class LineupController extends GetxController {
         // lineupp.value.clear();
         // teamPositioned.value = response.data!;
 
-        log("lineup data settt");
+        // log("lineup data settt");
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
@@ -256,14 +256,13 @@ class LineupController extends GetxController {
     }
 
     statsList.refresh();
-    log("stats recalculateddd");
+    // log("stats recalculateddd");
   }
 
   Future<void> submmitLineupDataPlayesId() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-        print('Saved Game ID: $gameId');
       } else {
         print('Game ID not found');
       }

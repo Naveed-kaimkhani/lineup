@@ -3,7 +3,9 @@ import 'dart:developer';
 
 import 'package:gaming_web_app/Base/model/response/base_response.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
+import 'package:gaming_web_app/utils/snackbarUtils.dart';
 
 import 'package:http/http.dart' as http;
 import '../../Base/controller/getTeamData.dart';
@@ -43,6 +45,41 @@ class TeamsApi {
       // Optionally, handle or log errors here
       print('Error: $e');
       return BaseResponse<List<Team>>(data: []);
+    }
+  }
+
+  static Future<bool> validatePromoCode(String promoCode) async {
+    try {
+      final token = await SharedPreferencesUtil.read(
+        SharedPreferencesKeysConstants.bearerToken,
+      );
+      final uri = Uri.parse("${APIEndPoints.validatePromo}/$promoCode");
+
+      final response = await http.get(
+        uri,
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json',
+        },
+      );
+      if (response.statusCode == 200) {
+        final jsonMap = jsonDecode(response.body);
+        if (jsonMap['success'] == true) {
+          return true;
+        } else {
+          SnackbarUtils.showErrorr(jsonMap['message'] ?? 'Invalid promo code.');
+          return false;
+        }
+      } else {
+        final jsonMap = jsonDecode(response.body);
+        SnackbarUtils.showErrorr(jsonMap['message'] ?? 'Promo code is valid.');
+        // SnackbarUtils.showErrorr('Something went wrong.');
+        return false;
+      }
+    } catch (e) {
+      print('Promo Code Check Error: $e');
+      SnackbarUtils.showErrorr('Error checking promo code.');
+      return false;
     }
   }
 
