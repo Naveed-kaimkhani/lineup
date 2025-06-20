@@ -1101,12 +1101,12 @@ class _LineupWidgetState extends State<LineupWidget> {
               color: Colors.white,
               child: Obx(
                 () =>
-                    controller.playersOut.value.isEmpty
+                    controller.playersOut.isEmpty
                         ? SizedBox()
                         : Column(
                           mainAxisSize: MainAxisSize.max,
                           children:
-                              controller.playersOut.value!
+                              controller.playersOut
                                   .map(
                                     (player) => Container(
                                       padding: const EdgeInsets.symmetric(

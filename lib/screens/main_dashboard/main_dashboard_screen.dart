@@ -388,7 +388,7 @@ class TabletOrWebLayout extends StatelessWidget {
             Expanded(flex: 1, child: _buildCell(team.ageGroup, ageGroupWidth)),
             InkWell(
               onTap: () {
-                // Delete logic
+                // // Delete logic
                 showCustomDialog(
                   context: context,
                   title: 'Delete Team',
@@ -396,8 +396,7 @@ class TabletOrWebLayout extends StatelessWidget {
                   onOk: () {
                     globleController.teamDelete(team.id!);
                   },
-                  onCancel: () {
-                  },
+                  onCancel: () {},
                 );
               },
               child: Image.asset(
