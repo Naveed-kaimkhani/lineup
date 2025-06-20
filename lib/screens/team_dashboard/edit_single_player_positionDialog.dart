@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/fav_position_controller_single_user.dart';
 import 'package:gaming_web_app/Base/controller/teamController/favoritPositionedConteroller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/player_position_controller.dart';
@@ -120,15 +121,9 @@ class _EditSinglePlayerPositionDialogState
                     title: "Save",
                     width: double.infinity,
                     onTap: () async {
-                      showDialog(
-                        context: context,
-                        barrierDismissible:
-                            false, // Prevent dismiss on tap outside
-                        builder:
-                            (_) => const Center(
-                              child: CircularProgressIndicator(),
-                            ),
-                      );
+                      final controllerLoading = Get.find<LoaderController>();
+                      controllerLoading.isLoading.value = true;
+              
                       List<int> favIds =
                           controller.fav
                               .where((p) => p?.id != null)
@@ -150,7 +145,8 @@ class _EditSinglePlayerPositionDialogState
                         await positionController.savePreference(preference);
                         SnackbarUtils.showSuccess("Player position updated");
                         Navigator.pop(context);
-                        Navigator.pop(context);
+                        // Navigator.pop(context);
+                        controllerLoading.isLoading.value = false;
                       } catch (e) {
                         Navigator.pop(context);
                         SnackbarUtils.showErrorr("Error: ${e.toString()}");

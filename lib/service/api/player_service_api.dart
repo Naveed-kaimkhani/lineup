@@ -45,7 +45,6 @@ class PlayerService {
       },
     );
 
-    log(response.body);
     if (response.statusCode != 200) {
       throw Exception("Failed to load player preferences");
     }

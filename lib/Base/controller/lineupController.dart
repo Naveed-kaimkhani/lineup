@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
 import '../../routes/routes_path.dart';
-import '../../screens/team_dashboard/add_new_player_screen.dart';
 import '../../service/api/team.dart';
 import '../../utils/SharedPreferencesUtil.dart';
 import '../../utils/snackbarUtils.dart';
@@ -166,10 +165,7 @@ class LineupController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null) {
-        // lineupp.value.clear();
-        // teamPositioned.value = response.data!;
-
-        // log("lineup data settt");
+      
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
@@ -256,7 +252,6 @@ class LineupController extends GetxController {
     }
 
     statsList.refresh();
-    // log("stats recalculateddd");
   }
 
   Future<void> submmitLineupDataPlayesId() async {

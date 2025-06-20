@@ -17,16 +17,11 @@ import '../../../utils/snackbarUtils.dart';
 import 'orginatizationDialog.dart';
 
 class AdminController extends GetxController {
-
-
-
   var organization = <Organizations?>[].obs; // flat list of Organizations
-  
-  
-  
+
   Organizations? selectedOrganization;
   RxList<TeamData?> teamData = <TeamData?>[].obs;
- var  orginizationNameController = TextEditingController();
+  var orginizationNameController = TextEditingController();
   var orginizationEmail = TextEditingController();
   var organization_code = TextEditingController();
 
@@ -50,7 +45,7 @@ class AdminController extends GetxController {
       //
       if (response?.data != null) {
         paginatedUserResponse.value = response!.data!;
-    
+
         update();
       } else {
         print('No user data found.');
@@ -143,7 +138,6 @@ class AdminController extends GetxController {
   }
 
   Future<void> updateOrganization(var team) async {
-
     try {
       final orginizationCreate = OrginizationCreate(
         name: orginizationNameController.text.trim(),
@@ -157,7 +151,6 @@ class AdminController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.success!) {
-
         fetchOrganization();
         SnackbarUtils.showSuccess("Organization Add Successfully");
       } else {
@@ -169,8 +162,8 @@ class AdminController extends GetxController {
       print('Error fetching teams: $e');
     }
   }
+
   Future<void> adminCreateOrganization() async {
-   
     try {
       final orginizationCreate = OrginizationCreate(
         name: orginizationNameController.text.trim(),
@@ -186,6 +179,8 @@ class AdminController extends GetxController {
       if (response.success!) {
         fetchOrganization();
         SnackbarUtils.showSuccess("Organization Add Successfully");
+
+        // SnackbarUtils.showSuccess("Hi jack");
       } else {
         // Handle the case where no teams are returned
         SnackbarUtils.showErrorr("Organization Add Failed Try again");
@@ -200,10 +195,9 @@ class AdminController extends GetxController {
     try {
       // Call the API to get the list of teams
       final response = await TeamsApi.getOrganizationTeam(orgnizationId);
-   
+
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
-       
         teamData.value = response.data!;
         teamData.refresh();
         update();
@@ -267,9 +261,13 @@ class AdminController extends GetxController {
 
     Get.dialog(
       PosisionedDialog(
-        nameController: TextEditingController(text: position.display_name ??""),
-        labelController: TextEditingController(text: position.name ??""),
-        categoryController: TextEditingController(text: position.category??""),
+        nameController: TextEditingController(
+          text: position.display_name ?? "",
+        ),
+        labelController: TextEditingController(text: position.name ?? ""),
+        categoryController: TextEditingController(
+          text: position.category ?? "",
+        ),
         onSubmit: () async {
           final name = position.display_name;
           final label = position.name;
@@ -290,7 +288,6 @@ class AdminController extends GetxController {
             } else {
               Get.snackbar("Error", response.message.toString());
             }
-
           }
         },
       ),
@@ -333,8 +330,6 @@ class AdminController extends GetxController {
           final maxUses = maxUsesController.text.trim();
           final useCount = useCountController.text.trim();
           final maxUsesPerUser = maxUsesPerUserController.text.trim();
-
-          
 
           final updatedPromoCode = PromoCodeResponse(
             id: promoCode.id,

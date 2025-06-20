@@ -1,12 +1,10 @@
-// models/lineup_model.dart
-import 'dart:developer';
+
 
 import 'package:get/get.dart';
 
 class FetchAutoFillLineups {
   final List<Lineupp>? lineupp;
   final List<int>? playersInGame;
-  // bool? isOut;
   final Map<String, dynamic>? fixedAssignments;
 
    FetchAutoFillLineups({
@@ -18,11 +16,9 @@ class FetchAutoFillLineups {
 
   factory FetchAutoFillLineups.fromJson(Map<String, dynamic>? json) {
     if (json == null) return  FetchAutoFillLineups();
-    log(json.toString());
+  
     return FetchAutoFillLineups(
       lineupp: _parseLineuppList(json['lineup']),
-      
-      // isOut: json['isOut'],
       playersInGame: _parseIntList(json['playersInGame']),
       fixedAssignments: _parseFixedAssignments(json['fixedAssignments']),
     );

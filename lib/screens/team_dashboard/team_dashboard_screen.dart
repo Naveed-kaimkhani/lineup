@@ -605,7 +605,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                     showCustomDialog(
                       context: context,
                       title: 'Delete Player',
-                      description: 'Are you sure you want to delete This Team?',
+                      description: 'Are you sure you want to delete this team?',
                       onOk: () {
                         globleController.playesDelete(players.id!);
                       },

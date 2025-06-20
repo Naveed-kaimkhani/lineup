@@ -378,12 +378,11 @@ class _MobileLayoutState extends State<_MobileLayout> {
                                 context: context,
                                 title: 'Delete Team',
                                 description:
-                                    'Are you sure you want to delete This Team?',
+                                    'Are you sure you want to delete this team?',
                                 onOk: () {
-                                  globleController.teamDelete(team.id!);
+                                  globleController.teamDelete(team.id);
                                 },
-                                onCancel: () {
-                                },
+                                onCancel: () {},
                               );
                             },
                             child: Image.asset(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -119,6 +120,34 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                       children: [
                         PrimaryButton(
                           width: 300,
+
+                          backgroundColor: AppColors.primaryColor,
+                          onTap: () async {
+                            // showFullWidthDialogPay(context);
+
+                            final NewTeamController newTeamController =
+                                Get.find<NewTeamController>();
+                            newTeamController.isHavingCredit.value = true;
+                            await showDialog(
+                              context: context,
+                              barrierDismissible: true,
+                              builder: (_) => CreateTeamDialog(),
+                            );
+                          },
+                          radius: 20.r,
+
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: isMobile ? 18 : 18,
+                          ),
+
+                          title: 'Create Team (1 Credit Left)',
+                          // backgroundColor: AppColors.secondaryColor,
+                        ),
+
+                        SizedBox(width: 10),
+                        PrimaryButton(
+                          width: 300,
                           onTap: () async {
                             Get.toNamed(RoutesPath.paymentHistoryScreen);
                           },
@@ -201,7 +230,6 @@ class _MobileLayout extends StatelessWidget {
                     await prefs.setInt('teamInfoId', team.id);
                     controller.fetchGetTeamData();
                     await Future.delayed(const Duration(seconds: 1));
-                    // await SharedPreferencesUtil.saveCurrentRoute(RoutesPath.teamDashboardScreen);
                     Get.toNamed(RoutesPath.teamDashboardScreen);
                   },
                   child: Column(
@@ -219,7 +247,7 @@ class _MobileLayout extends StatelessWidget {
                             context: context,
                             title: 'Delete Team',
                             description:
-                                'Are you sure you want to delete This Team?',
+                                'Are you sure you want to delete this team?',
                             onOk: () async {
                               await globleController.teamDelete(team.id);
                             },
@@ -392,7 +420,7 @@ class TabletOrWebLayout extends StatelessWidget {
                 showCustomDialog(
                   context: context,
                   title: 'Delete Team',
-                  description: 'Are you sure you want to delete This Team?',
+                  description: 'Are you sure you want to delete this team?',
                   onOk: () {
                     globleController.teamDelete(team.id!);
                   },

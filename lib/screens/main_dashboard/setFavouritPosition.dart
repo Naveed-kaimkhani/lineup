@@ -174,84 +174,6 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           SizedBox(height: 10),
 
           // Display favorite items
-          controller.fav.isNotEmpty
-              ? Column(
-                children: List.generate(controller.fav.length, (index) {
-                  final item = controller.fav[index];
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Item display container
-                        GestureDetector(
-                          onTap: () {},
-                          child: Container(
-                            height: 50,
-                            width: 200,
-                            decoration: BoxDecoration(
-                              border: Border.all(color: Colors.black),
-                              borderRadius: BorderRadius.circular(8),
-                            ),
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 8.0,
-                              ),
-                              child: Row(
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      item.name ?? 'No Name',
-                                      style: TextStyle(fontSize: 16),
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  ),
-                                  Icon(Icons.arrow_drop_down),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-
-                        SizedBox(width: 20),
-                        // Delete button
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              controller.resPositioned.add(
-                                controller.fav[index],
-                              );
-                              controller.favPositioned.add(
-                                controller.fav[index],
-                              );
-                              keyAddRes();
-                              keyAddFav();
-                              controller.fav.removeAt(index);
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              )
-              : SizedBox(height: 10),
           // controller.fav.isNotEmpty
           //     ? Column(
           //       children: List.generate(controller.fav.length, (index) {
@@ -260,57 +182,56 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           //         return Padding(
           //           padding: const EdgeInsets.symmetric(vertical: 8.0),
           //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.start,
+          //             crossAxisAlignment: CrossAxisAlignment.center,
           //             children: [
-          //               // Editable Custom Dropdown - NOW WITH UNIQUE SELECTION
-          //               ConflictFreeDropdown<Position>(
-          //                 key: ValueKey(
-          //                   'fav_dropdown_$index',
-          //                 ), // Unique key for each
-          //                 items:
-          //                     controller.favPositioned
-          //                         .where(
-          //                           (p) =>
-          //                               // Show all available + currently selected item
-          //                               !controller.fav.any(
-          //                                 (f) => f.id == p?.id,
-          //                               ) ||
-          //                               p?.id == item.id,
-          //                         )
-          //                         .toList(),
-          //                 selectedItem: item, // Use the item from fav list
-          //                 itemLabelBuilder: (item) => item?.name ?? "na",
-          //                 onChanged: (newValue) {
-          //                   if (newValue == null) return;
-
-          //                   setState(() {
-          //                     // 1. Add old item back to available pool
-          //                     controller.favPositioned.add(item);
-
-          //                     // 2. Update the fav list with new selection
-          //                     controller.fav[index] = newValue;
-
-          //                     // 3. Remove new selection from available pool
-          //                     controller.favPositioned.removeWhere(
-          //                       (p) => p?.id == newValue.id,
-          //                     );
-          //                   });
-          //                 },
-          //                 width: 200,
+          //               // Item display container
+          //               GestureDetector(
+          //                 onTap: () {},
+          //                 child: Container(
+          //                   height: 50,
+          //                   width: 200,
+          //                   decoration: BoxDecoration(
+          //                     border: Border.all(color: Colors.black),
+          //                     borderRadius: BorderRadius.circular(8),
+          //                   ),
+          //                   child: Padding(
+          //                     padding: const EdgeInsets.symmetric(
+          //                       horizontal: 8.0,
+          //                     ),
+          //                     child: Row(
+          //                       children: [
+          //                         Expanded(
+          //                           child: Text(
+          //                             item.name ?? 'No Name',
+          //                             style: TextStyle(fontSize: 16),
+          //                             overflow: TextOverflow.ellipsis,
+          //                           ),
+          //                         ),
+          //                         Icon(Icons.arrow_drop_down),
+          //                       ],
+          //                     ),
+          //                   ),
+          //                 ),
           //               ),
 
           //               SizedBox(width: 20),
-          //               // Delete Button remains same
+          //               // Delete button
           //               InkWell(
           //                 onTap: () {
           //                   setState(() {
-          //                     controller.resPositioned.add(item);
-          //                     controller.favPositioned.add(item);
-
+          //                     controller.resPositioned.add(
+          //                       controller.fav[index],
+          //                     );
+          //                     controller.favPositioned.add(
+          //                       controller.fav[index],
+          //                     );
+          //                     keyAddRes();
+          //                     keyAddFav();
           //                     controller.fav.removeAt(index);
-
-          //                     controller.resPositioned.removeAt(index);
           //                   });
           //                 },
+          //                 borderRadius: BorderRadius.circular(5),
           //                 child: Container(
           //                   height: 50,
           //                   width: 50,
@@ -318,7 +239,11 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           //                     color: AppColors.primaryColor,
           //                     borderRadius: BorderRadius.circular(5),
           //                   ),
-          //                   child: Icon(Icons.close, color: Colors.white),
+          //                   child: Icon(
+          //                     Icons.close,
+          //                     color: Colors.white,
+          //                     size: 20,
+          //                   ),
           //                 ),
           //               ),
           //             ],
@@ -327,6 +252,81 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           //       }),
           //     )
           //     : SizedBox(height: 10),
+          controller.fav.isNotEmpty
+              ? Column(
+                children: List.generate(controller.fav.length, (index) {
+                  final item = controller.fav[index];
+
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        // Editable Custom Dropdown - NOW WITH UNIQUE SELECTION
+                        ConflictFreeDropdown<Position>(
+                          key: ValueKey(
+                            'fav_dropdown_$index',
+                          ), // Unique key for each
+                          items:
+                              controller.favPositioned
+                                  .where(
+                                    (p) =>
+                                        // Show all available + currently selected item
+                                        !controller.fav.any(
+                                          (f) => f.id == p?.id,
+                                        ) ||
+                                        p?.id == item.id,
+                                  )
+                                  .toList(),
+                          selectedItem: item, // Use the item from fav list
+                          itemLabelBuilder: (item) => item?.name ?? "na",
+                          onChanged: (newValue) {
+                            if (newValue == null) return;
+
+                            setState(() {
+                              // 1. Add old item back to available pool
+                              controller.favPositioned.add(item);
+
+                              // 2. Update the fav list with new selection
+                              controller.fav[index] = newValue;
+
+                              // 3. Remove new selection from available pool
+                              controller.favPositioned.removeWhere(
+                                (p) => p?.id == newValue.id,
+                              );
+                            });
+                          },
+                          width: 200,
+                        ),
+
+                        SizedBox(width: 20),
+                        // Delete Button remains same
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              controller.resPositioned.add(item);
+                              controller.favPositioned.add(item);
+
+                              controller.fav.removeAt(index);
+
+                              controller.resPositioned.removeAt(index);
+                            });
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Icon(Icons.close, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              )
+              : SizedBox(height: 10),
           isShow == 1
               ? DynamicDropdownList<Position?>(
                 key: addFavKeys,
@@ -458,131 +458,60 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
             ),
           ),
           SizedBox(height: 10),
-          controller.res.isNotEmpty
-              ? Column(
-                children: List.generate(controller.res.length, (index) {
-                  final item = controller.res[index];
-
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        // Item display container
-                        Container(
-                          height: 50,
-                          width: 200,
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.black),
-                            borderRadius: BorderRadius.circular(8),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 8.0,
-                            ),
-                            child: Row(
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    item.name ?? 'No Name',
-                                    style: TextStyle(fontSize: 16),
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-                                Icon(Icons.arrow_drop_down),
-                              ],
-                            ),
-                          ),
-                        ),
-                        SizedBox(width: 20),
-                        // Delete button
-                        InkWell(
-                          onTap: () {
-                            setState(() {
-                              controller.resPositioned.add(
-                                controller.res[index],
-                              );
-                              controller.favPositioned.add(
-                                controller.res[index],
-                              );
-                              keyAddRes();
-                              keyAddFav();
-                              controller.res.removeAt(index);
-                            });
-                          },
-                          borderRadius: BorderRadius.circular(5),
-                          child: Container(
-                            height: 50,
-                            width: 50,
-                            decoration: BoxDecoration(
-                              color: AppColors.primaryColor,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Icon(
-                              Icons.close,
-                              color: Colors.white,
-                              size: 20,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }),
-              )
-              : SizedBox(),
           // controller.res.isNotEmpty
           //     ? Column(
           //       children: List.generate(controller.res.length, (index) {
           //         final item = controller.res[index];
+
           //         return Padding(
           //           padding: const EdgeInsets.symmetric(vertical: 8.0),
           //           child: Row(
+          //             mainAxisAlignment: MainAxisAlignment.start,
+          //             crossAxisAlignment: CrossAxisAlignment.center,
           //             children: [
-          //               // Editable Dropdown for restricted position
-          //               ConflictFreeDropdown<Position>(
-          //                 key: ValueKey('res_dropdown_$index'),
-          //                 items:
-          //                     controller.resPositioned
-          //                         .where(
-          //                           (p) =>
-          //                               !controller.res.any(
-          //                                 (r) => r.id == p?.id,
-          //                               ) ||
-          //                               p?.id == item.id,
-          //                         )
-          //                         .toList(),
-          //                 selectedItem: item,
-          //                 itemLabelBuilder: (item) => item?.name ?? 'N/A',
-          //                 onChanged: (newValue) {
-          //                   if (newValue == null) return;
-
-          //                   setState(() {
-          //                     // Add old item back to available list
-          //                     controller.resPositioned.add(item);
-
-          //                     // Update with new selection
-          //                     controller.res[index] = newValue;
-
-          //                     // Remove new selection from available list
-          //                     controller.resPositioned.removeWhere(
-          //                       (p) => p?.id == newValue.id,
-          //                     );
-          //                   });
-          //                 },
+          //               // Item display container
+          //               Container(
+          //                 height: 50,
           //                 width: 200,
+          //                 decoration: BoxDecoration(
+          //                   border: Border.all(color: Colors.black),
+          //                   borderRadius: BorderRadius.circular(8),
+          //                 ),
+          //                 child: Padding(
+          //                   padding: const EdgeInsets.symmetric(
+          //                     horizontal: 8.0,
+          //                   ),
+          //                   child: Row(
+          //                     children: [
+          //                       Expanded(
+          //                         child: Text(
+          //                           item.name ?? 'No Name',
+          //                           style: TextStyle(fontSize: 16),
+          //                           overflow: TextOverflow.ellipsis,
+          //                         ),
+          //                       ),
+          //                       Icon(Icons.arrow_drop_down),
+          //                     ],
+          //                   ),
+          //                 ),
           //               ),
           //               SizedBox(width: 20),
           //               // Delete button
           //               InkWell(
           //                 onTap: () {
           //                   setState(() {
-          //                     controller.resPositioned.add(item);
-          //                     controller.favPositioned.add(item);
+          //                     controller.resPositioned.add(
+          //                       controller.res[index],
+          //                     );
+          //                     controller.favPositioned.add(
+          //                       controller.res[index],
+          //                     );
+          //                     keyAddRes();
+          //                     keyAddFav();
           //                     controller.res.removeAt(index);
           //                   });
           //                 },
+          //                 borderRadius: BorderRadius.circular(5),
           //                 child: Container(
           //                   height: 50,
           //                   width: 50,
@@ -590,7 +519,11 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
           //                     color: AppColors.primaryColor,
           //                     borderRadius: BorderRadius.circular(5),
           //                   ),
-          //                   child: Icon(Icons.close, color: Colors.white),
+          //                   child: Icon(
+          //                     Icons.close,
+          //                     color: Colors.white,
+          //                     size: 20,
+          //                   ),
           //                 ),
           //               ),
           //             ],
@@ -599,6 +532,73 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
           //       }),
           //     )
           //     : SizedBox(),
+          controller.res.isNotEmpty
+              ? Column(
+                children: List.generate(controller.res.length, (index) {
+                  final item = controller.res[index];
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 8.0),
+                    child: Row(
+                      children: [
+                        // Editable Dropdown for restricted position
+                        ConflictFreeDropdown<Position>(
+                          key: ValueKey('res_dropdown_$index'),
+                          items:
+                              controller.resPositioned
+                                  .where(
+                                    (p) =>
+                                        !controller.res.any(
+                                          (r) => r.id == p?.id,
+                                        ) ||
+                                        p?.id == item.id,
+                                  )
+                                  .toList(),
+                          selectedItem: item,
+                          itemLabelBuilder: (item) => item?.name ?? 'N/A',
+                          onChanged: (newValue) {
+                            if (newValue == null) return;
+
+                            setState(() {
+                              // Add old item back to available list
+                              controller.resPositioned.add(item);
+
+                              // Update with new selection
+                              controller.res[index] = newValue;
+
+                              // Remove new selection from available list
+                              controller.resPositioned.removeWhere(
+                                (p) => p?.id == newValue.id,
+                              );
+                            });
+                          },
+                          width: 200,
+                        ),
+                        SizedBox(width: 20),
+                        // Delete button
+                        InkWell(
+                          onTap: () {
+                            setState(() {
+                              controller.resPositioned.add(item);
+                              controller.favPositioned.add(item);
+                              controller.res.removeAt(index);
+                            });
+                          },
+                          child: Container(
+                            height: 50,
+                            width: 50,
+                            decoration: BoxDecoration(
+                              color: AppColors.primaryColor,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Icon(Icons.close, color: Colors.white),
+                          ),
+                        ),
+                      ],
+                    ),
+                  );
+                }),
+              )
+              : SizedBox(),
           SizedBox(height: 10),
 
           /// Restricted Position Dropdown

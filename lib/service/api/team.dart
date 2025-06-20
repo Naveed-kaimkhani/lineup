@@ -229,7 +229,6 @@ class TeamsApi {
     FetchAutoFillLineups autoFillLineups,
     int gameId,
   ) async {
-    log(autoFillLineups.toJson().toString());
     final response = await DioUtil.request<FetchAutoFillLineups>(
       loadingText: 'Submitting players...',
       endpoint: "/games/$gameId/lineup",

@@ -22,18 +22,7 @@ class TeamController extends GetxController {
   RxList<Organizations?> organization = <Organizations?>[].obs;
   // RxList<Organization?> organization = <Organization?>[].obs;
   Rx<Organizations> organizationItem = Organizations().obs;
-
-
-
-
-
-
   List<Position?> teamPositioned = [];
-  
-  
-  
-  
-  
   Position positioned = Position();
   RxList<GetPlayer?> getPlayer = <GetPlayer?>[].obs;
   RxString selectTeam = "".obs;

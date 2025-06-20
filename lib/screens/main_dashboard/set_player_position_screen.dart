@@ -156,12 +156,18 @@ class SetPlayerPositionScreen extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                       children: [
-                        Text(
-                          textAlign: TextAlign.center,
-                          "   ${position!.name!}",
-                          style: tableContentHeader.copyWith(
-                            fontSize: 14.sp,
-                            fontWeight: FontWeight.normal,
+                        Padding(
+                          padding:
+                              position!.name!.length == 1
+                                  ? EdgeInsets.only(left: 23.0)
+                                  : EdgeInsets.zero,
+                          child: Text(
+                            textAlign: TextAlign.center,
+                            "   ${position!.name!}",
+                            style: tableContentHeader.copyWith(
+                              fontSize: 14.sp,
+                              fontWeight: FontWeight.normal,
+                            ),
                           ),
                         ),
                         // const Spacer(),

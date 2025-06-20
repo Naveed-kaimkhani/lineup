@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/colored_name_text.dart';
@@ -14,6 +15,7 @@ import 'package:screenshot/screenshot.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:path_provider/path_provider.dart';
 import 'package:open_file/open_file.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:universal_html/html.dart' as html;
 import '../../Base/controller/lineupController.dart';
 import 'package:flutter/foundation.dart';
@@ -54,6 +56,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
   void initState() {
     super.initState();
     // controller.getPDF();
+    controller.gameData.value.players!.first.teamId;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.getPDF();
       controller.fetchTeamsPositioned();
@@ -88,6 +91,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
 
       final pdfBytes = await pdf.save();
 
+      final TeamController controllerK = Get.find<TeamController>();
       // Web-specific download
       if (kIsWeb) {
         // Use kIsWeb from 'dart:io' or 'package:flutter/foundation.dart'
@@ -104,7 +108,18 @@ class _LineupWidgetState extends State<_LineupWidget> {
         anchor.remove();
         html.Url.revokeObjectUrl(url);
         toggleLoader(false);
-        Get.toNamed(RoutesPath.mainDashboardScreen);
+        // Get.toNamed(RoutesPath.mainDashboardScreen);
+
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setInt(
+          'teamInfoId',
+          controller.gameData.value.players!.first.teamId ?? 0,
+        );
+        controllerK.fetchGetTeamData();
+        await Future.delayed(const Duration(seconds: 1));
+        Get.toNamed(RoutesPath.teamDashboardScreen);
+        // sdfdf
+        ;
         Get.snackbar('Success', 'PDF downloaded');
       } else {
         // Fallback for mobile/desktop (already handled in previous code)
@@ -336,13 +351,16 @@ class _LineupWidgetState extends State<_LineupWidget> {
                               ),
                             ),
                           ),
-                          SizedBox(
-                            width: 140,
-                            child: Text(
-                              player.firstName ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+                          Padding(
+                            padding: const EdgeInsets.only(left: 33),
+                            child: SizedBox(
+                              width: 140,
+                              child: Text(
+                                player.firstName ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                           ),
@@ -367,30 +385,6 @@ class _LineupWidgetState extends State<_LineupWidget> {
                                         .value
                                         .lineupAssignments![index]
                                         .isOut!
-                                    // ? Container(
-                                    //   padding: const EdgeInsets.symmetric(
-                                    //     horizontal: 28,
-                                    //     vertical: 4,
-                                    //   ),
-                                    //   decoration: BoxDecoration(
-                                    //     color: Colors.white,
-                                    //     border: Border.all(
-                                    //       color: Colors.grey.shade300,
-                                    //     ),
-                                    //     borderRadius: BorderRadius.circular(2),
-                                    //   ),
-                                    //   child: Center(
-                                    //     child: const Text(
-                                    //       textAlign: TextAlign.center,
-                                    //       'OUT',
-                                    //       style: TextStyle(
-                                    //         fontSize: 10,
-                                    //         fontWeight: FontWeight.w500,
-                                    //         color: Color(0xFF1E4D92),
-                                    //       ),
-                                    //     ),
-                                    //   ),
-                                    // )
                                     ? SizedBox()
                                     : Row(
                                       children:

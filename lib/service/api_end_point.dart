@@ -1,6 +1,8 @@
 class APIEndPoints {
   static const baseUrl = "http://18.189.193.38/api/v1";
-  // static const baseUrl="https://jzeescollection.com/api/v1";
+
+  // https://jzeescollection.com/api/v1
+  // static const baseUrl = "https://jzeescollection.com/api/v1";
 
   static const forgotPassword = "/user/auth/forgot-password";
   static const resetPassword = "/user/auth/reset-password";
@@ -10,8 +12,9 @@ class APIEndPoints {
   static const register = "/user/auth/register";
   static const login = "/user/auth/login";
   static const admin = "http://18.189.193.38/api/v1/auth/login";
-  
-  static const validatePromo = "http://18.189.193.38/api/v1/organizations/by-code";
+
+  static const validatePromo =
+      "http://18.189.193.38/api/v1/organizations/by-code";
   static const getTeams = "/teams";
   static const teamPositions = "/positions";
   static const organizations = "/organizations";

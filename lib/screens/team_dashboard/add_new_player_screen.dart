@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -45,9 +44,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
     }
   }
 
-  void checkFocus() {
-
-  }
+  void checkFocus() {}
 
   @override
   Widget build(BuildContext context) {
@@ -135,79 +132,80 @@ class _LineupWidgetState extends State<LineupWidget> {
   late List<FocusNode> focusNodes;
   late List<TextEditingController> controllers;
 
-  Timer? _debounce;
-  //   @override
-  // void dispose() {
-  //   for (final node in focusNodes) {
-  //     node.dispose();
-  //   }
-  //   for (final controller in controllers) {
-  //     controller.dispose();
-  //   }
-  //   super.dispose();
-  // }
-
   // @override
-  // void initState() {
-  //   // TODO: implement initState
-  //   super.initState();
-  //      final fieldCount = controller.autoFillData.value?.lineupp?.length ?? 0;
+  // Widget build(BuildContext context) {
+  //   textFieldKey.clear();
+  //   // focusNode.clear();
+  //   return Container(
+  //     color: Colors.grey[100],
+  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         // _buildDateAndButtons(),
+  //         const SizedBox(height: 16),
+  //         _buildPositionChips(),
+  //         const SizedBox(height: 16),
 
-  //   focusNodes = List.generate(fieldCount, (_) => FocusNode());
+  //         Column(
+  //           children: [
+  //             LayoutBuilder(
+  //               builder: (context, constraints) {
+  //                 // Avoid calling setState or updating observables here directly
+  //                 final isWideScreen = constraints.maxWidth > 900;
 
-  //   controllers = List.generate(
-  //     fieldCount,
-  //     (i) => TextEditingController(
-  //       text: controller.autoFillData.value!.lineupp![i].innings[inningNumber],
+  //                 return isWideScreen
+  //                     ? _buildWideScreenLayout()
+  //                     : _buildNarrowScreenLayout();
+  //               },
+  //             ),
+
+  //             const SizedBox(height: 24),
+
+  //             // Action buttons
+  //             _buildActionButtons(context),
+
+  //             const SizedBox(height: 24),
+
+  //             // OUT section
+  //             /// out player
+  //             Container(
+  //               width: double.infinity,
+  //               height: 900,
+  //               margin: EdgeInsets.only(left: 50),
+  //               // color: Colors.black,
+  //               child: _buildOutSection(),
+  //             ),
+  //           ],
+  //         ),
+  //       ],
   //     ),
   //   );
   // }
+
   @override
   Widget build(BuildContext context) {
-    textFieldKey.clear();
-    // focusNode.clear();
-    return Container(
-      color: Colors.grey[100],
+    return SingleChildScrollView(
+      // ✅ Add vertical scroll
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // _buildDateAndButtons(),
           const SizedBox(height: 16),
           _buildPositionChips(),
           const SizedBox(height: 16),
-
-          Column(
-            children: [
-              LayoutBuilder(
-                builder: (context, constraints) {
-                  // Avoid calling setState or updating observables here directly
-                  final isWideScreen = constraints.maxWidth > 900;
-
-                  return isWideScreen
-                      ? _buildWideScreenLayout()
-                      : _buildNarrowScreenLayout();
-                },
-              ),
-
-              const SizedBox(height: 24),
-
-              // Action buttons
-              _buildActionButtons(context),
-
-              const SizedBox(height: 24),
-
-              // OUT section
-              /// out player
-              Container(
-                width: double.infinity,
-                height: 900,
-                margin: EdgeInsets.only(left: 50),
-                // color: Colors.black,
-                child: _buildOutSection(),
-              ),
-            ],
+          LayoutBuilder(
+            builder: (context, constraints) {
+              final isWideScreen = constraints.maxWidth > 900;
+              return isWideScreen
+                  ? _buildWideScreenLayout()
+                  : _buildNarrowScreenLayout();
+            },
           ),
+          const SizedBox(height: 24),
+          _buildActionButtons(context),
+          const SizedBox(height: 24),
+          _buildOutSection(), // 🔁 NO fixed height here
         ],
       ),
     );
@@ -507,11 +505,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                             .refresh();
                                                         controller.gameData
                                                             .refresh();
-                                                      } else {
-                                                       
-                                                      }
+                                                      } else {}
 
-                                                      
                                                       controller.playersOut
                                                           .refresh();
 
@@ -757,9 +752,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                   ) async {
                                                                                     val =
                                                                                         val.trim().toUpperCase(); // Normalize for consistent matching
-                                                                                    log(
-                                                                                      "Submitted. Value: $val",
-                                                                                    );
 
                                                                                     // Allow OUT always
                                                                                     if (val ==
@@ -767,13 +759,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                           "OUT";
                                                                                       controller.autoFillData.refresh();
-                                                                                      log(
-                                                                                        "value updated",
-                                                                                      );
-                                                                                      log(
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                            "",
-                                                                                      );
+
                                                                                       // return;
                                                                                       // controller.againCalculateStatsandTopPositions();
                                                                                       controller.recalculatePlayerStats(

@@ -98,7 +98,7 @@ void showFullWidthDialogPay(BuildContext context) {
                                 response.message.toString(),
 
                               );
-                              controlle.launchPayUrl(response.data!.paymentUrl!);
+                              controlle.launchPayUrl(response.data!.paymentUrl);
                             } else {
                               SnackbarUtils.showErrorr(
                                 response.message.toString(),

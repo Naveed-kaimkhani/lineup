@@ -35,6 +35,8 @@ class _AddTeamNameScreenState extends State<AddTeamNameScreen> {
     final screenSize = MediaQuery.of(context).size;
     final isSmallScreen = screenSize.width < 600;
 
+    final NewTeamController newTeamController = Get.find<NewTeamController>();
+    bool check = newTeamController.isHavingCredit.value;
     // Scale font size based on screen width
     final headerFontSize = isSmallScreen ? 18.0 : 25.0;
 
@@ -91,7 +93,10 @@ class _AddTeamNameScreenState extends State<AddTeamNameScreen> {
 
                           return PrimaryTextField(
                             controller: controllers.orgCode,
-                            label: 'Organization Code',
+                            label:
+                                check
+                                    ? 'Organization Code (Optional)'
+                                    : 'Organization Code',
                             hintText: 'Tiger',
                           );
                         },
@@ -111,4 +116,3 @@ class _AddTeamNameScreenState extends State<AddTeamNameScreen> {
     );
   }
 }
-

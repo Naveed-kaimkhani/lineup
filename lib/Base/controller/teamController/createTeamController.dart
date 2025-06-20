@@ -1,5 +1,6 @@
 import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
+import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -36,6 +37,7 @@ class NewTeamController extends GetxController {
   // final name = ''.obs;
   final sportType = ''.obs; // 'baseball' or 'softball'
   final teamType = ''.obs; // 'travel', 'recreation', or 'school'
+  final isHavingCredit = false.obs; // RxBool
 
   final year = 0.obs; // optional
   final city = ''.obs; // optional
@@ -109,24 +111,50 @@ class NewTeamController extends GetxController {
       }
     }
 
+    // if (currentPage.value == 1) {
+
+    //   if (orgCode.text.trim().isEmpty ||
+    //       teamNameController.text.trim().isEmpty) {
+    //     SnackbarUtils.showErrorr('Please enter required fields');
+    //   } else {
+    //     final loader = Get.find<LoaderController>();
+    //     loader.isLoading.value = true; // 🔵 Show GlobalLoader
+
+    //     final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
+    //     loader.isLoading.value = false; // 🔵 Hide GlobalLoader
+
+    //     if (isValid) {
+    //       _goToNext(context); // Continue to next step
+    //     } else {
+    //       // SnackbarUtils.showErrorr('Invalid Organization Code');
+    //     }
+    //   }
+    // }
     if (currentPage.value == 1) {
-      if (orgCode.text.trim().isEmpty ||
-          teamNameController.text.trim().isEmpty) {
-        SnackbarUtils.showErrorr('Please enter required fields');
+      if (teamNameController.text.trim().isEmpty) {
+        SnackbarUtils.showErrorr('Please enter team name');
+      } else if (!isHavingCredit.value && orgCode.text.trim().isEmpty) {
+        SnackbarUtils.showErrorr('Please enter organization code');
       } else {
-        final loader = Get.find<LoaderController>();
-        loader.isLoading.value = true; // 🔵 Show GlobalLoader
-
-        final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
-        loader.isLoading.value = false; // 🔵 Hide GlobalLoader
-
-        if (isValid) {
-          _goToNext(context); // Continue to next step
+        if (isHavingCredit.value) {
+          _goToNext(context); // ✅ Credit available, skip promo code check
         } else {
-          // SnackbarUtils.showErrorr('Invalid Organization Code');
+          final loader = Get.find<LoaderController>();
+          loader.isLoading.value = true; // 🔄 Show loader
+
+          final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
+
+          loader.isLoading.value = false; // 🔄 Hide loader
+
+          if (isValid) {
+            _goToNext(context);
+          } else {
+            // SnackbarUtils.showErrorr('Invalid Organization Code');
+          }
         }
       }
     }
+
     if (currentPage.value == 2) {
       if (teamType.value.isEmpty) {
         SnackbarUtils.showErrorr('Please set values'.toString());
@@ -300,7 +328,13 @@ class NewTeamController extends GetxController {
       final request = PromoCodeRequest(code: PromoCode.text.trim());
       final response = await AdminApi.promocodeReq(request);
       if (response.success == true) {
-        SnackbarUtils.showSuccess(response.message ?? "");
+        final NewTeamController newTeamController =
+            Get.find<NewTeamController>();
+        newTeamController.isHavingCredit.value = true;
+
+        await Get.dialog(CreateTeamDialog(), barrierDismissible: true);
+        // SnackbarUtils.showSuccess(response.message ?? "");
+        // ssssssssssss
       }
     } catch (e) {
       // Handle any errors that occur
@@ -318,12 +352,12 @@ class NewTeamController extends GetxController {
     }
   }
 
-  void promoCodeDialog(BuildContext context) {
+  void promoCodeDialog(BuildContext context) async {
     Get.dialog(
       PromoCodeDialog(
         nameController: PromoCode,
 
-        onSubmit: () {
+        onSubmit: () async {
           final name = PromoCode.text.trim();
 
           // Perform your validation or logic here
@@ -372,7 +406,7 @@ class NewTeamController extends GetxController {
           createTeamResponse.value = response.data!;
           teamController.fetchGetPlayer(createTeamResponse.value!.id!);
           // Get.toNamed(RoutesPath.mainDashboardScreen);
-          SnackbarUtils.showSuccess('Create new Team  successfully');
+          SnackbarUtils.showSuccess('Your Team Created Successfully');
           // Navigate to home or dashboard
           // Get.toNamed(RoutesPath.home);
         } else {
