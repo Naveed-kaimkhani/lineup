@@ -77,7 +77,6 @@ class TeamsApi {
         return false;
       }
     } catch (e) {
-      print('Promo Code Check Error: $e');
       SnackbarUtils.showErrorr('Error checking promo code.');
       return false;
     }

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/SharedPreferencesKeysConstants.dart';
@@ -153,17 +154,18 @@ class SignInController extends GetxController {
     // if (true)
     if (isOrgCodeValid && isPasswordValid) {
       try {
-        Get.dialog(
-          const Center(child: CircularProgressIndicator()),
-          barrierDismissible: false,
-        );
+        // Get.dialog(
+        //   const Center(child: CircularProgressIndicator()),
+        //   barrierDismissible: false,
+        // );
+
+        toggleLoader(true);
 
         final response = await AuthAPI.loginOrganization({
           "organization_code": orgCode,
           "password": password,
         });
-        isLoading.value = false;
-        if (Get.isDialogOpen ?? false) Get.back(); // Close dialog
+        toggleLoader(false); // Close dialog
 
         if (response['success'] == true) {
           final token = response['data']['access_token'];

@@ -18,10 +18,6 @@ class PaymentHistoryScreen extends StatelessWidget {
 
     return DashboardScaffold(
       onTab: () {
-        // Get.offAllNamed(RoutesPath.mainDashboardScreen);
-
-        // Get.toNamed(RoutesPath.mainDashboardScreen);
-        // Navigator.pop(context);
         Get.back();
       },
       isShowBanner: false,

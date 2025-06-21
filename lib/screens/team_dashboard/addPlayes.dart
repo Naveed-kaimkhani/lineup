@@ -1,9 +1,6 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../Base/controller/globleController.dart';
 import '../../Base/controller/teamController/createTeamController.dart';
 import '../../Base/controller/teamController/teamController.dart';
@@ -12,10 +9,8 @@ import '../../constants/app_text_styles.dart';
 import '../../constants/widgets/buttons/primary_button.dart';
 import '../../constants/widgets/text_fields/primary_text_field.dart';
 
-// final NewTeamController newTeamController = Get.find<NewTeamController>();
 
 void showAddTeamPlayerDialog() {
-  // Get.lazyPut<NewTeamController>(() => NewTeamController());
 
   Get.dialog(
     Dialog(
@@ -184,39 +179,10 @@ class AddPlayerInTeamDialog extends StatelessWidget {
                       backgroundColor:
                           AppColors.descriptiveTextColor, // Button color
                     ),
-                    // Add Player button - takes 1/3 of the row width
-                    // Expanded(
-                    //   child: PrimaryButton(
-                    //     // When button is tapped, show a dialog to select player position
-                    //     onTap: () async {
-                    //       newTeamController.addPlayer(context);
-                    //       // showDialog creates a popup modal window
-                    //       // await means it will wait for the dialog to close before continuing
-                    //    // test
-                    //    //   newTeamController
-                    //       // await showDialog(
-                    //       //   context: context,
-                    //       //   barrierDismissible: true,  // Allow closing by tapping outside
-                    //       //   builder: (_) => const SetFavoredPositionDialog(),  // Dialog content
-                    //       // );
-                    //     },
-                    //     title: 'Add Player',  // Button text
-                    //     backgroundColor: AppColors.descriptiveTextColor,  // Button color
-                    //   ),
-                    // ),
+                  
                   ],
                 ),
 
-                //  PrimaryButton(
-                //  width: MediaQuery.of(context).size.width,
-                //   // When button is tapped, show a dialog to select player position
-                //   onTap: () async {
-                //     newTeamController.addPlayer(context);
-                //
-                //   },
-                //   title: 'Add Player',  // Button text
-                //   backgroundColor: AppColors.descriptiveTextColor,  // Button color
-                // ),
                 SizedBox(width: 20),
                 // Display the list of existing players
                 PlayerListWidget(),

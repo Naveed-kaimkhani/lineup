@@ -31,7 +31,7 @@ class ApiServic extends GetxService {
     // You can load stored tokens from secure storage here
     // Example: authToken.value = await secureStorage.read(key: 'auth_token');
 
-    debugPrint('🌐 API Service initialized');
+   
     return this;
   }
 
@@ -328,7 +328,6 @@ class ApiServic extends GetxService {
   /// Helper method to handle errors
   void _handleError(String message) {
     errorMessage.value = message;
-    debugPrint('🔴 API Error: $message');
 
     // Optionally show a snackbar or toast
     Get.snackbar(

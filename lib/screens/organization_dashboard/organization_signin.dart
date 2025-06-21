@@ -164,7 +164,6 @@ class OrganizationSignin extends StatelessWidget {
                                     backgroundColor: AppColors.secondaryColor,
                                   ),
 
-
                                   SizedBox(height: 19.57.h),
                                 ],
                               ),

@@ -607,7 +607,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                       title: 'Delete Player',
                       description: 'Are you sure you want to delete this team?',
                       onOk: () {
-                        globleController.playesDelete(players.id!);
+                        globleController.playesDelete(players.id);
                       },
                       onCancel: () {
                       },

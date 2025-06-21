@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -120,6 +119,8 @@ class _LineupWidgetState extends State<_LineupWidget> {
         Get.toNamed(RoutesPath.teamDashboardScreen);
         // sdfdf
         ;
+
+        controller.playersOut.value = [];
         Get.snackbar('Success', 'PDF downloaded');
       } else {
         // Fallback for mobile/desktop (already handled in previous code)
@@ -603,11 +604,11 @@ Widget _buildOutSection() {
                                             ),
                                           ),
                                         ),
-                                        SizedBox(
-                                          height: 36,
-                                          width: 80,
-                                          child: const Text('Add'),
-                                        ),
+                                        // SizedBox(
+                                        //   height: 36,
+                                        //   width: 80,
+                                        //   child: const Text('Add'),
+                                        // ),
                                         const SizedBox(width: 16),
 
                                         // OUT status indicators - showing only OUT

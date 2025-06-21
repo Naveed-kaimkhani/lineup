@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPreferencesUtil {
@@ -20,6 +21,13 @@ class SharedPreferencesUtil {
   static Future<String?> read(String key) async {
     return sharedPreferences.getString(key);
   }
+// Future<void> logoutUser(BuildContext context) async {
+//   // 1. Clear shared preferences (session data)
+//   await SharedPreferencesUtil.clear();
+
+//   // 2. Navigate to login screen or welcome screen
+
+// }
 
   /// Save a JSON-serializable object
   static Future<void> saveObject<T>(

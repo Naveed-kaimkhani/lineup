@@ -633,7 +633,7 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                       if (!existsInRes) {
                         controller.res.add(value);
                         int index = controller.resPositioned.indexWhere(
-                          (position) => position?.id == value!.id,
+                          (position) => position?.id == value.id,
                         );
                         if (index != -1) {
                           controller.resPositioned.removeAt(index);

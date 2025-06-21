@@ -50,6 +50,7 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   Widget build(BuildContext context) {
     return DashboardScaffold(
       onTab: () {
+        controller.playersOut.value = [];
         Get.toNamed(RoutesPath.teamDashboardScreen);
       },
       userImage: 'assets/images/dummy_image.png',
@@ -613,9 +614,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     controller.teamPositioned,
                                                                                     controller.enerLable.value,
                                                                                   );
-                                                                                  print(
-                                                                                    "Matched name: $result",
-                                                                                  );
+
                                                                                   if (result !=
                                                                                       "") {
                                                                                     // controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
@@ -636,9 +635,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     // });
                                                                                   }
                                                                                   // The widget lost focus, run your function here
-                                                                                  print(
-                                                                                    'Widget unfocused — run your function',
-                                                                                  );
                                                                                 }
                                                                               },
                                                                               child: Container(

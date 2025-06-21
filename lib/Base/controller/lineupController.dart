@@ -152,7 +152,6 @@ class LineupController extends GetxController {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
       } else {
-        print('Game ID not found');
       }
       if (fixedAssignments != null) {
         autoFillLineups.value.fixedAssignments = fixedAssignments;
@@ -172,7 +171,6 @@ class LineupController extends GetxController {
         fetchAutoFillLineups.refresh();
         lineupp.value = response.data!.lineupp!;
 
-        // print(fetchAutoFillLineups.value.playersInGame!.length);
 
         for (
           int inning = 0;
@@ -190,7 +188,6 @@ class LineupController extends GetxController {
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
     }
   }
   // void againCalculateStatsandTopPositions(){
@@ -259,7 +256,7 @@ class LineupController extends GetxController {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
       } else {
-        print('Game ID not found');
+      
       }
       // Call the API to get the list of teams
       final response = await TeamsApi.submmitLineupData(
@@ -338,7 +335,6 @@ class LineupController extends GetxController {
     int index,
     int totalInnings,
   ) {
-    print("1");
     int playedInnings = 0;
     Map<String, int> positionCount = {};
 
