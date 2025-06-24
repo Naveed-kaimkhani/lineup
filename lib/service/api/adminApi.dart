@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 import 'package:gaming_web_app/Base/model/teamModel/activation_history_model.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -89,6 +90,22 @@ class AdminApi {
 
     final response = await http.get(
       Uri.parse(APIEndPoints.activationHistory),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    // log(response.body);
+    if (response.statusCode == 200) {
+      final List<dynamic> data = jsonDecode(response.body)['data'];
+      return data.map((e) => ActivationRecord.fromJson(e)).toList();
+    } else {
+      throw Exception('Failed to load activation history');
+    }
+  }
+
+  static Future<List<ActivationRecord>> fetchOrgHistory() async {
+    String? token = await SharedPreferencesUtil.read("org_access_token");
+    log("token vlaue $token");
+    final response = await http.get(
+      Uri.parse(APIEndPoints.orgActivationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
     log(response.body);
@@ -293,6 +310,7 @@ class AdminApi {
     String? token = await SharedPreferencesUtil.read("org_access_token");
 
     try {
+      toggleLoader(true);
       final uri = Uri.parse(APIEndPoints.promoRenewal);
 
       final response = await http.post(
@@ -306,6 +324,7 @@ class AdminApi {
 
       final responseData = jsonDecode(response.body);
 
+      toggleLoader(false);
       if (response.statusCode == 200) {
         if (responseData['success'] == true) {
           SnackbarUtils.showSuccess(responseData['message'] ?? 'Success');
@@ -316,8 +335,11 @@ class AdminApi {
           );
         }
       } else {
+        SnackbarUtils.showErrorr(
+          responseData['message'] ?? 'Something went wrong',
+        );
         // Unexpected status code (non-200)
-        SnackbarUtils.showErrorr('Server error: ${response.statusCode}');
+        // SnackbarUtils.showErrorr('Server error: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');

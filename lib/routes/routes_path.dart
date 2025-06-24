@@ -8,6 +8,8 @@ class RoutesPath {
   static const String organizationDashboardScreen =
       '/organization-dashboard-screen';
   static const String teamDashboardScreen = '/team-dashboard-screen';
+
+  static const String organizationPaymentHistoryScreen = '/OrganizationPaymentHistory';
   static const String addNewPlayerScreen = '/add-new-screen';
   static const String savePdfScreen = '/save-pdf-screen';
   static const String purchaseTeamScreen = '/purchase-team-screen';

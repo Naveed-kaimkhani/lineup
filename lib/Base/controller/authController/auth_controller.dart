@@ -184,6 +184,26 @@ class SignInController extends GetxController {
             "organization_code",
             orgData["organization_code"],
           ); // optional
+          await SharedPreferencesUtil.save(
+            "organization_name",
+            orgData["name"],
+          );
+          await SharedPreferencesUtil.save(
+            "organization_code",
+            orgData["organization_code"],
+          );
+          await SharedPreferencesUtil.save(
+            "organization_email",
+            orgData["email"],
+          );
+          await SharedPreferencesUtil.save(
+            "subscription_status",
+            orgData["subscription_status"],
+          );
+          await SharedPreferencesUtil.save(
+            "subscription_expires_at",
+            orgData["subscription_expires_at"],
+          );
 
           // Navigate to organization dashboard
           Get.toNamed(RoutesPath.organizationDashboardScreen);

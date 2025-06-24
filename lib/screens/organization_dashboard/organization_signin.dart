@@ -68,7 +68,7 @@ class OrganizationSignin extends StatelessWidget {
                                         PrimaryTextField(
                                           controller:
                                               controller.orgCodeController,
-                                          label: 'Enter Organization Code',
+                                          label: 'Enter Email',
                                         ),
                                         if (controller
                                             .emailError

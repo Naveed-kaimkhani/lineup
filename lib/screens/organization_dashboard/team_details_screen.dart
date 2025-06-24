@@ -17,6 +17,9 @@ class TeamDetailsScreen extends StatelessWidget {
     controller.fetchTeamData(teamId);
 
     return DashboardScaffold(
+      onTab: () {
+        Get.back();
+      },
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
       title: 'My Team',

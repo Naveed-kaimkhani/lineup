@@ -41,6 +41,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       adminController.fetchOrganization();
+
+      adminController.fetchAllUser();
     });
   }
 

@@ -377,6 +377,27 @@ class NewTeamController extends GetxController {
     );
   }
 
+  void promoCodeDialogForOrg(BuildContext context) async {
+    Get.dialog(
+      PromoCodeDialog(
+        nameController: PromoCode,
+
+        onSubmit: () async {
+          final name = PromoCode.text.trim();
+
+          // Perform your validation or logic here
+          if (name.isEmpty) {
+            Get.snackbar("Error", "Please enter a Promo Code");
+          } else {
+            promoCodeRenewalRequest(context);
+            Get.back(); // Close dialog
+            Get.back(); // Close dialog
+          }
+        },
+      ),
+    );
+  }
+
   CreateTeam getCreateTeamModel() {
     return CreateTeam(
       name: teamNameController.text.trim(),
@@ -667,7 +688,7 @@ class NewTeamController extends GetxController {
     if (response.success!) {
       SnackbarUtils.showSuccess(response.message!);
       // Navigator.pop(context);
-      // Get.offAndToNamed(RoutesPath.mainDashboardScreen);
+      Get.offAndToNamed(RoutesPath.mainDashboardScreen);
     } else {
       SnackbarUtils.showErrorr(response.message.toString());
       print('No team data saved');

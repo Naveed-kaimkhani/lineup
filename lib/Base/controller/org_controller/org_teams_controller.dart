@@ -1,6 +1,6 @@
-
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:gaming_web_app/service/api/org_team_api.dart';
 import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:get/get.dart';
@@ -35,11 +35,14 @@ class OrgTeamsController extends GetxController {
       "org_access_token",
     ); // optional
     try {
-      isLoading(true);
+      // isLoading(true);
+      toggleLoader(true);
       final result = await _repository.fetchTeams(
         page: page,
         token: token ?? "",
       );
+
+      toggleLoader(false);
       teams.value = result['teams'];
       totalPages.value = result['totalPages'];
       currentPage.value = page;

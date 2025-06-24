@@ -7,6 +7,7 @@ import 'package:gaming_web_app/screens/authentication/welcome_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/main_dashboard_screen.dart';
 import 'package:gaming_web_app/screens/main_dashboard/purchase_team_screen.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/organization_dashboard_screen.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/organization_payment_history.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/organization_signin.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/payment_history_screen.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
@@ -25,6 +26,10 @@ class AppPages {
     GetPage(
       name: RoutesPath.forgotPassword,
       page: () => ForgotPasswordScreen(),
+    ),
+    GetPage(
+      name: RoutesPath.organizationPaymentHistoryScreen,
+      page: () => OrganizationPaymentHistory(),
     ),
     GetPage(
       name: RoutesPath.mainDashboardScreen,
@@ -62,10 +67,7 @@ class AppPages {
       page: () => PaymentHistoryScreen(),
     ),
 
- GetPage(
-      name: RoutesPath.signUpScreen,
-      page: () => SignUpScreen(),
-    ),
+    GetPage(name: RoutesPath.signUpScreen, page: () => SignUpScreen()),
 
     // GetPage(
     //   name: RoutesPath.teamDetailsScreen,

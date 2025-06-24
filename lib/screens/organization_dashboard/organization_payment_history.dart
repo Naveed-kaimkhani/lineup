@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:gaming_web_app/Base/controller/org_controller/org_payment_controller.dart'
+    show OrgPaymentController;
 import 'package:get/get.dart';
 import 'package:gaming_web_app/Base/controller/org_controller/payment_history_controller.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -8,10 +10,10 @@ import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaff
 import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:intl/intl.dart';
 
-class PaymentHistoryScreen extends StatelessWidget {
-  PaymentHistoryScreen({super.key});
+class OrganizationPaymentHistory extends StatelessWidget {
+  OrganizationPaymentHistory({super.key});
 
-  final controller = Get.put(ActivationHistoryController());
+  final controller = Get.put(OrgPaymentController());
 
   @override
   Widget build(BuildContext context) {
@@ -105,9 +107,9 @@ class PaymentHistoryScreen extends StatelessWidget {
 
           // _TableHeaderCell(title: "Slot ID", flex: 1),
           _TableHeaderCell(title: "Type", flex: 1),
-          _TableHeaderCell(title: "Promo / Amount", flex: 4),
 
-          // _TableHeaderCell(title: "Amount", flex: 2),
+          _TableHeaderCell(title: "Amount/Promo", flex: 2),
+
           _TableHeaderCell(title: "Status", flex: 2),
           // _TableHeaderCell(title: "Promo", flex: 2),
           _TableHeaderCell(title: "Activated On", flex: 2),
@@ -147,11 +149,15 @@ class PaymentHistoryScreen extends StatelessWidget {
           _TableDataCell(content: record.type, flex: 1),
           // _TableDataCell(content: record.amountDisplay ?? "-", flex: 2),
           _TableDataCell(
-            content: "${record.promoCode ?? record.amountDisplay}",
-            flex: 4,
+            content:
+                (record.promoCode != null && record.promoCode!.isNotEmpty)
+                    ? record.promoCode!
+                    : (record.amountDisplay ?? "-"),
+            flex: 2,
           ),
 
           _TableDataCell(content: record.status ?? "-", flex: 2),
+
           // _TableDataCell(content: record.promoCode ?? "-", flex: 2),
           _TableDataCell(content: _formatDate(record.activatedAt), flex: 2),
 
@@ -196,10 +202,9 @@ class PaymentHistoryScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildMobileItem("Record ID", record.recordId.toString()),
+          // _buildMobileItem("Record ID", record.recordId.toString()),
 
-          _buildMobileItem("Slot ID", record.slotId.toString()),
-
+          // _buildMobileItem("Slot ID", record.slotId.toString()),
           _buildMobileItem("Type", record.type),
           _buildMobileItem("Amount", record.amountDisplay ?? "-"),
 
@@ -208,6 +213,7 @@ class PaymentHistoryScreen extends StatelessWidget {
           // _buildMobileItem("Activated On", record.activatedAt),
           _buildMobileItem("Status", record.status ?? "-"),
           _buildMobileItem("Activated On", _formatDate(record.activatedAt)),
+          _buildMobileItem("Description", record.description ?? "-"),
         ],
       ),
     );

@@ -8,6 +8,7 @@ import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:gaming_web_app/screens/main_dashboard/slectorgPay.dart';
 import 'package:get/get.dart';
@@ -107,6 +108,61 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                         title: 'Activation History',
                         backgroundColor: AppColors.secondaryColor,
                       ),
+                     Obx(() {
+                          final count =
+                              availableSlotsController
+                                  .teamSlot
+                                  .value
+                                  ?.availableTeamSlotsCount;
+
+                          return PrimaryButton(
+                            width: 300,
+                            backgroundColor: AppColors.primaryColor,
+                            onTap: () async {
+                              toggleLoader(true);
+                              // Fetch the latest slots
+
+                              await availableSlotsController
+                                  .fetchAvailableSlots();
+                              final updatedCount =
+                                  availableSlotsController
+                                      .teamSlot
+                                      .value
+                                      ?.availableTeamSlotsCount ??
+                                  0;
+
+                              toggleLoader(false);
+                              if (updatedCount > 0) {
+                                final NewTeamController newTeamController =
+                                    Get.find<NewTeamController>();
+                                newTeamController.isHavingCredit.value = true;
+
+                                await showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (_) => CreateTeamDialog(),
+                                );
+                              } else {
+                                Get.snackbar(
+                                  'No Credit Left',
+                                  'You do not have any available team activation slots.',
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
+                            },
+                            radius: 20.r,
+                            textStyle: descriptiveStyle.copyWith(
+                              color: Colors.white,
+                              fontSize: isMobile ? 18 : 18,
+                            ),
+                            title:
+                                count != null
+                                    ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
+                                    : 'Checking...',
+                          );
+                        }),
                     ],
                   );
                 }
@@ -158,7 +214,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                             width: 300,
                             backgroundColor: AppColors.primaryColor,
                             onTap: () async {
+                              toggleLoader(true);
                               // Fetch the latest slots
+
                               await availableSlotsController
                                   .fetchAvailableSlots();
                               final updatedCount =
@@ -168,6 +226,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                       ?.availableTeamSlotsCount ??
                                   0;
 
+                              toggleLoader(false);
                               if (updatedCount > 0) {
                                 final NewTeamController newTeamController =
                                     Get.find<NewTeamController>();

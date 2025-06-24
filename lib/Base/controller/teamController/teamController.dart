@@ -44,6 +44,7 @@ class TeamController extends GetxController {
   Future<void> getData() async {
     await Future.delayed(const Duration(seconds: 1)); // Wait 2 seconds
     fetchTeams();
+
     fetchTeamsPositioned();
     fetchOrganization();
   }
@@ -177,7 +178,7 @@ class TeamController extends GetxController {
         organization.value = response.data!;
       } else {
         // Handle the case where no teams are returned
-        teams.value = [];
+        organization.value = [];
       }
     } catch (e) {
       // Handle any errors that occur

@@ -49,7 +49,7 @@ class Team {
       organizationId: json['organization_id'] ?? 0,
       name: json['name'] ?? '',
       season: json['season'] ?? '-',
-      year: json['year'] ?? 0,
+      year: json['year'] ?? 2025,
       sportType: json['sport_type'] ?? '',
       teamType: json['team_type'] ?? '',
       ageGroup: json['age_group'] ?? '',
@@ -306,6 +306,7 @@ class Organizations {
   });
 
   factory Organizations.fromJson(Map<String, dynamic> json) {
+    // log(json.toString());
     return Organizations(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',

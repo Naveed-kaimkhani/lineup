@@ -8,6 +8,8 @@ import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
+import 'package:gaming_web_app/routes/routes_path.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/org_scaffold.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/show_renewal_dialogue.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
@@ -20,7 +22,7 @@ class OrganizationDashboardScreen extends StatelessWidget {
   final controlle = Get.find<NewTeamController>();
   @override
   Widget build(BuildContext context) {
-    return DashboardScaffold(
+    return OrgScaffold(
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
       title: 'Game-Ready',
@@ -80,42 +82,172 @@ class OrganizationDashboardScreen extends StatelessWidget {
             LayoutBuilder(
               builder: (context, constraints) {
                 bool isMobile = constraints.maxWidth < 600;
-
                 return Align(
                   alignment:
                       isMobile
-                          ? Alignment
-                              .center // Center on mobile
-                          : AlignmentDirectional.centerEnd, // Right on desktop
+                          ? Alignment.center
+                          : AlignmentDirectional.centerEnd,
                   child: Padding(
                     padding: EdgeInsets.only(
                       right: isMobile ? 0 : 0,
                       bottom: isMobile ? 16 : 0,
                     ),
-                    child: PrimaryButton(
-                      width: isMobile ? double.infinity : 280.w,
-                      onTap: () async {
-                        showRenewalPaymentDialog(
-                          context,
-                          PromoCode: () {
-                            controlle.promoCodeRenewalRequest(context);
-                          },
-                          OnlinePayment: () async {
-                            final response =
-                                await AdminApi.getRenewalPaymentLink();
-                          },
-                        );
-                      },
-                      radius: 20.r,
-                      textStyle: descriptiveStyle.copyWith(
-                        color: Colors.white,
-                        fontSize: 18,
-                      ),
-                      title: 'Renew Subscription',
-                      backgroundColor: AppColors.secondaryColor,
-                    ),
+                    child:
+                        isMobile
+                            ? Column(
+                              crossAxisAlignment: CrossAxisAlignment.stretch,
+                              children: [
+                                PrimaryButton(
+                                  width: double.infinity,
+                                  onTap: () {
+                                    Get.toNamed(
+                                      RoutesPath
+                                          .organizationPaymentHistoryScreen,
+                                    );
+                                  },
+                                  radius: 20.r,
+                                  textStyle: descriptiveStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                  title: 'Activation History',
+                                  backgroundColor: AppColors.secondaryColor,
+                                ),
+                                SizedBox(height: 12.h),
+                                PrimaryButton(
+                                  width: double.infinity,
+                                  onTap: () {
+                                    showRenewalPaymentDialog(
+                                      context,
+                                      PromoCode: () {
+                                        controlle.promoCodeRenewalRequest(
+                                          context,
+                                        );
+                                      },
+                                      OnlinePayment: () async {
+                                        final response =
+                                            await AdminApi.getRenewalPaymentLink();
+                                      },
+                                    );
+                                  },
+                                  radius: 20.r,
+                                  textStyle: descriptiveStyle.copyWith(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                  title: 'Renew Subscription',
+                                  backgroundColor: AppColors.secondaryColor,
+                                ),
+                              ],
+                            )
+                            : Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                SizedBox(
+                                  width: 280.w,
+                                  child: PrimaryButton(
+                                    onTap: () {
+                                      Get.toNamed(
+                                        RoutesPath
+                                            .organizationPaymentHistoryScreen,
+                                      );
+                                    },
+                                    radius: 20.r,
+                                    textStyle: descriptiveStyle.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                    title: 'Activation History',
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
+                                ),
+                                SizedBox(width: 12.w),
+                                SizedBox(
+                                  width: 280.w,
+                                  child: PrimaryButton(
+                                    onTap: () {
+                                      showRenewalPaymentDialog(
+                                        context,
+                                        PromoCode: () {
+                                          // controlle.promoCodeRenewalRequest(
+                                          //   context,
+                                          // );
+                                          controlle.promoCodeDialogForOrg(context);
+                                        },
+                                        OnlinePayment: () async {
+                                          final response =
+                                              await AdminApi.getRenewalPaymentLink();
+                                        },
+                                      );
+                                    },
+                                    radius: 20.r,
+                                    textStyle: descriptiveStyle.copyWith(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
+                                    title: 'Renew Subscription',
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
+                                ),
+                              ],
+                            ),
                   ),
                 );
+
+                // return Align(
+                //   alignment:
+                //       isMobile
+                //           ? Alignment
+                //               .center // Center on mobile
+                //           : AlignmentDirectional.centerEnd, // Right on desktop
+                //   child: Padding(
+                //     padding: EdgeInsets.only(
+                //       right: isMobile ? 0 : 0,
+                //       bottom: isMobile ? 16 : 0,
+                //     ),
+                //     child: Row(
+                //       children: [
+                //       PrimaryButton(
+                //         width: double.infinity,
+                //         onTap: () async {
+                //           Get.toNamed(RoutesPath.organizationPaymentHistoryScreen);
+                //         },
+                //         radius: 20.r,
+                //         textStyle: descriptiveStyle.copyWith(
+                //           color: Colors.white,
+                //           fontSize: isMobile ? 18 : 18,
+                //         ),
+                //         title: 'Activation History',
+                //         backgroundColor: AppColors.secondaryColor,
+                //       ),
+
+                //         SizedBox(height: 12.h),
+                //         PrimaryButton(
+                //           width: isMobile ? double.infinity : 280.w,
+                //           onTap: () async {
+                //             showRenewalPaymentDialog(
+                //               context,
+                //               PromoCode: () {
+                //                 controlle.promoCodeRenewalRequest(context);
+                //               },
+                //               OnlinePayment: () async {
+                //                 final response =
+                //                     await AdminApi.getRenewalPaymentLink();
+                //               },
+                //             );
+                //           },
+                //           radius: 20.r,
+                //           textStyle: descriptiveStyle.copyWith(
+                //             color: Colors.white,
+                //             fontSize: 18,
+                //           ),
+                //           title: 'Renew Subscription',
+                //           backgroundColor: AppColors.secondaryColor,
+                //         ),
+                //       ],
+                //     ),
+                //   ),
+                // );
               },
             ),
 
@@ -128,7 +260,7 @@ class OrganizationDashboardScreen extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        SizedBox(height: 10),
+                        SizedBox(height: 20),
                         Center(
                           child: Text(
                             'Teams Linked to Your Organization'.toUpperCase(),
@@ -146,15 +278,19 @@ class OrganizationDashboardScreen extends StatelessWidget {
                       children: [
                         Expanded(
                           flex: 1,
-                          child: Center(
-                            child: Text(
-                              'Teams Linked to Your Organization'.toUpperCase(),
-                              style: descriptionHeader.copyWith(
-                                fontSize: 26,
-                                color: AppColors.secondaryColor,
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 18.0),
+                            child: Center(
+                              child: Text(
+                                'Teams Linked to Your Organization'
+                                    .toUpperCase(),
+                                style: descriptionHeader.copyWith(
+                                  fontSize: 26,
+                                  color: AppColors.secondaryColor,
+                                ),
+                                overflow: TextOverflow.ellipsis,
+                                softWrap: false,
                               ),
-                              overflow: TextOverflow.ellipsis,
-                              softWrap: false,
                             ),
                           ),
                         ),
@@ -231,7 +367,6 @@ class _WebLayout extends StatelessWidget {
         ...teams.map((team) {
           return InkWell(
             onTap: () async {
-              
               Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -263,7 +398,7 @@ class _WebLayout extends StatelessWidget {
 
                   Expanded(
                     child: Text(
-  team.year?.toString() ?? '-',
+                      team.year?.toString() ?? '-',
                       style: fieldLabelStyle.copyWith(
                         color: AppColors.descriptiveTextColor,
                         fontSize: 18,
@@ -275,7 +410,7 @@ class _WebLayout extends StatelessWidget {
                   // Expanded(child: Text("team.year", style: fieldLabelStyle)),
                   Expanded(
                     child: Text(
-                      team.season??"-",
+                      team.season ?? "-",
                       style: fieldLabelStyle.copyWith(
                         color: AppColors.descriptiveTextColor,
                         fontSize: 18,

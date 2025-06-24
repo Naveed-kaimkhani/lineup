@@ -29,7 +29,9 @@ class APIEndPoints {
   static const admin_positions = "/admin/positions";
   static const admin_payments = "/admin/payments";
   static const getPromoCode = "/admin/promo-codes";
-  static const getPaymentLink = "/user/subscription/generate-payment-link";
+  // static const getPaymentLink = "/user/subscription/generate-payment-link";
+  // {{baseUrl}}/team-activation-slots/generate-payment-link
+  static const getPaymentLink = "/team-activation-slots/generate-payment-link";
   static const reqPromoCode = "/promo-codes/redeem";
   // static  const deletePlayes ="/games/{gameId}/autocomplete-lineup";
   static const orgCode = "/user/validate-organization-access-code";
@@ -43,6 +45,11 @@ class APIEndPoints {
   static const OrgnizationLogin = "$baseUrl/organization-panel/auth/login";
 
   static const activationHistory = "$baseUrl/activation-history";
+
+  static const orgActivationHistory =
+      "$baseUrl/organization-panel/subscription/activation-history";
+
+  // {{baseUrl}}/
 
   static const availableSlots = "$baseUrl/available-team-slots";
 
