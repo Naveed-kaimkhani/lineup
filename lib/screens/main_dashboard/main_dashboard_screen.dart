@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gaming_web_app/Base/controller/teamController/available_teamSlots_controller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
@@ -27,12 +28,15 @@ class MainDashboardScreen extends StatefulWidget {
 
 class _MainDashboardScreenState extends State<MainDashboardScreen> {
   final TeamController controller = Get.find<TeamController>();
+
+  final availableSlotsController = Get.put(AvailableTeamSlotsController());
   @override
   void initState() {
     super.initState();
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeams();
+      availableSlotsController.fetchAvailableSlots();
     });
   }
 
@@ -55,7 +59,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
             LayoutBuilder(
               builder: (context, constraints) {
                 final isMobile = constraints.maxWidth < 600;
-                final isDesktop = constraints.maxWidth > 1024;
+                // final isDesktop = constraints.maxWidth > 1024;
                 double width = constraints.maxWidth;
                 if (width < 600) {
                   return Column(
@@ -118,32 +122,83 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     ),
                     Row(
                       children: [
-                        PrimaryButton(
-                          width: 300,
+                        // PrimaryButton(
+                        //   width: 300,
 
-                          backgroundColor: AppColors.primaryColor,
-                          onTap: () async {
-                            // showFullWidthDialogPay(context);
+                        //   backgroundColor: AppColors.primaryColor,
+                        //   onTap: () async {
 
-                            final NewTeamController newTeamController =
-                                Get.find<NewTeamController>();
-                            newTeamController.isHavingCredit.value = true;
-                            await showDialog(
-                              context: context,
-                              barrierDismissible: true,
-                              builder: (_) => CreateTeamDialog(),
-                            );
-                          },
-                          radius: 20.r,
+                        //     final NewTeamController newTeamController =
+                        //         Get.find<NewTeamController>();
+                        //     newTeamController.isHavingCredit.value = true;
+                        //     await showDialog(
+                        //       context: context,
+                        //       barrierDismissible: true,
+                        //       builder: (_) => CreateTeamDialog(),
+                        //     );
+                        //   },
+                        //   radius: 20.r,
 
-                          textStyle: descriptiveStyle.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 18 : 18,
-                          ),
+                        //   textStyle: descriptiveStyle.copyWith(
+                        //     color: Colors.white,
+                        //     fontSize: isMobile ? 18 : 18,
+                        //   ),
 
-                          title: 'Create Team (1 Credit Left)',
-                          // backgroundColor: AppColors.secondaryColor,
-                        ),
+                        //   title: 'Create Team (1 Credit Left)',
+                        //   // backgroundColor: AppColors.secondaryColor,
+                        // ),
+                        Obx(() {
+                          final count =
+                              availableSlotsController
+                                  .teamSlot
+                                  .value
+                                  ?.availableTeamSlotsCount;
+
+                          return PrimaryButton(
+                            width: 300,
+                            backgroundColor: AppColors.primaryColor,
+                            onTap: () async {
+                              // Fetch the latest slots
+                              await availableSlotsController
+                                  .fetchAvailableSlots();
+                              final updatedCount =
+                                  availableSlotsController
+                                      .teamSlot
+                                      .value
+                                      ?.availableTeamSlotsCount ??
+                                  0;
+
+                              if (updatedCount > 0) {
+                                final NewTeamController newTeamController =
+                                    Get.find<NewTeamController>();
+                                newTeamController.isHavingCredit.value = true;
+
+                                await showDialog(
+                                  context: context,
+                                  barrierDismissible: true,
+                                  builder: (_) => CreateTeamDialog(),
+                                );
+                              } else {
+                                Get.snackbar(
+                                  'No Credit Left',
+                                  'You do not have any available team activation slots.',
+                                  backgroundColor: Colors.red,
+                                  colorText: Colors.white,
+                                  snackPosition: SnackPosition.BOTTOM,
+                                );
+                              }
+                            },
+                            radius: 20.r,
+                            textStyle: descriptiveStyle.copyWith(
+                              color: Colors.white,
+                              fontSize: isMobile ? 18 : 18,
+                            ),
+                            title:
+                                count != null
+                                    ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
+                                    : 'Checking...',
+                          );
+                        }),
 
                         SizedBox(width: 10),
                         PrimaryButton(
@@ -238,7 +293,7 @@ class _MobileLayout extends StatelessWidget {
                     children: [
                       _buildInfoRow("Team Name", team!.name),
                       _buildInfoRow("Year", team.year.toString()),
-                      _buildInfoRow("Season", team.season),
+                      _buildInfoRow("Season", team.season ?? "-"),
                       _buildInfoRow("Age Group", team.ageGroup),
                       const SizedBox(height: 10),
                       InkWell(
@@ -412,7 +467,10 @@ class TabletOrWebLayout extends StatelessWidget {
               flex: 1,
               child: _buildCell(team.year.toString(), yearWidth),
             ),
-            Expanded(flex: 1, child: _buildCell(team.season, seasonWidth)),
+            Expanded(
+              flex: 1,
+              child: _buildCell(team.season ?? "-", seasonWidth),
+            ),
             Expanded(flex: 1, child: _buildCell(team.ageGroup, ageGroupWidth)),
             InkWell(
               onTap: () {

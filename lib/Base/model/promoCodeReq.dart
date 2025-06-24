@@ -1,11 +1,10 @@
+import 'dart:developer';
+
 class PromoCodeRequest {
   final String? code;
   final int? teamId;
 
-  PromoCodeRequest({
-    required this.code,
-     this.teamId,
-  });
+  PromoCodeRequest({required this.code, this.teamId});
 
   // Convert JSON to Dart object
   factory PromoCodeRequest.fromJson(Map<String, dynamic> json) {
@@ -17,9 +16,7 @@ class PromoCodeRequest {
 
   // Convert Dart object to JSON
   Map<String, dynamic> toJson() {
-    return {
-      'code': code,
-      'team_id': teamId,
-    };
+    // print(teamId ?? "-");
+    return {'code': code, 'team_id': teamId};
   }
 }

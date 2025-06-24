@@ -213,6 +213,7 @@ class TeamsApi {
       playerPreferences: playerPreference,
     );
     var jsonString = playerPreference.map((e) => e.toJson()).toList();
+    log(data.toJson().toString());
     final response = await DioUtil.request<void>(
       loadingText: 'Submitting players...',
       endpoint: "/teams/$teamId/bulk-player-preferences",

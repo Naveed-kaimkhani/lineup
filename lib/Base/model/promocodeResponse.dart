@@ -1,8 +1,8 @@
 import 'dart:developer';
 
 class SubscriptionInfo {
-  final String? organizationAccessCode;
-  final String? subscriptionExpiresAt;
+  final int? organizationAccessCode;
+  final int? subscriptionExpiresAt;
 
   SubscriptionInfo({
     required this.organizationAccessCode,
@@ -10,10 +10,13 @@ class SubscriptionInfo {
   });
 
   factory SubscriptionInfo.fromJson(Map<String, dynamic> json) {
-
+    // log("on wron valuse");
+    // log(json.toString());
     return SubscriptionInfo(
-      organizationAccessCode: json['organization_code'] as String,
-      subscriptionExpiresAt: json['subscription_expires_at'] as String,
+      // organizationAccessCode: json['organization_code'] as String,
+      // subscriptionExpiresAt: json['subscription_expires_at'] as String,
+      organizationAccessCode: json['slot_id'],
+      subscriptionExpiresAt: json['available_team_slots_count'],
     );
   }
 

@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class PlayerPreferencesResponse {
   final List<PlayerPreference> playerPreferences;
 
@@ -12,6 +14,7 @@ class PlayerPreferencesResponse {
   }
 
   Map<String, dynamic> toJson() => {
+    // log(playerPreferences)
     'player_preferences': playerPreferences.map((e) => e.toJson()).toList(),
   };
 
@@ -38,6 +41,7 @@ class PlayerPreference {
   }
 
   Map<String, dynamic> toJson() => {
+  
     'player_id': playerId,
     'preferred_position_ids': preferredPositionIds,
     'restricted_position_ids': restrictedPositionIds,

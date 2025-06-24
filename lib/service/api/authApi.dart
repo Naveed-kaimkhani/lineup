@@ -32,6 +32,7 @@ class AuthAPI {
   static Future<Map<String, dynamic>> loginOrganization(
     Map<String, String> request,
   ) async {
+    log(request.toString());
     final response = await DioUtil.simpleRequest(
       endpoint: APIEndPoints.OrgnizationLogin,
       requestBody: request,

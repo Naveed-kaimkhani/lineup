@@ -6,6 +6,7 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/Base/model/teamModel/activation_history_model.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/routes/routes_path.dart';
+import 'package:intl/intl.dart';
 
 class PaymentHistoryScreen extends StatelessWidget {
   PaymentHistoryScreen({super.key});
@@ -72,6 +73,25 @@ class PaymentHistoryScreen extends StatelessWidget {
     });
   }
 
+  // Widget _buildHeaderRow() {
+  //   return Container(
+  //     decoration: BoxDecoration(
+  //       color: const Color(0xffE6E6E6),
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  //     child: Row(
+  //       children: const [
+  //         _TableHeaderCell(title: "Record ID", flex: 1),
+  //         _TableHeaderCell(title: "Org Name", flex: 2),
+  //         _TableHeaderCell(title: "Org Code", flex: 2),
+  //         _TableHeaderCell(title: "Promo Code", flex: 2),
+  //         _TableHeaderCell(title: "Activated At", flex: 2),
+  //       ],
+  //     ),
+  //   );
+  // }
+
   Widget _buildHeaderRow() {
     return Container(
       decoration: BoxDecoration(
@@ -82,15 +102,33 @@ class PaymentHistoryScreen extends StatelessWidget {
       child: Row(
         children: const [
           _TableHeaderCell(title: "Record ID", flex: 1),
-          _TableHeaderCell(title: "Org Name", flex: 2),
+          _TableHeaderCell(title: "Organization", flex: 2),
           _TableHeaderCell(title: "Org Code", flex: 2),
-          _TableHeaderCell(title: "Promo Code", flex: 2),
-          _TableHeaderCell(title: "Activated At", flex: 2),
+          _TableHeaderCell(title: "Promo", flex: 2),
+          _TableHeaderCell(title: "Activated On", flex: 2),
+          _TableHeaderCell(title: "Type", flex: 1),
+          _TableHeaderCell(title: "Slot ID", flex: 1),
         ],
       ),
     );
   }
 
+  // Widget _buildDataRow(ActivationRecord record) {
+  //   return Container(
+  //     padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  //     margin: const EdgeInsets.symmetric(vertical: 6),
+  //     decoration: const BoxDecoration(color: Colors.white),
+  //     child: Row(
+  //       children: [
+  //         _TableDataCell(content: record.recordId.toString(), flex: 1),
+  //         _TableDataCell(content: record.organizationName, flex: 2),
+  //         _TableDataCell(content: record.organizationCode, flex: 2),
+  //         _TableDataCell(content: record.promoCode ?? "", flex: 2),
+  //         _TableDataCell(content: record.activatedAt, flex: 2),
+  //       ],
+  //     ),
+  //   );
+  // }
   Widget _buildDataRow(ActivationRecord record) {
     return Container(
       padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -101,12 +139,38 @@ class PaymentHistoryScreen extends StatelessWidget {
           _TableDataCell(content: record.recordId.toString(), flex: 1),
           _TableDataCell(content: record.organizationName, flex: 2),
           _TableDataCell(content: record.organizationCode, flex: 2),
-          _TableDataCell(content: record.promoCode ?? "", flex: 2),
-          _TableDataCell(content: record.activatedAt, flex: 2),
+          _TableDataCell(content: record.promoCode ?? "-", flex: 2),
+          _TableDataCell(content: _formatDate(record.activatedAt), flex: 2),
+
+          // _buildMobileItem("Activated On", _formatDate(record.activatedAt)),
+          _TableDataCell(content: record.type, flex: 1),
+          _TableDataCell(content: record.slotId.toString(), flex: 1),
         ],
       ),
     );
   }
+
+  // Widget _buildMobileCard(ActivationRecord record) {
+  //   return Container(
+  //     margin: const EdgeInsets.symmetric(vertical: 8),
+  //     padding: const EdgeInsets.all(12),
+  //     decoration: BoxDecoration(
+  //       color: Colors.white,
+  //       border: Border.all(color: AppColors.primaryColor.withOpacity(0.2)),
+  //       borderRadius: BorderRadius.circular(8),
+  //     ),
+  //     child: Column(
+  //       crossAxisAlignment: CrossAxisAlignment.start,
+  //       children: [
+  //         _buildMobileItem("Record ID", record.recordId.toString()),
+  //         _buildMobileItem("Org Name", record.organizationName),
+  //         _buildMobileItem("Org Code", record.organizationCode),
+  //         _buildMobileItem("Promo Code", record.promoCode ?? ""),
+  //         _buildMobileItem("Activated At", record.activatedAt),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMobileCard(ActivationRecord record) {
     return Container(
@@ -121,14 +185,36 @@ class PaymentHistoryScreen extends StatelessWidget {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildMobileItem("Record ID", record.recordId.toString()),
-          _buildMobileItem("Org Name", record.organizationName),
+          _buildMobileItem("Organization", record.organizationName),
           _buildMobileItem("Org Code", record.organizationCode),
-          _buildMobileItem("Promo Code", record.promoCode ?? ""),
-          _buildMobileItem("Activated At", record.activatedAt),
+          _buildMobileItem("Promo", record.promoCode ?? "-"),
+          // _buildMobileItem("Activated On", record.activatedAt),
+          _buildMobileItem("Activated On", _formatDate(record.activatedAt)),
+
+          _buildMobileItem("Type", record.type),
+          _buildMobileItem("Slot ID", record.slotId.toString()),
         ],
       ),
     );
   }
+
+  String _formatDate(String dateStr) {
+    try {
+      final dateTime = DateTime.parse(dateStr);
+      return DateFormat('d-M-yyyy').format(dateTime.toLocal());
+    } catch (e) {
+      return dateStr; // fallback if parsing fails
+    }
+  }
+
+  // String _formatDate(String dateStr) {
+  //   try {
+  //     final dateTime = DateTime.parse(dateStr);
+  //     return DateFormat('MMM dd, yyyy — hh:mm a').format(dateTime.toLocal());
+  //   } catch (e) {
+  //     return dateStr; // fallback to original if parsing fails
+  //   }
+  // }
 
   Widget _buildMobileItem(String label, String value) {
     return Padding(

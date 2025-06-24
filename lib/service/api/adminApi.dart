@@ -91,6 +91,7 @@ class AdminApi {
       Uri.parse(APIEndPoints.activationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
+    log(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();
@@ -189,7 +190,7 @@ class AdminApi {
       if (response.statusCode == 200) {
         final jsonData = jsonDecode(response.body);
         final paymentUrl = jsonData['data']?['payment_url'];
-     
+
         launchPayUrl(paymentUrl);
       } else {
         final jsonData = jsonDecode(response.body);
@@ -285,7 +286,6 @@ class AdminApi {
       fromJsonT: (json) => SubscriptionInfo.fromJson(json),
       httpRequestType: HttpRequestType.post,
     );
-
     return response;
   }
 

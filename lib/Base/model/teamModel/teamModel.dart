@@ -36,19 +36,19 @@ class Team {
     required this.updatedAt,
     required this.accessStatus,
     this.accessExpiresAt,
-   this.organization,
+    this.organization,
     required this.games,
     required this.players,
   });
 
   factory Team.fromJson(Map<String, dynamic> json) {
-
+    // log(json.toString());
     return Team(
       id: json['id'] ?? 0,
       userId: json['user_id'] ?? 0,
       organizationId: json['organization_id'] ?? 0,
       name: json['name'] ?? '',
-      season: json['season'] ?? '',
+      season: json['season'] ?? '-',
       year: json['year'] ?? 0,
       sportType: json['sport_type'] ?? '',
       teamType: json['team_type'] ?? '',
@@ -59,15 +59,15 @@ class Team {
       updatedAt: json['updated_at'] ?? '',
       accessStatus: json['access_status'] ?? '',
       accessExpiresAt: json['access_expires_at'],
-        organization:
-        json['organization'] != null
-            ? Organizations.fromJson(json['organization'])
-            : null,
+      organization:
+          json['organization'] != null
+              ? Organizations.fromJson(json['organization'])
+              : null,
       games: [],
       // games: (json['games'] as List)
       //     .map((gameJson) => Game.fromJson(gameJson))
       //     .toList(),
-      players: []
+      players: [],
       // (json['players'] as List)
       //     .map((playerJson) => Player.fromJson(playerJson))
       //     .toList(),
@@ -98,7 +98,101 @@ class Team {
   }
 }
 
+// class Team {
+//   final int id;
+//   final int userId;
+//   final int organizationId;
+//   final String name;
+//   final String? season;
+//   final int? year;
+//   final String sportType;
+//   final String teamType;
+//   final String ageGroup;
+//   final String city;
+//   final String state;
+//   final String country;
+//   final String directActivationStatus;
+//   final String? directActivationExpiresAt;
+//   final String isEditableUntil;
+//   final bool isSetupComplete;
+//   final String createdAt;
+//   final String updatedAt;
+//   final Organizations? organization;
 
+//   Team({
+//     required this.id,
+//     required this.userId,
+//     required this.organizationId,
+//     required this.name,
+//     this.season,
+//     this.year,
+//     required this.sportType,
+//     required this.teamType,
+//     required this.ageGroup,
+//     required this.city,
+//     required this.state,
+//     required this.country,
+//     required this.directActivationStatus,
+//     this.directActivationExpiresAt,
+//     required this.isEditableUntil,
+//     required this.isSetupComplete,
+//     required this.createdAt,
+//     required this.updatedAt,
+//     this.organization,
+//   });
+
+//   factory Team.fromJson(Map<String, dynamic> json) {
+//     log(json.toString());
+//     return Team(
+//       id: json['id'] ?? 0,
+//       userId: json['user_id'] ?? 0,
+//       organizationId: json['organization_id'] ?? 0,
+//       name: json['name'] ?? '',
+//       season: json['season'] ?? "-",
+//       year: json['year'] ?? 2025,
+//       sportType: json['sport_type'] ?? '',
+//       teamType: json['team_type'] ?? '',
+//       ageGroup: json['age_group'] ?? '',
+//       city: json['city'] ?? '',
+//       state: json['state'] ?? '',
+//       country: json['country'] ?? '',
+//       directActivationStatus: json['direct_activation_status'] ?? '',
+//       directActivationExpiresAt: json['direct_activation_expires_at'] ?? "-",
+//       isEditableUntil: json['is_editable_until'] ?? '',
+//       isSetupComplete: json['is_setup_complete'] ?? false,
+//       createdAt: json['created_at'] ?? '',
+//       updatedAt: json['updated_at'] ?? '',
+//       organization:
+//           json['organization'] != null
+//               ? Organizations.fromJson(json['organization'])
+//               : null,
+//     );
+//   }
+
+//   Map<String, dynamic> toJson() {
+//     return {
+//       'id': id,
+//       'user_id': userId,
+//       'organization_id': organizationId,
+//       'name': name,
+//       'season': season,
+//       'year': year,
+//       'sport_type': sportType,
+//       'team_type': teamType,
+//       'age_group': ageGroup,
+//       'city': city,
+//       'state': state,
+//       'country': country,
+//       'direct_activation_status': directActivationStatus,
+//       'direct_activation_expires_at': directActivationExpiresAt,
+//       'is_editable_until': isEditableUntil,
+//       'is_setup_complete': isSetupComplete,
+//       'created_at': createdAt,
+//       'updated_at': updatedAt,
+//       'organization': organization?.toJson(),
+//     };
+//   }
+// }
 
 class Player {
   int id;
@@ -139,10 +233,6 @@ class Player {
     };
   }
 }
-
-
-
-
 
 class Game {
   int id;
@@ -200,9 +290,6 @@ class Game {
   }
 }
 
-
-
-
 class Organizations {
   int? id;
   String? name;
@@ -211,15 +298,14 @@ class Organizations {
   String? updatedAt;
 
   Organizations({
-   this.id,
-   this.name,
-   this.email,
-   this.createdAt,
-   this.updatedAt,
+    this.id,
+    this.name,
+    this.email,
+    this.createdAt,
+    this.updatedAt,
   });
 
   factory Organizations.fromJson(Map<String, dynamic> json) {
-
     return Organizations(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
@@ -239,10 +325,6 @@ class Organizations {
     };
   }
 }
-
-
-
-
 
 class OrganizationCodes {
   final int organizationId;

@@ -12,56 +12,57 @@ class OrgTeamMobileLayout extends StatelessWidget {
   final List<OrgTeamModel> teams;
 
   final OrgTeamsController controller = Get.find<OrgTeamsController>();
-   OrgTeamMobileLayout({required this.teams});
+  OrgTeamMobileLayout({required this.teams});
 
   @override
   Widget build(BuildContext context) {
     return Column(
-      children: teams.map((team) {
-        return Container(
-          margin: const EdgeInsets.only(bottom: 12),
-          padding: const EdgeInsets.all(12),
-          decoration: BoxDecoration(
-            color: Colors.white,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              _buildInfoRow("Team Name", team.name),
-              // _buildInfoRow("Year", team.year.toString()),
-
-              _buildInfoRow("Year", "2023"),
-              _buildInfoRow("Season", team.season),
-              _buildInfoRow("Age Group", team.ageGroup),
-              const SizedBox(height: 10),
-              Align(
-                alignment: Alignment.centerRight,
-                child: InkWell(
-                  onTap: () {
-                      showCustomDialog(
-                        context: context,
-                        title: 'Delete Team',
-                        description:
-                            'Are you sure you want to delete this team?',
-                        onOk: () async {
-                          Navigator.pop(context); // close dialog
-                          await controller.deleteTeam(team.id);
-                        },
-                        onCancel: () => Navigator.pop(context),
-                      );
-                    },
-                  child: Image.asset(
-                    'assets/images/delete_icon.png',
-                    height: 36.h,
-                    width: 40.w,
-                  ),
-                ),
+      children:
+          teams.map((team) {
+            return Container(
+              margin: const EdgeInsets.only(bottom: 12),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(8),
               ),
-            ],
-          ),
-        );
-      }).toList(),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildInfoRow("Team Name", team.name),
+
+                  // _buildInfoRow("Year", team.year.toString()),
+                  _buildInfoRow("Year", "2023"),
+                  _buildInfoRow("Season", team.season ?? "-"),
+                  _buildInfoRow("Age Group", team.ageGroup),
+                  const SizedBox(height: 10),
+                  Align(
+                    alignment: Alignment.centerRight,
+                    child: InkWell(
+                      onTap: () {
+                        showCustomDialog(
+                          context: context,
+                          title: 'Delete Team',
+                          description:
+                              'Are you sure you want to delete this team?',
+                          onOk: () async {
+                            Navigator.pop(context); // close dialog
+                            await controller.deleteTeam(team.id);
+                          },
+                          onCancel: () => Navigator.pop(context),
+                        );
+                      },
+                      child: Image.asset(
+                        'assets/images/delete_icon.png',
+                        height: 36.h,
+                        width: 40.w,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            );
+          }).toList(),
     );
   }
 

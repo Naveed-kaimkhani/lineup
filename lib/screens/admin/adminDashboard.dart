@@ -369,7 +369,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
                         children: [
                           _buildInfoRow("Team Name", team!.name),
                           _buildInfoRow("Year", team.year.toString()),
-                          _buildInfoRow("Season", team.season),
+                          _buildInfoRow("Season", team.season ?? "-"),
                           _buildInfoRow("Age Group", team.ageGroup),
                           const SizedBox(height: 10),
                           InkWell(

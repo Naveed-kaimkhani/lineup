@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
@@ -335,6 +337,8 @@ class NewTeamController extends GetxController {
         await Get.dialog(CreateTeamDialog(), barrierDismissible: true);
         // SnackbarUtils.showSuccess(response.message ?? "");
         // ssssssssssss
+      } else {
+        SnackbarUtils.showErrorr(response.message ?? "");
       }
     } catch (e) {
       // Handle any errors that occur
@@ -659,9 +663,11 @@ class NewTeamController extends GetxController {
       teamController.playerPreference,
       createTeamResponse.value!.id,
     );
+
     if (response.success!) {
       SnackbarUtils.showSuccess(response.message!);
-      Navigator.pop(context);
+      // Navigator.pop(context);
+      // Get.offAndToNamed(RoutesPath.mainDashboardScreen);
     } else {
       SnackbarUtils.showErrorr(response.message.toString());
       print('No team data saved');

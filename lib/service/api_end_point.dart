@@ -42,8 +42,9 @@ class APIEndPoints {
 
   static const OrgnizationLogin = "$baseUrl/organization-panel/auth/login";
 
-  static const activationHistory =
-      "$baseUrl/user/organization-activation-history";
+  static const activationHistory = "$baseUrl/activation-history";
+
+  static const availableSlots = "$baseUrl/available-team-slots";
 
   static const promoRenewal =
       "$baseUrl/organization-panel/subscription/redeem-promo";

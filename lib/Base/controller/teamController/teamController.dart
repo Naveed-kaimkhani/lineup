@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -53,9 +55,7 @@ class TeamController extends GetxController {
     );
 
     if (teamData.value != null) {
-
-    } else {
-    }
+    } else {}
   }
 
   // Fetch teams from the API and update the teams list
@@ -69,12 +69,13 @@ class TeamController extends GetxController {
         teams.value = response.data!;
         teams.refresh();
       } else {
+        // log(response.data.toString());
         // Handle the case where no teams are returned
         teams.value = [];
       }
     } catch (e) {
       // Handle any errors that occur
-      print('Error fetching teams: $e');
+      log('Error fetching teams: $e');
     }
   }
 
@@ -106,8 +107,6 @@ class TeamController extends GetxController {
     }
   }
 
-
-  
   Future<void> fetchGetPlayer(int id) async {
     try {
       // Call the API to get the list of teams

@@ -263,7 +263,7 @@ class _WebLayout extends StatelessWidget {
 
                   Expanded(
                     child: Text(
-                      team.year,
+  team.year?.toString() ?? '-',
                       style: fieldLabelStyle.copyWith(
                         color: AppColors.descriptiveTextColor,
                         fontSize: 18,
@@ -275,7 +275,7 @@ class _WebLayout extends StatelessWidget {
                   // Expanded(child: Text("team.year", style: fieldLabelStyle)),
                   Expanded(
                     child: Text(
-                      team.season,
+                      team.season??"-",
                       style: fieldLabelStyle.copyWith(
                         color: AppColors.descriptiveTextColor,
                         fontSize: 18,

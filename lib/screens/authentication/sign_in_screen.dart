@@ -217,8 +217,14 @@ class SignInScreen extends StatelessWidget {
                                                 title: ' Organization SignIn',
                                                 fontSize: 16,
                                                 onTap:
-                                                    controller
-                                                        .organizationSignup,
+                                                // controller
+                                                //     .organizationSignup,
+                                                () {
+                                                  Get.toNamed(
+                                                    RoutesPath
+                                                        .OrganizationSignin,
+                                                  );
+                                                },
                                                 hasUnderline: true,
                                               ),
                                             ],
@@ -241,7 +247,13 @@ class SignInScreen extends StatelessWidget {
                                                         ' Click here to sign up',
                                                     fontSize: 8,
                                                     onTap:
-                                                        controller.goToSignUp,
+                                                    // controller.goToSignUp,
+                                                    () {
+                                                      Get.toNamed(
+                                                        RoutesPath
+                                                            .OrganizationSignin,
+                                                      );
+                                                    },
                                                     hasUnderline: true,
                                                   ),
                                                 ],

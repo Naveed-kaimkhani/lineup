@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -13,6 +15,7 @@ class TeamRepository {
       Uri.parse('$baseUrl?page=$page'),
       headers: {'Authorization': 'Bearer $token'},
     );
+    log(response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<OrgTeamModel> teams =
@@ -27,13 +30,11 @@ class TeamRepository {
     }
   }
 
-
-
-    Future<bool> deleteTeam({required int id, required String token}) async {
+  Future<bool> deleteTeam({required int id, required String token}) async {
     final url = Uri.parse('$baseUrl/$id');
 
     final response = await http.delete(
-    url,
+      url,
       headers: {
         'Authorization': 'Bearer $token',
         'Content-Type': 'application/json',

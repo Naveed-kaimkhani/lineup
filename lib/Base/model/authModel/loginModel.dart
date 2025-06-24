@@ -28,6 +28,8 @@ class LoginModel {
 
 class UserResponse {
   final String? accessToken;
+  
+  final int? availableTeamCount;
   final String? tokenType;
   final int? expiresIn;
   final UserResponseModel? user;
@@ -36,6 +38,7 @@ class UserResponse {
     required this.accessToken,
     required this.tokenType,
     required this.expiresIn,
+   required this.availableTeamCount,
     required this.user,
   });
 
@@ -45,6 +48,10 @@ class UserResponse {
     return UserResponse(
       accessToken: json['access_token'],
       tokenType: json['token_type'],
+      // expiresIn: json['expires_in'],
+      
+      availableTeamCount: json['available_team_slots_count'],
+      
       expiresIn: json['expires_in'],
       user: UserResponseModel.fromJson(json['user']),
     );

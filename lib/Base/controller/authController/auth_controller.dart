@@ -95,7 +95,7 @@ class SignInController extends GetxController {
 
       final request = LoginModel(
         email: "shahbazvidicraze@gmail.com",
-        password: "12345678",
+        password: "123456789",
       );
       final response;
       if (email.toString() == "admin@lineup.com")
@@ -162,7 +162,7 @@ class SignInController extends GetxController {
         toggleLoader(true);
 
         final response = await AuthAPI.loginOrganization({
-          "organization_code": orgCode,
+          "email": orgCode,
           "password": password,
         });
         toggleLoader(false); // Close dialog
