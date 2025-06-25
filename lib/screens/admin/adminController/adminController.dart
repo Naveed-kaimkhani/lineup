@@ -165,12 +165,17 @@ class AdminController extends GetxController {
 
   Future<void> adminCreateOrganization() async {
     try {
+      log("hn bhai");
       final orginizationCreate = OrginizationCreate(
         name: orginizationNameController.text.trim(),
         email: orginizationEmail.text.trim(),
         organization_code: organization_code.text.trim(),
       );
       // Call the API to get the list of teams
+      // if (int.tryParse(organization_code.text) == null) {
+      //   SnackbarUtils.showErrorr("Organization code must be an integer");
+      //   return;
+      // }
       final response = await OrginizationsApi.createOrginization(
         orginizationCreate,
       );
@@ -182,6 +187,7 @@ class AdminController extends GetxController {
 
         // SnackbarUtils.showSuccess("Hi jack");
       } else {
+        log(response.message ?? "");
         // Handle the case where no teams are returned
         SnackbarUtils.showErrorr("Organization Add Failed Try again");
       }

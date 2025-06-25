@@ -1,18 +1,24 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/adminModel/paymentTrackingModel.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
+import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart' show DateFormat;
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'package:http/http.dart' as http;
 import '../../Base/componant/alertDialog.dart';
 import '../../Base/controller/globleController.dart';
 import '../../Base/model/adminModel/promoCodeModel.dart';
@@ -50,6 +56,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
 
   @override
   Widget build(BuildContext context) {
+    adminController.fetchOrganization();
+
     return Obx(
       () => DashboardScaffold(
         onTab: () {
@@ -81,6 +89,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           // width: 300,
                           onTap: () async {
                             adminController.selectedTab.value = 1;
+                            adminController.fetchOrganization();
+
                             // Get.toNamed(RoutesPath.organizationDashboardScreen);
                           },
                           radius: 20.r,
@@ -317,13 +327,62 @@ class _MobileLayoutState extends State<_MobileLayout> {
           if (name.isEmpty || email.isEmpty || org.isEmpty) {
             Get.snackbar("Error", "Please enter both name and email");
           } else {
-            adminController.adminCreateOrganization();
+            adminCreateOrganization(
+              name: name,
+              email: email,
+              annualTeamAllocation: int.parse(org),
+            );
             Navigator.pop(context);
             // You can call your controller method here
           }
         },
       ),
     );
+  }
+
+  Future<void> adminCreateOrganization({
+    required String name,
+    required String email,
+    required int annualTeamAllocation,
+  }) async {
+    log("in methodd");
+    final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
+
+      final body = {
+        "name": name,
+        "email": email,
+        "annual_team_allocation": annualTeamAllocation,
+      };
+      log("bodyyyy");
+      log(body.toString());
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      );
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        final data = jsonDecode(response.body);
+        if (data['success'] == true) {
+          Get.snackbar("Success", data['message'] ?? "Organization created");
+          // Optional: do something with data['data']
+        } else {
+          Get.snackbar("Error", data['message'] ?? "Creation failed");
+        }
+      } else {
+        Get.snackbar("Error", "Server returned ${response.statusCode}");
+      }
+    } catch (e) {
+      Get.snackbar("Error", "Exception: $e");
+    }
   }
 
   @override
@@ -769,6 +828,117 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
   final double seasonWidth = 100;
   final double ageGroupWidth = 100;
   final double actionWidth = 190;
+  // Future<void> adminCreateOrganization({
+  //   required String name,
+  //   required String email,
+  //   required int annualTeamAllocation,
+  // }) async {
+  //   log("in methodd");
+  //   final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
+
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
+
+  //     final body = {
+  //       "name": name,
+  //       "email": email,
+  //       "annual_team_allocation": annualTeamAllocation,
+  //     };
+  //     log("bodyyyy");
+  //     log(body.toString());
+  //     final response = await http.post(
+  //       url,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //         'Authorization': 'Bearer $token',
+  //       },
+  //       body: jsonEncode(body),
+  //     );
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       final data = jsonDecode(response.body);
+  //       if (data['success'] == true) {
+  //         Get.snackbar("Success", data['message'] ?? "Organization created");
+  //         // Optional: do something with data['data']
+  //       } else {
+  //         Get.snackbar("Error", data['message'] ?? "Creation failed");
+  //       }
+  //     } else {
+  //       log(response.body);
+  //       kkkkkkk
+  //       Get.snackbar("Error", "Server returned ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     Get.snackbar("Error", "Exception: $e");
+  //   }
+  // }
+  Future<void> adminCreateOrganization({
+    required String name,
+    required String email,
+    required int annualTeamAllocation,
+  }) async {
+    if (name.trim().isEmpty ||
+        email.trim().isEmpty ||
+        annualTeamAllocation == 0) {
+      SnackbarUtils.showErrorr("Please fill in all fields.");
+      return;
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      SnackbarUtils.showErrorr("Invalid email format.");
+      return;
+    }
+
+    final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
+
+      final body = {
+        "name": name,
+        "email": email,
+        "annual_team_allocation": annualTeamAllocation,
+      };
+
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      );
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        if (responseBody['success'] == true) {
+          SnackbarUtils.showSuccess(
+            responseBody['message'] ?? "Organization created",
+          );
+        } else {
+          SnackbarUtils.showErrorr(
+            responseBody['message'] ?? "Organization creation failed",
+          );
+        }
+      } else {
+        SnackbarUtils.showErrorr(
+          responseBody['message'] ?? "Organization created",
+        );
+        // SnackbarUtils.showErrorr("Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      //  SnackbarUtils.showErrorr(
+      //       responseBody['message'] ?? "Organization created",
+      //     );
+      SnackbarUtils.showErrorr("Exception: ${e.toString()}");
+    }
+  }
+
   void showNameEmailDialog() {
     // final nameController = TextEditingController();
     // final emailController = TextEditingController();
@@ -787,7 +957,23 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           if (name.isEmpty || email.isEmpty || org.isEmpty) {
             Get.snackbar("Error", "Please enter both name and email");
           } else {
-            adminController.adminCreateOrganization();
+            // adminController.adminCreateOrganization();
+            // ss
+            // adminCreateOrganization()
+            final int? annualTeamAllocation = int.tryParse(org);
+
+            if (annualTeamAllocation == null) {
+              SnackbarUtils.showErrorr(
+                "Annual team allocation must be a valid number.",
+              );
+              return;
+            }
+
+            adminCreateOrganization(
+              name: name,
+              email: email,
+              annualTeamAllocation: int.parse(org),
+            );
             Navigator.pop(context);
             // You can call your controller method here
           }
@@ -992,7 +1178,13 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           if (name.isEmpty || email.isEmpty || org.isEmpty) {
             Get.snackbar("Error", "Please enter both name and email");
           } else {
-            adminController.adminCreateOrganization();
+            // adminController.adminCreateOrganization();
+            // fdfdf
+            adminCreateOrganization(
+              name: name,
+              email: email,
+              annualTeamAllocation: int.parse(org),
+            );
             Navigator.pop(context);
             // You can call your controller method here
           }

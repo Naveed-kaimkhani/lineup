@@ -74,7 +74,7 @@ class NameEmailDialog extends StatelessWidget {
           TextField(
             controller: orgCodeController,
             decoration: const InputDecoration(
-              labelText: 'Organization Code',
+              labelText: 'Annual Team Allocation',
               border: OutlineInputBorder(),
             ),
             keyboardType: TextInputType.emailAddress,
