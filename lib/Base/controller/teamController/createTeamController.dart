@@ -47,6 +47,8 @@ class NewTeamController extends GetxController {
   // final organizationId = 0.obs;  // optional
   TextEditingController orgCode = TextEditingController();
   TextEditingController PromoCode = TextEditingController();
+  
+  TextEditingController orgCodeValidationController = TextEditingController();
   // TextEditingControllers (for text fields if needed)
   final TextEditingController teamNameController = TextEditingController();
   int? organizationId;
@@ -113,25 +115,6 @@ class NewTeamController extends GetxController {
       }
     }
 
-    // if (currentPage.value == 1) {
-
-    //   if (orgCode.text.trim().isEmpty ||
-    //       teamNameController.text.trim().isEmpty) {
-    //     SnackbarUtils.showErrorr('Please enter required fields');
-    //   } else {
-    //     final loader = Get.find<LoaderController>();
-    //     loader.isLoading.value = true; // 🔵 Show GlobalLoader
-
-    //     final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
-    //     loader.isLoading.value = false; // 🔵 Hide GlobalLoader
-
-    //     if (isValid) {
-    //       _goToNext(context); // Continue to next step
-    //     } else {
-    //       // SnackbarUtils.showErrorr('Invalid Organization Code');
-    //     }
-    //   }
-    // }
     if (currentPage.value == 1) {
       if (teamNameController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please enter team name');
@@ -363,6 +346,26 @@ class NewTeamController extends GetxController {
 
         onSubmit: () async {
           final name = PromoCode.text.trim();
+
+          // Perform your validation or logic here
+          if (name.isEmpty) {
+            Get.snackbar("Error", "Please enter a Promo Code");
+          } else {
+            promoCodeReq(context);
+            Get.back(); // Close dialog
+            Get.back(); // Close dialog
+          }
+        },
+      ),
+    );
+  }
+  void orgCodeDialog(BuildContext context) async {
+    Get.dialog(
+      PromoCodeDialog(
+        nameController: orgCodeValidationController,
+
+        onSubmit: () async {
+          final name = orgCodeValidationController.text.trim();
 
           // Perform your validation or logic here
           if (name.isEmpty) {
