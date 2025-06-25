@@ -21,16 +21,43 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
   final LineupController controller = Get.put(LineupController());
   FocusNode _focusNode = FocusNode();
 
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     controller.fetchTeamsPositioned();
+  //     controller.getGamePlayer();
+  //   });
+
+  //   WidgetsBinding.instance.addPostFrameCallback((_) {
+  //     _focusNode.requestFocus();
+  //   });
+  // }
+
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.fetchTeamsPositioned();
-      controller.getGamePlayer();
-    });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      _focusNode.requestFocus();
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      await controller.fetchTeamsPositioned();
+      await controller.getGamePlayer();
+
+      final lineups = controller.autoFillData.value?.lineupp ?? [];
+      final inningKeys =
+          lineups.isNotEmpty ? lineups[0].innings.keys.toList() : [];
+
+      if (lineups.isNotEmpty && inningKeys.isNotEmpty) {
+        controller.fieldFocusNodes = List.generate(
+          lineups.length, // rows = players
+          (row) => List.generate(
+            inningKeys.length, // columns = innings
+            (_) => FocusNode(),
+          ),
+        );
+
+        _focusNode.requestFocus();
+        setState(() {}); // 🔁 trigger UI rebuild with FocusNodes
+      }
     });
   }
 
@@ -39,12 +66,21 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
       // Check if Enter key is pressed
       if (event.logicalKey == LogicalKeyboardKey.enter ||
           event.logicalKey == LogicalKeyboardKey.numpadEnter) {
-        checkFocus();
+        // checkFocus();
       }
     }
   }
 
-  void checkFocus() {}
+  @override
+  void dispose() {
+    for (var row in controller.fieldFocusNodes) {
+      for (var node in row) {
+        node.dispose();
+      }
+    }
+    _focusNode.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -133,56 +169,22 @@ class _LineupWidgetState extends State<LineupWidget> {
   late List<FocusNode> focusNodes;
   late List<TextEditingController> controllers;
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   textFieldKey.clear();
-  //   // focusNode.clear();
-  //   return Container(
-  //     color: Colors.grey[100],
-  //     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
-  //     child: Column(
-  //       crossAxisAlignment: CrossAxisAlignment.start,
-  //       children: [
-  //         // _buildDateAndButtons(),
-  //         const SizedBox(height: 16),
-  //         _buildPositionChips(),
-  //         const SizedBox(height: 16),
+  void handleArrowKey(RawKeyEvent event, int row, int col) {
+    final focusNodes = controller.fieldFocusNodes;
 
-  //         Column(
-  //           children: [
-  //             LayoutBuilder(
-  //               builder: (context, constraints) {
-  //                 // Avoid calling setState or updating observables here directly
-  //                 final isWideScreen = constraints.maxWidth > 900;
-
-  //                 return isWideScreen
-  //                     ? _buildWideScreenLayout()
-  //                     : _buildNarrowScreenLayout();
-  //               },
-  //             ),
-
-  //             const SizedBox(height: 24),
-
-  //             // Action buttons
-  //             _buildActionButtons(context),
-
-  //             const SizedBox(height: 24),
-
-  //             // OUT section
-  //             /// out player
-  //             Container(
-  //               width: double.infinity,
-  //               height: 900,
-  //               margin: EdgeInsets.only(left: 50),
-  //               // color: Colors.black,
-  //               child: _buildOutSection(),
-  //             ),
-  //           ],
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
+    if (event.logicalKey == LogicalKeyboardKey.arrowRight &&
+        col + 1 < focusNodes[row].length) {
+      focusNodes[row][col + 1].requestFocus();
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft &&
+        col - 1 >= 0) {
+      focusNodes[row][col - 1].requestFocus();
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowDown &&
+        row + 1 < focusNodes.length) {
+      focusNodes[row + 1][col].requestFocus();
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowUp && row - 1 >= 0) {
+      focusNodes[row - 1][col].requestFocus();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -583,7 +585,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                             .lineupp![index]
                                                                             .innings
                                                                             .keys;
-
+                                                                    final inningKeys =
+                                                                        controller
+                                                                            .autoFillData
+                                                                            .value!
+                                                                            .lineupp![index]
+                                                                            .innings
+                                                                            .keys
+                                                                            .toList();
                                                                     return Row(
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
@@ -591,265 +600,495 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                       crossAxisAlignment:
                                                                           CrossAxisAlignment
                                                                               .start,
-                                                                      children:
-                                                                          valuesList.map((
-                                                                            inningNumber,
-                                                                          ) {
-                                                                            bool
-                                                                            isLable =
-                                                                                false;
-                                                                            TextEditingController
-                                                                            textEditingController =
-                                                                                TextEditingController();
-                                                                            return Focus(
-                                                                              onFocusChange: (
-                                                                                hasFocus,
-                                                                              ) async {
-                                                                                if (!hasFocus) {
-                                                                                  yourFunction(
-                                                                                    index,
-                                                                                  );
-                                                                                  // controller.teamPositioned
-                                                                                  String result = await filterPositionsByNamePrefix(
-                                                                                    controller.teamPositioned,
-                                                                                    controller.enerLable.value,
-                                                                                  );
+                                                                      children: List.generate(
+                                                                        inningKeys
+                                                                            .length,
+                                                                        (col) {
+                                                                          final inningNumber =
+                                                                              inningKeys[col];
+                                                                          final focusNode =
+                                                                              controller.fieldFocusNodes[index][col];
+                                                                          final textController = TextEditingController(
+                                                                            text:
+                                                                                controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                          );
 
-                                                                                  if (result !=
-                                                                                      "") {
-                                                                                    // controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                    //     result;
-                                                                                    // controller.autoFillData.refresh();
-                                                                                    // textEditingController.text = result;
-                                                                                    // setState(() {
-                                                                                    isLable =
-                                                                                        true;
+                                                                          final keyboardListenerNode = FocusNode(skipTraversal: true, canRequestFocus: false);
+final inputFocusNode = controller.fieldFocusNodes[index][col];
 
-                                                                                    // controller.fixedAssignments!.add({});
-                                                                                    controller.addFixedAssignment(
-                                                                                      controller.gameData.value.players![index].id.toString(),
-                                                                                      '${inningNumber}',
-                                                                                      result,
-                                                                                    );
+return RawKeyboardListener(
+  focusNode: keyboardListenerNode,
+  onKey: (RawKeyEvent event) {
+    if (event is RawKeyDownEvent) {
+      handleArrowKey(event, index, col);
+    }
+  },
+  child: Focus(
+    focusNode: inputFocusNode,
+    onFocusChange: (hasFocus) async {
+      if (!hasFocus) {
+        yourFunction(index);
 
-                                                                                    // });
-                                                                                  }
-                                                                                  // The widget lost focus, run your function here
-                                                                                }
-                                                                              },
-                                                                              child: Container(
-                                                                                padding: const EdgeInsets.all(
-                                                                                  8,
-                                                                                ),
-                                                                                color:
-                                                                                    Colors.white,
-                                                                                child: LineupTextField(
-                                                                                  positions:
-                                                                                      controller.teamPositioned,
-                                                                                  controller: TextEditingController(
-                                                                                    text:
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber],
-                                                                                  ),
-                                                                                  // textEditingController,
-                                                                                  isLable: filterPositionsByNameMatch(
-                                                                                    controller.teamPositioned,
-                                                                                    textEditingController.text,
-                                                                                  ),
+        final result = await filterPositionsByNamePrefix(
+          controller.teamPositioned,
+          controller.enerLable.value,
+        );
 
-                                                                                  onChanged: (
-                                                                                    val,
-                                                                                  ) {
-                                                                                    val =
-                                                                                        val.trim().toUpperCase();
-                                                                                    controller.enerLable.value = val;
+        if (result.isNotEmpty) {
+          controller.addFixedAssignment(
+            controller.gameData.value.players![index].id.toString(),
+            '$inningNumber',
+            result,
+          );
+        }
+      }
+    },
+    child: Container(
+      padding: const EdgeInsets.all(8),
+      color: Colors.white,
+      child: LineupTextField(
+        positions: controller.teamPositioned,
+        controller: textController,
+        isLable: filterPositionsByNameMatch(
+          controller.teamPositioned,
+          textController.text,
+        ),
+        onChanged: (val) {
+          val = val.trim().toUpperCase();
+          controller.enerLable.value = val;
+        },
+        onFieldSubmitted: (val) async {
+          val = val.trim().toUpperCase();
 
-                                                                                    // if (_debounce?.isActive ??
-                                                                                    //     false)
-                                                                                    //   _debounce!.cancel();
-                                                                                    // _debounce = Timer(
-                                                                                    //   const Duration(
-                                                                                    //     milliseconds:
-                                                                                    //         500,
-                                                                                    //   ),
-                                                                                    //   () async {
-                                                                                    //     final allLineups =
-                                                                                    //         controller.autoFillData.value?.lineupp ??
-                                                                                    //         [];
-                                                                                    //     final inningValues =
-                                                                                    //         allLineups
-                                                                                    //             .asMap()
-                                                                                    //             .entries
-                                                                                    //             .where(
-                                                                                    //               (
-                                                                                    //                 e,
-                                                                                    //               ) =>
-                                                                                    //                   e.key !=
-                                                                                    //                   index,
-                                                                                    //             )
-                                                                                    //             .map(
-                                                                                    //               (
-                                                                                    //                 e,
-                                                                                    //               ) =>
-                                                                                    //                   e.value.innings[inningNumber]?.trim().toUpperCase(),
-                                                                                    //             )
-                                                                                    //             .toList();
+          if (val == "OUT") {
+            controller.autoFillData.value!.lineupp![index].innings[inningNumber] = "OUT";
+            controller.autoFillData.refresh();
+            controller.recalculatePlayerStats(index);
+          } else {
+            final allLineups = controller.autoFillData.value?.lineupp ?? [];
+            final inningValues = allLineups
+                .asMap()
+                .entries
+                .where((e) => e.key != index)
+                .map((e) => e.value.innings[inningNumber]?.trim().toUpperCase())
+                .toList();
 
-                                                                                    //     if (val ==
-                                                                                    //         "OUT") {
-                                                                                    //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                    //           "OUT";
-                                                                                    //       controller.autoFillData.refresh();
-                                                                                    //     } else {
-                                                                                    //       if (inningValues.contains(
-                                                                                    //         val,
-                                                                                    //       )) {
-                                                                                    //         // textControllers[index][inningNumber].text =
-                                                                                    //         //     controller.autoFillData.value!.lineupp![index].innings[inningNumber] ?? "";
+            if (inningValues.contains(val)) {
+              if (mounted) {
+                showDialog(
+                  context: context,
+                  builder: (_) => AlertDialog(
+                    title: const Text("Duplicate Position"),
+                    content: const Text("This position is already used in this inning (column)."),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pop(context);
+                          textController.clear();
+                        },
+                        child: const Text("OK"),
+                      ),
+                    ],
+                  ),
+                );
+              }
+              return;
+            }
+          }
 
-                                                                                    //         showDialog(
-                                                                                    //           context:
-                                                                                    //               context,
-                                                                                    //           builder:
-                                                                                    //               (
-                                                                                    //                 _,
-                                                                                    //               ) => AlertDialog(
-                                                                                    //                 title: const Text(
-                                                                                    //                   "Duplicate Position",
-                                                                                    //                 ),
-                                                                                    //                 content: const Text(
-                                                                                    //                   "This position is already used in this inning (column). Duplicate values are not allowed.",
-                                                                                    //                 ),
-                                                                                    //                 actions: [
-                                                                                    //                   TextButton(
-                                                                                    //                     onPressed:
-                                                                                    //                         () => Navigator.pop(
-                                                                                    //                           context,
-                                                                                    //                         ),
-                                                                                    //                     child: const Text(
-                                                                                    //                       "OK",
-                                                                                    //                     ),
-                                                                                    //                   ),
-                                                                                    //                 ],
-                                                                                    //               ),
-                                                                                    //         );
-                                                                                    //         return;
-                                                                                    //       }
+          controller.autoFillData.value!.lineupp![index].innings[inningNumber] = val;
+          controller.autoFillData.refresh();
 
-                                                                                    //       // Valid entry
-                                                                                    //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                    //           val;
-                                                                                    //       controller.autoFillData.refresh();
-                                                                                    //     }
-                                                                                    //   },
-                                                                                    // );
-                                                                                  },
-                                                                                  onFieldSubmitted: (
-                                                                                    val,
-                                                                                  ) async {
-                                                                                    val =
-                                                                                        val.trim().toUpperCase(); // Normalize for consistent matching
+          final result = await filterPositionsByNamePrefix(
+            controller.teamPositioned,
+            controller.enerLable.value,
+          );
 
-                                                                                    // Allow OUT always
-                                                                                    if (val ==
-                                                                                        "OUT") {
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                          "OUT";
-                                                                                      controller.autoFillData.refresh();
+          if (result.isNotEmpty) {
+            controller.autoFillData.value!.lineupp![index].innings[inningNumber] = result;
+            controller.autoFillData.refresh();
+            textController.text = result;
+            controller.addFixedAssignment(
+              controller.gameData.value.players![index].id.toString(),
+              '$inningNumber',
+              result,
+            );
+          }
+        },
+      ),
+    ),
+  ),
+);
 
-                                                                                      // return;
-                                                                                      // controller.againCalculateStatsandTopPositions();
-                                                                                      controller.recalculatePlayerStats(
-                                                                                        index,
-                                                                                      );
-                                                                                    } else {
-                                                                                      final allLineups =
-                                                                                          controller.autoFillData.value?.lineupp ??
-                                                                                          [];
-                                                                                      final inningValues =
-                                                                                          allLineups
-                                                                                              .asMap()
-                                                                                              .entries
-                                                                                              .where(
-                                                                                                (
-                                                                                                  e,
-                                                                                                ) =>
-                                                                                                    e.key !=
-                                                                                                    index,
-                                                                                              ) // Exclude current row
-                                                                                              .map(
-                                                                                                (
-                                                                                                  e,
-                                                                                                ) =>
-                                                                                                    e.value.innings[inningNumber]?.trim().toUpperCase(),
-                                                                                              )
-                                                                                              .toList();
-
-                                                                                      // ✅ Check for duplicate (excluding empty and OUT)
-                                                                                      if (inningValues.contains(
-                                                                                        val,
-                                                                                      )) {
-                                                                                        showDialog(
-                                                                                          context:
-                                                                                              context,
-                                                                                          builder:
-                                                                                              (
-                                                                                                _,
-                                                                                              ) => AlertDialog(
-                                                                                                title: const Text(
-                                                                                                  "Duplicate Position",
-                                                                                                ),
-                                                                                                content: const Text(
-                                                                                                  "This position is already used in this inning (column). Duplicate values are not allowed.",
-                                                                                                ),
-                                                                                                actions: [
-                                                                                                  TextButton(
-                                                                                                    onPressed: () {
-                                                                                                      Navigator.pop(
-                                                                                                        context,
-                                                                                                      );
-                                                                                                      textEditingController.clear();
-                                                                                                    },
-                                                                                                    child: const Text(
-                                                                                                      "OK",
-                                                                                                    ),
-                                                                                                  ),
-                                                                                                ],
-                                                                                              ),
-                                                                                        );
-                                                                                        return;
-                                                                                      }
-                                                                                    }
-                                                                                    // ✅ Get all values in current inning column
-
-                                                                                    // ✅ Save entered value
-                                                                                    controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                        val;
-                                                                                    controller.autoFillData.refresh();
-
-                                                                                    // Optional auto-fill from team positions
-                                                                                    String result = await filterPositionsByNamePrefix(
-                                                                                      controller.teamPositioned,
-                                                                                      controller.enerLable.value,
-                                                                                    );
-
-                                                                                    if (result !=
-                                                                                        "") {
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                          result;
-                                                                                      controller.autoFillData.refresh();
-                                                                                      textEditingController.text = result;
-                                                                                      controller.addFixedAssignment(
-                                                                                        controller.gameData.value.players![index].id.toString(),
-                                                                                        '$inningNumber',
-                                                                                        result,
-                                                                                      );
-                                                                                    }
-                                                                                  },
-                                                                                ),
-                                                                              ),
-                                                                            );
-                                                                          }).toList(),
+                                                                        },
+                                                                      ),
                                                                     );
+                                                                    // return Row(
+                                                                    //   mainAxisAlignment:
+                                                                    //       MainAxisAlignment
+                                                                    //           .start,
+                                                                    //   crossAxisAlignment:
+                                                                    //       CrossAxisAlignment
+                                                                    //           .start,
+                                                                    //   children: List.generate(
+                                                                    //     inningKeys
+                                                                    //         .length,
+                                                                    //     (col) {
+                                                                    //       final inningNumber =
+                                                                    //           inningKeys[col];
+
+                                                                    //       final textController = TextEditingController(
+                                                                    //         text:
+                                                                    //             controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                    //       );
+
+                                                                    //       return RawKeyboardListener(
+                                                                    //         focusNode: FocusNode(
+                                                                    //           skipTraversal:
+                                                                    //               true,
+                                                                    //           canRequestFocus:
+                                                                    //               false,
+                                                                    //         ), // dummy
+                                                                    //         onKey:
+                                                                    //             (
+                                                                    //               event,
+                                                                    //             ) => handleArrowKey(
+                                                                    //               event,
+                                                                    //               index,
+                                                                    //               col,
+                                                                    //             ),
+                                                                    //         child: Focus(
+                                                                    //           focusNode:
+                                                                    //               fieldFocusNodes[index][col],
+                                                                    //           onFocusChange: (
+                                                                    //             hasFocus,
+                                                                    //           ) async {
+                                                                    //             if (!hasFocus) {
+                                                                    //               yourFunction(
+                                                                    //                 index,
+                                                                    //               );
+
+                                                                    //               String result = await filterPositionsByNamePrefix(
+                                                                    //                 controller.teamPositioned,
+                                                                    //                 controller.enerLable.value,
+                                                                    //               );
+
+                                                                    //               if (result !=
+                                                                    //                   "") {
+                                                                    //                 controller.addFixedAssignment(
+                                                                    //                   controller.gameData.value.players![index].id.toString(),
+                                                                    //                   '$inningNumber',
+                                                                    //                   result,
+                                                                    //                 );
+                                                                    //               }
+                                                                    //             }
+                                                                    //           },
+                                                                    //           child: Container(
+                                                                    //             padding: const EdgeInsets.all(
+                                                                    //               8,
+                                                                    //             ),
+                                                                    //             color:
+                                                                    //                 Colors.white,
+                                                                    //             child: LineupTextField(
+                                                                    //               positions:
+                                                                    //                   controller.teamPositioned,
+                                                                    //               controller:
+                                                                    //                   textController,
+                                                                    //               isLable: filterPositionsByNameMatch(
+                                                                    //                 controller.teamPositioned,
+                                                                    //                 textController.text,
+                                                                    //               ),
+                                                                    //               onChanged: (
+                                                                    //                 val,
+                                                                    //               ) {
+                                                                    //                 val =
+                                                                    //                     val.trim().toUpperCase();
+                                                                    //                 controller.enerLable.value = val;
+                                                                    //               },
+                                                                    //               onFieldSubmitted: (
+                                                                    //                 val,
+                                                                    //               ) async {
+                                                                    //                 val =
+                                                                    //                     val.trim().toUpperCase();
+
+                                                                    //                 if (val ==
+                                                                    //                     "OUT") {
+                                                                    //                   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                       "OUT";
+                                                                    //                   controller.autoFillData.refresh();
+                                                                    //                   controller.recalculatePlayerStats(
+                                                                    //                     index,
+                                                                    //                   );
+                                                                    //                 } else {
+                                                                    //                   final allLineups =
+                                                                    //                       controller.autoFillData.value?.lineupp ??
+                                                                    //                       [];
+                                                                    //                   final inningValues =
+                                                                    //                       allLineups
+                                                                    //                           .asMap()
+                                                                    //                           .entries
+                                                                    //                           .where(
+                                                                    //                             (
+                                                                    //                               e,
+                                                                    //                             ) =>
+                                                                    //                                 e.key !=
+                                                                    //                                 index,
+                                                                    //                           )
+                                                                    //                           .map(
+                                                                    //                             (
+                                                                    //                               e,
+                                                                    //                             ) =>
+                                                                    //                                 e.value.innings[inningNumber]?.trim().toUpperCase(),
+                                                                    //                           )
+                                                                    //                           .toList();
+
+                                                                    //                   if (inningValues.contains(
+                                                                    //                     val,
+                                                                    //                   )) {
+                                                                    //                     showDialog(
+                                                                    //                       context:
+                                                                    //                           context,
+                                                                    //                       builder:
+                                                                    //                           (
+                                                                    //                             _,
+                                                                    //                           ) => AlertDialog(
+                                                                    //                             title: const Text(
+                                                                    //                               "Duplicate Position",
+                                                                    //                             ),
+                                                                    //                             content: const Text(
+                                                                    //                               "This position is already used in this inning (column). Duplicate values are not allowed.",
+                                                                    //                             ),
+                                                                    //                             actions: [
+                                                                    //                               TextButton(
+                                                                    //                                 onPressed: () {
+                                                                    //                                   Navigator.pop(
+                                                                    //                                     context,
+                                                                    //                                   );
+                                                                    //                                   textController.clear();
+                                                                    //                                 },
+                                                                    //                                 child: const Text(
+                                                                    //                                   "OK",
+                                                                    //                                 ),
+                                                                    //                               ),
+                                                                    //                             ],
+                                                                    //                           ),
+                                                                    //                     );
+                                                                    //                     return;
+                                                                    //                   }
+                                                                    //                 }
+
+                                                                    //                 controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                     val;
+                                                                    //                 controller.autoFillData.refresh();
+
+                                                                    //                 String result = await filterPositionsByNamePrefix(
+                                                                    //                   controller.teamPositioned,
+                                                                    //                   controller.enerLable.value,
+                                                                    //                 );
+
+                                                                    //                 if (result !=
+                                                                    //                     "") {
+                                                                    //                   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                       result;
+                                                                    //                   controller.autoFillData.refresh();
+                                                                    //                   textController.text = result;
+                                                                    //                   controller.addFixedAssignment(
+                                                                    //                     controller.gameData.value.players![index].id.toString(),
+                                                                    //                     '$inningNumber',
+                                                                    //                     result,
+                                                                    //                   );
+                                                                    //                 }
+                                                                    //               },
+                                                                    //             ),
+                                                                    //           ),
+                                                                    //         ),
+                                                                    //       );
+                                                                    //     },
+                                                                    //   ),
+                                                                    // );
+
+                                                                    // return Row(
+                                                                    //   mainAxisAlignment:
+                                                                    //       MainAxisAlignment
+                                                                    //           .start,
+                                                                    //   crossAxisAlignment:
+                                                                    //       CrossAxisAlignment
+                                                                    //           .start,
+                                                                    //   children:
+                                                                    //       valuesList.map((
+                                                                    //         inningNumber,
+                                                                    //       ) {
+                                                                    //         bool
+                                                                    //         isLable =
+                                                                    //             false;
+                                                                    //         TextEditingController
+                                                                    //         textEditingController =
+                                                                    //             TextEditingController();
+                                                                    //         return Focus(
+                                                                    //           onFocusChange: (
+                                                                    //             hasFocus,
+                                                                    //           ) async {
+                                                                    //             if (!hasFocus) {
+                                                                    //               yourFunction(
+                                                                    //                 index,
+                                                                    //               );
+                                                                    //               // controller.teamPositioned
+                                                                    //               String result = await filterPositionsByNamePrefix(
+                                                                    //                 controller.teamPositioned,
+                                                                    //                 controller.enerLable.value,
+                                                                    //               );
+
+                                                                    //               if (result !=
+                                                                    //                   "") {
+                                                                    //                 isLable =
+                                                                    //                     true;
+
+                                                                    //                 // controller.fixedAssignments!.add({});
+                                                                    //                 controller.addFixedAssignment(
+                                                                    //                   controller.gameData.value.players![index].id.toString(),
+                                                                    //                   '${inningNumber}',
+                                                                    //                   result,
+                                                                    //                 );
+
+                                                                    //                 // });
+                                                                    //               }
+                                                                    //               // The widget lost focus, run your function here
+                                                                    //             }
+                                                                    //           },
+                                                                    //           child: Container(
+                                                                    //             padding: const EdgeInsets.all(
+                                                                    //               8,
+                                                                    //             ),
+                                                                    //             color:
+                                                                    //                 Colors.white,
+                                                                    //             child: LineupTextField(
+                                                                    //               positions:
+                                                                    //                   controller.teamPositioned,
+                                                                    //               controller: TextEditingController(
+                                                                    //                 text:
+                                                                    //                     controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                    //               ),
+                                                                    //               // textEditingController,
+                                                                    //               isLable: filterPositionsByNameMatch(
+                                                                    //                 controller.teamPositioned,
+                                                                    //                 textEditingController.text,
+                                                                    //               ),
+
+                                                                    //               onChanged: (
+                                                                    //                 val,
+                                                                    //               ) {
+                                                                    //                 val =
+                                                                    //                     val.trim().toUpperCase();
+                                                                    //                 controller.enerLable.value = val;
+
+                                                                    //               },
+                                                                    //               onFieldSubmitted: (
+                                                                    //                 val,
+                                                                    //               ) async {
+                                                                    //                 val =
+                                                                    //                     val.trim().toUpperCase(); // Normalize for consistent matching
+
+                                                                    //                 // Allow OUT always
+                                                                    //                 if (val ==
+                                                                    //                     "OUT") {
+                                                                    //                   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                       "OUT";
+                                                                    //                   controller.autoFillData.refresh();
+
+                                                                    //                   // return;
+                                                                    //                   // controller.againCalculateStatsandTopPositions();
+                                                                    //                   controller.recalculatePlayerStats(
+                                                                    //                     index,
+                                                                    //                   );
+                                                                    //                 } else {
+                                                                    //                   final allLineups =
+                                                                    //                       controller.autoFillData.value?.lineupp ??
+                                                                    //                       [];
+                                                                    //                   final inningValues =
+                                                                    //                       allLineups
+                                                                    //                           .asMap()
+                                                                    //                           .entries
+                                                                    //                           .where(
+                                                                    //                             (
+                                                                    //                               e,
+                                                                    //                             ) =>
+                                                                    //                                 e.key !=
+                                                                    //                                 index,
+                                                                    //                           ) // Exclude current row
+                                                                    //                           .map(
+                                                                    //                             (
+                                                                    //                               e,
+                                                                    //                             ) =>
+                                                                    //                                 e.value.innings[inningNumber]?.trim().toUpperCase(),
+                                                                    //                           )
+                                                                    //                           .toList();
+
+                                                                    //                   // ✅ Check for duplicate (excluding empty and OUT)
+                                                                    //                   if (inningValues.contains(
+                                                                    //                     val,
+                                                                    //                   )) {
+                                                                    //                     showDialog(
+                                                                    //                       context:
+                                                                    //                           context,
+                                                                    //                       builder:
+                                                                    //                           (
+                                                                    //                             _,
+                                                                    //                           ) => AlertDialog(
+                                                                    //                             title: const Text(
+                                                                    //                               "Duplicate Position",
+                                                                    //                             ),
+                                                                    //                             content: const Text(
+                                                                    //                               "This position is already used in this inning (column). Duplicate values are not allowed.",
+                                                                    //                             ),
+                                                                    //                             actions: [
+                                                                    //                               TextButton(
+                                                                    //                                 onPressed: () {
+                                                                    //                                   Navigator.pop(
+                                                                    //                                     context,
+                                                                    //                                   );
+                                                                    //                                   textEditingController.clear();
+                                                                    //                                 },
+                                                                    //                                 child: const Text(
+                                                                    //                                   "OK",
+                                                                    //                                 ),
+                                                                    //                               ),
+                                                                    //                             ],
+                                                                    //                           ),
+                                                                    //                     );
+                                                                    //                     return;
+                                                                    //                   }
+                                                                    //                 }
+                                                                    //                 // ✅ Get all values in current inning column
+
+                                                                    //                 // ✅ Save entered value
+                                                                    //                 controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                     val;
+                                                                    //                 controller.autoFillData.refresh();
+
+                                                                    //                 // Optional auto-fill from team positions
+                                                                    //                 String result = await filterPositionsByNamePrefix(
+                                                                    //                   controller.teamPositioned,
+                                                                    //                   controller.enerLable.value,
+                                                                    //                 );
+
+                                                                    //                 if (result !=
+                                                                    //                     "") {
+                                                                    //                   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                    //                       result;
+                                                                    //                   controller.autoFillData.refresh();
+                                                                    //                   textEditingController.text = result;
+                                                                    //                   controller.addFixedAssignment(
+                                                                    //                     controller.gameData.value.players![index].id.toString(),
+                                                                    //                     '$inningNumber',
+                                                                    //                     result,
+                                                                    //                   );
+                                                                    //                 }
+                                                                    //               },
+                                                                    //             ),
+                                                                    //           ),
+                                                                    //         );
+                                                                    //       }).toList(),
+                                                                    // );
                                                                   }),
                                                                 ),
                                                       ),

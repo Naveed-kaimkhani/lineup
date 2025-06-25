@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
+import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -47,8 +48,9 @@ class NewTeamController extends GetxController {
   // final organizationId = 0.obs;  // optional
   TextEditingController orgCode = TextEditingController();
   TextEditingController PromoCode = TextEditingController();
-  
+
   TextEditingController orgCodeValidationController = TextEditingController();
+
   // TextEditingControllers (for text fields if needed)
   final TextEditingController teamNameController = TextEditingController();
   int? organizationId;
@@ -187,7 +189,16 @@ class NewTeamController extends GetxController {
     }
 
     if (currentPage.value == 7) {
-      CreateNewTeam(context);
+      // CreateNewTeam(context);
+      showConfirmationDialog(
+        title: "Confirm",
+        message: "Are you sure you want to create the team?",
+        onConfirm: () {
+          CreateNewTeam(context);
+        },
+      );
+
+      // dfdf
     }
 
     if (currentPage.value == 8) {
@@ -221,6 +232,99 @@ class NewTeamController extends GetxController {
     final screenSize = MediaQuery.of(context).size;
     // Set initial dimensions
     updateDimensions(context);
+  }
+
+  static void showConfirmationDialog({
+    required String title,
+    required String message,
+    required VoidCallback onConfirm,
+    Color titleColor = Colors.black,
+    // Color confirmButtonColor = AppColors.primaryColor,
+    Color cancelButtonColor = Colors.grey,
+  }) {
+    Get.dialog(
+      Center(
+        child: ConstrainedBox(
+          constraints: BoxConstraints(maxWidth: 500),
+          child: Dialog(
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(16),
+            ),
+            child: Container(
+              padding: const EdgeInsets.all(24),
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(16),
+              ),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 20,
+                      color: titleColor,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    message,
+                    textAlign: TextAlign.center,
+                    style: const TextStyle(fontSize: 16, color: Colors.black87),
+                  ),
+                  const SizedBox(height: 24),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () => Get.back(), // Dismiss dialog
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: cancelButtonColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            "Cancel",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Get.back(); // Dismiss dialog first
+                            onConfirm(); // Then call action
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: AppColors.primaryColor,
+                            foregroundColor: Colors.white,
+                            padding: const EdgeInsets.symmetric(vertical: 14),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                          child: const Text(
+                            "Yes",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      barrierDismissible: false,
+    );
   }
 
   Future<void> getOrgCode(BuildContext context) async {
@@ -359,11 +463,12 @@ class NewTeamController extends GetxController {
       ),
     );
   }
+
   void orgCodeDialog(BuildContext context) async {
     Get.dialog(
       PromoCodeDialog(
         nameController: orgCodeValidationController,
-
+        // vkjkjj
         onSubmit: () async {
           final name = orgCodeValidationController.text.trim();
 
@@ -371,7 +476,11 @@ class NewTeamController extends GetxController {
           if (name.isEmpty) {
             Get.snackbar("Error", "Please enter a Promo Code");
           } else {
-            promoCodeReq(context);
+            // promoCodeReq(context);
+            final isValid = await TeamsApi.validatePromoCode(
+              orgCode.text.trim(),
+            );
+
             Get.back(); // Close dialog
             Get.back(); // Close dialog
           }

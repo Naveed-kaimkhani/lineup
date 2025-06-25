@@ -172,7 +172,9 @@ class OrganizationDashboardScreen extends StatelessWidget {
                                           // controlle.promoCodeRenewalRequest(
                                           //   context,
                                           // );
-                                          controlle.promoCodeDialogForOrg(context);
+                                          controlle.promoCodeDialogForOrg(
+                                            context,
+                                          );
                                         },
                                         OnlinePayment: () async {
                                           final response =
@@ -185,7 +187,7 @@ class OrganizationDashboardScreen extends StatelessWidget {
                                       color: Colors.white,
                                       fontSize: 18,
                                     ),
-                                    title: 'Renew Subscription',
+                                    title: 'Activate Subscription',
                                     backgroundColor: AppColors.secondaryColor,
                                   ),
                                 ),

@@ -8,6 +8,7 @@ import 'package:gaming_web_app/constants/widgets/buttons/social_app_button.dart'
 import 'package:gaming_web_app/constants/widgets/custom_form.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/player_background_scaffold.dart';
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
+import 'package:gaming_web_app/screens/main_dashboard/ArrowKeyNavigationScreen.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/authController/auth_controller.dart';
 import '../../routes/routes_path.dart';
@@ -173,6 +174,15 @@ class SignInScreen extends StatelessWidget {
                                   // Sign In Button
                                   PrimaryButton(
                                     onTap: controller.signIn,
+                                    //                                     onTap: (){
+                                    //                                       Navigator.push(
+                                    //   context,
+                                    //   MaterialPageRoute(
+                                    //     builder: (context) => ArrowKeyNavigationScreen(), // Replace with your screen
+                                    //   ),
+                                    // );
+
+                                    //                                     },
                                     title: 'Sign in',
                                     width: double.infinity,
                                     radius: 4.89.r,

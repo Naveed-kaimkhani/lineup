@@ -18,6 +18,7 @@ import '../model/positioned.dart';
 class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
   final previewText = 'PREVIEW       '.obs;
+  List<List<FocusNode>> fieldFocusNodes = [];
 
   Map<String, Map<String, String>>? fixedAssignments;
   RxBool isPayment = false.obs;
