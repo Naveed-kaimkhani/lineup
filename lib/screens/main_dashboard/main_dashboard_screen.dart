@@ -11,6 +11,7 @@ import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaff
 import 'package:gaming_web_app/main.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
 import 'package:gaming_web_app/screens/main_dashboard/slectorgPay.dart';
+import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../Base/componant/alertDialog.dart';
@@ -108,61 +109,61 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                         title: 'Activation History',
                         backgroundColor: AppColors.secondaryColor,
                       ),
-                     Obx(() {
-                          final count =
-                              availableSlotsController
-                                  .teamSlot
-                                  .value
-                                  ?.availableTeamSlotsCount;
+                      Obx(() {
+                        final count =
+                            availableSlotsController
+                                .teamSlot
+                                .value
+                                ?.availableTeamSlotsCount;
 
-                          return PrimaryButton(
-                            width: 300,
-                            backgroundColor: AppColors.primaryColor,
-                            onTap: () async {
-                              toggleLoader(true);
-                              // Fetch the latest slots
+                        return PrimaryButton(
+                          width: 300,
+                          backgroundColor: AppColors.primaryColor,
+                          onTap: () async {
+                            toggleLoader(true);
+                            // Fetch the latest slots
 
-                              await availableSlotsController
-                                  .fetchAvailableSlots();
-                              final updatedCount =
-                                  availableSlotsController
-                                      .teamSlot
-                                      .value
-                                      ?.availableTeamSlotsCount ??
-                                  0;
+                            await availableSlotsController
+                                .fetchAvailableSlots();
+                            final updatedCount =
+                                availableSlotsController
+                                    .teamSlot
+                                    .value
+                                    ?.availableTeamSlotsCount ??
+                                0;
 
-                              toggleLoader(false);
-                              if (updatedCount > 0) {
-                                final NewTeamController newTeamController =
-                                    Get.find<NewTeamController>();
-                                newTeamController.isHavingCredit.value = true;
+                            toggleLoader(false);
+                            if (updatedCount > 0) {
+                              final NewTeamController newTeamController =
+                                  Get.find<NewTeamController>();
+                              newTeamController.isHavingCredit.value = true;
 
-                                await showDialog(
-                                  context: context,
-                                  barrierDismissible: true,
-                                  builder: (_) => CreateTeamDialog(),
-                                );
-                              } else {
-                                Get.snackbar(
-                                  'No Credit Left',
-                                  'You do not have any available team activation slots.',
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                  snackPosition: SnackPosition.BOTTOM,
-                                );
-                              }
-                            },
-                            radius: 20.r,
-                            textStyle: descriptiveStyle.copyWith(
-                              color: Colors.white,
-                              fontSize: isMobile ? 18 : 18,
-                            ),
-                            title:
-                                count != null
-                                    ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
-                                    : 'Checking...',
-                          );
-                        }),
+                              await showDialog(
+                                context: context,
+                                barrierDismissible: true,
+                                builder: (_) => CreateTeamDialog(),
+                              );
+                            } else {
+                              Get.snackbar(
+                                'No Credit Left',
+                                'You do not have any available team activation slots.',
+                                backgroundColor: Colors.red,
+                                colorText: Colors.white,
+                                snackPosition: SnackPosition.BOTTOM,
+                              );
+                            }
+                          },
+                          radius: 20.r,
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: isMobile ? 18 : 18,
+                          ),
+                          title:
+                              count != null
+                                  ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
+                                  : 'Checking...',
+                        );
+                      }),
                     ],
                   );
                 }
@@ -238,12 +239,9 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                   builder: (_) => CreateTeamDialog(),
                                 );
                               } else {
-                                Get.snackbar(
-                                  'No Credit Left',
-                                  'You do not have any available team activation slots.',
-                                  backgroundColor: Colors.red,
-                                  colorText: Colors.white,
-                                  snackPosition: SnackPosition.BOTTOM,
+                              
+                                SnackbarUtils.showErrorr(
+                                  "You do not have any available team activation slots.",
                                 );
                               }
                             },

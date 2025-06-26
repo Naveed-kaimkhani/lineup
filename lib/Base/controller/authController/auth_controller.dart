@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:gaming_web_app/main.dart';
+import 'package:gaming_web_app/screens/admin/adminController/adminController.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../constants/SharedPreferencesKeysConstants.dart';
@@ -89,14 +90,16 @@ class SignInController extends GetxController {
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
 
-    // if (isEmailValid && isPasswordValid)
-    if (true) {
-      // final request = LoginModel(email: email, password: password);
+    if (isEmailValid && isPasswordValid)
+    // if (true)
+    {
+      final request = LoginModel(email: email, password: password);
 
-      final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
-        password: "123456789",
-      );
+      // final request = LoginModel(
+      //   email: "shahbazvidicraze@gmail.com",
+      //   // email: "admin@lineup.com",
+      //   password: "123456789",
+      // );
       final response;
       if (email.toString() == "admin@lineup.com")
       // if (true)
@@ -117,12 +120,16 @@ class SignInController extends GetxController {
           "1",
         );
         if (response.data!.user!.role_id == 1) {
+          final AdminController adminController = Get.put(AdminController());
+          await adminController.fetchOrganization();
+          adminController.selectedTab.value = 1;
           Get.toNamed(RoutesPath.adminDashboardScreen);
         } else {
           await SharedPreferencesUtil.save(
             SharedPreferencesKeysConstants.isLogin,
             "1",
           );
+
           Get.toNamed(RoutesPath.mainDashboardScreen);
         }
 

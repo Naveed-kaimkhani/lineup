@@ -11,7 +11,7 @@ import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
-import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
+import 'package:gaming_web_app/screens/admin/adminController/settings_controller.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
@@ -52,12 +52,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
     });
   }
 
-  // final TeamController controller = Get.put(TeamController());
-
   @override
   Widget build(BuildContext context) {
-    adminController.fetchOrganization();
-
     return Obx(
       () => DashboardScaffold(
         onTab: () {
@@ -75,10 +71,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SizedBox(height: 50.h),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  // final isMobile = constraints.maxWidth < 600;
-                  // final isDesktop = constraints.maxWidth > 1024;
-                  // double width = constraints.maxWidth;
-
                   return SizedBox(
                     height: 50, // Set height based on button size
                     child: ListView(
@@ -88,8 +80,8 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
-                            adminController.selectedTab.value = 1;
                             adminController.fetchOrganization();
+                            adminController.selectedTab.value = 1;
 
                             // Get.toNamed(RoutesPath.organizationDashboardScreen);
                           },
@@ -179,22 +171,22 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         ),
 
                         SizedBox(width: 16),
-                        // PrimaryButton(
-                        //   // width: 300,
-                        //   onTap: () async {
-                        //     adminController.selectedTab.value = 6;
-                        //   },
-                        //   radius: 20.r,
-                        //   textStyle: descriptiveStyle.copyWith(
-                        //     color: Colors.white,
-                        //     fontSize: 18,
-                        //   ),
-                        //   title: '       Settings        ',
-                        //   backgroundColor:
-                        //       6 == adminController.selectedTab.value
-                        //           ? AppColors.primaryColor
-                        //           : AppColors.secondaryColor,
-                        // ),
+                        PrimaryButton(
+                          // width: 300,
+                          onTap: () async {
+                            adminController.selectedTab.value = 6;
+                          },
+                          radius: 20.r,
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                          title: '       Pricing        ',
+                          backgroundColor:
+                              6 == adminController.selectedTab.value
+                                  ? AppColors.primaryColor
+                                  : AppColors.secondaryColor,
+                        ),
                       ],
                     ),
                   );
@@ -210,7 +202,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               if (adminController.selectedTab.value == 4) PromoCodeManagemant(),
               if (adminController.selectedTab.value == 5)
                 PaymentTrackingManagemant(),
-              // if (adminController.selectedTab.value == 6) Settings(),
+              if (adminController.selectedTab.value == 6) Settings(),
               SizedBox(height: 27.h),
             ],
           ),
@@ -357,8 +349,6 @@ class _MobileLayoutState extends State<_MobileLayout> {
         "email": email,
         "annual_team_allocation": annualTeamAllocation,
       };
-      log("bodyyyy");
-      log(body.toString());
       final response = await http.post(
         url,
         headers: {
@@ -828,52 +818,7 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
   final double seasonWidth = 100;
   final double ageGroupWidth = 100;
   final double actionWidth = 190;
-  // Future<void> adminCreateOrganization({
-  //   required String name,
-  //   required String email,
-  //   required int annualTeamAllocation,
-  // }) async {
-  //   log("in methodd");
-  //   final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
 
-  //   try {
-  //     final prefs = await SharedPreferences.getInstance();
-  //     final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
-
-  //     final body = {
-  //       "name": name,
-  //       "email": email,
-  //       "annual_team_allocation": annualTeamAllocation,
-  //     };
-  //     log("bodyyyy");
-  //     log(body.toString());
-  //     final response = await http.post(
-  //       url,
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //         'Accept': 'application/json',
-  //         'Authorization': 'Bearer $token',
-  //       },
-  //       body: jsonEncode(body),
-  //     );
-
-  //     if (response.statusCode == 200 || response.statusCode == 201) {
-  //       final data = jsonDecode(response.body);
-  //       if (data['success'] == true) {
-  //         Get.snackbar("Success", data['message'] ?? "Organization created");
-  //         // Optional: do something with data['data']
-  //       } else {
-  //         Get.snackbar("Error", data['message'] ?? "Creation failed");
-  //       }
-  //     } else {
-  //       log(response.body);
-  //       kkkkkkk
-  //       Get.snackbar("Error", "Server returned ${response.statusCode}");
-  //     }
-  //   } catch (e) {
-  //     Get.snackbar("Error", "Exception: $e");
-  //   }
-  // }
   Future<void> adminCreateOrganization({
     required String name,
     required String email,
@@ -916,6 +861,79 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
       final responseBody = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
+        if (responseBody['success'] == true) {
+          SnackbarUtils.showSuccess(
+            responseBody['message'] ?? "Organization created",
+          );
+        } else {
+          SnackbarUtils.showErrorr(
+            responseBody['message'] ?? "Organization creation failed",
+          );
+        }
+      } else {
+        SnackbarUtils.showErrorr(
+          responseBody['message'] ?? "Organization created",
+        );
+        // SnackbarUtils.showErrorr("Server error: ${response.statusCode}");
+      }
+    } catch (e) {
+      //  SnackbarUtils.showErrorr(
+      //       responseBody['message'] ?? "Organization created",
+      //     );
+      SnackbarUtils.showErrorr("Exception: ${e.toString()}");
+    }
+  }
+
+  Future<void> adminEditOrganization({
+    required String name,
+    required String email,
+    required int annualTeamAllocation,
+    required int id,
+  }) async {
+    if (name.trim().isEmpty ||
+        email.trim().isEmpty ||
+        annualTeamAllocation == 0) {
+      SnackbarUtils.showErrorr("Please fill in all fields.");
+      return;
+    }
+    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!emailRegex.hasMatch(email)) {
+      SnackbarUtils.showErrorr("Invalid email format.");
+      return;
+    }
+
+    final url = Uri.parse(
+      'http://18.189.193.38/api/v1/admin/organizations/$id',
+    );
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
+
+      final body = {
+        // "id": id,
+        "name": name,
+        "email": email,
+        "annual_team_allocation": annualTeamAllocation,
+      };
+
+      final response = await http.put(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      );
+      // log(response.body);
+
+      final responseBody = jsonDecode(response.body);
+
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        // adminController.selectedTab.value = 1;
+        // await adminController.fetchOrganization();
+
         if (responseBody['success'] == true) {
           SnackbarUtils.showSuccess(
             responseBody['message'] ?? "Organization created",
@@ -1028,51 +1046,30 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
                               .spaceBetween, // Distributes space between the children
                       children: [
                         // Wrapping each header in an Expanded widget to stretch them equally
+                        Expanded(flex: 2, child: _buildHeader("Org Name", 80)),
+
+                        Expanded(flex: 2, child: _buildHeader("Email", 80)),
+                        Expanded(flex: 2, child: _buildHeader("Org Code", 80)),
                         Expanded(
                           flex: 2,
-                          child: _buildHeader(
-                            "Organization Name",
-                            teamNameWidth,
-                          ),
+                          child: _buildHeader("Teams Created", 80),
                         ),
                         Expanded(
                           flex: 2,
-                          child: _buildHeader("Email", seasonWidth),
-                        ),
-                        Expanded(
-                          flex: 1,
-                          child: _buildHeader("Organization ID", yearWidth),
+                          child: _buildHeader("Annual Teams", 80),
                         ),
 
-                        // Expanded(
-                        //   flex: 1,
-                        //   child: _buildHeader("Age Group", ageGroupWidth),
-                        // ),
-                        _buildHeader("Action", ageGroupWidth),
-
-                        // SizedBox(width: actionWidth),
-                        // Expanded(
-                        //     flex: 3,
-                        //     child: SizedBox())
+                        // Expanded(flex: 1, child: _buildHeader("Org ID", 80)),
+                        _buildHeader("Action", 80),
                       ],
                     ),
-
-                    // Row(
-                    //   children: [
-                    //     _buildHeader("Team Name", teamNameWidth),
-                    //     _buildHeader("Year", yearWidth),
-                    //     _buildHeader("Season", seasonWidth),
-                    //     _buildHeader("Age Group", ageGroupWidth),
-                    //     SizedBox(width: actionWidth),
-                    //   ],
-                    // ),
                   ),
                 ],
               ),
             ),
             const SizedBox(height: 8),
 
-            // Data Rows
+            // // Data Rows
             ...adminController.organization
                 .map(
                   (team) => SingleChildScrollView(
@@ -1103,63 +1100,63 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
 
   Widget _buildRow(BuildContext context, Organizations team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
-    return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
-      child: Container(
-        width: maxWidth,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-        margin: const EdgeInsets.symmetric(vertical: 6),
-        decoration: const BoxDecoration(color: Colors.white),
-        child: Row(
-          children: [
-            Expanded(
-              flex: 2,
-              child: _buildCell(team.name.toString(), teamNameWidth),
+    return Container(
+      width: maxWidth,
+      padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      decoration: const BoxDecoration(color: Colors.white),
+      child: Row(
+        children: [
+          Expanded(
+            flex: 2,
+            child: _buildCell(team.name.toString(), teamNameWidth),
+          ),
+          Expanded(
+            flex: 2,
+            child: _buildCell(team.email.toString(), teamNameWidth),
+          ),
+          Expanded(
+            flex: 2,
+            child: _buildCell(team.orgCode.toString(), teamNameWidth),
+          ),
+
+          Expanded(
+            flex: 2,
+            child: _buildCell(
+              team.teams_created_this_period.toString(),
+              seasonWidth,
             ),
-            Expanded(
-              flex: 2,
-              child: _buildCell(team.email.toString(), seasonWidth),
+          ),
+          Expanded(
+            flex: 2,
+            child: _buildCell(
+              team.annual_team_allocation.toString(),
+              seasonWidth,
             ),
-            Expanded(flex: 1, child: _buildCell(team.id.toString(), yearWidth)),
-            // _buildEditButton(context,),
-            InkWell(
-              onTap: () async {
-                orginizationUpateDialog(team);
-                // orginizationUpateDialog(team);
-                // Show dialog to edit player details
-                // await showDialog(
-                //   context: context,
-                //   barrierDismissible: true, builder: (BuildContext context) { return  SizedBox(); },
-                //   // builder: (_) => EditPlayerDialog(players: players,),
-                // );
-              },
-              child: Image.asset(
-                'assets/images/edit_icon.png', // Pencil icon image
-                height: 36.h,
-                width: 40.w,
-              ),
+          ),
+          // Expanded(flex: 1, child: _buildCell(team.id.toString(), yearWidth)),
+          // _buildEditButton(context,),
+          InkWell(
+            onTap: () async {
+              orginizationUpateDialog(team);
+            },
+            child: Image.asset(
+              'assets/images/edit_icon.png', // Pencil icon image
+              height: 36.h,
+              width: 40.w,
             ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  void orginizationUpateDialog(var team) {
+  void orginizationUpateDialog(Organizations team) {
     // final nameController = TextEditingController();
     // final emailController = TextEditingController();
     final AdminController adminController = Get.find<AdminController>();
     adminController!.orginizationNameController = TextEditingController(
-      text: team.display_name,
+      text: team.name,
     );
     adminController!.orginizationEmail = TextEditingController(
       text: team.email,
@@ -1180,9 +1177,10 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           } else {
             // adminController.adminCreateOrganization();
             // fdfdf
-            adminCreateOrganization(
+            adminEditOrganization(
               name: name,
               email: email,
+              id: team.id!,
               annualTeamAllocation: int.parse(org),
             );
             Navigator.pop(context);
@@ -2085,29 +2083,88 @@ class userManageOrWebLayout extends StatelessWidget {
   }
 }
 
-class Settings extends StatefulWidget {
-  const Settings({super.key});
+class Settings extends StatelessWidget {
+  final SettingsController controller = Get.put(SettingsController());
 
-  @override
-  State<Settings> createState() => _SettingsState();
-}
+  Settings({super.key}) {
+    // controller.fetchSettings();
+  }
 
-class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
-        Text(
-          "Email Notification",
-          style: fieldLabelStyle.copyWith(
-            color: AppColors.descriptiveTextColor,
-            fontSize: 14,
-            fontWeight: FontWeight.normal,
+        // Text("Unlock Price", style: fieldLabelStyle),
+        PrimaryTextField(
+          controller: controller.unlockPriceController,
+          label: 'Unlock Price',
+        ),
+
+        // SizedBox(height: 4),
+        // // Text("Access Duration (Days)", style: fieldLabelStyle),
+        // PrimaryTextField(
+        //   controller: controller.accessDurationController,
+        //   label: 'Duration (days)',
+        // ),
+        SizedBox(height: 10),
+        // Text("Notify Admin on Payment", style: fieldLabelStyle),
+        Obx(
+          () => SizedBox(
+            width: 500, // Set your desired width
+
+            child: DropdownButtonFormField<bool>(
+              value: controller.notifyAdmin.value,
+              decoration: InputDecoration(
+                labelText: "Notify Admin on Payment",
+                labelStyle: TextStyle(fontSize: 14, color: Colors.grey[700]),
+                contentPadding: const EdgeInsets.symmetric(
+                  vertical: 14,
+                  horizontal: 12,
+                ),
+                filled: true,
+                fillColor: Colors.grey.shade100,
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: BorderSide(color: Colors.grey.shade300),
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(10),
+                  borderSide: const BorderSide(
+                    color: Color(0xFF2B4582),
+                    width: 1.5,
+                  ),
+                ),
+              ),
+              dropdownColor: Colors.white,
+              icon: const Icon(Icons.arrow_drop_down, color: Colors.black87),
+              items: const [
+                DropdownMenuItem(value: true, child: Text("True")),
+                DropdownMenuItem(value: false, child: Text("False")),
+              ],
+              onChanged: (value) => controller.notifyAdmin.value = value!,
+            ),
           ),
         ),
+
+        SizedBox(height: 10),
+        // Text("Admin Email (optional)", style: fieldLabelStyle),
         PrimaryTextField(
-          controller: TextEditingController(),
-          label: 'Notification Email ',
+          controller: controller.adminEmailController,
+          label: 'Admin Email',
+        ),
+
+        SizedBox(height: 20),
+        // ElevatedButton(
+        //   onPressed: controller.saveSettings,
+        //   child: const Text("Save Settings"),
+        // ),
+        PrimaryButton(
+          onTap: controller.saveSettings,
+          title: "  Save Settings ",
         ),
       ],
     );

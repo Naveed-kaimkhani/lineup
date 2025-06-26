@@ -173,16 +173,16 @@ class SignInScreen extends StatelessWidget {
 
                                   // Sign In Button
                                   PrimaryButton(
-                                    onTap: controller.signIn,
-                                    //                                     onTap: (){
-                                    //                                       Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => ArrowKeyNavigationScreen(), // Replace with your screen
-                                    //   ),
-                                    // );
+                                    // onTap: controller.signIn,
+                                                                        onTap: (){
+                                                                          Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (context) => ArrowKeyNavigationScreen(), // Replace with your screen
+                                      ),
+                                    );
 
-                                    //                                     },
+                                                                        },
                                     title: 'Sign in',
                                     width: double.infinity,
                                     radius: 4.89.r,

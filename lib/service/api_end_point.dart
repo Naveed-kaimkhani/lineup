@@ -52,6 +52,8 @@ class APIEndPoints {
   // {{baseUrl}}/
 
   static const availableSlots = "$baseUrl/available-team-slots";
+  
+  static const setting = "$baseUrl/admin/settings";
 
   static const promoRenewal =
       "$baseUrl/organization-panel/subscription/redeem-promo";

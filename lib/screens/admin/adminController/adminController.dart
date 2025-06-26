@@ -16,6 +16,7 @@ import '../../../service/api/team.dart';
 import '../../../utils/snackbarUtils.dart';
 import 'orginatizationDialog.dart';
 
+import 'package:http/http.dart' as http;
 class AdminController extends GetxController {
   var organization = <Organizations?>[].obs; // flat list of Organizations
 
@@ -126,7 +127,6 @@ class AdminController extends GetxController {
       if (response.data != null && response.data!.isNotEmpty) {
         organization.value = response.data!;
         organization = organization;
-
         update();
       } else {
         // Handle the case where no teams are returned

@@ -196,6 +196,11 @@ class NewTeamController extends GetxController {
         onConfirm: () {
           CreateNewTeam(context);
         },
+        onCancel: () {
+          Get.back();
+
+          clearAllFields();
+        },
       );
 
       // dfdf
@@ -234,10 +239,28 @@ class NewTeamController extends GetxController {
     updateDimensions(context);
   }
 
+  void clearAllFields() {
+    orgCode.clear();
+    PromoCode.clear();
+    orgCodeValidationController.clear();
+
+    teamNameController.clear();
+    ageGroupController.clear();
+    enterAgeGroupController.clear();
+    seasonController.clear();
+    countryController.clear();
+    cityController.clear();
+    stateController.clear();
+
+    // organizationId = null;
+  }
+
   static void showConfirmationDialog({
     required String title,
     required String message,
     required VoidCallback onConfirm,
+
+    required VoidCallback onCancel,
     Color titleColor = Colors.black,
     // Color confirmButtonColor = AppColors.primaryColor,
     Color cancelButtonColor = Colors.grey,
@@ -279,7 +302,7 @@ class NewTeamController extends GetxController {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () => Get.back(), // Dismiss dialog
+                          onPressed: onCancel,
                           style: ElevatedButton.styleFrom(
                             backgroundColor: cancelButtonColor,
                             foregroundColor: Colors.white,
@@ -678,13 +701,9 @@ class NewTeamController extends GetxController {
     ); // Replace with `loginUser()` if needed
 
     if (response.success!) {
-      addPlayerResponse.value = response!.data!;
+      addPlayerResponse.value = response.data!;
       clearPlayerFormFields();
       teamController.fetchGetPlayer(player.id!);
-      // Get.toNamed(RoutesPath.mainDashboardScreen);
-      SnackbarUtils.showSuccess(response.message.toString());
-      // Get.snackbar('Success', 'User Add Player in successfully');
-      // Navigate to home or dashboard
     } else {
       SnackbarUtils.showErrorr(response.message.toString());
     }

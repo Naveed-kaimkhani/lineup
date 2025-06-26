@@ -44,6 +44,25 @@ class AdminApi {
     }
   }
 
+  static Future<http.Response> saveSettings(Map<String, dynamic> data) async {
+    toggleLoader(true);
+    String? token = await SharedPreferencesUtil.read(
+      SharedPreferencesKeysConstants.bearerToken,
+    );
+    log("token $token");
+    final response = await http.put(
+      Uri.parse(APIEndPoints.setting),
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer $token",
+      },
+      body: json.encode(data),
+    );
+    toggleLoader(false);
+    log(response.body);
+    return response;
+  }
+
   static Future<BaseResponse<List<Position?>>> adminPosition() async {
     try {
       final response = await DioUtil.request<List<Position>>(

@@ -296,13 +296,21 @@ class Organizations {
   String? email;
   String? createdAt;
   String? updatedAt;
+  int? annual_team_allocation;
+  int? teams_created_this_period;
+  String? orgCode;
+  // String? subscription_expires_at;
 
   Organizations({
     this.id,
     this.name,
     this.email,
+    this.annual_team_allocation,
+    // this.subscription_expires_at,
     this.createdAt,
     this.updatedAt,
+    this.teams_created_this_period,
+    this.orgCode,
   });
 
   factory Organizations.fromJson(Map<String, dynamic> json) {
@@ -311,6 +319,12 @@ class Organizations {
       id: json['id'] ?? 0,
       name: json['name'] ?? '',
       email: json['email'] ?? '',
+
+      annual_team_allocation: json['annual_team_allocation'] ?? '',
+
+      // subscription_expires_at: json['subscription_expires_at'] ?? '',
+      teams_created_this_period: json['teams_created_this_period'] ?? '',
+      orgCode: json['organization_code'] ?? '',
       createdAt: json['created_at'] ?? '',
       updatedAt: json['updated_at'] ?? '',
     );

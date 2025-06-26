@@ -394,7 +394,7 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
               if (index != -1) {
                 teamController.playerPreference[index].preferredPositionIds =
                     favIds;
-                SnackbarUtils.showSuccess("Successfully Added");
+                // SnackbarUtils.showSuccess("Successfully Added");
                 print('Found at index: $index');
               } else {
                 SnackbarUtils.showErrorr("Please Select Favorite Position");
