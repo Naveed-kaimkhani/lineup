@@ -113,6 +113,8 @@ class LineupTextField extends StatelessWidget {
   final bool isLable;
   final TextInputType keyboardType;
   final Widget? prefixIcon;
+    final FocusNode? focusNode; // Add focusNode
+
   final Widget? suffixIcon;
   List<Position?> positions;
   final ValueChanged<String>? onChanged; // <- this is the parameter
@@ -129,6 +131,8 @@ class LineupTextField extends StatelessWidget {
     super.key,
     this.controller,
       this.onFieldSubmitted,
+          this.focusNode, // Pass focusNode to the TextField
+
 
     required this.positions,
     this.onChanged,
@@ -164,6 +168,8 @@ class LineupTextField extends StatelessWidget {
               height: 30, // responsive height
               child: TextFormField(
                 // focusNode: focusNode[foc], // Make sure this line exists!
+                        focusNode: focusNode, // Assign the passed focusNode
+
                 onTap: (){
                 
                  int index = textFieldKey.indexOf(key);
