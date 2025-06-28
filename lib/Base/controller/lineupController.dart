@@ -19,7 +19,8 @@ class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
-
+final focusNodesGrid = <int, Map<String, FocusNode>>{};
+  final textControllersGrid = <int, Map<String, TextEditingController>>{};
   Map<String, Map<String, String>>? fixedAssignments;
   RxBool isPayment = false.obs;
   RxBool isLoading = false.obs;
