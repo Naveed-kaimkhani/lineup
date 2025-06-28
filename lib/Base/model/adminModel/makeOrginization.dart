@@ -45,7 +45,6 @@ class OrgnizatioResponse {
   });
 
   factory OrgnizatioResponse.fromJson(Map<String, dynamic> json) {
-    log(json.toString());
     return OrgnizatioResponse(
       id: json['id'] as int?,
       name: json['name'] as String?,

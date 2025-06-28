@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -85,9 +85,6 @@ class _TeamDashboardBody extends StatelessWidget {
   // This method builds the summary statistics header and action buttons
   // It's responsive - changes layout based on screen width
   Widget _buildSummaryAndActions(BuildContext context) {
-    // log("team isssssss");
-    // log(controller.checkTeamEditable.value.toString());
-    // LayoutBuilder provides the available space constraints
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth; // Get available width

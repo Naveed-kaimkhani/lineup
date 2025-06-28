@@ -35,35 +35,11 @@ class OrginizationsApi {
     }
   }
 
-  // static Future<BaseResponse<Object>> createOrginization(
-  //   OrginizationCreate orginizationCreate,
-  // ) async {
-  //   log(orginizationCreate.toString());
-  //   try {
-  //     final response = await DioUtil.request<OrgnizatioResponse>(
-  //       endpoint: APIEndPoints.adminOrganizations,
-  //       requestBody: orginizationCreate.toJson(),
-  //       fromJsonT: OrgnizatioResponse.fromJson,
-  //       httpRequestType: HttpRequestType.post,
-  //     );
-
-  //     return response;
-  //   } catch (e) {
-  //     print('Error: $e');
-  //     return BaseResponse<OrgnizatioResponse>(
-  //       success: false,
-  //       message: 'An error occurred: ${e.toString()}',
-  //       data: null,
-  //     );
-  //   }
-  // }
 
   static Future<BaseResponse<OrgnizatioResponse>> createOrginization(
     OrginizationCreate orginizationCreate,
   ) async {
-    log(
-      jsonEncode(orginizationCreate.toJson()),
-    ); // log("name iss${orginizationCreate.name}");
+    
     final url = Uri.parse("http://18.189.193.38/api/v1/admin/organizations");
     String? token = await SharedPreferencesUtil.read(
       SharedPreferencesKeysConstants.bearerToken,
@@ -83,8 +59,7 @@ class OrginizationsApi {
           "annual_team_allocation": 11,
         }),
       );
-      // log(orginizationCreate.toJson().toString());
-      // log(response.body);
+      
       if (response.statusCode == 200 || response.statusCode == 201) {
         final Map<String, dynamic> responseData = jsonDecode(response.body);
 
@@ -103,7 +78,6 @@ class OrginizationsApi {
           );
         }
       } else {
-        log(response.body);
         return BaseResponse<OrgnizatioResponse>(
           success: false,
           message: 'HTTP error: ${response.statusCode}',

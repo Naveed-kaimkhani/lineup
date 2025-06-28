@@ -15,7 +15,6 @@ class TeamRepository {
       Uri.parse('$baseUrl?page=$page'),
       headers: {'Authorization': 'Bearer $token'},
     );
-    log(response.body);
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final List<OrgTeamModel> teams =

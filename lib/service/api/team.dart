@@ -102,7 +102,7 @@ class TeamsApi {
         'Accept': 'application/json',
       },
     );
-    log(response.body);
+    
     return response;
   }
 

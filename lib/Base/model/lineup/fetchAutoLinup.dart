@@ -15,7 +15,6 @@ class FetchAutoFillLineups {
   });
 
   factory FetchAutoFillLineups.fromJson(Map<String, dynamic>? json) {
-    log(json.toString());
     if (json == null) return FetchAutoFillLineups();
 
     return FetchAutoFillLineups(

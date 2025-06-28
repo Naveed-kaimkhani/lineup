@@ -49,7 +49,6 @@ class AdminApi {
     String? token = await SharedPreferencesUtil.read(
       SharedPreferencesKeysConstants.bearerToken,
     );
-    log("token $token");
     final response = await http.put(
       Uri.parse(APIEndPoints.setting),
       headers: {
@@ -110,7 +109,6 @@ class AdminApi {
       Uri.parse(APIEndPoints.activationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
-    // log(response.body);
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();
@@ -121,12 +119,11 @@ class AdminApi {
 
   static Future<List<ActivationRecord>> fetchOrgHistory() async {
     String? token = await SharedPreferencesUtil.read("org_access_token");
-    log("token vlaue $token");
     final response = await http.get(
       Uri.parse(APIEndPoints.orgActivationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
-    log(response.body);
+    
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();

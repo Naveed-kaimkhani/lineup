@@ -540,9 +540,6 @@ class TabletOrWebLayout extends StatelessWidget {
 
             InkWell(
               onTap: () async {
-                log(team.sportType);
-
-                log(team.teamType);
                 bool isEditable = await controller.isTeamEditable(team.id);
                 if (isEditable) {
                   // SnackbarUtils.showSuccess("edditable");

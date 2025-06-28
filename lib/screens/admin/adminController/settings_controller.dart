@@ -45,7 +45,6 @@ class SettingsController extends GetxController {
 
     try {
       final response = await AdminApi.saveSettings(model.toJson());
-      log(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         SnackbarUtils.showSuccess("Settings saved successfully");
       } else {
