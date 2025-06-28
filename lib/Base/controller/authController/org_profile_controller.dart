@@ -31,9 +31,9 @@ class OrgProfileController extends GetxController {
     final code = await SharedPreferencesUtil.read("organization_code");
     final emailVal = await SharedPreferencesUtil.read("organization_email");
     final subStatus = await SharedPreferencesUtil.read("subscription_status");
-    final subExpires = await SharedPreferencesUtil.read(
-      "subscription_expires_at",
-    );
+    // String? subExpires = await SharedPreferencesUtil.read(
+    //   "subscription_expires_at",
+    // );
 
     if (name != null) {
       firstName.value = name;
@@ -46,7 +46,6 @@ class OrgProfileController extends GetxController {
 
     // You can use the other values like code, subStatus, subExpires as needed
   }
-
 
   @override
   void onClose() {

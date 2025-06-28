@@ -1,6 +1,4 @@
-import 'dart:developer';
 
-import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
@@ -20,10 +18,8 @@ import '../../model/player/addPaler.dart';
 import '../../model/player/addPlayerResponse.dart';
 import '../../model/promoCodeReq.dart';
 import '../../model/teamModel/createModel.dart';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
 import '../paymantContrller.dart'; // Import Dio for API call
 
 class NewTeamController extends GetxController {
@@ -120,24 +116,27 @@ class NewTeamController extends GetxController {
     if (currentPage.value == 1) {
       if (teamNameController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please enter team name');
-      } else if (!isHavingCredit.value && orgCode.text.trim().isEmpty) {
-        SnackbarUtils.showErrorr('Please enter organization code');
-      } else {
+      }
+      //  else if (!isHavingCredit.value && orgCode.text.trim().isEmpty) {
+      //   SnackbarUtils.showErrorr('Please enter organization code');
+      // }
+      else {
         if (isHavingCredit.value) {
           _goToNext(context); // ✅ Credit available, skip promo code check
         } else {
-          final loader = Get.find<LoaderController>();
-          loader.isLoading.value = true; // 🔄 Show loader
+          // final loader = Get.find<LoaderController>();
+          // loader.isLoading.value = true; // 🔄 Show loader
 
-          final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
+          // final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
 
-          loader.isLoading.value = false; // 🔄 Hide loader
+          _goToNext(context);
+          // loader.isLoading.value = false; // 🔄 Hide loader
 
-          if (isValid) {
-            _goToNext(context);
-          } else {
-            // SnackbarUtils.showErrorr('Invalid Organization Code');
-          }
+          // if (isValid) {
+          //   _goToNext(context);
+          // } else {
+          //   // SnackbarUtils.showErrorr('Invalid Organization Code');
+          // }
         }
       }
     }
@@ -445,10 +444,23 @@ class NewTeamController extends GetxController {
         newTeamController.isHavingCredit.value = true;
 
         await Get.dialog(CreateTeamDialog(), barrierDismissible: true);
-        // SnackbarUtils.showSuccess(response.message ?? "");
-        // ssssssssssss
       } else {
         SnackbarUtils.showErrorr(response.message ?? "");
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> valideOrgCode(BuildContext context, String orgCode) async {
+    try {
+      // final request = PromoCodeRequest(code: PromoCode.text.trim());
+      final response = await TeamsApi.validatePromoCode(orgCode);
+      if (response) {
+        await Get.dialog(CreateTeamDialog(), barrierDismissible: true);
+      } else {
+        // SnackbarUtils.showErrorr(response.message ?? "");
       }
     } catch (e) {
       // Handle any errors that occur
@@ -489,23 +501,19 @@ class NewTeamController extends GetxController {
 
   void orgCodeDialog(BuildContext context) async {
     Get.dialog(
-      PromoCodeDialog(
+      OrgCodeDialog(
         nameController: orgCodeValidationController,
-        // vkjkjj
+
         onSubmit: () async {
           final name = orgCodeValidationController.text.trim();
 
           // Perform your validation or logic here
           if (name.isEmpty) {
-            Get.snackbar("Error", "Please enter a Promo Code");
+            Get.snackbar("Error", "Please enter a Organization Code");
           } else {
-            // promoCodeReq(context);
-            final isValid = await TeamsApi.validatePromoCode(
-              orgCode.text.trim(),
-            );
-
+            valideOrgCode(context, name);
             Get.back(); // Close dialog
-            Get.back(); // Close dialog
+            // Get.back(); // Close dialog
           }
         },
       ),
@@ -544,7 +552,7 @@ class NewTeamController extends GetxController {
 
       city: cityController.text,
       state: countryController.text,
-      organizationId: orgCode.text,
+      organizationId: orgCodeValidationController.text,
     );
   }
 
@@ -570,7 +578,8 @@ class NewTeamController extends GetxController {
           // Navigate to home or dashboard
           // Get.toNamed(RoutesPath.home);
         } else {
-          Get.snackbar('Error', response.message ?? 'Something went wrong');
+          SnackbarUtils.showErrorr(response.message ?? 'Something went wrong');
+          // Get.snackbar('Error', response.message ?? 'Something went wrong');
         }
       } catch (e) {
         Get.back(); // Close loading dialog

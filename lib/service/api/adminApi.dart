@@ -59,7 +59,6 @@ class AdminApi {
       body: json.encode(data),
     );
     toggleLoader(false);
-    log(response.body);
     return response;
   }
 

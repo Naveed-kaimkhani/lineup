@@ -1,7 +1,10 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/available_teamSlots_controller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
+import 'package:gaming_web_app/Base/controller/teamController/edit_team_dialogue.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -179,31 +182,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                     ),
                     Row(
                       children: [
-                        // PrimaryButton(
-                        //   width: 300,
-
-                        //   backgroundColor: AppColors.primaryColor,
-                        //   onTap: () async {
-
-                        //     final NewTeamController newTeamController =
-                        //         Get.find<NewTeamController>();
-                        //     newTeamController.isHavingCredit.value = true;
-                        //     await showDialog(
-                        //       context: context,
-                        //       barrierDismissible: true,
-                        //       builder: (_) => CreateTeamDialog(),
-                        //     );
-                        //   },
-                        //   radius: 20.r,
-
-                        //   textStyle: descriptiveStyle.copyWith(
-                        //     color: Colors.white,
-                        //     fontSize: isMobile ? 18 : 18,
-                        //   ),
-
-                        //   title: 'Create Team (1 Credit Left)',
-                        //   // backgroundColor: AppColors.secondaryColor,
-                        // ),
                         Obx(() {
                           final count =
                               availableSlotsController
@@ -216,7 +194,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                             backgroundColor: AppColors.primaryColor,
                             onTap: () async {
                               toggleLoader(true);
-                              // Fetch the latest slots
 
                               await availableSlotsController
                                   .fetchAvailableSlots();
@@ -239,7 +216,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                   builder: (_) => CreateTeamDialog(),
                                 );
                               } else {
-                              
                                 SnackbarUtils.showErrorr(
                                   "You do not have any available team activation slots.",
                                 );
@@ -353,26 +329,52 @@ class _MobileLayout extends StatelessWidget {
                       _buildInfoRow("Season", team.season ?? "-"),
                       _buildInfoRow("Age Group", team.ageGroup),
                       const SizedBox(height: 10),
-                      InkWell(
-                        onTap: () {
-                          showCustomDialog(
-                            context: context,
-                            title: 'Delete Team',
-                            description:
-                                'Are you sure you want to delete this team?',
-                            onOk: () async {
-                              await globleController.teamDelete(team.id);
+                      Row(
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              showCustomDialog(
+                                context: context,
+                                title: 'Delete Team',
+                                description:
+                                    'Are you sure you want to delete this team?',
+                                onOk: () async {
+                                  await globleController.teamDelete(team.id);
+                                },
+                                onCancel: () {
+                                  print("Cancel pressed");
+                                },
+                              );
                             },
-                            onCancel: () {
-                              print("Cancel pressed");
+                            child: Image.asset(
+                              'assets/images/delete_icon.png',
+                              height: 36.h,
+                              width: 40.w,
+                            ),
+                          ),
+
+                          InkWell(
+                            onTap: () {
+                              showCustomDialog(
+                                context: context,
+                                title: 'Edit Team',
+                                description:
+                                    'Are you sure you want to delete this team?',
+                                onOk: () async {
+                                  await globleController.teamDelete(team.id);
+                                },
+                                onCancel: () {
+                                  print("Cancel pressed");
+                                },
+                              );
                             },
-                          );
-                        },
-                        child: Image.asset(
-                          'assets/images/delete_icon.png',
-                          height: 36.h,
-                          width: 40.w,
-                        ),
+                            child: Image.asset(
+                              'assets/images/edit_icon.png',
+                              height: 36.h,
+                              width: 40.w,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
@@ -416,6 +418,8 @@ class _MobileLayout extends StatelessWidget {
 class TabletOrWebLayout extends StatelessWidget {
   // final TeamController controller = Get.put(TeamController());
   final TeamController controller = Get.find<TeamController>();
+
+  final NewTeamController tamController = Get.find<NewTeamController>();
   final double teamNameWidth = 160;
   final double yearWidth = 90;
   final double seasonWidth = 100;
@@ -503,6 +507,10 @@ class TabletOrWebLayout extends StatelessWidget {
     return InkWell(
       onTap: () async {
         controller.teamDataIndex.value = team.id;
+
+        controller.checkTeamEditable.value = await controller.isTeamEditable(
+          team.id,
+        );
         final prefs = await SharedPreferences.getInstance();
         await prefs.setInt('teamInfoId', team.id);
         controller.fetchGetTeamData();
@@ -529,6 +537,56 @@ class TabletOrWebLayout extends StatelessWidget {
               child: _buildCell(team.season ?? "-", seasonWidth),
             ),
             Expanded(flex: 1, child: _buildCell(team.ageGroup, ageGroupWidth)),
+
+            InkWell(
+              onTap: () async {
+                log(team.sportType);
+
+                log(team.teamType);
+                bool isEditable = await controller.isTeamEditable(team.id);
+                if (isEditable) {
+                  // SnackbarUtils.showSuccess("edditable");
+                  // showEditTeamDialog(team.id.toString());
+                  showEditTeamDialog(
+                    team.id.toString(),
+                    hints: {
+                      'teamName': team.name,
+                      'ageGroup': team.ageGroup,
+                      'season': team.season,
+                      'year': team.year.toString(),
+                      'city': team.city,
+                      'state': team.state,
+                      'sportType': team.sportType,
+                      'teamType': team.teamType,
+                    },
+                  );
+                } else {
+                  showCustomDialog(
+                    context: context,
+                    title: 'Your Team has been Expired',
+                    description: 'Are you want to renew team activation?',
+                    onOk: () async {
+                      final controlle = Get.find<NewTeamController>();
+
+                      // globleController.teamDelete(team.id!);
+                      String? url = await controller.getRenewalLinkForTeam(
+                        team.id,
+                      );
+                      controlle.launchPayUrl(url ?? '');
+                    },
+                    onCancel: () {
+                      Get.back();
+                    },
+                  );
+                  // SnackbarUtils.showErrorr("not edditable");
+                }
+              },
+              child: Image.asset(
+                'assets/images/edit_icon.png',
+                height: 36.h,
+                width: 40.w,
+              ),
+            ),
             InkWell(
               onTap: () {
                 // // Delete logic

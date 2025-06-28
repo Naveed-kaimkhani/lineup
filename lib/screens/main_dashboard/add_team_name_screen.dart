@@ -81,28 +81,27 @@ class _AddTeamNameScreenState extends State<AddTeamNameScreen> {
                     ),
                     SizedBox(height: 16), // Fixed spacing between fields
 
-                    Padding(
-                      padding: const EdgeInsets.all(0.0),
-                      child: GetBuilder<OrganizationController>(
-                        builder: (controller) {
-                          if (controller.isLoading) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
+                    // Padding(
+                    //   padding: const EdgeInsets.all(0.0),
+                    //   child: GetBuilder<OrganizationController>(
+                    //     builder: (controller) {
+                    //       if (controller.isLoading) {
+                    //         return const Center(
+                    //           child: CircularProgressIndicator(),
+                    //         );
+                    //       }
 
-                          return PrimaryTextField(
-                            controller: controllers.orgCode,
-                            label:
-                                check
-                                    ? 'Organization Code (Optional)'
-                                    : 'Organization Code',
-                            hintText: 'Tiger',
-                          );
-                        },
-                      ),
-                    ),
-
+                    //       return PrimaryTextField(
+                    //         controller: controllers.orgCode,
+                    //         label:
+                    //             check
+                    //                 ? 'Organization Code (Optional)'
+                    //                 : 'Organization Code',
+                    //         hintText: 'Tiger',
+                    //       );
+                    //     },
+                    //   ),
+                    // ),
                     SizedBox(
                       height: betweenFieldsSpacing,
                     ), // Add bottom padding

@@ -219,18 +219,38 @@ class OrgProfileDialogue extends StatelessWidget {
                                                 ),
                                               ),
                                             ),
-                                            PrimaryButton(
-                                              onTap: () async {
-                                                await SharedPreferencesUtil.clear();
-                                                Get.offAllNamed(
-                                                  RoutesPath.signIn,
-                                                ); // Navigates and clears navigation stack
-                                              },
-                                              title: 'Logout',
-                                              width: double.infinity,
-                                              radius: 4.89.r,
-                                              backgroundColor:
-                                                  AppColors.secondaryColor,
+                                            Column(
+                                              children: [
+                                                PrimaryButton(
+                                                  onTap: () async {
+                                                    await SharedPreferencesUtil.clear();
+                                                    Get.offAllNamed(
+                                                      RoutesPath.signIn,
+                                                    ); // Navigates and clears navigation stack
+                                                  },
+                                                  title: 'Logout',
+                                                  width: double.infinity,
+                                                  radius: 4.89.r,
+                                                  backgroundColor:
+                                                      AppColors.secondaryColor,
+                                                ),
+                                                SizedBox(height: 10),
+                                                Align(
+                                                  alignment:
+                                                      Alignment.bottomCenter,
+                                                  child: TextButton(
+                                                    onPressed: () {
+                                                      Get.toNamed(
+                                                        RoutesPath
+                                                            .ORGChangePasswordScreen,
+                                                      );
+                                                    },
+                                                    child: Text(
+                                                      "Reset password",
+                                                    ),
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),

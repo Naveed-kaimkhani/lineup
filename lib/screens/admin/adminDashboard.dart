@@ -337,7 +337,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
     required String email,
     required int annualTeamAllocation,
   }) async {
-    log("in methodd");
+    // log("in methodd");
     final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
 
     try {

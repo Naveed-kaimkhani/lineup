@@ -208,7 +208,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                                     () => {
                                       newTeamController.pageIndex(context),
                                     },
-
                                 style: ElevatedButton.styleFrom(
                                   backgroundColor: const Color(0xFF003478),
                                   shape: RoundedRectangleBorder(

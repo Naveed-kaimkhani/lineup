@@ -4,6 +4,7 @@ import 'dart:developer';
 import 'package:gaming_web_app/Base/model/response/base_response.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 
@@ -50,6 +51,7 @@ class TeamsApi {
 
   static Future<bool> validatePromoCode(String promoCode) async {
     try {
+      toggleLoader(true);
       final token = await SharedPreferencesUtil.read(
         SharedPreferencesKeysConstants.bearerToken,
       );
@@ -62,6 +64,7 @@ class TeamsApi {
           'Content-Type': 'application/json',
         },
       );
+      toggleLoader(false);
       if (response.statusCode == 200) {
         final jsonMap = jsonDecode(response.body);
         if (jsonMap['success'] == true) {
@@ -80,6 +83,66 @@ class TeamsApi {
       SnackbarUtils.showErrorr('Error checking promo code.');
       return false;
     }
+  }
+
+  static Future<http.Response> checkTeamEditability(int teamId) async {
+    final token = await SharedPreferencesUtil.read(
+      SharedPreferencesKeysConstants.bearerToken,
+    ); // Change key as per your setup
+
+    final url = Uri.parse(
+      '${APIEndPoints.baseUrl}/teams/$teamId/check-editability',
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+    log(response.body);
+    return response;
+  }
+
+  static Future<http.Response> generateRenewalLinkForTeam(int teamId) async {
+    final token = await SharedPreferencesUtil.read(
+      SharedPreferencesKeysConstants.bearerToken,
+    ); // Change key as per your setup
+
+    final url = Uri.parse(
+      '${APIEndPoints.baseUrl}/teams/$teamId/generate-renewal-link',
+    );
+
+    final response = await http.get(
+      url,
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+      },
+    );
+
+    return response;
+  }
+
+  Future<String?> getRenewalLink(int teamId) async {
+    try {
+      final response = await TeamsApi.generateRenewalLinkForTeam(teamId);
+
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        if (body['success'] == true) {
+          return body['data']?['payment_url'];
+        }
+      } else {
+        log('Failed to generate renewal link. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Error generating renewal link: $e');
+    }
+    return null;
   }
 
   static Future<BaseResponse<List<GetPlayer?>>> getPlayer(int id) async {
@@ -213,7 +276,7 @@ class TeamsApi {
       playerPreferences: playerPreference,
     );
     var jsonString = playerPreference.map((e) => e.toJson()).toList();
-    log(data.toJson().toString());
+    // log(data.toJson().toString());
     final response = await DioUtil.request<void>(
       loadingText: 'Submitting players...',
       endpoint: "/teams/$teamId/bulk-player-preferences",

@@ -9,7 +9,7 @@ class CreateTeam {
   String ageGroup;
   String? season; // Nullable field
   int year;
-  String? city;  // Nullable field
+  String? city; // Nullable field
   String? state; // Nullable field
   String organizationId;
 
@@ -18,9 +18,9 @@ class CreateTeam {
     required this.sportType,
     required this.teamType,
     required this.ageGroup,
-    this.season,  // Optional field
+    this.season, // Optional field
     required this.year,
-    this.city,  // Optional field
+    this.city, // Optional field
     this.state, // Optional field
     required this.organizationId,
   });
@@ -36,10 +36,9 @@ class CreateTeam {
       year: json['year'] as int? ?? 0, // Default value if missing
       city: json['city'] as String?, // Optional field
       state: json['state'] as String?, // Optional field
-      organizationId: json['organization_code'] , // Default value if missing
+      organizationId: json['organization_code'], // Default value if missing
     );
   }
-
 
   // Method to convert CreateTeam instance back to a JSON map
   Map<String, dynamic> toJson() {
@@ -105,9 +104,10 @@ class CreateTeamResponse {
       userId: json['user_id'] as int?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
-      organization: json['organization'] != null
-          ? Organization.fromJson(json['organization'])
-          : null,
+      organization:
+          json['organization'] != null
+              ? Organization.fromJson(json['organization'])
+              : null,
     );
   }
 

@@ -68,7 +68,6 @@ class OrginizationsApi {
     String? token = await SharedPreferencesUtil.read(
       SharedPreferencesKeysConstants.bearerToken,
     );
-    log(token ?? "");
     try {
       final response = await http.post(
         url,

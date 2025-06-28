@@ -314,7 +314,6 @@ class Organizations {
   });
 
   factory Organizations.fromJson(Map<String, dynamic> json) {
-    // log(json.toString());
     return Organizations(
       id: json['id'] ?? 0,
       name: json['name'] ?? '',

@@ -1,6 +1,8 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaming_web_app/main.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -19,6 +21,8 @@ class TeamController extends GetxController {
   RxList<Team?> teams = <Team?>[].obs;
   Rx<TeamData?> teamData = TeamData().obs;
   RxInt teamDataIndex = 0.obs;
+  RxBool checkTeamEditable = true.obs;
+
   TextEditingController codeField = TextEditingController();
   // TextEditingController code =TextEditingController();
   RxList<Organizations?> organization = <Organizations?>[].obs;
@@ -64,7 +68,7 @@ class TeamController extends GetxController {
     try {
       // Call the API to get the list of teams
       final response = await TeamsApi.getTeam();
-
+      // log(response.data.toString());
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
         teams.value = response.data!;
@@ -136,6 +140,45 @@ class TeamController extends GetxController {
       // Handle any errors that occur
       print('Error fetching teams: $e');
     }
+  }
+
+  Future<bool> isTeamEditable(int teamId) async {
+    try {
+      toggleLoader(true);
+      // log("isEditiable");
+      final response = await TeamsApi.checkTeamEditability(teamId);
+      toggleLoader(false);
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        return body['success'] == true && body['data']?['is_editable'] == true;
+      } else {
+        log('Server responded with status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      log('Exception in isTeamEditable: $e');
+      return false;
+    }
+  }
+
+  Future<String?> getRenewalLinkForTeam(int teamId) async {
+    try {
+      toggleLoader(true);
+      final response = await TeamsApi.generateRenewalLinkForTeam(teamId);
+
+      toggleLoader(false);
+      if (response.statusCode == 200) {
+        final body = jsonDecode(response.body);
+        if (body['success'] == true) {
+          return body['data']?['payment_url'];
+        }
+      } else {
+        log('Failed to generate renewal link. Status: ${response.statusCode}');
+      }
+    } catch (e) {
+      log('Error generating renewal link: $e');
+    }
+    return null;
   }
 
   Future<void> fetchGetTeamData() async {

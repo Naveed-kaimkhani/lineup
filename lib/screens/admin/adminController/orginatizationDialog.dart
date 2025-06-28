@@ -362,6 +362,78 @@ class PromoCodeDialog extends StatelessWidget {
   }
 }
 
+
+
+
+class OrgCodeDialog extends StatelessWidget {
+  final TextEditingController nameController;
+
+  final VoidCallback onSubmit;
+
+  const OrgCodeDialog({
+    super.key,
+    required this.nameController,
+
+    required this.onSubmit,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      backgroundColor: Colors.white,
+      title: Row(
+        children: [
+          Text(
+            '  Apply Organization Code',
+            style: TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.bold,
+              color: AppColors.secondaryColor,
+            ),
+          ),
+          Spacer(),
+          // Spacer(),
+          InkWell(
+            onTap: () {
+              Get.back();
+            },
+
+            child: Icon(Icons.cancel, size: 50, color: Colors.red),
+          ),
+        ],
+      ),
+
+      content: SizedBox(
+        width: 700,
+        height: 300,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            TextField(
+              controller: nameController,
+              decoration: const InputDecoration(
+                labelText: 'Enter a Organization Code',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            const SizedBox(height: 16),
+          ],
+        ),
+      ),
+      actions: [
+        PrimaryButton(
+          width: double.infinity,
+          onTap: onSubmit,
+          title: 'Submit',
+          backgroundColor: AppColors.descriptiveTextColor,
+        ),
+      ],
+    );
+  }
+}
+
 void showPaymentDialog(
   BuildContext context, {
   required VoidCallback PromoCode,

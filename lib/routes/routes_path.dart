@@ -25,4 +25,7 @@ class RoutesPath {
 
   static const String paymentHistoryScreen = '/PaymentHistoryScreen';
   static const String OrganizationSignin = '/OrganizationSignin';
+static const String changePasswordScreen = '/ChangePasswordScreen';
+static const String ORGChangePasswordScreen = '/ORGChangePasswordScreen';
+
 }

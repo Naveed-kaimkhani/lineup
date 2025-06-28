@@ -231,6 +231,19 @@ class UserprofileDialog extends StatelessWidget {
                                               backgroundColor:
                                                   AppColors.secondaryColor,
                                             ),
+                                            SizedBox(height: 10),
+                                            Align(
+                                              alignment: Alignment.bottomCenter,
+                                              child: TextButton(
+                                                onPressed: () {
+                                                  Get.toNamed(
+                                                    RoutesPath
+                                                        .changePasswordScreen,
+                                                  );
+                                                },
+                                                child: Text("Reset password"),
+                                              ),
+                                            ),
                                           ],
                                         ),
                                       ],

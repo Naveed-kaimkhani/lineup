@@ -54,11 +54,20 @@ void showFullWidthDialogPay(BuildContext context) {
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.pop(context);
-                        await showDialog(
-                          context: context,
-                          barrierDismissible: true,
-                          builder: (_) => CreateTeamDialog(),
-                        );
+                        // await showDialog(
+                        //   context: context,
+                        //   barrierDismissible: true,
+                        //   builder: (_) => CreateTeamDialog(),
+                        // );
+                        // await showDialog(
+                        //   context: context,
+                        //   barrierDismissible: true,
+                        //   builder: (_) => CreateTeamDialog(),
+                        // );
+
+                        controlle.orgCodeDialog(context);
+
+                        // await
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.primaryColor,
@@ -91,12 +100,11 @@ void showFullWidthDialogPay(BuildContext context) {
                           },
                           OnlinePayment: () async {
                             final response = await AdminApi.getPaymentLink();
-                        
+
                             if (response.success!) {
                               // Navigator.pop(context);
                               SnackbarUtils.showSuccess(
                                 response.message.toString(),
-
                               );
                               controlle.launchPayUrl(response.data!.paymentUrl);
                             } else {
