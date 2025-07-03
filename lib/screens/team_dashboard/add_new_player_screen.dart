@@ -260,8 +260,6 @@ class _LineupWidgetState extends State<LineupWidget> {
 
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
-    // final Map<int, Map<String, FocusNode>> focusNodesGrid = {};
-    // final Map<int, Map<String, TextEditingController>> textControllersGrid = {};
     int i = 1;
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
