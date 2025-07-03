@@ -5,7 +5,12 @@ class APIEndPoints {
   // static const baseUrl = "https://jzeescollection.com/api/v1";
 
   static const forgotPassword = "/user/auth/forgot-password";
+  
+  static const orgforgotPassword = "/organization-panel/auth/forgot-password";
   static const resetPassword = "/user/auth/reset-password";
+
+
+  static const orgResetPassword = "/organization-panel/auth/reset-password";
   static const changePassword = "/user/auth/change-password";
   static const userProfile = "/user/auth/profile";
 

@@ -92,16 +92,17 @@ class SignInController extends GetxController {
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
 
-    // if (isEmailValid && isPasswordValid)
-    if (true) {
-      // final request = LoginModel(email: email, password: password);
+    if (isEmailValid && isPasswordValid)
+    // if (true)
+    {
+      final request = LoginModel(email: email, password: password);
 
-      final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
-        // email: "naveedkaimkhami@gmail.com",
-        // email: "admin@lineup.com",
-        password: "12345678",
-      );
+      // final request = LoginModel(
+      //   email: "shahbazvidicraze@gmail.com",
+      //   // email: "naveedkaimkhami@gmail.com",
+      //   // email: "admin@lineup.com",
+      //   password: "12345678",
+      // );
       final response;
       if (email.toString() == "admin@lineup.com")
       // if (true)
@@ -175,7 +176,7 @@ class SignInController extends GetxController {
           "password": password,
         });
         toggleLoader(false); // Close dialog
-        // log(response.toString());
+        log(response.toString());
         if (response['success'] == true) {
           final token = response['data']['access_token'];
           final orgData = response['data']['organization'];
@@ -209,10 +210,10 @@ class SignInController extends GetxController {
             "subscription_status",
             orgData["subscription_status"],
           );
-          await SharedPreferencesUtil.save(
-            "subscription_expires_at",
-            orgData["subscription_expires_at"],
-          );
+          // await SharedPreferencesUtil.save(
+          //   "subscription_expires_at",
+          //   orgData["subscription_expires_at"],
+          // );
 
           // Navigate to organization dashboard
           Get.toNamed(RoutesPath.organizationDashboardScreen);

@@ -133,6 +133,8 @@ class SignInScreen extends StatelessWidget {
 
                                   // Remember Me
                                   Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
                                     children: [
                                       Obx(
                                         () => Checkbox(
@@ -174,14 +176,6 @@ class SignInScreen extends StatelessWidget {
                                   // Sign In Button
                                   PrimaryButton(
                                     onTap: controller.signIn,
-                                    //                                     onTap: (){
-                                    //                                       Navigator.push(
-                                    //   context,
-                                    //   MaterialPageRoute(
-                                    //     builder: (context) => ArrowKeyNavigationScreen(), // Replace with your screen
-                                    //   ),
-                                    // );
-
                                     //                                     },
                                     title: 'Sign in',
                                     width: double.infinity,

@@ -5,6 +5,7 @@ import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_form.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/player_background_scaffold.dart';
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
+import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/authController/auth_controller.dart';
 
@@ -163,7 +164,21 @@ class OrganizationSignin extends StatelessWidget {
                                     radius: 4.89.r,
                                     backgroundColor: AppColors.secondaryColor,
                                   ),
-
+                                  SizedBox(height: 10),
+                                  Align(
+                                    alignment: Alignment.bottomRight,
+                                    child: InkWell(
+                                      onTap: () {
+                                        Get.toNamed(
+                                          RoutesPath.orgForgotPasswordScreen,
+                                        );
+                                      },
+                                      child: const Text(
+                                        'Forgot Password',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
+                                    ),
+                                  ),
                                   SizedBox(height: 19.57.h),
                                 ],
                               ),

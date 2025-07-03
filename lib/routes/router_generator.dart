@@ -3,6 +3,7 @@ import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:gaming_web_app/screens/authentication/ChangePasswordScreen.dart';
 import 'package:gaming_web_app/screens/authentication/forgot_password_screen.dart';
 import 'package:gaming_web_app/screens/authentication/org_change_password.dart';
+import 'package:gaming_web_app/screens/authentication/org_forget_password.dart';
 import 'package:gaming_web_app/screens/authentication/sign_in_screen.dart';
 import 'package:gaming_web_app/screens/authentication/sign_up_screen.dart';
 import 'package:gaming_web_app/screens/authentication/welcome_screen.dart';
@@ -42,6 +43,11 @@ class AppPages {
     GetPage(
       name: RoutesPath.ORGChangePasswordScreen,
       page: () => ORGChangePasswordScreen(),
+    ),
+
+    GetPage(
+      name: RoutesPath.orgForgotPasswordScreen,
+      page: () => OrgForgotPasswordScreen(),
     ),
     GetPage(
       name: RoutesPath.mainDashboardScreen,

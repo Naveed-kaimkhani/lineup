@@ -28,4 +28,6 @@ class RoutesPath {
 static const String changePasswordScreen = '/ChangePasswordScreen';
 static const String ORGChangePasswordScreen = '/ORGChangePasswordScreen';
 
+static const String orgForgotPasswordScreen = '/OrgForgotPasswordScreen';
+
 }
