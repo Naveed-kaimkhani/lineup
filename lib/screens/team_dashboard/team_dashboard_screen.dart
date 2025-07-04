@@ -173,8 +173,6 @@ class _TeamDashboardBody extends StatelessWidget {
             ],
           );
         } else {
-          // For wider screens (tablet & desktop layout)
-          // Place title on left, buttons in a row on right
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             crossAxisAlignment: CrossAxisAlignment.center,

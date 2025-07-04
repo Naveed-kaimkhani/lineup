@@ -742,7 +742,7 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
   String formatExpiresAt(String dateStr) {
     try {
       DateTime dateTime = DateTime.parse(dateStr);
-      return DateFormat('dd MMM yyyy').format(dateTime); // no time part
+      return DateFormat('MM-dd-yyyy').format(dateTime);
     } catch (e) {
       return dateStr; // fallback
     }
@@ -1277,41 +1277,23 @@ class PaymentManageOrWebLayout extends StatelessWidget {
                       flex: 1,
                       child: _buildHeader("currency", seasonWidth),
                     ),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: _buildHeader("Age Group", ageGroupWidth),
-                    // ),
-                    _buildHeader("status", ageGroupWidth),
 
-                    // SizedBox(width: actionWidth),
-                    // Expanded(
-                    //     flex: 3,
-                    //     child: SizedBox())
+                    _buildHeader("status", ageGroupWidth),
                   ],
                 ),
-
-                // Row(
-                //   children: [
-                //     _buildHeader("Team Name", teamNameWidth),
-                //     _buildHeader("Year", yearWidth),
-                //     _buildHeader("Season", seasonWidth),
-                //     _buildHeader("Age Group", ageGroupWidth),
-                //     SizedBox(width: actionWidth),
-                //   ],
-                // ),
               ),
             ),
             const SizedBox(height: 8),
 
             // Data Rows
             Obx(() {
-              final paginatedUserResponse = adminController.paymentModel ?? [];
+              final paginatedUserResponse = adminController.paymentModel;
 
               return SingleChildScrollView(
                 // scrollDirection: Axis.horizontal,
                 child: Column(
                   children:
-                      paginatedUserResponse!.map((user) {
+                      paginatedUserResponse.map((user) {
                         return _buildRowPayment(context, user);
                       }).toList(),
                 ),
@@ -1326,16 +1308,7 @@ class PaymentManageOrWebLayout extends StatelessWidget {
   Widget _buildRowPayment(BuildContext context, PaymentModel team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1346,7 +1319,8 @@ class PaymentManageOrWebLayout extends StatelessWidget {
             Expanded(
               flex: 1,
               child: _buildCell(
-                team.user!.firstName.toString().toString(),
+                team.user!.firstName.toString(),
+                // "fsfsfs",
                 teamNameWidth,
               ),
             ),

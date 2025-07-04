@@ -731,7 +731,8 @@ class NewTeamController extends GetxController {
     );
 
     if (picked != null) {
-      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+      String formattedDate = DateFormat('MM-dd-yyyy').format(picked);
+
       dateController.text = formattedDate;
       datess.value = dateController.text.toString();
       // You can now use this formattedDate as needed

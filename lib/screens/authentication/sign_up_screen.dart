@@ -33,151 +33,215 @@ class SignUpScreen extends StatelessWidget {
 
               return SingleChildScrollView(
                 child: Align(
-                  alignment: isDesktop
-                      ? Alignment.centerLeft // Align to left on desktop
-                      : Alignment.center, // Center content on mobile
+                  alignment:
+                      isDesktop
+                          ? Alignment
+                              .centerLeft // Align to left on desktop
+                          : Alignment.center, // Center content on mobile
                   child: ConstrainedBox(
                     constraints: BoxConstraints(
                       // maxWidth: isMobile ? 400 : 600, // Adjust maxWidth for responsiveness
                     ),
                     child: Padding(
-                      padding: isMobile
-                          ? EdgeInsets.symmetric(horizontal:10,vertical: 10) // Add horizontal padding for mobile
-                          : EdgeInsets.symmetric(horizontal:30,vertical: 30),
+                      padding:
+                          isMobile
+                              ? EdgeInsets.symmetric(
+                                horizontal: 10,
+                                vertical: 10,
+                              ) // Add horizontal padding for mobile
+                              : EdgeInsets.symmetric(
+                                horizontal: 30,
+                                vertical: 30,
+                              ),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           SizedBox(height: 58.h),
                           CustomForm(
                             header: 'Sign Up',
-                            description: 'Manage your team and create game-ready lineups.',
+                            description:
+                                'Manage your team and create game-ready lineups.',
                             body: Column(
                               children: [
                                 // First & Last Name Fields
                                 isMobile
                                     ? Column(
-                                  children: [
-                                    PrimaryTextField(
-                                      controller: controller.firstNameController,
-                                      label: 'First Name',
-                                    ),
-                                    Obx(() {
-                                      return Text(
-                                        controller.firstNameError.value,
-                                        style: TextStyle(color: Colors.red, fontSize: 12),
-                                      );
-                                    }),
-                                    SizedBox(height: 10.h),
-                                    PrimaryTextField(
-                                      controller: controller.lastNameController,
-                                      label: 'Last Name',
-                                    ),
-                                    Obx(() {
-                                      return Text(
-                                        controller.lastNameError.value,
-                                        style: TextStyle(color: Colors.red, fontSize: 12),
-                                      );
-                                    }),
-                                  ],
-                                )
+                                      children: [
+                                        PrimaryTextField(
+                                          controller:
+                                              controller.firstNameController,
+                                          label: 'First Name',
+                                        ),
+                                        Obx(() {
+                                          return Text(
+                                            controller.firstNameError.value,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 10.h),
+                                        PrimaryTextField(
+                                          controller:
+                                              controller.lastNameController,
+                                          label: 'Last Name',
+                                        ),
+                                        Obx(() {
+                                          return Text(
+                                            controller.lastNameError.value,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    )
                                     : Row(
-                                  children: [
-                                    Expanded(
-                                      child: PrimaryTextField(
-                                        controller: controller.firstNameController,
-                                        label: 'First Name',
-                                      ),
+                                      children: [
+                                        Expanded(
+                                          child: PrimaryTextField(
+                                            controller:
+                                                controller.firstNameController,
+                                            label: 'First Name',
+                                          ),
+                                        ),
+                                        SizedBox(width: 10.w),
+                                        Expanded(
+                                          child: PrimaryTextField(
+                                            controller:
+                                                controller.lastNameController,
+                                            label: 'Last Name',
+                                          ),
+                                        ),
+                                      ],
                                     ),
-                                    SizedBox(width: 10.w),
-                                    Expanded(
-                                      child: PrimaryTextField(
-                                        controller: controller.lastNameController,
-                                        label: 'Last Name',
-                                      ),
-                                    ),
-                                  ],
-                                ),
                                 SizedBox(height: 10.h),
 
                                 // Email & Phone Fields
                                 isMobile
                                     ? Column(
-                                  children: [
-                                    PrimaryTextField(
-                                      controller: controller.emailController,
-                                      label: 'Email',
-                                    ),
-                                    Obx(() {
-                                      return Text(
-                                        controller.emailError.value,
-                                        style: TextStyle(color: Colors.red, fontSize: 12),
-                                      );
-                                    }),
-                                    SizedBox(height: 10.h),
-                                    PrimaryTextField(
-                                      controller: controller.phoneNumberController,
-                                      label: 'Phone',
-                                    ),
-                                    Obx(() {
-                                      return Text(
-                                        controller.phoneNumberError.value,
-                                        style: TextStyle(color: Colors.red, fontSize: 12),
-                                      );
-                                    }),
-                                  ],
-                                )
-                                    : Row(
-                                  children: [
-                                    Expanded(
-                                      child: PrimaryTextField(
-                                        controller: controller.emailController,
-                                        label: 'Email',
+                                      children: [
+                                        PrimaryTextField(
+                                          controller:
+                                              controller.emailController,
+                                          label: 'Email',
+                                        ),
+                                        Obx(() {
+                                          return Text(
+                                            controller.emailError.value,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          );
+                                        }),
+                                        SizedBox(height: 10.h),
+                                        PrimaryTextField(
+                                          controller:
+                                              controller.phoneNumberController,
+                                          label: 'Phone',
+                                        ),
+                                        Obx(() {
+                                          return Text(
+                                            controller.phoneNumberError.value,
+                                            style: TextStyle(
+                                              color: Colors.red,
+                                              fontSize: 12,
+                                            ),
+                                          );
+                                        }),
+                                      ],
+                                    )
+                                    : Align(
+                                      alignment: Alignment.centerLeft,
+                                      child: Column(
+                                        children: [
+                                          PrimaryTextField(
+                                            controller:
+                                                controller.emailController,
+                                            label: 'Email',
+                                          ),
+                                          Obx(() {
+                                            return Text(
+                                              controller.emailError.value,
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                              ),
+                                            );
+                                          }),
+                                          // SizedBox(height: 5.h),
+                                          PrimaryTextField(
+                                            controller:
+                                                controller
+                                                    .phoneNumberController,
+                                            label: 'Phone',
+                                          ),
+                                          Obx(() {
+                                            return Text(
+                                              controller.phoneNumberError.value,
+                                              style: TextStyle(
+                                                color: Colors.red,
+                                                fontSize: 12,
+                                              ),
+                                            );
+                                          }),
+                                        ],
                                       ),
                                     ),
-                                    SizedBox(width: 10.w),
-                                    Expanded(
-                                      child: PrimaryTextField(
-                                        controller: controller.phoneNumberController,
-                                        label: 'Phone',
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                SizedBox(height: 10.h),
+                                // SizedBox(height: 5.h),
 
                                 // Password Fields
-                                PrimaryTextField(
-                                  controller: controller.passwordController,
-                                  label: 'Password',
-                                  obscureText: true,
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: PrimaryTextField(
+                                    controller: controller.passwordController,
+                                    label: 'Password',
+                                    obscureText: true,
+                                  ),
                                 ),
                                 Obx(() {
                                   return Text(
                                     controller.passwordError.value,
-                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
                                   );
                                 }),
-                                SizedBox(height: 10.h),
-                                PrimaryTextField(
-                                  controller: controller.confirmPasswordController,
-                                  label: 'Confirm Password',
-                                  obscureText: true,
+                                // SizedBox(height: 5.h),
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: PrimaryTextField(
+                                    controller:
+                                        controller.confirmPasswordController,
+                                    label: 'Confirm Password',
+                                    obscureText: true,
+                                  ),
                                 ),
                                 Obx(() {
                                   return Text(
                                     controller.confirmPasswordError.value,
-                                    style: TextStyle(color: Colors.red, fontSize: 12),
+                                    style: TextStyle(
+                                      color: Colors.red,
+                                      fontSize: 12,
+                                    ),
                                   );
                                 }),
-                                SizedBox(height: 10.h),
+                                // SizedBox(height: 5.h),
 
                                 // Sign Up Button
-                                PrimaryButton(
-                                  onTap: controller.signUp,
-                                  title: 'Sign Up',
-                                  width: double.infinity,
-                                  radius: 4.89.r,
-                                  backgroundColor: AppColors.secondaryColor,
+                                Align(
+                                  alignment: Alignment.centerLeft,
+                                  child: PrimaryButton(
+                                    onTap: controller.signUp,
+                                    title: 'Sign Up',
+                                    width: 500,
+                                    radius: 4.89.r,
+                                    backgroundColor: AppColors.secondaryColor,
+                                  ),
                                 ),
                                 SizedBox(height: 10.h),
 
@@ -187,7 +251,7 @@ class SignUpScreen extends StatelessWidget {
                                   crossAxisAlignment: WrapCrossAlignment.center,
                                   children: [
                                     Text(
-                                      'Already Have Account ? ' ,
+                                      'Already Have Account ? ',
                                       // style: descriptionStyle,
                                     ),
                                     CustomTextButton(

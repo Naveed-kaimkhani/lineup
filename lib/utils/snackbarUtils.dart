@@ -9,6 +9,8 @@ class SnackbarUtils {
     required String message,
     required Color titleColor,
     required Color buttonColor,
+      VoidCallback? onOkPressed, // ← add this line
+
   }) {
     Get.dialog(
       Center(
@@ -47,7 +49,11 @@ class SnackbarUtils {
                   SizedBox(
                     width: 200,
                     child: ElevatedButton(
-                      onPressed: () => Get.back(),
+                      // onPressed: () => Get.back(),
+                       onPressed: () {
+                      Get.back();
+                      if (onOkPressed != null) onOkPressed();
+                    },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: buttonColor,
                         foregroundColor: Colors.white,
@@ -69,16 +75,26 @@ class SnackbarUtils {
     );
   }
 
-  static void showErrorr(String message) {
-    showCustomDialog(
-      title: "Alert",
-      message: message,
-      titleColor: Colors.red.shade700,
+  // static void showErrorr(String message) {
+  //   showCustomDialog(
+  //     title: "Alert",
+  //     message: message,
+  //     titleColor: Colors.red.shade700,
 
-      // buttonColor: Colors.red.shade600,
-      buttonColor: AppColors.primaryColor,
-    );
-  }
+  //     // buttonColor: Colors.red.shade600,
+  //     buttonColor: AppColors.primaryColor,
+  //   );
+  // }
+
+static void showErrorr(String message, {VoidCallback? onOkPressed}) {
+  showCustomDialog(
+    title: "Alert",
+    message: message,
+    titleColor: Colors.red.shade700,
+    buttonColor: AppColors.primaryColor,
+    onOkPressed: onOkPressed, // 👈 pass it here
+  );
+}
 
   static void showSuccess(String message) {
     showCustomDialog(

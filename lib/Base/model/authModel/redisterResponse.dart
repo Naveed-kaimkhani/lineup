@@ -16,7 +16,7 @@ class RegisterResponse {
   });
 
   factory RegisterResponse.fromJson(Map<String, dynamic> json) {
-
+    // log(json.toString());
     return RegisterResponse(
       accessToken: json['access_token'],
       tokenType: json['token_type'],

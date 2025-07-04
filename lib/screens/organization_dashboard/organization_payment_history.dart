@@ -222,20 +222,12 @@ class OrganizationPaymentHistory extends StatelessWidget {
   String _formatDate(String dateStr) {
     try {
       final dateTime = DateTime.parse(dateStr);
-      return DateFormat('d-M-yyyy').format(dateTime.toLocal());
+      return DateFormat('MM-dd-yyyy').format(dateTime.toLocal());
     } catch (e) {
       return dateStr; // fallback if parsing fails
     }
   }
 
-  // String _formatDate(String dateStr) {
-  //   try {
-  //     final dateTime = DateTime.parse(dateStr);
-  //     return DateFormat('MMM dd, yyyy — hh:mm a').format(dateTime.toLocal());
-  //   } catch (e) {
-  //     return dateStr; // fallback to original if parsing fails
-  //   }
-  // }
 
   Widget _buildMobileItem(String label, String value) {
     return Padding(

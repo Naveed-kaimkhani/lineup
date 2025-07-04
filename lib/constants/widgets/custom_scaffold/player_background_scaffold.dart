@@ -1,37 +1,3 @@
-// import 'package:flutter/material.dart';
-// import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-// class PlayerBackgroundScaffold extends StatelessWidget {
-//   final Widget body;
-//   const PlayerBackgroundScaffold({super.key, required this.body});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       body: Stack(
-//         children: [
-//           Align(
-//             alignment: Alignment.centerRight,
-//             child: Image.asset(
-//               'assets/images/player_background.png',
-//               fit: BoxFit.contain,
-//               width: 1400.w,
-//               height: 1300.h,
-//             ),
-//           ),
-//           Positioned.fill(
-//             child: Padding(
-//               padding: EdgeInsets.symmetric(horizontal: 117.w, vertical: 52.h),
-//               child: SafeArea(child: body),
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
-
-
 import 'package:flutter/material.dart';
 
 class PlayerBackgroundScaffold extends StatelessWidget {
@@ -41,6 +7,7 @@ class PlayerBackgroundScaffold extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 251, 250, 250),
       body: LayoutBuilder(
         builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
@@ -52,15 +19,13 @@ class PlayerBackgroundScaffold extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Image.asset(
-                  'assets/images/player_background.png',
+                  'assets/images/image_player.jpg',
                   fit: BoxFit.contain,
                   width: imageWidth,
                   height: imageHeight,
                 ),
               ),
-              Positioned.fill(
-                child: SafeArea(child: body),
-              ),
+              Positioned.fill(child: SafeArea(child: body)),
             ],
           );
         },

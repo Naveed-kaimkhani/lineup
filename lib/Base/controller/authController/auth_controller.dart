@@ -97,15 +97,14 @@ class SignInController extends GetxController {
       // final request = LoginModel(email: email, password: password);
 
       final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
+        // email: "shahbazvidicraze@gmail.com",
         // email: "naveedkaimkhami@gmail.com",
-        // email: "admin@lineup.com",
+        email: "admin@lineup.com",
         password: "12345678",
       );
       final response;
-      if (email.toString() == "admin@lineup.com")
-      // if (true)
-      {
+      // if (email.toString() == "admin@lineup.com")
+      if (true) {
         response = await AuthAPI.loginAdmin(request);
       } else {
         response = await AuthAPI.loginUser(
@@ -136,8 +135,6 @@ class SignInController extends GetxController {
         }
 
         Get.snackbar('Success', 'User signed in successfully');
-        // Navigate to home or dashboard
-        // Get.toNamed(RoutesPath.home);
       } else {
         Get.snackbar('Error', response.message.toString());
       }
@@ -171,11 +168,10 @@ class SignInController extends GetxController {
         toggleLoader(true);
 
         final response = await AuthAPI.loginOrganization({
-          "email": orgCode,
+          "username": orgCode,
           "password": password,
         });
         toggleLoader(false); // Close dialog
-        log(response.toString());
         if (response['success'] == true) {
           final token = response['data']['access_token'];
           final orgData = response['data']['organization'];

@@ -23,6 +23,8 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
   final textControllersGrid = <int, Map<String, TextEditingController>>{};
   Map<String, Map<String, String>>? fixedAssignments;
   RxBool isPayment = false.obs;
+  final isBackspacePressed = false.obs;
+
   RxBool isLoading = false.obs;
   RxList<Position?> teamPositioned = <Position?>[].obs;
 
@@ -67,7 +69,7 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
 
   String getFormattedDate() {
     final now = DateTime.now();
-    final formatter = DateFormat('MMMM d yyyy'); // Example: April 4 2025
+    final formatter =  DateFormat('MM-dd-yyyy');
     return formatter.format(now);
   }
 

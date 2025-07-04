@@ -23,9 +23,9 @@ class DashboardScaffold extends StatelessWidget {
   const DashboardScaffold({
     super.key,
     required this.userImage,
-     this.onTab,
+    this.onTab,
     required this.userName,
-     this.bg=true,
+    this.bg = true,
     this.actionWidget,
     this.title = '',
     this.subtitle = '',
@@ -38,82 +38,88 @@ class DashboardScaffold extends StatelessWidget {
   Widget build(BuildContext context) {
     final UserProfileController controller = Get.put(UserProfileController());
     return Scaffold(
-      body:
-
-
-      SingleChildScrollView(
+      backgroundColor: const Color.fromARGB(255, 251, 250, 250),
+      body: SingleChildScrollView(
         child: Column(
           children: [
-        LayoutBuilder(
-        builder: (context, constraints) {
-      final isMobile = constraints.maxWidth < 600;
-      final isDesktop = constraints.maxWidth > 1024;
-      double width = constraints.maxWidth;
+            LayoutBuilder(
+              builder: (context, constraints) {
+                final isMobile = constraints.maxWidth < 600;
+                final isDesktop = constraints.maxWidth > 1024;
+                double width = constraints.maxWidth;
 
-        return   Row(
-              children: [
-
-                Container(
-                  width: MediaQuery.of(context).size.width,
-                  padding: EdgeInsets.only(left: 117.w, right: 100.w),
-                  decoration: BoxDecoration(color: Colors.white),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      onTab ==null?SizedBox():   BackButtons(onTab: onTab!,),
-
-                         InkWell(
-                             onTap: (){
-                               Get.toNamed(RoutesPath.mainDashboardScreen);
-                             },
-                             child:
-                      Container(child:   Image.asset(
-                        'assets/images/line_up_hero_header.png',
-                        width:isMobile ?90: 185.44.w,
-                        height: 75.h,
-                      ))),
-                      InkWell(
-                          onTap: (){
-                            Get.dialog(UserprofileDialog());
-                          },
-                          child:
-                      Row(
+                return Row(
+                  children: [
+                    Container(
+                      width: MediaQuery.of(context).size.width,
+                      padding: EdgeInsets.only(left: 117.w, right: 100.w),
+                      decoration: BoxDecoration(color: Colors.white),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          CircleAvatar(
-                            radius:isMobile ?20: 30.r,
-                            backgroundColor:Colors.grey,
-                            // AppColors.secondaryColor,
-                             child: Icon(Icons.person),
-                            // backgroundImage: AssetImage(userImage),
-                          ),
-                          SizedBox(width: 10.w),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'Welcome 👋',
-                                style: appBarHeader.copyWith(fontSize:isMobile ? 12:16,
-                                  color: AppColors.primaryColor,
-                                ),
+                          onTab == null
+                              ? SizedBox()
+                              : BackButtons(onTab: onTab!),
+
+                          InkWell(
+                            onTap: () {
+                              Get.toNamed(RoutesPath.mainDashboardScreen);
+                            },
+                            child: Container(
+                              child: Image.asset(
+                                'assets/images/line_up_hero_header.png',
+                                width: isMobile ? 90 : 185.44.w,
+                                height: 75.h,
                               ),
-                              Obx(()=>Text(
-                                controller.firstName.toUpperCase(),
-                                style: descriptionStyle.copyWith(
-                                  color: AppColors.descriptiveTextColor,
-                                  fontSize: isMobile ? 10:14,
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              Get.dialog(UserprofileDialog());
+                            },
+                            child: Row(
+                              children: [
+                                CircleAvatar(
+                                  radius: isMobile ? 20 : 30.r,
+                                  backgroundColor: Colors.grey,
+                                  // AppColors.secondaryColor,
+                                  child: Icon(Icons.person),
+                                  // backgroundImage: AssetImage(userImage),
                                 ),
-                              )),
-                            ],
+                                SizedBox(width: 10.w),
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Text(
+                                      'Welcome 👋',
+                                      style: appBarHeader.copyWith(
+                                        fontSize: isMobile ? 12 : 16,
+                                        color: AppColors.primaryColor,
+                                      ),
+                                    ),
+                                    Obx(
+                                      () => Text(
+                                        controller.firstName.toUpperCase(),
+                                        style: descriptionStyle.copyWith(
+                                          color: AppColors.descriptiveTextColor,
+                                          fontSize: isMobile ? 10 : 14,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                         ],
-                      )),
-                    ],
-                  ),
-                ),
-              ],
-            );}),
+                      ),
+                    ),
+                  ],
+                );
+              },
+            ),
             SizedBox(height: 27.h),
-           
+
             body,
           ],
         ),

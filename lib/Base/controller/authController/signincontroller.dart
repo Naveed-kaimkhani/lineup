@@ -1,6 +1,8 @@
 import 'dart:developer';
 
 import 'package:flutter/material.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
+import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:get/get.dart';
 import '../../../routes/routes_path.dart';
 import '../../../service/api/authApi.dart';
@@ -139,11 +141,9 @@ class SignUpController extends GetxController {
       if (response.success!) {
         Get.snackbar('Success', 'User Register Success');
         Get.offNamed(RoutesPath.signIn);
-
       } else {
         Get.snackbar('Error', response.message.toString());
       }
-  
     }
   }
 
