@@ -1,7 +1,4 @@
-// import 'dart:ui' as html;
-
-import 'dart:developer';
-
+// import 'dart:ui' as html
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/model/authModel/loginModel.dart';
 import 'package:gaming_web_app/main.dart';
@@ -92,16 +89,11 @@ class SignInController extends GetxController {
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
 
-    // if (isEmailValid && isPasswordValid)
-    if (true) {
-      // final request = LoginModel(email: email, password: password);
+    if (isEmailValid && isPasswordValid)
+    // if (true)
+    {
+      final request = LoginModel(email: email, password: password);
 
-      final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
-        // email: "naveedkaimkhami@gmail.com",
-        // email: "admin@lineup.com",
-        password: "12345678",
-      );
       final response;
       if (email.toString() == "admin@lineup.com")
       // if (true)

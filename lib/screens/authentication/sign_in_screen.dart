@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
-import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/custom_text_button.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
-import 'package:gaming_web_app/constants/widgets/buttons/social_app_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_form.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/player_background_scaffold.dart';
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
-import 'package:gaming_web_app/screens/main_dashboard/ArrowKeyNavigationScreen.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/authController/auth_controller.dart';
 import '../../routes/routes_path.dart';

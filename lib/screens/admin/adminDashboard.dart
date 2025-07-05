@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/org_controller/org_teams_controller.dart'
@@ -325,30 +326,38 @@ class _MobileLayout extends StatefulWidget {
 class _MobileLayoutState extends State<_MobileLayout> {
   final TeamController controller = Get.find<TeamController>();
   void showNameEmailDialog() {
-    // final nameController = TextEditingController();
-    // final emailController = TextEditingController();
     final AdminController adminController = Get.find<AdminController>();
+
+    final RxString pricingType = "general".obs;
+    final TextEditingController customPriceController = TextEditingController();
+
     Get.dialog(
       NameEmailDialog(
         nameController: adminController.orginizationNameController,
-        orgCodeController: adminController.orginizationNameController,
+        orgCodeController: adminController.organization_code,
         emailController: adminController.orginizationEmail,
+        pricingType: pricingType,
+        customPriceController: customPriceController,
         onSubmit: () {
           final name = adminController.orginizationNameController.text.trim();
           final email = adminController.orginizationEmail.text.trim();
           final org = adminController.organization_code.text.trim();
+          final price =
+              pricingType.value == "custom"
+                  ? double.tryParse(customPriceController.text.trim()) ?? 0.0
+                  : 0.0;
 
-          // Perform your validation or logic here
           if (name.isEmpty || email.isEmpty || org.isEmpty) {
-            Get.snackbar("Error", "Please enter both name and email");
+            Get.snackbar("Error", "Please enter name, email, and allocation");
           } else {
             adminCreateOrganization(
               name: name,
               email: email,
               annualTeamAllocation: int.parse(org),
+              pricingType: pricingType.value,
+              customPriceAmount: price,
             );
-            Navigator.pop(context);
-            // You can call your controller method here
+            Get.back(); // Close dialog
           }
         },
       ),
@@ -359,6 +368,8 @@ class _MobileLayoutState extends State<_MobileLayout> {
     required String name,
     required String email,
     required int annualTeamAllocation,
+    required String pricingType,
+    required double customPriceAmount,
   }) async {
     final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
 
@@ -370,7 +381,10 @@ class _MobileLayoutState extends State<_MobileLayout> {
         "name": name,
         "email": email,
         "annual_team_allocation": annualTeamAllocation,
+        "pricing_type": pricingType,
+        "custom_price_amount": customPriceAmount,
       };
+      log(body.toString());
       final response = await http.post(
         url,
         headers: {
@@ -380,7 +394,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
         },
         body: jsonEncode(body),
       );
-
+      log(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
@@ -393,6 +407,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
         Get.snackbar("Error", "Server returned ${response.statusCode}");
       }
     } catch (e) {
+      log(e.toString());
       Get.snackbar("Error", "Exception: $e");
     }
   }
@@ -636,16 +651,6 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                         //     child: SizedBox())
                       ],
                     ),
-
-                    // Row(
-                    //   children: [
-                    //     _buildHeader("Team Name", teamNameWidth),
-                    //     _buildHeader("Year", yearWidth),
-                    //     _buildHeader("Season", seasonWidth),
-                    //     _buildHeader("Age Group", ageGroupWidth),
-                    //     SizedBox(width: actionWidth),
-                    //   ],
-                    // ),
                   ),
                 ],
               ),
@@ -845,19 +850,9 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
     required String name,
     required String email,
     required int annualTeamAllocation,
+    required String pricingType,
+    required double customPriceAmount,
   }) async {
-    if (name.trim().isEmpty ||
-        email.trim().isEmpty ||
-        annualTeamAllocation == 0) {
-      SnackbarUtils.showErrorr("Please fill in all fields.");
-      return;
-    }
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(email)) {
-      SnackbarUtils.showErrorr("Invalid email format.");
-      return;
-    }
-
     final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
 
     try {
@@ -868,8 +863,10 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
         "name": name,
         "email": email,
         "annual_team_allocation": annualTeamAllocation,
+        "pricing_type": pricingType,
+        "custom_price_amount": customPriceAmount,
       };
-
+      log(body.toString());
       final response = await http.post(
         url,
         headers: {
@@ -879,30 +876,21 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
         },
         body: jsonEncode(body),
       );
-
-      final responseBody = jsonDecode(response.body);
-
+      final data = jsonDecode(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
-        if (responseBody['success'] == true) {
-          SnackbarUtils.showSuccess(
-            responseBody['message'] ?? "Organization created",
-          );
+        if (data['success'] == true) {
+          // Get.snackbar("Success", data['message'] ?? "Organization created");
+
+          SnackbarUtils.showSuccess(data['message'] ?? "Organization created");
         } else {
-          SnackbarUtils.showErrorr(
-            responseBody['message'] ?? "Organization creation failed",
-          );
+          // Get.snackbar("Error", data['message'] ?? "Creation failed");
+          SnackbarUtils.showSuccess(data['message'] ?? "Creation failed");
         }
       } else {
-        SnackbarUtils.showErrorr(
-          responseBody['message'] ?? "Organization created",
-        );
-        // SnackbarUtils.showErrorr("Server error: ${response.statusCode}");
+        SnackbarUtils.showErrorr(data['message'] ?? "Creation failed");
       }
     } catch (e) {
-      //  SnackbarUtils.showErrorr(
-      //       responseBody['message'] ?? "Organization created",
-      //     );
-      SnackbarUtils.showErrorr("Exception: ${e.toString()}");
+      SnackbarUtils.showErrorr("Error Exception: $e");
     }
   }
 
@@ -980,42 +968,38 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
   }
 
   void showNameEmailDialog() {
-    // final nameController = TextEditingController();
-    // final emailController = TextEditingController();
     final AdminController adminController = Get.find<AdminController>();
+
+    final RxString pricingType = "general".obs;
+    final TextEditingController customPriceController = TextEditingController();
+
     Get.dialog(
       NameEmailDialog(
         nameController: adminController.orginizationNameController,
-        emailController: adminController.orginizationEmail,
         orgCodeController: adminController.organization_code,
+        emailController: adminController.orginizationEmail,
+        pricingType: pricingType,
+        customPriceController: customPriceController,
         onSubmit: () {
           final name = adminController.orginizationNameController.text.trim();
           final email = adminController.orginizationEmail.text.trim();
           final org = adminController.organization_code.text.trim();
+          final price =
+              pricingType.value == "custom"
+                  ? double.tryParse(customPriceController.text.trim()) ?? 0.0
+                  : 0.0;
 
-          // Perform your validation or logic here
           if (name.isEmpty || email.isEmpty || org.isEmpty) {
-            Get.snackbar("Error", "Please enter both name and email");
+            Get.snackbar("Error", "Please enter name, email, and allocation");
           } else {
-            // adminController.adminCreateOrganization();
-            // ss
-            // adminCreateOrganization()
-            final int? annualTeamAllocation = int.tryParse(org);
-
-            if (annualTeamAllocation == null) {
-              SnackbarUtils.showErrorr(
-                "Annual team allocation must be a valid number.",
-              );
-              return;
-            }
-
             adminCreateOrganization(
               name: name,
               email: email,
               annualTeamAllocation: int.parse(org),
+              pricingType: pricingType.value,
+              customPriceAmount: price,
             );
-            Navigator.pop(context);
-            // You can call your controller method here
+            Get.back(); // Close dialog
           }
         },
       ),
@@ -1160,7 +1144,7 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           // _buildEditButton(context,),
           InkWell(
             onTap: () async {
-              orginizationUpateDialog(team);
+              // orginizationUpateDialog(team);
             },
             child: Image.asset(
               'assets/images/edit_icon.png', // Pencil icon image
@@ -1173,45 +1157,45 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
     );
   }
 
-  void orginizationUpateDialog(Organizations team) {
-    // final nameController = TextEditingController();
-    // final emailController = TextEditingController();
-    final AdminController adminController = Get.find<AdminController>();
-    adminController!.orginizationNameController = TextEditingController(
-      text: team.name,
-    );
-    adminController!.orginizationEmail = TextEditingController(
-      text: team.email,
-    );
-    Get.dialog(
-      NameEmailDialog(
-        nameController: adminController.orginizationNameController,
-        emailController: adminController.orginizationEmail,
-        orgCodeController: adminController.organization_code,
-        onSubmit: () {
-          final name = adminController.orginizationNameController.text.trim();
-          final email = adminController.orginizationEmail.text.trim();
-          final org = adminController.organization_code.text.trim();
+  // void orginizationUpateDialog(Organizations team) {
+  //   // final nameController = TextEditingController();
+  //   // final emailController = TextEditingController();
+  //   final AdminController adminController = Get.find<AdminController>();
+  //   adminController.orginizationNameController = TextEditingController(
+  //     text: team.name,
+  //   );
+  //   adminController.orginizationEmail = TextEditingController(
+  //     text: team.email,
+  //   );
+  //   Get.dialog(
+  //     NameEmailDialog(
+  //       nameController: adminController.orginizationNameController,
+  //       emailController: adminController.orginizationEmail,
+  //       orgCodeController: adminController.organization_code,
+  //       onSubmit: () {
+  //         final name = adminController.orginizationNameController.text.trim();
+  //         final email = adminController.orginizationEmail.text.trim();
+  //         final org = adminController.organization_code.text.trim();
 
-          // Perform your validation or logic here
-          if (name.isEmpty || email.isEmpty || org.isEmpty) {
-            Get.snackbar("Error", "Please enter both name and email");
-          } else {
-            // adminController.adminCreateOrganization();
-            // fdfdf
-            adminEditOrganization(
-              name: name,
-              email: email,
-              id: team.id!,
-              annualTeamAllocation: int.parse(org),
-            );
-            Navigator.pop(context);
-            // You can call your controller method here
-          }
-        },
-      ),
-    );
-  }
+  //         // Perform your validation or logic here
+  //         if (name.isEmpty || email.isEmpty || org.isEmpty) {
+  //           Get.snackbar("Error", "Please enter both name and email");
+  //         } else {
+  //           // adminController.adminCreateOrganization();
+  //           // fdfdf
+  //           adminEditOrganization(
+  //             name: name,
+  //             email: email,
+  //             id: team.id!,
+  //             annualTeamAllocation: int.parse(org),
+  //           );
+  //           Navigator.pop(context);
+  //           // You can call your controller method here
+  //         }
+  //       },
+  //     ),
+  //   );
+  // }
 
   // Widget _buildEditButton(BuildContext context,) {
   //   return InkWell(
@@ -1819,7 +1803,6 @@ class userManageOrWebLayout extends StatelessWidget {
                     hintText: 'Search by name',
                     prefixIcon: Icon(Icons.search),
                     border: OutlineInputBorder(
-                      
                       borderRadius: BorderRadius.circular(8),
                     ),
                     filled: true,

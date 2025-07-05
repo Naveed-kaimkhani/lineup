@@ -7,7 +7,6 @@ import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
-import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_scaffold.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/show_renewal_dialogue.dart';
@@ -314,16 +313,18 @@ class _WebLayout extends StatelessWidget {
                     ),
                   ),
 
-                  //    Expanded(
-                  //   child: Text(
-                  //     team.,
-                  //     style: fieldLabelStyle.copyWith(
-                  //       color: AppColors.descriptiveTextColor,
-                  //       fontSize: 18,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  // ),
+                  Expanded(
+                    child: Text(
+                      team.organization != null
+                          ? team.organization!.organizationCode
+                          : "-",
+                      style: fieldLabelStyle.copyWith(
+                        color: AppColors.descriptiveTextColor,
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
                   Expanded(
                     child: Text(
                       team.year?.toString() ?? '-',

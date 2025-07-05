@@ -4,10 +4,124 @@ import 'package:get/get.dart';
 import '../../../constants/app_colors.dart';
 import '../../../constants/widgets/buttons/primary_button.dart';
 
+// class NameEmailDialog extends StatelessWidget {
+//   final TextEditingController nameController;
+//    RxString pricingType = "general".obs;
+// final TextEditingController customPriceController = TextEditingController();
+
+//   final TextEditingController emailController;
+//   final TextEditingController orgCodeController;
+//   final VoidCallback onSubmit;
+
+//    NameEmailDialog({
+//     super.key,
+//     required this.pricingType,
+
+//     required this.nameController,
+//     required this.emailController,
+//     required this.orgCodeController,
+//     required this.onSubmit,
+//   });
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return AlertDialog(
+//       title: Row(
+//         children: [
+//           Text(
+//             "Enter Organizations Details   ",
+//             style: TextStyle(
+//               fontSize: 20,
+//               fontWeight: FontWeight.bold,
+//               color: AppColors.secondaryColor,
+//             ),
+//           ),
+//           SizedBox(width: 20),
+//           // Spacer(),
+//           InkWell(
+//             onTap: () {
+//               Get.back();
+//             },
+
+//             child: Icon(Icons.cancel, size: 30, color: Colors.red),
+//           ),
+//         ],
+//       ),
+
+//       // Padding(padding:EdgeInsets.all(20) ,child: Text("Enter Organizations Details",style: descriptionHeader.copyWith(
+//       //   fontSize:  20 ,
+//       //   color: AppColors.secondaryColor,
+//       // ),),),
+//       content: Column(
+//         mainAxisSize: MainAxisSize.min,
+//         mainAxisAlignment: MainAxisAlignment.start,
+//         crossAxisAlignment: CrossAxisAlignment.start,
+//         children: [
+//           TextField(
+//             controller: nameController,
+//             decoration: const InputDecoration(
+//               labelText: 'Name',
+//               border: OutlineInputBorder(),
+//             ),
+//           ),
+//           const SizedBox(height: 16),
+
+//           TextField(
+//             controller: emailController,
+//             decoration: const InputDecoration(
+//               labelText: 'Email',
+//               border: OutlineInputBorder(),
+//             ),
+//             keyboardType: TextInputType.emailAddress,
+//           ),
+//           const SizedBox(height: 16),
+
+//           TextField(
+//             controller: orgCodeController,
+//             decoration: const InputDecoration(
+//               labelText: 'Annual Team Allocation',
+//               border: OutlineInputBorder(),
+//             ),
+//             keyboardType: TextInputType.emailAddress,
+//           ),
+//           DropdownButtonFormField<String>(
+//   value: pricingType.value,
+//   items: ["general", "custom"]
+//       .map((type) => DropdownMenuItem(value: type, child: Text(type)))
+//       .toList(),
+//   onChanged: (val) {
+//     if (val != null) pricingType.value = val;
+//   },
+//   decoration: InputDecoration(labelText: "Pricing Type"),
+// ),
+
+// Obx(() => pricingType.value == "custom"
+//     ? TextFormField(
+//         controller: customPriceController,
+//         keyboardType: TextInputType.number,
+//         decoration: InputDecoration(labelText: "Custom Price Amount"),
+//       )
+//     : const SizedBox()),
+
+//         ],
+//       ),
+//       actions: [
+//         PrimaryButton(
+//           width: double.infinity,
+//           onTap: onSubmit,
+//           title: 'Submit',
+//           backgroundColor: AppColors.descriptiveTextColor,
+//         ),
+//       ],
+//     );
+//   }
+// }
 class NameEmailDialog extends StatelessWidget {
   final TextEditingController nameController;
   final TextEditingController emailController;
   final TextEditingController orgCodeController;
+  final TextEditingController customPriceController;
+  final RxString pricingType;
   final VoidCallback onSubmit;
 
   const NameEmailDialog({
@@ -15,6 +129,8 @@ class NameEmailDialog extends StatelessWidget {
     required this.nameController,
     required this.emailController,
     required this.orgCodeController,
+    required this.customPriceController,
+    required this.pricingType,
     required this.onSubmit,
   });
 
@@ -24,33 +140,22 @@ class NameEmailDialog extends StatelessWidget {
       title: Row(
         children: [
           Text(
-            "Enter Organizations Details   ",
+            "Enter Organization Details",
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
               color: AppColors.secondaryColor,
             ),
           ),
-          SizedBox(width: 20),
-          // Spacer(),
+          const Spacer(),
           InkWell(
-            onTap: () {
-              Get.back();
-            },
-
-            child: Icon(Icons.cancel, size: 30, color: Colors.red),
+            onTap: Get.back,
+            child: const Icon(Icons.cancel, size: 30, color: Colors.red),
           ),
         ],
       ),
-
-      // Padding(padding:EdgeInsets.all(20) ,child: Text("Enter Organizations Details",style: descriptionHeader.copyWith(
-      //   fontSize:  20 ,
-      //   color: AppColors.secondaryColor,
-      // ),),),
       content: Column(
         mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           TextField(
             controller: nameController,
@@ -60,7 +165,6 @@ class NameEmailDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-
           TextField(
             controller: emailController,
             decoration: const InputDecoration(
@@ -70,15 +174,55 @@ class NameEmailDialog extends StatelessWidget {
             keyboardType: TextInputType.emailAddress,
           ),
           const SizedBox(height: 16),
-
           TextField(
             controller: orgCodeController,
             decoration: const InputDecoration(
               labelText: 'Annual Team Allocation',
               border: OutlineInputBorder(),
             ),
-            keyboardType: TextInputType.emailAddress,
+            keyboardType: TextInputType.number,
           ),
+          const SizedBox(height: 16),
+          Obx(
+            () => DropdownButtonFormField<String>(
+              value: pricingType.value,
+              items:
+                  ["general", "custom"]
+                      .map(
+                        (type) =>
+                            DropdownMenuItem(value: type, child: Text(type)),
+                      )
+                      .toList(),
+              onChanged: (val) {
+                if (val != null) pricingType.value = val;
+              },
+              decoration: const InputDecoration(labelText: "Pricing Type"),
+            ),
+          ),
+          const SizedBox(height: 16),
+          Obx(
+            () =>
+                pricingType.value == "custom"
+                    ? TextFormField(
+                      controller: customPriceController,
+                      keyboardType: TextInputType.number,
+                      decoration: const InputDecoration(
+                        labelText: "Custom Price Amount",
+                        border: OutlineInputBorder(),
+                      ),
+                    )
+                    : const SizedBox(),
+          ),
+
+          const SizedBox(height: 16),
+          // TextField(
+          //   controller: customPriceController,
+          //   decoration: const InputDecoration(
+          //     labelText: 'Add Price',
+          //     border: OutlineInputBorder(),
+          //   ),
+          //   keyboardType: TextInputType.number,
+          // ),
         ],
       ),
       actions: [

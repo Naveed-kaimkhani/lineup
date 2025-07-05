@@ -11,7 +11,7 @@ class PlayerBackgroundScaffold extends StatelessWidget {
       body: LayoutBuilder(
         builder: (context, constraints) {
           double screenWidth = constraints.maxWidth;
-          double imageWidth = screenWidth * 0.6; // Adjust as needed
+          double imageWidth = screenWidth * 0.5; // Adjust as needed
           double imageHeight = constraints.maxHeight;
 
           return Stack(
@@ -19,7 +19,7 @@ class PlayerBackgroundScaffold extends StatelessWidget {
               Align(
                 alignment: Alignment.centerRight,
                 child: Image.asset(
-                  'assets/images/image_player.jpg',
+                  'assets/images/image_player.png',
                   fit: BoxFit.contain,
                   width: imageWidth,
                   height: imageHeight,

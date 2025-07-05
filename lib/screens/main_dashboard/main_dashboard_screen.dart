@@ -231,21 +231,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           );
                         }),
 
-                        // SizedBox(width: 10),
-                        // PrimaryButton(
-                        //   width: 300,
-                        //   onTap: () async {
-                        //     Get.toNamed(RoutesPath.paymentHistoryScreen);
-                        //   },
-                        //   radius: 20.r,
-                        //   textStyle: descriptiveStyle.copyWith(
-                        //     color: Colors.white,
-                        //     fontSize: isMobile ? 18 : 18,
-                        //   ),
-
-                        //   title: 'Activation History',
-                        //   backgroundColor: AppColors.secondaryColor,
-                        // ),
+                       
                         SizedBox(width: 10),
                         PrimaryButton(
                           width: 300,

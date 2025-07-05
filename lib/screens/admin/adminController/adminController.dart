@@ -64,7 +64,6 @@ void setUsers(List<UserListResponse> users) {
     String? token = await SharedPreferencesUtil.read(
       SharedPreferencesKeysConstants.bearerToken,
     );
-    log(token.toString());
     try {
       final response = await AdminApi.getUser();
 
@@ -120,8 +119,8 @@ void setUsers(List<UserListResponse> users) {
 
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
-        // log(jsonEncode(response.data));
-        paymentModel.value = response.data!.cast<PaymentModel>();
+
+        paymentModel.value = response.data!.cast<PaymentModel>(); 
 
         debugger();
         update();

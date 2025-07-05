@@ -49,7 +49,7 @@ class PaymentModel {
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
-    log(json.toString());
+
     return PaymentModel(
       id: json['id'] as int?,
       userId: json['user_id'] as int?,

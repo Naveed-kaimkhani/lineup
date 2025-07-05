@@ -599,11 +599,6 @@ class NewTeamController extends GetxController {
     BuildContext context,
     int? teamId,
   ) async {
-    log(opponentController.text);
-
-    log(dateController.text);
-
-    log(insController.text);
     if (opponentController.text.trim().isEmpty ||
         dateController.text.trim().isEmpty ||
         insController.text.trim().isEmpty) {
