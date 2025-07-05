@@ -68,19 +68,13 @@ class TeamController extends GetxController {
     try {
       // Call the API to get the list of teams
       final response = await TeamsApi.getTeam();
-      // log(response.data.toString());
-      // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
         teams.value = response.data!;
         teams.refresh();
       } else {
-        // log(response.data.toString());
-        // Handle the case where no teams are returned
         teams.value = [];
       }
     } catch (e) {
-      // Handle any errors that occur
-      log('Error fetching teams: $e');
     }
   }
 
@@ -145,7 +139,6 @@ class TeamController extends GetxController {
   Future<bool> isTeamEditable(int teamId) async {
     try {
       toggleLoader(true);
-      // log("isEditiable");
       final response = await TeamsApi.checkTeamEditability(teamId);
       toggleLoader(false);
       if (response.statusCode == 200) {

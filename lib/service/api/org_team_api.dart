@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
+import 'package:gaming_web_app/service/api_end_point.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -13,6 +14,27 @@ class TeamRepository {
   }) async {
     final response = await http.get(
       Uri.parse('$baseUrl?page=$page'),
+      headers: {'Authorization': 'Bearer $token'},
+    );
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      final List<OrgTeamModel> teams =
+          (data['data'] as List)
+              .map((item) => OrgTeamModel.fromJson(item))
+              .toList();
+
+      final int totalPages = data['meta']['last_page'];
+      return {'teams': teams, 'totalPages': totalPages};
+    } else {
+      throw Exception('Failed to load teams');
+    }
+  }
+ Future<Map<String, dynamic>> fetchTeamsForAdminView({
+    int page = 1,
+    required String token,
+  }) async {
+    final response = await http.get(
+      Uri.parse('${APIEndPoints.adminTeamViewApi}?page=$page'),
       headers: {'Authorization': 'Bearer $token'},
     );
     if (response.statusCode == 200) {

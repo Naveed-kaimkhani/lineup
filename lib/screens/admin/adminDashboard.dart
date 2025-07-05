@@ -1,10 +1,12 @@
 import 'dart:convert';
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:gaming_web_app/Base/controller/org_controller/org_teams_controller.dart'
+    show OrgTeamsController;
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
+import 'package:gaming_web_app/Base/controller/teamController/team_view_controller_org.dart';
 import 'package:gaming_web_app/Base/model/adminModel/paymentTrackingModel.dart';
+import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -12,6 +14,9 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/screens/admin/adminController/settings_controller.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
+import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
+import 'package:gaming_web_app/screens/team_dashboard/teams_view_in_admin.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
@@ -56,9 +61,6 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
   Widget build(BuildContext context) {
     return Obx(
       () => DashboardScaffold(
-        onTab: () {
-          // Get.toNamed(RoutesPath.mainDashboardScreen);
-        },
         userImage: 'assets/images/dummy_image.png',
         userName: 'Test User',
         title: 'Game-Ready',
@@ -116,18 +118,19 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                                   : AppColors.secondaryColor,
                         ),
                         SizedBox(width: 16),
+
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
+                            adminController.fetchAllUser();
                             adminController.selectedTab.value = 3;
-                            adminController.fetchTeamsPositioned();
                           },
                           radius: 20.r,
                           textStyle: descriptiveStyle.copyWith(
                             color: Colors.white,
                             fontSize: 18,
                           ),
-                          title: '  Position Management  ',
+                          title: '  Team Management  ',
                           backgroundColor:
                               3 == adminController.selectedTab.value
                                   ? AppColors.primaryColor
@@ -137,15 +140,15 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
-                            adminController.fetchPromoCode();
                             adminController.selectedTab.value = 4;
+                            adminController.fetchTeamsPositioned();
                           },
                           radius: 20.r,
                           textStyle: descriptiveStyle.copyWith(
                             color: Colors.white,
                             fontSize: 18,
                           ),
-                          title: '  Promo Code Management  ',
+                          title: '  Position Management  ',
                           backgroundColor:
                               4 == adminController.selectedTab.value
                                   ? AppColors.primaryColor
@@ -155,8 +158,26 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
-                            adminController.fetchTeamsPayment();
+                            adminController.fetchPromoCode();
                             adminController.selectedTab.value = 5;
+                          },
+                          radius: 20.r,
+                          textStyle: descriptiveStyle.copyWith(
+                            color: Colors.white,
+                            fontSize: 18,
+                          ),
+                          title: '  Promo Code Management  ',
+                          backgroundColor:
+                              5 == adminController.selectedTab.value
+                                  ? AppColors.primaryColor
+                                  : AppColors.secondaryColor,
+                        ),
+                        SizedBox(width: 16),
+                        PrimaryButton(
+                          // width: 300,
+                          onTap: () async {
+                            adminController.fetchTeamsPayment();
+                            adminController.selectedTab.value = 6;
                           },
                           radius: 20.r,
                           textStyle: descriptiveStyle.copyWith(
@@ -165,7 +186,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           ),
                           title: '  Payment Tracking  ',
                           backgroundColor:
-                              5 == adminController.selectedTab.value
+                              6 == adminController.selectedTab.value
                                   ? AppColors.primaryColor
                                   : AppColors.secondaryColor,
                         ),
@@ -174,7 +195,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                         PrimaryButton(
                           // width: 300,
                           onTap: () async {
-                            adminController.selectedTab.value = 6;
+                            adminController.selectedTab.value = 7;
                           },
                           radius: 20.r,
                           textStyle: descriptiveStyle.copyWith(
@@ -183,7 +204,7 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
                           ),
                           title: '       Pricing        ',
                           backgroundColor:
-                              6 == adminController.selectedTab.value
+                              7 == adminController.selectedTab.value
                                   ? AppColors.primaryColor
                                   : AppColors.secondaryColor,
                         ),
@@ -197,12 +218,14 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SizedBox(height: 27.h),
               if (adminController.selectedTab.value == 1) TeamTable(),
               if (adminController.selectedTab.value == 2) UserManagement(),
-              if (adminController.selectedTab.value == 3)
+
+              if (adminController.selectedTab.value == 3) TeamView(),
+              if (adminController.selectedTab.value == 4)
                 PositionedManagemant(),
-              if (adminController.selectedTab.value == 4) PromoCodeManagemant(),
-              if (adminController.selectedTab.value == 5)
+              if (adminController.selectedTab.value == 5) PromoCodeManagemant(),
+              if (adminController.selectedTab.value == 6)
                 PaymentTrackingManagemant(),
-              if (adminController.selectedTab.value == 6) Settings(),
+              if (adminController.selectedTab.value == 7) Settings(),
               SizedBox(height: 27.h),
             ],
           ),
@@ -337,7 +360,6 @@ class _MobileLayoutState extends State<_MobileLayout> {
     required String email,
     required int annualTeamAllocation,
   }) async {
-    // log("in methodd");
     final url = Uri.parse('http://18.189.193.38/api/v1/admin/organizations');
 
     try {
@@ -1269,16 +1291,19 @@ class PaymentManageOrWebLayout extends StatelessWidget {
                     ),
                     Expanded(
                       flex: 1,
-                      child: _buildHeader("Team Name", teamNameWidth),
+                      child: _buildHeader(
+                        "Available Team Slots",
+                        teamNameWidth,
+                      ),
                     ),
-                    Expanded(flex: 1, child: _buildHeader("amount", yearWidth)),
+                    Expanded(flex: 1, child: _buildHeader("Amount", yearWidth)),
 
                     Expanded(
                       flex: 1,
-                      child: _buildHeader("currency", seasonWidth),
+                      child: _buildHeader("Currency", seasonWidth),
                     ),
 
-                    _buildHeader("status", ageGroupWidth),
+                    _buildHeader("Status", ageGroupWidth),
                   ],
                 ),
               ),
@@ -1319,15 +1344,18 @@ class PaymentManageOrWebLayout extends StatelessWidget {
             Expanded(
               flex: 1,
               child: _buildCell(
-                team.user!.firstName.toString(),
+                // team.user!.firstName.toString(),
+                team.user?.firstName ?? '-',
                 // "fsfsfs",
                 teamNameWidth,
               ),
             ),
+            SizedBox(width: 60),
             Expanded(
               flex: 2,
               child: _buildCell(
-                team.team!.name.toString().toString(),
+                team.user?.slots.toString() ?? '-',
+
                 teamNameWidth,
               ),
             ),
@@ -1633,16 +1661,7 @@ class _PositionedManageOrWebLayoutState
   Widget _buildRowPositioned(BuildContext context, Position team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1677,10 +1696,6 @@ class _PositionedManageOrWebLayoutState
                   ),
                 )
                 : SizedBox(),
-            // Expanded(
-            //   flex: 1,
-            //   child: _buildCell(team..toString(), seasonWidth),
-            // ),
           ],
         ),
       ),
@@ -1690,16 +1705,7 @@ class _PositionedManageOrWebLayoutState
   Widget _buildRowUser(BuildContext context, UserListResponse team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1747,16 +1753,7 @@ class _PositionedManageOrWebLayoutState
   Widget _buildRow(BuildContext context, Organizations team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1806,13 +1803,35 @@ class userManageOrWebLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
-    // controller.getData();
+
     return Center(
       child: SizedBox(
         width: maxWidth,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            Padding(
+              padding: const EdgeInsets.only(bottom: 12),
+              child: SizedBox(
+                width: 400,
+                child: TextField(
+                  decoration: InputDecoration(
+                    hintText: 'Search by name',
+                    prefixIcon: Icon(Icons.search),
+                    border: OutlineInputBorder(
+                      
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                  onChanged: (value) {
+                    adminController.searchQuery.value =
+                        value; // ✅ triggers debounce
+                  },
+                ),
+              ),
+            ),
             // Header Row
             SingleChildScrollView(
               scrollDirection: Axis.horizontal,
@@ -1841,28 +1860,10 @@ class userManageOrWebLayout extends StatelessWidget {
                       flex: 2,
                       child: _buildHeader("Phone", seasonWidth),
                     ),
-                    // Expanded(
-                    //   flex: 1,
-                    //   child: _buildHeader("Age Group", ageGroupWidth),
-                    // ),
-                    _buildHeader("created_at", ageGroupWidth),
 
-                    // SizedBox(width: actionWidth),
-                    // Expanded(
-                    //     flex: 3,
-                    //     child: SizedBox())
+                    _buildHeader("created_at", ageGroupWidth),
                   ],
                 ),
-
-                // Row(
-                //   children: [
-                //     _buildHeader("Team Name", teamNameWidth),
-                //     _buildHeader("Year", yearWidth),
-                //     _buildHeader("Season", seasonWidth),
-                //     _buildHeader("Age Group", ageGroupWidth),
-                //     SizedBox(width: actionWidth),
-                //   ],
-                // ),
               ),
             ),
             const SizedBox(height: 8),
@@ -1870,13 +1871,13 @@ class userManageOrWebLayout extends StatelessWidget {
             // Data Rows
             Obx(() {
               final paginatedUserResponse =
-                  adminController.paginatedUserResponse.value ?? [];
+                  adminController.paginatedUserResponse;
 
               return SingleChildScrollView(
                 // scrollDirection: Axis.horizontal,
                 child: Column(
                   children:
-                      paginatedUserResponse!.map((user) {
+                      paginatedUserResponse.map((user) {
                         return _buildRowUser(context, user);
                       }).toList(),
                 ),
@@ -1891,16 +1892,7 @@ class userManageOrWebLayout extends StatelessWidget {
   Widget _buildRowUser(BuildContext context, UserListResponse team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1923,12 +1915,24 @@ class userManageOrWebLayout extends StatelessWidget {
 
             Expanded(
               flex: 1,
-              child: _buildCell(team.createdAt.toString(), seasonWidth),
+              child: _buildCell(
+                _formatDate(team.createdAt.toString()),
+                seasonWidth,
+              ),
             ),
           ],
         ),
       ),
     );
+  }
+
+  String _formatDate(String dateStr) {
+    try {
+      final dateTime = DateTime.parse(dateStr);
+      return DateFormat('MM-dd-yyyy').format(dateTime.toLocal());
+    } catch (e) {
+      return dateStr; // fallback if parsing fails
+    }
   }
 
   Widget _buildHeader(String title, double width) {
@@ -1944,16 +1948,7 @@ class userManageOrWebLayout extends StatelessWidget {
   Widget _buildRow(BuildContext context, Organizations team) {
     final double maxWidth = MediaQuery.of(context).size.width * 0.85;
     return InkWell(
-      onTap: () async {
-        // showNameEmailDialog();
-        // controller.teamDataIndex.value = team.id!;
-        // controller.teamDataIndex.value = team.id!;
-        // final prefs = await SharedPreferences.getInstance();
-        // await prefs.setInt('teamInfoId', team.id!);
-        // controller.fetchGetTeamData();
-        // await Future.delayed(const Duration(seconds: 1));
-        // Get.toNamed(RoutesPath.teamDashboardScreen);
-      },
+      onTap: () async {},
       child: Container(
         width: maxWidth,
         padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
@@ -1970,72 +1965,6 @@ class userManageOrWebLayout extends StatelessWidget {
               flex: 1,
               child: _buildCell(team.email.toString(), seasonWidth),
             ),
-            // Expanded(flex: 1, child: _buildCell(team.ageGroup, ageGroupWidth)),
-            // InkWell(
-            //   onTap: () {
-            //     // Delete logic
-            //     showCustomDialog(
-            //       context: context,
-            //       title: 'Delete Team',
-            //       description: 'Are you sure you want to delete This Team?',
-            //       onOk: () {
-            //         globleController.teamDelete(team.id!);
-            //       },
-            //       onCancel: () {
-            //         print("Cancel pressed");
-            //       },
-            //     );
-            //   },
-            //   child: Image.asset(
-            //     'assets/images/delete_icon.png',
-            //     height: 36.h,
-            //     width: 40.w,
-            //   ),
-            // ),
-            // Expanded(
-            //     flex: 2,
-            //     child: SizedBox()),
-            // Expanded(
-            //   flex: 2,
-            //   child: Row(
-            //     children: [
-            //       Expanded(
-            //         child: Container()
-            //
-            //         // ElevatedButton(
-            //         //   onPressed: () {},
-            //         //   style: ElevatedButton.styleFrom(
-            //         //     backgroundColor: AppColors.activeGreenColor,
-            //         //     shape: RoundedRectangleBorder(
-            //         //       borderRadius: BorderRadius.circular(5),
-            //         //     ),
-            //         //   ),
-            //         //   child:FittedBox(
-            //         //     fit: BoxFit.scaleDown,
-            //         //     child: Center(
-            //         //       child: Text(
-            //         //         'Edit Team',
-            //         //         style: fieldLabelStyle.copyWith(color: Colors.white),
-            //         //         textAlign: TextAlign.center,
-            //         //       ),
-            //         //     ),
-            //         //   )
-            //         // ),
-            //       ),
-            //       const SizedBox(width: 10),
-            //       // InkWell(
-            //       //   onTap: () {
-            //       //     // Delete logic
-            //       //   },
-            //       //   child: Image.asset(
-            //       //     'assets/images/delete_icon.png',
-            //       //     height: 36.h,
-            //       //     width: 40.w,
-            //       //   ),
-            //       // ),
-            //     ],
-            //   ),
-            // ),
           ],
         ),
       ),

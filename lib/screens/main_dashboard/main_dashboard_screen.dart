@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/available_teamSlots_controller.dart';
@@ -98,20 +96,20 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                         backgroundColor: AppColors.secondaryColor,
                       ),
 
-                      SizedBox(height: 12.h),
-                      PrimaryButton(
-                        width: double.infinity,
-                        onTap: () async {
-                          Get.toNamed(RoutesPath.paymentHistoryScreen);
-                        },
-                        radius: 20.r,
-                        textStyle: descriptiveStyle.copyWith(
-                          color: Colors.white,
-                          fontSize: isMobile ? 18 : 18,
-                        ),
-                        title: 'Activation History',
-                        backgroundColor: AppColors.secondaryColor,
-                      ),
+                      // SizedBox(height: 12.h),
+                      // PrimaryButton(
+                      //   width: double.infinity,
+                      //   onTap: () async {
+                      //     Get.toNamed(RoutesPath.paymentHistoryScreen);
+                      //   },
+                      //   radius: 20.r,
+                      //   textStyle: descriptiveStyle.copyWith(
+                      //     color: Colors.white,
+                      //     fontSize: isMobile ? 18 : 18,
+                      //   ),
+                      //   title: 'Activation History',
+                      //   backgroundColor: AppColors.secondaryColor,
+                      // ),
                       Obx(() {
                         final count =
                             availableSlotsController
@@ -163,7 +161,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           ),
                           title:
                               count != null
-                                  ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
+                                  ? 'Activate Team ($count Credit${count == 1 ? '' : 's'} Left)'
                                   : 'Checking...',
                         );
                       }),
@@ -228,26 +226,26 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                             ),
                             title:
                                 count != null
-                                    ? 'Create Team ($count Credit${count == 1 ? '' : 's'} Left)'
+                                    ? 'Activate Team ($count Credit${count == 1 ? '' : 's'} Left)'
                                     : 'Checking...',
                           );
                         }),
 
-                        SizedBox(width: 10),
-                        PrimaryButton(
-                          width: 300,
-                          onTap: () async {
-                            Get.toNamed(RoutesPath.paymentHistoryScreen);
-                          },
-                          radius: 20.r,
-                          textStyle: descriptiveStyle.copyWith(
-                            color: Colors.white,
-                            fontSize: isMobile ? 18 : 18,
-                          ),
+                        // SizedBox(width: 10),
+                        // PrimaryButton(
+                        //   width: 300,
+                        //   onTap: () async {
+                        //     Get.toNamed(RoutesPath.paymentHistoryScreen);
+                        //   },
+                        //   radius: 20.r,
+                        //   textStyle: descriptiveStyle.copyWith(
+                        //     color: Colors.white,
+                        //     fontSize: isMobile ? 18 : 18,
+                        //   ),
 
-                          title: 'Activation History',
-                          backgroundColor: AppColors.secondaryColor,
-                        ),
+                        //   title: 'Activation History',
+                        //   backgroundColor: AppColors.secondaryColor,
+                        // ),
                         SizedBox(width: 10),
                         PrimaryButton(
                           width: 300,
@@ -325,6 +323,13 @@ class _MobileLayout extends StatelessWidget {
                     // crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       _buildInfoRow("Team Name", team!.name),
+
+                      _buildInfoRow(
+                        "Organization Name",
+                        team.organization != null
+                            ? team.organization!.name ?? "-"
+                            : "-",
+                      ),
                       _buildInfoRow("Year", team.year.toString()),
                       _buildInfoRow("Season", team.season ?? "-"),
                       _buildInfoRow("Age Group", team.ageGroup),
@@ -460,6 +465,11 @@ class TabletOrWebLayout extends StatelessWidget {
                         flex: 2,
                         child: _buildHeader("Team Name", teamNameWidth),
                       ),
+                      Expanded(
+                        flex: 2,
+                        child: _buildHeader("Organization Name", teamNameWidth),
+                      ),
+
                       Expanded(flex: 1, child: _buildHeader("Year", yearWidth)),
                       Expanded(
                         flex: 1,
@@ -529,6 +539,16 @@ class TabletOrWebLayout extends StatelessWidget {
           children: [
             Expanded(flex: 2, child: _buildCell(team.name, teamNameWidth)),
             Expanded(
+              flex: 2,
+              child: _buildCell(
+                team.organization != null
+                    ? team.organization!.name ?? "-"
+                    : "-",
+                teamNameWidth,
+              ),
+            ),
+
+            Expanded(
               flex: 1,
               child: _buildCell(team.year.toString(), yearWidth),
             ),
@@ -542,8 +562,6 @@ class TabletOrWebLayout extends StatelessWidget {
               onTap: () async {
                 bool isEditable = await controller.isTeamEditable(team.id);
                 if (isEditable) {
-                  // SnackbarUtils.showSuccess("edditable");
-                  // showEditTeamDialog(team.id.toString());
                   showEditTeamDialog(
                     team.id.toString(),
                     hints: {

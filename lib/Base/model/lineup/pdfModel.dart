@@ -1,17 +1,15 @@
 // game_model.dart
 
+
 class PDFMODEL {
   final GameDetails? gameDetails;
   final List<PlayerInfo>? playersInfo;
   final List<LineupAssignment>? lineupAssignments;
 
-  PDFMODEL({
-  this.gameDetails,
-    this.playersInfo,
-    this.lineupAssignments,
-  });
+  PDFMODEL({this.gameDetails, this.playersInfo, this.lineupAssignments});
 
   factory PDFMODEL.fromJson(Map<String, dynamic> json) {
+
     return PDFMODEL(
       gameDetails: GameDetails.fromJson(json['game_details']),
       playersInfo:
@@ -108,10 +106,12 @@ class LineupAssignment {
       (key, value) => MapEntry(int.parse(key), value.toString()),
     );
 
-    return LineupAssignment(playerId: json['player_id'], innings: inningsMap, isOut: json['isOut']);
+    return LineupAssignment(
+      playerId: json['player_id'],
+      innings: inningsMap,
+      isOut: json['isOut'],
+    );
   }
-  
-
 
   Map<String, dynamic> toJson() => {
     'player_id': playerId,

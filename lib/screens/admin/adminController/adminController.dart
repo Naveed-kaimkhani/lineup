@@ -1,6 +1,9 @@
+import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
+import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:get/get.dart';
 
 import '../../../Base/controller/getTeamData.dart';
@@ -16,7 +19,7 @@ import '../../../service/api/team.dart';
 import '../../../utils/snackbarUtils.dart';
 import 'orginatizationDialog.dart';
 
-import 'package:http/http.dart' as http;
+
 class AdminController extends GetxController {
   var organization = <Organizations?>[].obs; // flat list of Organizations
 
@@ -31,21 +34,45 @@ class AdminController extends GetxController {
   final positionedCategoryController = TextEditingController();
 
   RxList<UserListResponse> paginatedUserResponse = <UserListResponse>[].obs;
-  RxList<Position> teamPositioned = <Position>[].obs;
-  RxList<PaymentModel> paymentModel = <PaymentModel>[].obs;
-  RxList<PromoCodeResponse> promoCodeResponse = <PromoCodeResponse>[].obs;
 
-  // Rx<PaginatedUserResponse> paginatedUserResponse = PaginatedUserResponse().obs;
+  RxList<Position> teamPositioned = <Position>[].obs;
+
+  RxList<PaymentModel> paymentModel = <PaymentModel>[].obs;
+
+  RxList<PromoCodeResponse> promoCodeResponse = <PromoCodeResponse>[].obs;
+  final RxString searchQuery = ''.obs;
+
+
+final RxList<UserListResponse> originalUserList = <UserListResponse>[].obs;
+// final RxList<UserListResponse> paginatedUserResponse = <UserListResponse>[].obs;
 
   RxInt selectedTab = 1.obs;
+  @override
+  void onInit() {
+    super.onInit();
 
+    // Apply debounce to search query
+    debounce(searchQuery, (value) {
+      filterUserList(value);
+    }, time: Duration(milliseconds: 300));
+  }
+void setUsers(List<UserListResponse> users) {
+  originalUserList.value = users;
+  paginatedUserResponse.value = users;
+}
   Future<void> fetchAllUser() async {
+    String? token = await SharedPreferencesUtil.read(
+      SharedPreferencesKeysConstants.bearerToken,
+    );
+    log(token.toString());
     try {
       final response = await AdminApi.getUser();
 
       //
       if (response?.data != null) {
         paginatedUserResponse.value = response!.data!;
+              setUsers(response.data!); // ✅ Set both original and paginated lists
+
 
         update();
       } else {
@@ -68,14 +95,23 @@ class AdminController extends GetxController {
         debugger();
         update();
       } else {
-        // Handle the case where no teams are returned
-        // teams.value = [];
       }
     } catch (e) {
       // Handle any errors that occur
       print('Error fetching teams: $e');
     }
   }
+
+  void filterUserList(String query) {
+  if (query.isEmpty) {
+    paginatedUserResponse.value = originalUserList;
+  } else {
+    final lowerQuery = query.toLowerCase();
+    paginatedUserResponse.value = originalUserList.where((user) {
+      return (user.firstName?.toLowerCase() ?? '').contains(lowerQuery);
+    }).toList();
+  }
+}
 
   Future<void> fetchTeamsPayment() async {
     try {
@@ -84,6 +120,7 @@ class AdminController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null && response.data!.isNotEmpty) {
+        // log(jsonEncode(response.data));
         paymentModel.value = response.data!.cast<PaymentModel>();
 
         debugger();
@@ -165,7 +202,6 @@ class AdminController extends GetxController {
 
   Future<void> adminCreateOrganization() async {
     try {
-      log("hn bhai");
       final orginizationCreate = OrginizationCreate(
         name: orginizationNameController.text.trim(),
         email: orginizationEmail.text.trim(),
@@ -187,7 +223,6 @@ class AdminController extends GetxController {
 
         // SnackbarUtils.showSuccess("Hi jack");
       } else {
-        log(response.message ?? "");
         // Handle the case where no teams are returned
         SnackbarUtils.showErrorr("Organization Add Failed Try again");
       }

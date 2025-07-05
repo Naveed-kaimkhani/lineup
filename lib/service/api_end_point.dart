@@ -60,6 +60,7 @@ class APIEndPoints {
   
   static const setting = "$baseUrl/admin/settings";
 
+  static const adminTeamViewApi = "$baseUrl/admin/teams";
   static const promoRenewal =
       "$baseUrl/organization-panel/subscription/redeem-promo";
 

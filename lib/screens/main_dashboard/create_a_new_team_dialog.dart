@@ -112,7 +112,8 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                           children: [
                             Spacer(),
                             Text(
-                              'CREATE NEW TEAM',
+                              // 'CREATE NEW TEAM',
+                              'Is the team part of an organization?',
                               style: TextStyle(
                                 fontSize: headerFontSize,
                                 fontWeight: FontWeight.bold,
@@ -159,11 +160,11 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                               controller: newTeamController.pageController,
                               physics: const NeverScrollableScrollPhysics(),
                               children: [
-                              //  controller.orgCodeDialog(),
-                              
+                                //  controller.orgCodeDialog(),
                                 _buildSportSelection(context),
                                 AddTeamNameScreen(),
                                 _buildTeamTypeSelection(context),
+
                                 AdGeGroup(),
                                 AddYearScreen(),
                                 AddSeasonScreen(),
@@ -378,9 +379,9 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
     ];
     final NewTeamController controller = Get.find<NewTeamController>();
     // Responsive dimensions
-    final iconSize = screenSize.width < 600 ? screenSize.width * 0.06 : 60.0;
+    // final iconSize = screenSize.width < 600 ? screenSize.width * 0.06 : 60.0;
     final iconContainerPadding = screenSize.width < 600 ? 15.0 : 20.0;
-    final fontSizeLabel = screenSize.width < 600 ? 12.0 : 14.0;
+    // final fontSizeLabel = screenSize.width < 600 ? 12.0 : 14.0;
 
     return Column(
       mainAxisSize: MainAxisSize.min,
@@ -398,6 +399,8 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
         Row(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: List.generate(sports.length, (index) {
+            controller.teamType.value = sports[index]['label']!;
+
             final sport = sports[index];
             final selected = index == _selectedSportIndex;
 

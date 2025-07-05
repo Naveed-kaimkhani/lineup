@@ -10,8 +10,7 @@ class SubscriptionInfo {
   });
 
   factory SubscriptionInfo.fromJson(Map<String, dynamic> json) {
-    // log("on wron valuse");
-    // log(json.toString());
+
     return SubscriptionInfo(
       // organizationAccessCode: json['organization_code'] as String,
       // subscriptionExpiresAt: json['subscription_expires_at'] as String,

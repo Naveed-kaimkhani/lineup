@@ -185,7 +185,7 @@ class FCreatePromoCodeDialog extends StatelessWidget {
           ),
 
           const SizedBox(height: 16),
-         
+
           const SizedBox(height: 16),
           TextField(
             controller: max_uses_per_user,
@@ -361,9 +361,6 @@ class PromoCodeDialog extends StatelessWidget {
     );
   }
 }
-
-
-
 
 class OrgCodeDialog extends StatelessWidget {
   final TextEditingController nameController;

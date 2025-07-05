@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/createTeamController.dart';
@@ -239,55 +237,58 @@ class _TeamDashboardBody extends StatelessWidget {
                   SizedBox(width: 15.w),
 
                   // "Previous Game" button with fixed width
-                  _buildActionButton(
-                    'Previous Games',
-                    Color(0xFF9B1C1C), // Dark red color
-                    () async {
-                      // Show dialog with list of previous games
-                      controller.checkTeamEditable.value
-                          ? await showDialog(
-                            context: context,
-                            builder:
-                                (context) => PreviousGameDialog(
-                                  items: [
-                                    // Sample past game data
-                                    {
-                                      'name': 'At Tigers',
-                                      'date': 'April 03, 2025',
-                                    },
-                                    {
-                                      'name': 'Vs Commanders',
-                                      'date': 'April 06, 2025',
-                                    },
-                                    {
-                                      'name': 'At Wildcats',
-                                      'date': 'April 10, 2025',
-                                    },
-                                  ],
-                                ),
-                          )
-                          : showCustomDialog(
-                            context: context,
-                            title: 'Your Team has been Expired',
-                            description:
-                                'Are you want to renew team activation?',
-                            onOk: () async {
-                              final controlle = Get.find<NewTeamController>();
+                  controller.teamData.value?.games?.length == 0
+                      ? SizedBox()
+                      : _buildActionButton(
+                        'Previous Games',
+                        Color(0xFF9B1C1C), // Dark red color
+                        () async {
+                          // Show dialog with list of previous games
+                          controller.checkTeamEditable.value
+                              ? await showDialog(
+                                context: context,
+                                builder:
+                                    (context) => PreviousGameDialog(
+                                      items: [
+                                        // Sample past game data
+                                        {
+                                          'name': 'At Tigers',
+                                          'date': 'April 03, 2025',
+                                        },
+                                        {
+                                          'name': 'Vs Commanders',
+                                          'date': 'April 06, 2025',
+                                        },
+                                        {
+                                          'name': 'At Wildcats',
+                                          'date': 'April 10, 2025',
+                                        },
+                                      ],
+                                    ),
+                              )
+                              : showCustomDialog(
+                                context: context,
+                                title: 'Your Team has been Expired',
+                                description:
+                                    'Are you want to renew team activation?',
+                                onOk: () async {
+                                  final controlle =
+                                      Get.find<NewTeamController>();
 
-                              // globleController.teamDelete(team.id!);
-                              String? url = await controller
-                                  .getRenewalLinkForTeam(
-                                    controller.teamDataIndex.value,
-                                  );
-                              controlle.launchPayUrl(url ?? '');
-                            },
-                            onCancel: () {
-                              Get.back();
-                            },
-                          );
-                    },
-                    width: 180.w,
-                  ),
+                                  // globleController.teamDelete(team.id!);
+                                  String? url = await controller
+                                      .getRenewalLinkForTeam(
+                                        controller.teamDataIndex.value,
+                                      );
+                                  controlle.launchPayUrl(url ?? '');
+                                },
+                                onCancel: () {
+                                  Get.back();
+                                },
+                              );
+                        },
+                        width: 180.w,
+                      ),
                   SizedBox(width: 15.w),
 
                   // "Add New Game" button with fixed width
@@ -574,7 +575,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 children: [
                   // Column headers with flex to control relative widths
                   _buildHeaderCell('#', flex: 1), // Jersey number
-                  _buildHeaderCell('Player Names', flex: 3), // Player name
+                  _buildHeaderCell('Player Names', flex: 2), // Player name
                   _buildHeaderCell(
                     '% innings played',
                     flex: 2,
@@ -583,7 +584,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                     'Total innings',
                     flex: 2,
                   ), // Total innings count
-                  _buildHeaderCell('% INF', flex: 1), // Percentage infield
+                  _buildHeaderCell('% INF', flex: 2), // Percentage infield
                   _buildHeaderCell(
                     'Favorite Position',
                     flex: 2,
@@ -624,7 +625,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
 
   // Helper method to create a row for each player
   Widget _buildPlayerRow(BuildContext context, TeamPlayer players) {
-    final TeamController controller = Get.find<TeamController>();
+    // final TeamController controller = Get.find<TeamController>();
     return Column(
       children: [
         // Row content with player data
@@ -648,7 +649,7 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 ),
                 // Player name column
                 Expanded(
-                  flex: 3,
+                  flex: 2,
                   child: Text(
                     "${players.firstName} ${players.lastName}",
                     style: TextStyle(fontSize: 14),
@@ -673,9 +674,8 @@ class _ResponsivePlayerTable extends StatelessWidget {
                 ),
                 // INF percentage column
                 Expanded(
-                  flex: 1,
+                  flex: 2,
                   child: Text(
-                    // player['inf'],
                     players.stats.pctInfPlayed.toString(),
                     style: TextStyle(fontSize: 14),
                   ),

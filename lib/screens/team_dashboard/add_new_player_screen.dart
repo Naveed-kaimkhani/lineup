@@ -656,29 +656,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       textEditingController.text,
                                                                                     ),
 
-                                                                                    // onChanged: (
-                                                                                    //   val,
-                                                                                    // ) {
-                                                                                    //   val =
-                                                                                    //       val.trim().toUpperCase();
-                                                                                    //   controller.enerLable.value = val;
-                                                                                    //         final shortcuts = {
-                                                                                    //     'L':
-                                                                                    //         'LF',
-                                                                                    //     'R':
-                                                                                    //         'RF',
-                                                                                    //     'O':
-                                                                                    //         'OUT',
-                                                                                    //     'S':
-                                                                                    //         'SS',
-                                                                                    //     '1':
-                                                                                    //         '1B',
-                                                                                    //     '2':
-                                                                                    //         '2B',
-                                                                                    //     '3':
-                                                                                    //         '3B',
-                                                                                    //   };
-                                                                                    // },
                                                                                     onChanged: (
                                                                                       val,
                                                                                     ) async {
@@ -687,24 +664,12 @@ class _LineupWidgetState extends State<LineupWidget> {
 
                                                                                       // 🛑 If backspace is pressed, just clear and skip all logic
                                                                                       if (controller.isBackspacePressed.value) {
-                                                                                        // Clear the text manually without losing focus
-                                                                                        // controllerNode.text = '';
-                                                                                        // controllerNode.selection = const TextSelection.collapsed(
-                                                                                        //   offset:
-                                                                                        //       0,
-                                                                                        // );
-
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             '';
                                                                                         controller.autoFillData.refresh();
-
-                                                                                        // // Set focus explicitly again
-                                                                                        // FocusScope.of(
-                                                                                        //   context,
-                                                                                        // ).requestFocus(
-                                                                                        //   focusNode,
-                                                                                        // );
-
+                                                                                        log(
+                                                                                          controller.autoFillData.value.toString(),
+                                                                                        );
                                                                                         controller.isBackspacePressed.value = false;
                                                                                         return;
                                                                                       }
@@ -721,6 +686,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       final shortcuts = {
                                                                                         'L':
                                                                                             'LF',
+                                                                                        'P':
+                                                                                            'Pitcher',
                                                                                         'R':
                                                                                             'RF',
                                                                                         'O':
@@ -785,37 +752,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           inningValues.contains(
                                                                                             val,
                                                                                           )) {
-                                                                                        // showDialog(
-                                                                                        //   context:
-                                                                                        //       context,
-                                                                                        //   builder:
-                                                                                        //       (
-                                                                                        //         _,
-                                                                                        //       ) => AlertDialog(
-                                                                                        //         title: const Text(
-                                                                                        //           "Duplicate Position",
-                                                                                        //         ),
-                                                                                        //         content: const Text(
-                                                                                        //           "This position is already used in this inning (column). Duplicate values are not allowed.",
-                                                                                        //         ),
-                                                                                        //         actions: [
-                                                                                        //           TextButton(
-                                                                                        //             onPressed: () {
-                                                                                        //               Navigator.pop(
-                                                                                        //                 context,
-                                                                                        //               );
-                                                                                        //               controllerNode.clear();
-                                                                                        //               controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                        //                   '';
-                                                                                        //               controller.autoFillData.refresh();
-                                                                                        //             },
-                                                                                        //             child: const Text(
-                                                                                        //               "OK",
-                                                                                        //             ),
-                                                                                        //           ),
-                                                                                        //         ],
-                                                                                        //       ),
-                                                                                        // );
                                                                                         SnackbarUtils.showErrorr(
                                                                                           "This position $val is already used in this inning (column). Duplicate values are not allowed.",
                                                                                           onOkPressed: () {
@@ -869,7 +805,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         );
                                                                                       }
                                                                                     },
-
                                                                                     onFieldSubmitted: (
                                                                                       val,
                                                                                     ) async {

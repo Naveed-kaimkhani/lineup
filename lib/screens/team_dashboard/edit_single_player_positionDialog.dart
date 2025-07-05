@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/controller/globlLoaderController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/fav_position_controller_single_user.dart';
-import 'package:gaming_web_app/Base/controller/teamController/favoritPositionedConteroller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/player_position_controller.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/player/getPlayerModel.dart';
@@ -113,9 +112,19 @@ class _EditSinglePlayerPositionDialogState
                   const SizedBox(height: 8),
                   const Divider(),
                   const SizedBox(height: 24),
-                  PlayerFavWidget(widget.player, dummyPositions, controller),
+                  PlayerFavWidget(
+                    widget.player,
+                    dummyPositions,
+                    controller,
+                    'Edit Preferred Positions',
+                  ),
                   const SizedBox(height: 24),
-                  PlayerResWidget(widget.player, dummyPositions, controller),
+                  PlayerResWidget(
+                    widget.player,
+                    dummyPositions,
+                    controller,
+                    'Edit Restricted Positions',
+                  ),
                   const SizedBox(height: 32),
                   PrimaryButton(
                     title: "Save",
@@ -123,7 +132,7 @@ class _EditSinglePlayerPositionDialogState
                     onTap: () async {
                       final controllerLoading = Get.find<LoaderController>();
                       controllerLoading.isLoading.value = true;
-              
+
                       List<int> favIds =
                           controller.fav
                               .where((p) => p?.id != null)

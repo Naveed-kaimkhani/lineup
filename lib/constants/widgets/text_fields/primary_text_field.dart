@@ -66,8 +66,13 @@ class PrimaryTextField extends StatelessWidget {
                   prefixIcon: prefixIcon,
                   suffixIcon: suffixIcon,
                   filled: true,
-                  // hintText: hintText,
-                  hintStyle: tableLabel.copyWith(color: Colors.black26),
+                  hintText: hintText ?? "",
+                  hintStyle: TextStyle(
+                    fontSize: 12.57.sp,
+                    color: const Color.fromARGB(255, 210, 208, 208),
+                    // fontWeight: FontWeight.w700,
+                    fontFamily: 'sansation',
+                  ),
                   fillColor: Colors.white,
                   contentPadding: EdgeInsets.symmetric(
                     vertical: isMobile ? 14.h : 18.h,
@@ -103,17 +108,19 @@ class PrimaryTextField extends StatelessWidget {
     );
   }
 }
-var textFieldKey=[];
 
-int textFieldIndex=0;
-int foc=1;
+var textFieldKey = [];
+
+int textFieldIndex = 0;
+int foc = 1;
+
 class LineupTextField extends StatelessWidget {
   final TextEditingController? controller;
   final bool obscureText;
   final bool isLable;
   final TextInputType keyboardType;
   final Widget? prefixIcon;
-    final FocusNode? focusNode; // Add focusNode
+  final FocusNode? focusNode; // Add focusNode
 
   final Widget? suffixIcon;
   List<Position?> positions;
@@ -126,13 +133,11 @@ class LineupTextField extends StatelessWidget {
   final bool readAble;
   final void Function(String)? onFieldSubmitted;
 
-
   LineupTextField({
     super.key,
     this.controller,
-      this.onFieldSubmitted,
-          this.focusNode, // Pass focusNode to the TextField
-
+    this.onFieldSubmitted,
+    this.focusNode, // Pass focusNode to the TextField
 
     required this.positions,
     this.onChanged,
@@ -151,11 +156,10 @@ class LineupTextField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    var key =GlobalKey();
-     foc=foc+1;
+    var key = GlobalKey();
+    foc = foc + 1;
     textFieldKey.add(key);
     return Padding(
-
       padding: EdgeInsets.only(bottom: 0),
       child: SizedBox(
         width: 60,
@@ -168,12 +172,11 @@ class LineupTextField extends StatelessWidget {
               height: 30, // responsive height
               child: TextFormField(
                 // focusNode: focusNode[foc], // Make sure this line exists!
-                        focusNode: focusNode, // Assign the passed focusNode
+                focusNode: focusNode, // Assign the passed focusNode
 
-                onTap: (){
-                
-                 int index = textFieldKey.indexOf(key);
-                 textFieldIndex=index;
+                onTap: () {
+                  int index = textFieldKey.indexOf(key);
+                  textFieldIndex = index;
                 },
                 key: key,
                 onChanged: onChanged,
@@ -200,7 +203,7 @@ class LineupTextField extends StatelessWidget {
                   hintText: "--",
                   hintStyle: tableLabel.copyWith(color: Colors.black26),
                   fillColor: Colors.white,
-               
+
                   enabledBorder: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(2),
                     borderSide: const BorderSide(

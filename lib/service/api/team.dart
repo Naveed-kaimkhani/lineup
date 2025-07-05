@@ -49,6 +49,29 @@ class TeamsApi {
     }
   }
 
+
+    static Future<BaseResponse<List<Team?>>> getTeamForAdmin() async {
+    try {
+      final response = await DioUtil.request<List<Team>>(
+        endpoint: APIEndPoints.getTeams,
+        fromJsonT: Team.fromJson,
+        httpRequestType: HttpRequestType.get,
+        cast: (object) {
+          if (object is List) {
+            return object.cast<Team>();
+          }
+          return [];
+        },
+      );
+
+      return response;
+    } catch (e) {
+      // Optionally, handle or log errors here
+      print('Error: $e');
+      return BaseResponse<List<Team>>(data: []);
+    }
+  }
+
   static Future<bool> validatePromoCode(String promoCode) async {
     try {
       toggleLoader(true);

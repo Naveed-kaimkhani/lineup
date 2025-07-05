@@ -70,6 +70,7 @@ class _SetFavoredPositionDialogState extends State<SetFavoredPositionDialog> {
                                 player!,
                                 controller.favPositioned,
                                 controller,
+                                            'Player’s Preferred Positions'
                               ),
                             ),
                             SizedBox(width: 12),
@@ -78,6 +79,7 @@ class _SetFavoredPositionDialogState extends State<SetFavoredPositionDialog> {
                                 player,
                                 controller.resPositioned,
                                 controller,
+                                "Player’s Restricted Positions",
                               ),
                             ),
                           ],
@@ -129,8 +131,9 @@ class PlayerFavWidget extends StatefulWidget {
   final GetPlayer player;
   final List<Position?>? positined;
   final controller;
+  final String title;
 
-  PlayerFavWidget(this.player, this.positined, this.controller);
+  PlayerFavWidget(this.player, this.positined, this.controller, this.title);
 
   @override
   _PlayerFavWidgetState createState() => _PlayerFavWidgetState();
@@ -165,7 +168,8 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           ),
           SizedBox(height: 4),
           Text(
-            'Player’s Preferred Positions',
+            // 'Player’s Preferred Positions',
+            widget.title,
             style: descriptionStyle.copyWith(
               fontSize: 14,
               color: AppColors.activeGreenColor,
@@ -173,85 +177,6 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
           ),
           SizedBox(height: 10),
 
-          // Display favorite items
-          // controller.fav.isNotEmpty
-          //     ? Column(
-          //       children: List.generate(controller.fav.length, (index) {
-          //         final item = controller.fav[index];
-
-          //         return Padding(
-          //           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.start,
-          //             crossAxisAlignment: CrossAxisAlignment.center,
-          //             children: [
-          //               // Item display container
-          //               GestureDetector(
-          //                 onTap: () {},
-          //                 child: Container(
-          //                   height: 50,
-          //                   width: 200,
-          //                   decoration: BoxDecoration(
-          //                     border: Border.all(color: Colors.black),
-          //                     borderRadius: BorderRadius.circular(8),
-          //                   ),
-          //                   child: Padding(
-          //                     padding: const EdgeInsets.symmetric(
-          //                       horizontal: 8.0,
-          //                     ),
-          //                     child: Row(
-          //                       children: [
-          //                         Expanded(
-          //                           child: Text(
-          //                             item.name ?? 'No Name',
-          //                             style: TextStyle(fontSize: 16),
-          //                             overflow: TextOverflow.ellipsis,
-          //                           ),
-          //                         ),
-          //                         Icon(Icons.arrow_drop_down),
-          //                       ],
-          //                     ),
-          //                   ),
-          //                 ),
-          //               ),
-
-          //               SizedBox(width: 20),
-          //               // Delete button
-          //               InkWell(
-          //                 onTap: () {
-          //                   setState(() {
-          //                     controller.resPositioned.add(
-          //                       controller.fav[index],
-          //                     );
-          //                     controller.favPositioned.add(
-          //                       controller.fav[index],
-          //                     );
-          //                     keyAddRes();
-          //                     keyAddFav();
-          //                     controller.fav.removeAt(index);
-          //                   });
-          //                 },
-          //                 borderRadius: BorderRadius.circular(5),
-          //                 child: Container(
-          //                   height: 50,
-          //                   width: 50,
-          //                   decoration: BoxDecoration(
-          //                     color: AppColors.primaryColor,
-          //                     borderRadius: BorderRadius.circular(5),
-          //                   ),
-          //                   child: Icon(
-          //                     Icons.close,
-          //                     color: Colors.white,
-          //                     size: 20,
-          //                   ),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       }),
-          //     )
-          //     : SizedBox(height: 10),
           controller.fav.isNotEmpty
               ? Column(
                 children: List.generate(controller.fav.length, (index) {
@@ -412,16 +337,22 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
 class PlayerResWidget extends StatefulWidget {
   final GetPlayer? player;
   final List<Position?>? positined;
+  final String title; // 👈 Add this line
+
   final dynamic controller; // Replace with your controller's type
 
-  const PlayerResWidget(this.player, this.positined, this.controller);
+  const PlayerResWidget(
+    this.player,
+    this.positined,
+    this.controller,
+    this.title,
+  );
 
   @override
   _PlayerResWidgetState createState() => _PlayerResWidgetState();
 }
 
 class _PlayerResWidgetState extends State<PlayerResWidget> {
-  // final GlobalKey addResKeys = GlobalKey();
   int isShow = 0;
   final TeamController teamController = Get.find<TeamController>();
   @override
@@ -451,87 +382,15 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
           ),
           SizedBox(height: 4),
           Text(
-            'Player’s Restricted Positions',
+            // 'Player’s Restricted Positions',
+            widget.title,
             style: descriptionStyle.copyWith(
               fontSize: 14,
               color: Colors.redAccent,
             ),
           ),
           SizedBox(height: 10),
-          // controller.res.isNotEmpty
-          //     ? Column(
-          //       children: List.generate(controller.res.length, (index) {
-          //         final item = controller.res[index];
 
-          //         return Padding(
-          //           padding: const EdgeInsets.symmetric(vertical: 8.0),
-          //           child: Row(
-          //             mainAxisAlignment: MainAxisAlignment.start,
-          //             crossAxisAlignment: CrossAxisAlignment.center,
-          //             children: [
-          //               // Item display container
-          //               Container(
-          //                 height: 50,
-          //                 width: 200,
-          //                 decoration: BoxDecoration(
-          //                   border: Border.all(color: Colors.black),
-          //                   borderRadius: BorderRadius.circular(8),
-          //                 ),
-          //                 child: Padding(
-          //                   padding: const EdgeInsets.symmetric(
-          //                     horizontal: 8.0,
-          //                   ),
-          //                   child: Row(
-          //                     children: [
-          //                       Expanded(
-          //                         child: Text(
-          //                           item.name ?? 'No Name',
-          //                           style: TextStyle(fontSize: 16),
-          //                           overflow: TextOverflow.ellipsis,
-          //                         ),
-          //                       ),
-          //                       Icon(Icons.arrow_drop_down),
-          //                     ],
-          //                   ),
-          //                 ),
-          //               ),
-          //               SizedBox(width: 20),
-          //               // Delete button
-          //               InkWell(
-          //                 onTap: () {
-          //                   setState(() {
-          //                     controller.resPositioned.add(
-          //                       controller.res[index],
-          //                     );
-          //                     controller.favPositioned.add(
-          //                       controller.res[index],
-          //                     );
-          //                     keyAddRes();
-          //                     keyAddFav();
-          //                     controller.res.removeAt(index);
-          //                   });
-          //                 },
-          //                 borderRadius: BorderRadius.circular(5),
-          //                 child: Container(
-          //                   height: 50,
-          //                   width: 50,
-          //                   decoration: BoxDecoration(
-          //                     color: AppColors.primaryColor,
-          //                     borderRadius: BorderRadius.circular(5),
-          //                   ),
-          //                   child: Icon(
-          //                     Icons.close,
-          //                     color: Colors.white,
-          //                     size: 20,
-          //                   ),
-          //                 ),
-          //               ),
-          //             ],
-          //           ),
-          //         );
-          //       }),
-          //     )
-          //     : SizedBox(),
           controller.res.isNotEmpty
               ? Column(
                 children: List.generate(controller.res.length, (index) {

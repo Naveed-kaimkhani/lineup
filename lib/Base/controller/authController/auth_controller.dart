@@ -97,14 +97,15 @@ class SignInController extends GetxController {
       // final request = LoginModel(email: email, password: password);
 
       final request = LoginModel(
-        // email: "shahbazvidicraze@gmail.com",
+        email: "shahbazvidicraze@gmail.com",
         // email: "naveedkaimkhami@gmail.com",
-        email: "admin@lineup.com",
+        // email: "admin@lineup.com",
         password: "12345678",
       );
       final response;
-      // if (email.toString() == "admin@lineup.com")
-      if (true) {
+      if (email.toString() == "admin@lineup.com")
+      // if (true)
+      {
         response = await AuthAPI.loginAdmin(request);
       } else {
         response = await AuthAPI.loginUser(
@@ -160,11 +161,6 @@ class SignInController extends GetxController {
     // if (true)
     if (isOrgCodeValid && isPasswordValid) {
       try {
-        // Get.dialog(
-        //   const Center(child: CircularProgressIndicator()),
-        //   barrierDismissible: false,
-        // );
-
         toggleLoader(true);
 
         final response = await AuthAPI.loginOrganization({

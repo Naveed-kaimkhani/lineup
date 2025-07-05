@@ -51,7 +51,6 @@ class CreateTeamViewModel extends GetxController {
           'Authorization': 'Bearer $token',
         },
       );
-      log(response.body);
       if (response.statusCode == 200) {
         // Get.snackbar("Success", "Team updated successfully");
         SnackbarUtils.showSuccess("Team updated successfully");

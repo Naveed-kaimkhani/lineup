@@ -1,19 +1,18 @@
+import 'dart:developer';
+
 class PaymentResponse {
   final List<PaymentModel>? data;
   final MetaModel? meta;
   final LinksModel? links;
 
-  PaymentResponse({
-    this.data,
-    this.meta,
-    this.links,
-  });
+  PaymentResponse({this.data, this.meta, this.links});
 
   factory PaymentResponse.fromJson(Map<String, dynamic> json) {
     return PaymentResponse(
-      data: (json['data'] as List?)
-          ?.map((e) => PaymentModel.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      data:
+          (json['data'] as List?)
+              ?.map((e) => PaymentModel.fromJson(e as Map<String, dynamic>))
+              .toList(),
       meta: json['meta'] != null ? MetaModel.fromJson(json['meta']) : null,
       links: json['links'] != null ? LinksModel.fromJson(json['links']) : null,
     );
@@ -25,7 +24,7 @@ class PaymentModel {
   final int? userId;
   final int? teamId;
   final String? stripePaymentIntentId;
-  final double? amount;
+  final String? amount;
   final String? currency;
   final String? status;
   final String? paidAt;
@@ -50,42 +49,44 @@ class PaymentModel {
   });
 
   factory PaymentModel.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
     return PaymentModel(
       id: json['id'] as int?,
       userId: json['user_id'] as int?,
       teamId: json['team_id'] as int?,
       stripePaymentIntentId: json['stripe_payment_intent_id'] as String?,
-      amount: (json['amount'] as num?)?.toDouble(),
+      // amount: (json['amount'] as num?)?.toDouble(),
+      amount: (json['amount']),
+
       currency: json['currency'] as String?,
       status: json['status'] as String?,
       paidAt: json['paid_at'] as String?,
       createdAt: json['created_at'] as String?,
       updatedAt: json['updated_at'] as String?,
       user: json['user'] != null ? UserModel.fromJson(json['user']) : null,
-      team: json['team'] != null ? TeamModel.fromJson(json['team']) : null,
+      // team: json['team'] != null ? TeamModel.fromJson(json['team']) : null,
     );
   }
 }
 
 class UserModel {
   final int? id;
+  
+  final int? slots;
   final String? firstName;
   final String? lastName;
   final String? email;
 
-  UserModel({
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.email,
-  });
+  UserModel({this.id, this.firstName, this.lastName, this.email, this.slots});
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       id: json['id'] as int?,
-      firstName: json['first_name'] as String?,
+      firstName: json['full_name'] as String?,
       lastName: json['last_name'] as String?,
       email: json['email'] as String?,
+      
+      slots: json['available_team_slots_count'] as int?,
     );
   }
 }
@@ -94,16 +95,10 @@ class TeamModel {
   final int? id;
   final String? name;
 
-  TeamModel({
-    this.id,
-    this.name,
-  });
+  TeamModel({this.id, this.name});
 
   factory TeamModel.fromJson(Map<String, dynamic> json) {
-    return TeamModel(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-    );
+    return TeamModel(id: json['id'] as int?, name: json['name'] as String?);
   }
 }
 
@@ -145,12 +140,7 @@ class LinksModel {
   final String? prev;
   final String? next;
 
-  LinksModel({
-    this.first,
-    this.last,
-    this.prev,
-    this.next,
-  });
+  LinksModel({this.first, this.last, this.prev, this.next});
 
   factory LinksModel.fromJson(Map<String, dynamic> json) {
     return LinksModel(

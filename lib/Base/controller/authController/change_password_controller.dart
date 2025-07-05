@@ -131,7 +131,6 @@ class ChangePasswordController extends GetxController {
     String newPass,
     String confirm,
   ) async {
-    // log("in method");
 
     final token = await SharedPreferencesUtil.read(
       SharedPreferencesKeysConstants.bearerToken,
@@ -159,7 +158,6 @@ class ChangePasswordController extends GetxController {
 
       return jsonDecode(response.body) as Map<String, dynamic>;
     } catch (e) {
-      // log("Error: $e");
       return {
         "success": false,
         "message": "Something went wrong. Please try again.",

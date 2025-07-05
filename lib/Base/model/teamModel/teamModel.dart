@@ -42,7 +42,6 @@ class Team {
   });
 
   factory Team.fromJson(Map<String, dynamic> json) {
-    // log(json.toString());
     return Team(
       id: json['id'] ?? 0,
       userId: json['user_id'] ?? 0,
@@ -97,7 +96,6 @@ class Team {
     };
   }
 }
-
 
 class Player {
   int id;

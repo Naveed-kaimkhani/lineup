@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -116,19 +117,10 @@ class NewTeamController extends GetxController {
     if (currentPage.value == 1) {
       if (teamNameController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please enter team name');
-      }
-      //  else if (!isHavingCredit.value && orgCode.text.trim().isEmpty) {
-      //   SnackbarUtils.showErrorr('Please enter organization code');
-      // }
-      else {
+      } else {
         if (isHavingCredit.value) {
           _goToNext(context); // ✅ Credit available, skip promo code check
         } else {
-          // final loader = Get.find<LoaderController>();
-          // loader.isLoading.value = true; // 🔄 Show loader
-
-          // final isValid = await TeamsApi.validatePromoCode(orgCode.text.trim());
-
           _goToNext(context);
           // loader.isLoading.value = false; // 🔄 Hide loader
 
@@ -573,10 +565,6 @@ class NewTeamController extends GetxController {
           teamController.getPlayer.clear();
           createTeamResponse.value = response.data!;
           teamController.fetchGetPlayer(createTeamResponse.value!.id!);
-          // Get.toNamed(RoutesPath.mainDashboardScreen);
-          SnackbarUtils.showSuccess('Your Team Created Successfully');
-          // Navigate to home or dashboard
-          // Get.toNamed(RoutesPath.home);
         } else {
           SnackbarUtils.showErrorr(response.message ?? 'Something went wrong');
           // Get.snackbar('Error', response.message ?? 'Something went wrong');
@@ -611,6 +599,11 @@ class NewTeamController extends GetxController {
     BuildContext context,
     int? teamId,
   ) async {
+    log(opponentController.text);
+
+    log(dateController.text);
+
+    log(insController.text);
     if (opponentController.text.trim().isEmpty ||
         dateController.text.trim().isEmpty ||
         insController.text.trim().isEmpty) {

@@ -7,7 +7,6 @@ import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
-import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/routes/routes_path.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_scaffold.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
@@ -51,34 +50,6 @@ class OrganizationDashboardScreen extends StatelessWidget {
           children: [
             SizedBox(height: 50.h),
 
-            // Align(
-            //   alignment: AlignmentDirectional.centerEnd,
-            //   child: PrimaryButton(
-            //     width: 280.w, // You can adjust this as needed
-            //     onTap: () async {
-            //       showRenewalPaymentDialog(
-            //         context,
-            //         PromoCode: () {
-            //           // Navigator.pop(context);
-            //           controlle.promoCodeDialog(context);
-            //           // Handle Promo Code selection
-            //           print('Promo Code selected');
-            //           // optional: close dialog after selection
-            //         },
-            //         OnlinePayment: () async {
-            //           final response = await AdminApi.getRenewalPaymentLink();
-            //         },
-            //       );
-            //     },
-            //     radius: 20.r,
-            //     textStyle: descriptiveStyle.copyWith(
-            //       color: Colors.white,
-            //       fontSize: 18,
-            //     ),
-            //     title: 'Renew Subscription',
-            //     backgroundColor: AppColors.secondaryColor,
-            //   ),
-            // ),
             LayoutBuilder(
               builder: (context, constraints) {
                 bool isMobile = constraints.maxWidth < 600;
@@ -97,22 +68,22 @@ class OrganizationDashboardScreen extends StatelessWidget {
                             ? Column(
                               crossAxisAlignment: CrossAxisAlignment.stretch,
                               children: [
-                                PrimaryButton(
-                                  width: double.infinity,
-                                  onTap: () {
-                                    Get.toNamed(
-                                      RoutesPath
-                                          .organizationPaymentHistoryScreen,
-                                    );
-                                  },
-                                  radius: 20.r,
-                                  textStyle: descriptiveStyle.copyWith(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                  ),
-                                  title: 'Activation History',
-                                  backgroundColor: AppColors.secondaryColor,
-                                ),
+                                // PrimaryButton(
+                                //   width: double.infinity,
+                                //   onTap: () {
+                                //     Get.toNamed(
+                                //       RoutesPath
+                                //           .organizationPaymentHistoryScreen,
+                                //     );
+                                //   },
+                                //   radius: 20.r,
+                                //   textStyle: descriptiveStyle.copyWith(
+                                //     color: Colors.white,
+                                //     fontSize: 18,
+                                //   ),
+                                //   title: 'Activation History',
+                                //   backgroundColor: AppColors.secondaryColor,
+                                // ),
                                 SizedBox(height: 12.h),
                                 PrimaryButton(
                                   width: double.infinity,
@@ -143,24 +114,24 @@ class OrganizationDashboardScreen extends StatelessWidget {
                             : Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                SizedBox(
-                                  width: 280.w,
-                                  child: PrimaryButton(
-                                    onTap: () {
-                                      Get.toNamed(
-                                        RoutesPath
-                                            .organizationPaymentHistoryScreen,
-                                      );
-                                    },
-                                    radius: 20.r,
-                                    textStyle: descriptiveStyle.copyWith(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                    ),
-                                    title: 'Activation History',
-                                    backgroundColor: AppColors.secondaryColor,
-                                  ),
-                                ),
+                                // SizedBox(
+                                //   width: 280.w,
+                                //   child: PrimaryButton(
+                                //     onTap: () {
+                                //       Get.toNamed(
+                                //         RoutesPath
+                                //             .organizationPaymentHistoryScreen,
+                                //       );
+                                //     },
+                                //     radius: 20.r,
+                                //     textStyle: descriptiveStyle.copyWith(
+                                //       color: Colors.white,
+                                //       fontSize: 18,
+                                //     ),
+                                //     title: 'Activation History',
+                                //     backgroundColor: AppColors.secondaryColor,
+                                //   ),
+                                // ),
                                 SizedBox(width: 12.w),
                                 SizedBox(
                                   width: 280.w,
@@ -195,61 +166,6 @@ class OrganizationDashboardScreen extends StatelessWidget {
                             ),
                   ),
                 );
-
-                // return Align(
-                //   alignment:
-                //       isMobile
-                //           ? Alignment
-                //               .center // Center on mobile
-                //           : AlignmentDirectional.centerEnd, // Right on desktop
-                //   child: Padding(
-                //     padding: EdgeInsets.only(
-                //       right: isMobile ? 0 : 0,
-                //       bottom: isMobile ? 16 : 0,
-                //     ),
-                //     child: Row(
-                //       children: [
-                //       PrimaryButton(
-                //         width: double.infinity,
-                //         onTap: () async {
-                //           Get.toNamed(RoutesPath.organizationPaymentHistoryScreen);
-                //         },
-                //         radius: 20.r,
-                //         textStyle: descriptiveStyle.copyWith(
-                //           color: Colors.white,
-                //           fontSize: isMobile ? 18 : 18,
-                //         ),
-                //         title: 'Activation History',
-                //         backgroundColor: AppColors.secondaryColor,
-                //       ),
-
-                //         SizedBox(height: 12.h),
-                //         PrimaryButton(
-                //           width: isMobile ? double.infinity : 280.w,
-                //           onTap: () async {
-                //             showRenewalPaymentDialog(
-                //               context,
-                //               PromoCode: () {
-                //                 controlle.promoCodeRenewalRequest(context);
-                //               },
-                //               OnlinePayment: () async {
-                //                 final response =
-                //                     await AdminApi.getRenewalPaymentLink();
-                //               },
-                //             );
-                //           },
-                //           radius: 20.r,
-                //           textStyle: descriptiveStyle.copyWith(
-                //             color: Colors.white,
-                //             fontSize: 18,
-                //           ),
-                //           title: 'Renew Subscription',
-                //           backgroundColor: AppColors.secondaryColor,
-                //         ),
-                //       ],
-                //     ),
-                //   ),
-                // );
               },
             ),
 
@@ -338,7 +254,7 @@ class TeamTable extends StatelessWidget {
               }
             },
           ),
-          if (true)
+          if (controller.teams.isNotEmpty)
             TextButton(
               onPressed: controller.loadMore,
               child: const Text("Load More"),
@@ -398,6 +314,16 @@ class _WebLayout extends StatelessWidget {
                     ),
                   ),
 
+                  //    Expanded(
+                  //   child: Text(
+                  //     team.,
+                  //     style: fieldLabelStyle.copyWith(
+                  //       color: AppColors.descriptiveTextColor,
+                  //       fontSize: 18,
+                  //       fontWeight: FontWeight.bold,
+                  //     ),
+                  //   ),
+                  // ),
                   Expanded(
                     child: Text(
                       team.year?.toString() ?? '-',
@@ -472,6 +398,8 @@ class _WebLayout extends StatelessWidget {
       child: Row(
         children: [
           Expanded(child: _buildHeader("Team Name")),
+
+          Expanded(child: _buildHeader("Org Code")),
           Expanded(child: _buildHeader("Year")),
           Expanded(child: _buildHeader("Season")),
           Expanded(child: _buildHeader("Age Group")),

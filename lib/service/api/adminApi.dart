@@ -123,7 +123,7 @@ class AdminApi {
       Uri.parse(APIEndPoints.orgActivationHistory),
       headers: {'Authorization': 'Bearer $token'},
     );
-    
+
     if (response.statusCode == 200) {
       final List<dynamic> data = jsonDecode(response.body)['data'];
       return data.map((e) => ActivationRecord.fromJson(e)).toList();
@@ -307,6 +307,8 @@ class AdminApi {
       return null;
     }
   }
+
+
 
   static Future<BaseResponse<SubscriptionInfo>> promocodeReq(
     PromoCodeRequest request,

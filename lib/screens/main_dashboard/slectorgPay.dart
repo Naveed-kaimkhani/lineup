@@ -31,7 +31,7 @@ void showFullWidthDialogPay(BuildContext context) {
                 children: [
                   Spacer(),
                   Text(
-                    'CREATE NEW TEAM',
+                    'Is the team part of an organization?',
                     style: TextStyle(
                       fontSize: 25,
                       fontWeight: FontWeight.bold,
@@ -54,16 +54,6 @@ void showFullWidthDialogPay(BuildContext context) {
                     child: ElevatedButton(
                       onPressed: () async {
                         Navigator.pop(context);
-                        // await showDialog(
-                        //   context: context,
-                        //   barrierDismissible: true,
-                        //   builder: (_) => CreateTeamDialog(),
-                        // );
-                        // await showDialog(
-                        //   context: context,
-                        //   barrierDismissible: true,
-                        //   builder: (_) => CreateTeamDialog(),
-                        // );
 
                         controlle.orgCodeDialog(context);
 
@@ -77,7 +67,7 @@ void showFullWidthDialogPay(BuildContext context) {
                         padding: EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: Text(
-                        'Organization',
+                        'Yes',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,
@@ -130,7 +120,7 @@ void showFullWidthDialogPay(BuildContext context) {
                         padding: EdgeInsets.symmetric(vertical: 12),
                       ),
                       child: Text(
-                        'Payment',
+                        'No',
                         style: TextStyle(
                           fontSize: 20,
                           color: Colors.white,

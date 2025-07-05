@@ -1,4 +1,4 @@
-
+import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
@@ -19,7 +19,7 @@ class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
-final focusNodesGrid = <int, Map<String, FocusNode>>{};
+  final focusNodesGrid = <int, Map<String, FocusNode>>{};
   final textControllersGrid = <int, Map<String, TextEditingController>>{};
   Map<String, Map<String, String>>? fixedAssignments;
   RxBool isPayment = false.obs;
@@ -69,7 +69,7 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
 
   String getFormattedDate() {
     final now = DateTime.now();
-    final formatter =  DateFormat('MM-dd-yyyy');
+    final formatter = DateFormat('MM-dd-yyyy');
     return formatter.format(now);
   }
 
@@ -91,8 +91,7 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
       isLoading.value = false;
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-      } else {
-      }
+      } else {}
 
       // Call the API to get the list of teams
       final response = await TeamsApi.getGameData(int.parse(gameId!));
@@ -155,8 +154,7 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-      } else {
-      }
+      } else {}
       if (fixedAssignments != null) {
         autoFillLineups.value.fixedAssignments = fixedAssignments;
       }
@@ -168,13 +166,11 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
 
       // Check if the response contains data and update the teams list
       if (response.data != null) {
-      
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
         fetchAutoFillLineups.refresh();
         lineupp.value = response.data!.lineupp!;
-
 
         for (
           int inning = 0;
@@ -259,18 +255,19 @@ final focusNodesGrid = <int, Map<String, FocusNode>>{};
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
       if (gameId != null) {
-      } else {
-      
-      }
+      } else {}
       // Call the API to get the list of teams
       final response = await TeamsApi.submmitLineupData(
         fetchAutoFillLineups.value,
+
         int.parse(gameId!),
       );
 
       // Check if the response contains data and update the teams list
       if (response.data != null) {
         // teamPositioned.value = response.data!;
+
+        log(response.data.toString());
         Get.toNamed(RoutesPath.savePdfScreen);
       } else {
         SnackbarUtils.showErrorr(response.message.toString());

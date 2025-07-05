@@ -1,3 +1,4 @@
+import 'dart:developer';
 
 class OrgTeamModel {
   final int id;
@@ -8,8 +9,6 @@ class OrgTeamModel {
   final String? city;
   final String? state;
   final String? country;
-
-  // Optional: add more fields if needed
   final String sportType;
   final String teamType;
   final String directActivationStatus;
@@ -29,6 +28,7 @@ class OrgTeamModel {
   });
 
   factory OrgTeamModel.fromJson(Map<String, dynamic> json) {
+    log(json.toString());
     return OrgTeamModel(
       id: json['id'],
       name: json['name'],

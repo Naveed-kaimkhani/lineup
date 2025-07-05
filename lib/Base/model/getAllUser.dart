@@ -1,26 +1,5 @@
-import 'dart:developer';
 
-//
-// class PaginatedUserResponse {
-//   final List<User>? data;
-//   final Meta? meta;
-//   final Links? links;
-//
-//   PaginatedUserResponse({
-//    this.data,
-//    this.meta,
-//   this.links,
-//   });
-//
-//   factory PaginatedUserResponse.fromJson(Map<String, dynamic> json) {
-//     debugger();
-//     return PaginatedUserResponse(
-//       data: (json['data'] as List).map((e) => User.fromJson(e)).toList(),
-//       meta: Meta.fromJson(json['meta']),
-//       links: Links.fromJson(json['links']),
-//     );
-//   }
-// }
+
 class UserListResponse {
   final int? id;
   final String? firstName;
@@ -39,13 +18,13 @@ class UserListResponse {
   });
 
   factory UserListResponse.fromJson(Map<String, dynamic> json) {
-
+  
     return UserListResponse(
       id: json['id'],
-      firstName: json['first_name'],
+      firstName: json['full_name'],
       lastName: json['last_name'],
       email: json['email'],
-      phone: json['phone'] ??"- -",
+      phone: json['phone'] ?? "- -",
       createdAt: DateTime.parse(json['created_at']),
     );
   }
