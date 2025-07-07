@@ -112,8 +112,8 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                           children: [
                             Spacer(),
                             Text(
-                              // 'CREATE NEW TEAM',
-                              'Is the team part of an organization?',
+                              'CREATE NEW TEAM',
+                              // 'Is the team part of an organization?',
                               style: TextStyle(
                                 fontSize: headerFontSize,
                                 fontWeight: FontWeight.bold,

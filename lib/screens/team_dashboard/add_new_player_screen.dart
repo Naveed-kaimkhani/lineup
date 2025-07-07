@@ -352,9 +352,6 @@ class _LineupWidgetState extends State<LineupWidget> {
               ),
             ),
           ),
-          // SizedBox(height: 5),
-
-          // Table rows
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Obx(
@@ -667,9 +664,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             '';
                                                                                         controller.autoFillData.refresh();
-                                                                                        log(
-                                                                                          controller.autoFillData.value.toString(),
-                                                                                        );
+
                                                                                         controller.isBackspacePressed.value = false;
                                                                                         return;
                                                                                       }
@@ -687,7 +682,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         'L':
                                                                                             'LF',
                                                                                         'P':
-                                                                                            'Pitcher',
+                                                                                            'P',
                                                                                         'R':
                                                                                             'RF',
                                                                                         'O':
@@ -701,6 +696,28 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         '3':
                                                                                             '3B',
                                                                                       };
+                                                                                      // final isValidShortcut = shortcuts.containsValue(
+                                                                                      //   val,
+                                                                                      // );
+
+                                                                                      // if (!isValidShortcut &&
+                                                                                      //     val !=
+                                                                                      //         "OUT" &&
+                                                                                      //     val !=
+                                                                                      //         "C" &&
+                                                                                      //     val !=
+                                                                                      //         "CF") {
+                                                                                      //   SnackbarUtils.showErrorr(
+                                                                                      //     "Invalid position '$val'. Please enter a valid fielding position.",
+                                                                                      //     onOkPressed: () {
+                                                                                      //       controllerNode.clear();
+                                                                                      //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                      //           '';
+                                                                                      //       controller.autoFillData.refresh();
+                                                                                      //     },
+                                                                                      //   );
+                                                                                      //   return;
+                                                                                      // }
 
                                                                                       if (val.length ==
                                                                                               1 &&
@@ -718,6 +735,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                   completed.length,
                                                                                             ),
                                                                                           );
+
                                                                                           val =
                                                                                               completed;
                                                                                         }
@@ -798,11 +816,54 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           ),
                                                                                         );
 
+                                                                                        // new
+                                                                                        if (val.length ==
+                                                                                                1 &&
+                                                                                            shortcuts.containsKey(
+                                                                                              val,
+                                                                                            )) {
+                                                                                          final completed =
+                                                                                              shortcuts[val]!;
+                                                                                          if (controllerNode.text !=
+                                                                                              completed) {
+                                                                                            controllerNode.text = completed;
+                                                                                            controllerNode.selection = TextSelection.fromPosition(
+                                                                                              TextPosition(
+                                                                                                offset:
+                                                                                                    completed.length,
+                                                                                              ),
+                                                                                            );
+                                                                                            val =
+                                                                                                completed;
+                                                                                          }
+                                                                                        }
+
                                                                                         controller.addFixedAssignment(
                                                                                           controller.gameData.value.players![index].id.toString(),
                                                                                           '$inningNumber',
                                                                                           result,
                                                                                         );
+                                                                                      }
+                                                                                      final validValues = [
+                                                                                        ...shortcuts.values,
+                                                                                        'OUT',
+                                                                                        'C',
+                                                                                        'CF',
+                                                                                      ];
+
+                                                                                      if (!validValues.contains(
+                                                                                        val,
+                                                                                      )) {
+                                                                                        SnackbarUtils.showErrorr(
+                                                                                          "Invalid position '$val'. Please enter a valid fielding position.",
+                                                                                          onOkPressed: () {
+                                                                                            controllerNode.clear();
+                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                                '';
+                                                                                            controller.autoFillData.refresh();
+                                                                                          },
+                                                                                        );
+                                                                                        return;
                                                                                       }
                                                                                     },
                                                                                     onFieldSubmitted: (
@@ -887,6 +948,20 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           result,
                                                                                         );
                                                                                       }
+                                                                                      //   if (!validValues.contains(
+                                                                                      //   val,
+                                                                                      // )) {
+                                                                                      //   SnackbarUtils.showErrorr(
+                                                                                      //     "Invalid position '$val'. Please enter a valid fielding position.",
+                                                                                      //     onOkPressed: () {
+                                                                                      //       controllerNode.clear();
+                                                                                      //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                      //           '';
+                                                                                      //       controller.autoFillData.refresh();
+                                                                                      //     },
+                                                                                      //   );
+                                                                                      //   return;
+                                                                                      // }
                                                                                     },
                                                                                   ),
                                                                                 ),

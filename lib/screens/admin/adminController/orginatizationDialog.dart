@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 import '../../../constants/app_colors.dart';
 import '../../../constants/widgets/buttons/primary_button.dart';
@@ -306,15 +307,32 @@ class FCreatePromoCodeDialog extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          TextField(
-            controller: expires_at,
-            decoration: const InputDecoration(
-              labelText: 'Expires At',
-              labelStyle: TextStyle(color: Colors.grey), // Change this color
 
-              border: OutlineInputBorder(),
+          GestureDetector(
+            onTap: () async {
+              final DateTime? picked = await showDatePicker(
+                context: context,
+                initialDate: DateTime.now(),
+                firstDate: DateTime(2000),
+                lastDate: DateTime(2100),
+              );
+              if (picked != null) {
+                String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+                expires_at.text = formattedDate;
+              }
+            },
+            child: AbsorbPointer(
+              child: TextField(
+                controller: expires_at,
+                decoration: const InputDecoration(
+                  labelText: 'Expires At',
+                  labelStyle: TextStyle(color: Colors.grey),
+                  border: OutlineInputBorder(),
+                  suffixIcon: Icon(Icons.calendar_today),
+                ),
+                readOnly: true,
+              ),
             ),
-            keyboardType: TextInputType.emailAddress,
           ),
 
           const SizedBox(height: 16),

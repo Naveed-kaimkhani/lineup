@@ -104,8 +104,6 @@ void showFullWidthDialogPay(BuildContext context) {
                               // Handle the case where no teams are returned
                               // teams.value = [];
                             }
-                            // Handle Online Payment selection
-                            print('Online Payment selected');
                             // Navigator.pop(
                             //   context,
                             // ); // optional: close dialog after selection

@@ -411,6 +411,12 @@ class NewTeamController extends GetxController {
       case 2:
         dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;
+      case 3:
+        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
+        break;
+      case 4:
+        dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
+        break;
       case 5:
         dialogWidth.value = screenWidth * 0.5 > 500 ? 500 : screenWidth * 0.5;
         break;

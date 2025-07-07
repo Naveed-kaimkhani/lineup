@@ -5,9 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/org_controller/org_teams_controller.dart'
     show OrgTeamsController;
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
-import 'package:gaming_web_app/Base/controller/teamController/team_view_controller_org.dart';
 import 'package:gaming_web_app/Base/model/adminModel/paymentTrackingModel.dart';
-import 'package:gaming_web_app/Base/model/teamModel/org_team_model.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
@@ -15,8 +13,6 @@ import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/screens/admin/adminController/settings_controller.dart';
-import 'package:gaming_web_app/screens/organization_dashboard/org_team_mobile_layout.dart';
-import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
 import 'package:gaming_web_app/screens/team_dashboard/teams_view_in_admin.dart';
 import 'package:gaming_web_app/service/api/adminApi.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
@@ -639,16 +635,6 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
                           flex: 1,
                           child: _buildHeader("Max Uses Per User", seasonWidth),
                         ),
-                        // Expanded(
-                        //   flex: 1,
-                        //   child: _buildHeader("Age Group", ageGroupWidth),
-                        // ),
-                        // _buildHeader("created At", ageGroupWidth),
-
-                        // SizedBox(width: actionWidth),
-                        // Expanded(
-                        //     flex: 3,
-                        //     child: SizedBox())
                       ],
                     ),
                   ),
@@ -659,14 +645,13 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
 
             // Data Rows
             Obx(() {
-              final paginatedUserResponse =
-                  adminController.promoCodeResponse ?? [];
+              final paginatedUserResponse = adminController.promoCodeResponse;
 
               return SingleChildScrollView(
                 // scrollDirection: Axis.horizontal,
                 child: Column(
                   children:
-                      paginatedUserResponse!.map((user) {
+                      paginatedUserResponse.map((user) {
                         return _buildRowPRomoCode(context, user);
                       }).toList(),
                   // ),
@@ -685,40 +670,44 @@ class PromoCodeManageOrWebLayout extends StatelessWidget {
       onTap: () async {},
       child: Container(
         width: maxWidth,
-        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+        padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 40),
         margin: const EdgeInsets.symmetric(vertical: 6),
         decoration: const BoxDecoration(color: Colors.white),
         child: Row(
           children: [
             Expanded(
               flex: 1,
-              child: _buildCell(team.code.toString(), teamNameWidth),
+              child: _buildCell(team.code ?? "-", teamNameWidth),
             ),
             Expanded(
-              flex: 2,
-              child: _buildCell(team.description.toString(), yearWidth),
+              flex: 1,
+
+              child: _buildCell(team.description ?? "-", yearWidth),
             ),
             Expanded(
               flex: 1,
               child: _buildCell(
-                formatExpiresAt(team.expiresAt ?? ""),
+                formatExpiresAt(team.expiresAt ?? "-"),
                 seasonWidth,
               ),
             ),
 
             Expanded(
               flex: 1,
-              child: _buildCell(team.maxUses.toString(), seasonWidth),
+              child: _buildCell(team.maxUses?.toString() ?? '-', seasonWidth),
             ),
 
             Expanded(
               flex: 1,
-              child: _buildCell(team.useCount.toString(), seasonWidth),
+              child: _buildCell(team.useCount?.toString() ?? '-', seasonWidth),
             ),
 
             Expanded(
               flex: 1,
-              child: _buildCell(team.maxUsesPerUser.toString(), seasonWidth),
+              child: _buildCell(
+                team.maxUsesPerUser?.toString() ?? '-',
+                seasonWidth,
+              ),
             ),
 
             InkWell(
@@ -1593,28 +1582,10 @@ class _PositionedManageOrWebLayoutState
                           flex: 2,
                           child: _buildHeader("category", seasonWidth),
                         ),
-                        // Expanded(
-                        //   flex: 1,
-                        //   child: _buildHeader("Age Group", ageGroupWidth),
-                        // ),
-                        // _buildHeader("created At", ageGroupWidth),
-
-                        // SizedBox(width: actionWidth),
-                        // Expanded(
-                        //     flex: 3,
-                        //     child: SizedBox())
+                       
                       ],
                     ),
 
-                    // Row(
-                    //   children: [
-                    //     _buildHeader("Team Name", teamNameWidth),
-                    //     _buildHeader("Year", yearWidth),
-                    //     _buildHeader("Season", seasonWidth),
-                    //     _buildHeader("Age Group", ageGroupWidth),
-                    //     SizedBox(width: actionWidth),
-                    //   ],
-                    // ),
                   ),
                 ],
               ),
@@ -1630,7 +1601,7 @@ class _PositionedManageOrWebLayoutState
                 // scrollDirection: Axis.horizontal,
                 child: Column(
                   children:
-                      paginatedUserResponse!.map((user) {
+                      paginatedUserResponse.map((user) {
                         return _buildRowPositioned(context, user);
                       }).toList(),
                 ),
