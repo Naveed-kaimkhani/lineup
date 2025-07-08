@@ -159,6 +159,7 @@ class SignInScreen extends StatelessWidget {
                                           Get.toNamed(
                                             RoutesPath.forgotPassword,
                                           );
+                                        
                                         },
                                         child: const Text(
                                           'Forgot Password',

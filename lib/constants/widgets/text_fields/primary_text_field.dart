@@ -194,7 +194,7 @@ class LineupTextField extends StatelessWidget {
                   color:
                       filterPositionsByNameMatch(positions, controller!.text)
                           ? AppColors.primaryColor
-                          : Colors.black,
+                          : Colors.red,
                 ),
                 decoration: InputDecoration(
                   prefixIcon: prefixIcon,

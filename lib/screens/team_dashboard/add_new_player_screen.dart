@@ -219,20 +219,80 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  void handleArrowKeyNavigation(
+  // void handleArrowKeyNavigation(
+  //   RawKeyEvent event,
+  //   int rowIndex,
+  //   String colKey,
+  // ) {
+  //   if (event is! RawKeyDownEvent) return;
+  //   final key = event.logicalKey;
+
+  //   // ✅ Check for backspace
+  //   if (key == LogicalKeyboardKey.backspace) {
+  //     controller.isBackspacePressed.value = true;
+  //     return;
+  //   } else {
+  //     controller.isBackspacePressed.value = false;
+  //   }
+
+  //   final rows = controller.focusNodesGrid.keys.toList()..sort();
+  //   final cols = controller.focusNodesGrid[rowIndex]!.keys.toList()..sort();
+
+  //   int rowIdx = rows.indexOf(rowIndex);
+  //   int colIdx = cols.indexOf(colKey);
+
+  //   int newRow = rowIdx;
+  //   int newCol = colIdx;
+
+  //   switch (event.logicalKey.keyLabel) {
+  //     case 'Arrow Up':
+  //       newRow = (rowIdx - 1).clamp(0, rows.length - 1);
+  //       break;
+  //     case 'Arrow Down':
+  //       newRow = (rowIdx + 1).clamp(0, rows.length - 1);
+  //       break;
+  //     case 'Arrow Left':
+  //       newCol = (colIdx - 1).clamp(0, cols.length - 1);
+  //       break;
+  //     case 'Arrow Right':
+  //       newCol = (colIdx + 1).clamp(0, cols.length - 1);
+  //       break;
+  //     default:
+  //       return;
+  //   }
+
+  //   final nextRowKey = rows[newRow];
+  //   final nextColKey = cols[newCol];
+  //   final nextFocus = controller.focusNodesGrid[nextRowKey]?[nextColKey];
+  //   if (nextFocus != null) {
+  //     FocusScope.of(Get.context!).requestFocus(nextFocus);
+  //   }
+  // }
+  // The function now returns a KeyEventResult
+  KeyEventResult handleArrowKeyNavigation(
     RawKeyEvent event,
     int rowIndex,
     String colKey,
   ) {
-    if (event is! RawKeyDownEvent) return;
+    if (event is! RawKeyDownEvent)
+      return KeyEventResult.ignored; // Ignore key-up events
+
     final key = event.logicalKey;
 
-    // ✅ Check for backspace
     if (key == LogicalKeyboardKey.backspace) {
       controller.isBackspacePressed.value = true;
-      return;
+      return KeyEventResult.ignored; // Let the TextField handle backspace
     } else {
       controller.isBackspacePressed.value = false;
+    }
+
+    // Only handle arrow keys for navigation
+    if (key != LogicalKeyboardKey.arrowUp &&
+        key != LogicalKeyboardKey.arrowDown &&
+        key != LogicalKeyboardKey.arrowLeft &&
+        key != LogicalKeyboardKey.arrowRight) {
+      return KeyEventResult
+          .ignored; // Ignore all other keys (letters, numbers, etc.)
     }
 
     final rows = controller.focusNodesGrid.keys.toList()..sort();
@@ -244,29 +304,43 @@ class _LineupWidgetState extends State<LineupWidget> {
     int newRow = rowIdx;
     int newCol = colIdx;
 
-    switch (event.logicalKey.keyLabel) {
-      case 'Arrow Up':
-        newRow = (rowIdx - 1).clamp(0, rows.length - 1);
-        break;
-      case 'Arrow Down':
-        newRow = (rowIdx + 1).clamp(0, rows.length - 1);
-        break;
-      case 'Arrow Left':
-        newCol = (colIdx - 1).clamp(0, cols.length - 1);
-        break;
-      case 'Arrow Right':
-        newCol = (colIdx + 1).clamp(0, cols.length - 1);
-        break;
-      default:
-        return;
+    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
+      newRow = (rowIdx - 1).clamp(0, rows.length - 1);
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
+      newRow = (rowIdx + 1).clamp(0, rows.length - 1);
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+      newCol = (colIdx - 1).clamp(0, cols.length - 1);
+    } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
+      newCol = (colIdx + 1).clamp(0, cols.length - 1);
+    }
+
+    // If no movement happened (already at an edge), ignore the event
+    if (newRow == rowIdx && newCol == colIdx) {
+      return KeyEventResult.ignored;
     }
 
     final nextRowKey = rows[newRow];
     final nextColKey = cols[newCol];
+
     final nextFocus = controller.focusNodesGrid[nextRowKey]?[nextColKey];
-    if (nextFocus != null) {
+    final nextController =
+        controller.textControllersGrid[nextRowKey]?[nextColKey];
+
+    if (nextFocus != null && nextController != null) {
       FocusScope.of(Get.context!).requestFocus(nextFocus);
+      // You can still keep the Future.delayed for robustness, but it's less critical now
+      Future.delayed(Duration.zero, () {
+        nextController.selection = TextSelection.fromPosition(
+          TextPosition(offset: nextController.text.length),
+        );
+      });
+
+      // ✅ CRITICAL FIX: Tell Flutter we handled this key event!
+      return KeyEventResult.handled;
     }
+
+    // If something went wrong, ignore the event.
+    return KeyEventResult.ignored;
   }
 
   Widget _buildMainLineupTable() {
@@ -826,27 +900,27 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           result,
                                                                                         );
                                                                                       }
-                                                                                      final validValues = [
-                                                                                        ...shortcuts.values,
-                                                                                        'OUT',
-                                                                                        'C',
-                                                                                        'CF',
-                                                                                      ];
+                                                                                      // final validValues = [
+                                                                                      //   ...shortcuts.values,
+                                                                                      //   'OUT',
+                                                                                      //   'C',
+                                                                                      //   'CF',
+                                                                                      // ];
 
-                                                                                      if (!validValues.contains(
-                                                                                        val,
-                                                                                      )) {
-                                                                                        SnackbarUtils.showErrorr(
-                                                                                          "Invalid position '$val'. Please enter a valid fielding position.",
-                                                                                          onOkPressed: () {
-                                                                                            controllerNode.clear();
-                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                                '';
-                                                                                            controller.autoFillData.refresh();
-                                                                                          },
-                                                                                        );
-                                                                                        return;
-                                                                                      }
+                                                                                      // if (!validValues.contains(
+                                                                                      //   val,
+                                                                                      // )) {
+                                                                                      //   SnackbarUtils.showErrorr(
+                                                                                      //     "Invalid position '$val'. Please enter a valid fielding position.",
+                                                                                      //     onOkPressed: () {
+                                                                                      //       controllerNode.clear();
+                                                                                      //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                      //           '';
+                                                                                      //       controller.autoFillData.refresh();
+                                                                                      //     },
+                                                                                      //   );
+                                                                                      //   return;
+                                                                                      // }
                                                                                     },
                                                                                     onFieldSubmitted: (
                                                                                       val,
