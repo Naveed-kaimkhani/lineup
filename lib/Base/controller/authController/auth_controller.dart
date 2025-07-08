@@ -89,18 +89,20 @@ class SignInController extends GetxController {
     bool isEmailValid = _validateEmail(email);
     bool isPasswordValid = _validatePassword(password);
 
-    // if (isEmailValid && isPasswordValid)
-    if (true) {
+    if (isEmailValid && isPasswordValid)
+    // if (true)
+     {
       final request = LoginModel(
-        // email: "shahbazvidicraze@gmail.com",
+        email: "shahbazvidicraze@gmail.com",
         // email: "naveedkaimkhami@gmail.com",
-        email: "admin@lineup.com",
+        // email: "admin@lineup.com",
         password: "12345678",
       );
 
       final response;
-      // if (email.toString() == "admin@lineup.com")
-      if (true) {
+      if (email.toString() == "admin@lineup.com")
+      // if (true)
+      {
         response = await AuthAPI.loginAdmin(request);
       } else {
         response = await AuthAPI.loginUser(

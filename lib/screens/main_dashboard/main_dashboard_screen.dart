@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/available_teamSlots_controller.dart';
@@ -96,27 +98,13 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                         backgroundColor: AppColors.secondaryColor,
                       ),
 
-                      // SizedBox(height: 12.h),
-                      // PrimaryButton(
-                      //   width: double.infinity,
-                      //   onTap: () async {
-                      //     Get.toNamed(RoutesPath.paymentHistoryScreen);
-                      //   },
-                      //   radius: 20.r,
-                      //   textStyle: descriptiveStyle.copyWith(
-                      //     color: Colors.white,
-                      //     fontSize: isMobile ? 18 : 18,
-                      //   ),
-                      //   title: 'Activation History',
-                      //   backgroundColor: AppColors.secondaryColor,
-                      // ),
                       Obx(() {
                         final count =
                             availableSlotsController
                                 .teamSlot
                                 .value
                                 ?.availableTeamSlotsCount;
-
+            
                         return PrimaryButton(
                           width: 300,
                           backgroundColor: AppColors.primaryColor,
@@ -231,7 +219,6 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                           );
                         }),
 
-                       
                         SizedBox(width: 10),
                         PrimaryButton(
                           width: 300,

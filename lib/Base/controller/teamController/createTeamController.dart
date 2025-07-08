@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
@@ -88,7 +86,6 @@ class NewTeamController extends GetxController {
   }
 
   void goToPrevious(BuildContext context) async {
-    SnackbarUtils.showErrorr('Please Fill All Next Requirement'.toString());
     if (currentPage.value > 0 && currentPage.value < 6) {
       await pageController.previousPage(
         duration: const Duration(milliseconds: 300),
@@ -149,7 +146,7 @@ class NewTeamController extends GetxController {
         _goToNext(context);
       }
     }
-
+// year wala dialgoue
     if (currentPage.value == 4) {
       if (ageGroupController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please Enter value '.toString());
@@ -161,7 +158,7 @@ class NewTeamController extends GetxController {
         }
       }
     }
-
+//season
     if (currentPage.value == 5) {
       if (seasonController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please select  values'.toString());
@@ -169,7 +166,7 @@ class NewTeamController extends GetxController {
         _goToNext(context);
       }
     }
-
+//city state
     if (currentPage.value == 6) {
       if (cityController.text.isEmpty || stateController.text.isEmpty) {
         SnackbarUtils.showErrorr('Please select  values'.toString());
@@ -179,6 +176,7 @@ class NewTeamController extends GetxController {
       }
     }
 
+//positions list
     if (currentPage.value == 7) {
       // CreateNewTeam(context);
       showConfirmationDialog(
