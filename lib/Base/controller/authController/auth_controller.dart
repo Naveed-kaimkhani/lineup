@@ -91,13 +91,15 @@ class SignInController extends GetxController {
 
     if (isEmailValid && isPasswordValid)
     // if (true)
-     {
-      final request = LoginModel(
-        email: "shahbazvidicraze@gmail.com",
-        // email: "naveedkaimkhami@gmail.com",
-        // email: "admin@lineup.com",
-        password: "12345678",
-      );
+    {
+      final request = LoginModel(email: email, password: password);
+
+      // final request = LoginModel(
+      //   email: "shahbazvidicraze@gmail.com",
+      //   // email: "naveedkaimkhami@gmail.com",
+      //   // email: "admin@lineup.com",
+      //   password: "12345678",
+      // );
 
       final response;
       if (email.toString() == "admin@lineup.com")
