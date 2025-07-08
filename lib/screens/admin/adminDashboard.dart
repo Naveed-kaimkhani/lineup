@@ -70,11 +70,11 @@ class _AdminDashboardScreenState extends State<AdminDashboardScreen> {
               SizedBox(height: 50.h),
               LayoutBuilder(
                 builder: (context, constraints) {
-                  return SizedBox(
-                    height: 50, // Set height based on button size
-                    child: ListView(
-                      scrollDirection: Axis.horizontal,
-                      padding: EdgeInsets.symmetric(horizontal: 16),
+                  return Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Wrap(
+                      spacing: 16,
+                      runSpacing: 12,
                       children: [
                         PrimaryButton(
                           // width: 300,
@@ -883,11 +883,85 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
     }
   }
 
+  // Future<void> adminEditOrganization({
+  //   required String name,
+  //   required String email,
+  //   required int annualTeamAllocation,
+  //   required int id,
+  // }) async {
+  //   if (name.trim().isEmpty ||
+  //       email.trim().isEmpty ||
+  //       annualTeamAllocation == 0) {
+  //     SnackbarUtils.showErrorr("Please fill in all fields.");
+  //     return;
+  //   }
+  //   final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+  //   if (!emailRegex.hasMatch(email)) {
+  //     SnackbarUtils.showErrorr("Invalid email format.");
+  //     return;
+  //   }
+
+  //   final url = Uri.parse(
+  //     'http://18.189.193.38/api/v1/admin/organizations/$id',
+  //   );
+
+  //   try {
+  //     final prefs = await SharedPreferences.getInstance();
+  //     final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
+
+  //     final body = {
+  //       // "id": id,
+  //       "name": name,
+  //       "email": email,
+  //       "annual_team_allocation": annualTeamAllocation,
+  //     };
+
+  //     final response = await http.put(
+  //       url,
+  //       headers: {
+  //         'Content-Type': 'application/json',
+  //         'Accept': 'application/json',
+  //         if (token != null) 'Authorization': 'Bearer $token',
+  //       },
+  //       body: jsonEncode(body),
+  //     );
+  //     // log(response.body);
+
+  //     final responseBody = jsonDecode(response.body);
+
+  //     if (response.statusCode == 200 || response.statusCode == 201) {
+  //       // adminController.selectedTab.value = 1;
+  //       // await adminController.fetchOrganization();
+
+  //       if (responseBody['success'] == true) {
+  //         SnackbarUtils.showSuccess(
+  //           responseBody['message'] ?? "Organization created",
+  //         );
+  //       } else {
+  //         SnackbarUtils.showErrorr(
+  //           responseBody['message'] ?? "Organization creation failed",
+  //         );
+  //       }
+  //     } else {
+  //       SnackbarUtils.showErrorr(
+  //         responseBody['message'] ?? "Organization created",
+  //       );
+  //       // SnackbarUtils.showErrorr("Server error: ${response.statusCode}");
+  //     }
+  //   } catch (e) {
+  //     //  SnackbarUtils.showErrorr(
+  //     //       responseBody['message'] ?? "Organization created",
+  //     //     );
+  //     SnackbarUtils.showErrorr("Exception: ${e.toString()}");
+  //   }
+  // }
   Future<void> adminEditOrganization({
     required String name,
     required String email,
     required int annualTeamAllocation,
     required int id,
+    required String pricingType,
+    required double customPriceAmount,
   }) async {
     if (name.trim().isEmpty ||
         email.trim().isEmpty ||
@@ -895,6 +969,7 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
       SnackbarUtils.showErrorr("Please fill in all fields.");
       return;
     }
+
     final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
     if (!emailRegex.hasMatch(email)) {
       SnackbarUtils.showErrorr("Invalid email format.");
@@ -910,10 +985,11 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
       final token = prefs.getString(SharedPreferencesKeysConstants.bearerToken);
 
       final body = {
-        // "id": id,
         "name": name,
         "email": email,
         "annual_team_allocation": annualTeamAllocation,
+        "pricing_type": pricingType,
+        "custom_price_amount": customPriceAmount,
       };
 
       final response = await http.put(
@@ -925,33 +1001,21 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
         },
         body: jsonEncode(body),
       );
-      // log(response.body);
 
       final responseBody = jsonDecode(response.body);
 
       if (response.statusCode == 200 || response.statusCode == 201) {
-        // adminController.selectedTab.value = 1;
-        // await adminController.fetchOrganization();
-
         if (responseBody['success'] == true) {
           SnackbarUtils.showSuccess(
-            responseBody['message'] ?? "Organization created",
+            responseBody['message'] ?? "Organization updated",
           );
         } else {
-          SnackbarUtils.showErrorr(
-            responseBody['message'] ?? "Organization creation failed",
-          );
+          SnackbarUtils.showErrorr(responseBody['message'] ?? "Update failed");
         }
       } else {
-        SnackbarUtils.showErrorr(
-          responseBody['message'] ?? "Organization created",
-        );
-        // SnackbarUtils.showErrorr("Server error: ${response.statusCode}");
+        SnackbarUtils.showErrorr(responseBody['message'] ?? "Server error");
       }
     } catch (e) {
-      //  SnackbarUtils.showErrorr(
-      //       responseBody['message'] ?? "Organization created",
-      //     );
       SnackbarUtils.showErrorr("Exception: ${e.toString()}");
     }
   }
@@ -1133,7 +1197,7 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
           // _buildEditButton(context,),
           InkWell(
             onTap: () async {
-              // orginizationUpateDialog(team);
+              orginizationUpateDialog(team);
             },
             child: Image.asset(
               'assets/images/edit_icon.png', // Pencil icon image
@@ -1185,6 +1249,53 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
   //     ),
   //   );
   // }
+  void orginizationUpateDialog(Organizations team) {
+    final AdminController adminController = Get.find<AdminController>();
+
+    adminController.orginizationNameController = TextEditingController(
+      text: team.name,
+    );
+    adminController.orginizationEmail = TextEditingController(text: team.email);
+    adminController.organization_code = TextEditingController(text: "");
+
+    final RxString pricingType = ("general").obs; // prefill if available
+    final TextEditingController customPriceController = TextEditingController(
+      text: '',
+    );
+
+    Get.dialog(
+      NameEmailDialog(
+        nameController: adminController.orginizationNameController,
+        emailController: adminController.orginizationEmail,
+        orgCodeController: adminController.organization_code,
+        pricingType: pricingType,
+        customPriceController: customPriceController,
+        onSubmit: () {
+          final name = adminController.orginizationNameController.text.trim();
+          final email = adminController.orginizationEmail.text.trim();
+          final org = adminController.organization_code.text.trim();
+          final price =
+              pricingType.value == "custom"
+                  ? double.tryParse(customPriceController.text.trim()) ?? 0.0
+                  : 0.0;
+
+          if (name.isEmpty || email.isEmpty || org.isEmpty) {
+            Get.snackbar("Error", "Please enter name, email, and allocation");
+          } else {
+            adminEditOrganization(
+              name: name,
+              email: email,
+              id: team.id!,
+              annualTeamAllocation: int.parse(org),
+              pricingType: pricingType.value,
+              customPriceAmount: price,
+            );
+            Get.back();
+          }
+        },
+      ),
+    );
+  }
 
   // Widget _buildEditButton(BuildContext context,) {
   //   return InkWell(
@@ -1582,10 +1693,8 @@ class _PositionedManageOrWebLayoutState
                           flex: 2,
                           child: _buildHeader("category", seasonWidth),
                         ),
-                       
                       ],
                     ),
-
                   ),
                 ],
               ),
@@ -1809,13 +1918,15 @@ class userManageOrWebLayout extends StatelessWidget {
                       flex: 2,
                       child: _buildHeader("Name", teamNameWidth),
                     ),
-                    Expanded(flex: 2, child: _buildHeader("Email", yearWidth)),
+                    Expanded(flex: 3, child: _buildHeader("Email", yearWidth)),
                     Expanded(
-                      flex: 2,
+                      flex: 3,
                       child: _buildHeader("Phone", seasonWidth),
                     ),
-
-                    _buildHeader("created_at", ageGroupWidth),
+                    Expanded(
+                      flex: 2,
+                      child: _buildHeader("Created At", ageGroupWidth),
+                    ),
                   ],
                 ),
               ),
@@ -1859,16 +1970,16 @@ class userManageOrWebLayout extends StatelessWidget {
               child: _buildCell(team.firstName.toString(), teamNameWidth),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: _buildCell(team.email.toString(), yearWidth),
             ),
             Expanded(
-              flex: 2,
+              flex: 3,
               child: _buildCell(team.phone.toString(), seasonWidth),
             ),
 
             Expanded(
-              flex: 1,
+              flex: 2,
               child: _buildCell(
                 _formatDate(team.createdAt.toString()),
                 seasonWidth,
