@@ -11,7 +11,6 @@ import 'package:gaming_web_app/screens/main_dashboard/set_player_position_screen
 import 'package:get/get.dart';
 import '../../Base/controller/teamController/createTeamController.dart';
 import '../../Base/controller/teamController/teamController.dart';
-import '../../utils/snackbarUtils.dart';
 
 class CreateTeamDialog extends StatefulWidget {
   CreateTeamDialog({Key? key}) : super(key: key);
@@ -24,9 +23,7 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
   int _selectedSportIndex = -1;
   final NewTeamController newTeamController = Get.find<NewTeamController>();
 
-  void _goToPrevious() async {
-    SnackbarUtils.showErrorr('Please Fill All Next Requirement'.toString());
-  }
+  
 
   // final int totalPages = 11; // total number of pages
 

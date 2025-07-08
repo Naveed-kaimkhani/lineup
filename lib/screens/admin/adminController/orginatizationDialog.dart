@@ -317,7 +317,7 @@ class FCreatePromoCodeDialog extends StatelessWidget {
                 lastDate: DateTime(2100),
               );
               if (picked != null) {
-                String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
+                String formattedDate = DateFormat('MM-dd-yyyy').format(picked);
                 expires_at.text = formattedDate;
               }
             },

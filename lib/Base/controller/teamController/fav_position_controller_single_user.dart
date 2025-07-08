@@ -22,6 +22,11 @@ class FavPositionControllerSingleUser extends GetxController {
     if (resPositioned.isEmpty) await loadResPositioned();
     update();
   }
+   Future<void> resetPositions() async {
+ await loadFavPositioned();
+  await loadResPositioned();
+    update();
+  }
 void setInitialPositions({
   required List<Position> allPositions,
   required List<int> preferredIds,

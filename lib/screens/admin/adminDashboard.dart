@@ -1982,6 +1982,7 @@ class userManageOrWebLayout extends StatelessWidget {
               flex: 2,
               child: _buildCell(
                 _formatDate(team.createdAt.toString()),
+                // team.createdAt.toString(),
                 seasonWidth,
               ),
             ),

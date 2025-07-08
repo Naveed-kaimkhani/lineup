@@ -70,7 +70,7 @@ class _SetFavoredPositionDialogState extends State<SetFavoredPositionDialog> {
                                 player!,
                                 controller.favPositioned,
                                 controller,
-                                            'Player’s Preferred Positions'
+                                'Player’s Preferred Positions',
                               ),
                             ),
                             SizedBox(width: 12),
@@ -203,7 +203,7 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
                                   )
                                   .toList(),
                           selectedItem: item, // Use the item from fav list
-                          itemLabelBuilder: (item) => item?.name ?? "na",
+                          itemLabelBuilder: (item) => item.name ?? "na",
                           onChanged: (newValue) {
                             if (newValue == null) return;
 
@@ -322,7 +322,7 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
                 // SnackbarUtils.showSuccess("Successfully Added");
                 print('Found at index: $index');
               } else {
-                SnackbarUtils.showErrorr("Please Select Favorite Position");
+                // SnackbarUtils.showErrorr("Please Select Favorite Position");
               }
             },
             title: 'Add',
@@ -413,7 +413,7 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                                   )
                                   .toList(),
                           selectedItem: item,
-                          itemLabelBuilder: (item) => item?.name ?? 'N/A',
+                          itemLabelBuilder: (item) => item.name ?? 'N/A',
                           onChanged: (newValue) {
                             if (newValue == null) return;
 

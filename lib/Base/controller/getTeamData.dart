@@ -163,6 +163,7 @@ class TeamGame {
   });
 
   factory TeamGame.fromJson(Map<String, dynamic> json) => TeamGame(
+    
     id: json['id'] ?? 0,
     teamId: json['team_id'] ?? 0,
     opponentName: json['opponent_name'] ?? '',

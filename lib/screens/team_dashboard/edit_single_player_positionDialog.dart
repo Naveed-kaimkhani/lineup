@@ -153,8 +153,14 @@ class _EditSinglePlayerPositionDialogState
                       try {
                         await positionController.savePreference(preference);
                         SnackbarUtils.showSuccess("Player position updated");
+
                         Navigator.pop(context);
-                        // Navigator.pop(context);
+                        Navigator.pop(context);
+
+                        // Reload original data into the controller
+
+                        _loadPlayerPositions(); // Reload original data into the controller
+                        controller.resetPositions();
                         controllerLoading.isLoading.value = false;
                       } catch (e) {
                         Navigator.pop(context);
