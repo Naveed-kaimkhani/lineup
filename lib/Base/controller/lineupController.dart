@@ -190,16 +190,6 @@ class LineupController extends GetxController {
       // Handle any errors that occur
     }
   }
-  // void againCalculateStatsandTopPositions(){
-  //   //  for (
-  //   //         int inning = 0;
-  //   //         inning < gameData.value.players!.length;
-  //   //         inning++
-  //   //       ) {
-  //   //         calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-  //   //       }
-  //     calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-  // }
 
   void recalculatePlayerStats(int index) {
     int playedInnings = 0;
@@ -215,7 +205,7 @@ class LineupController extends GetxController {
 
     double percentage =
         lineupp![index].innings!.length > 0
-            ? (playedInnings / lineupp![index].innings!.length) * 100
+            ? (playedInnings / lineupp![index].innings.length) * 100
             : 0;
     String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
 
@@ -265,14 +255,33 @@ class LineupController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null) {
-        // teamPositioned.value = response.data!;
-
-        log(response.data.toString());
         Get.toNamed(RoutesPath.savePdfScreen);
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
-        // Handle the case where no teams are returned
-        // teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> fetchSubmmittedLineupData() async {
+    try {
+      String? gameId = await SharedPreferencesUtil.read('gameID');
+      if (gameId != null) {
+      } else {}
+      // Call the API to get the list of teams
+      final response = await TeamsApi.fetchSubmmittedLineupData(
+        fetchAutoFillLineups.value,
+
+        int.parse(gameId!),
+      );
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null) {
+        // Get.toNamed(RoutesPath.savePdfScreen);
+      } else {
+        SnackbarUtils.showErrorr(response.message.toString());
       }
     } catch (e) {
       // Handle any errors that occur

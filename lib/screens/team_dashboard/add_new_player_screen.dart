@@ -28,6 +28,8 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
+
+      controller.fetchSubmmittedLineupData();
     });
 
     WidgetsBinding.instance.addPostFrameCallback((_) {});
@@ -78,7 +80,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
               children: [
                 Text(
                   "",
-                  // 'Team'.toUpperCase(),
                   style: descriptiveStyle.copyWith(
                     fontSize: 48.sp,
                     color: Colors.white, // Full white
@@ -193,7 +194,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                 () =>
                     controller.isLoading.value
                         ? _buildMainLineupTable()
-                        // ? SizedBox()
                         : SizedBox(),
               ),
             ),
@@ -345,6 +345,8 @@ class _LineupWidgetState extends State<LineupWidget> {
 
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
+    // ffs
+    //   controller.fetchSubmmittedLineupData();
     int i = 1;
 
     double tableWidth =

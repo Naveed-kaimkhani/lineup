@@ -49,8 +49,7 @@ class TeamsApi {
     }
   }
 
-
-    static Future<BaseResponse<List<Team?>>> getTeamForAdmin() async {
+  static Future<BaseResponse<List<Team?>>> getTeamForAdmin() async {
     try {
       final response = await DioUtil.request<List<Team>>(
         endpoint: APIEndPoints.getTeams,
@@ -125,7 +124,7 @@ class TeamsApi {
         'Accept': 'application/json',
       },
     );
-    
+
     return response;
   }
 
@@ -321,6 +320,21 @@ class TeamsApi {
       requestBody: autoFillLineups.toJson(), // ✅ send request body
       fromJsonT: FetchAutoFillLineups.fromJson, // ✅ parse response
       httpRequestType: HttpRequestType.put,
+    );
+
+    return response;
+  }
+
+  static Future<BaseResponse<FetchAutoFillLineups>> fetchSubmmittedLineupData(
+    FetchAutoFillLineups autoFillLineups,
+    int gameId,
+  ) async {
+    final response = await DioUtil.request<FetchAutoFillLineups>(
+      loadingText: 'Submitting players...',
+      endpoint: "/games/$gameId/lineup",
+      // requestBody: autoFillLineups.toJson(), // ✅ send request body
+      fromJsonT: FetchAutoFillLineups.fromJson, // ✅ parse response
+      httpRequestType: HttpRequestType.get,
     );
 
     return response;
