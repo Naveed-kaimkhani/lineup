@@ -191,6 +191,92 @@ class LineupController extends GetxController {
     }
   }
 
+  //get lineup
+  Future<void> getLineup(bool isShow) async {
+    try {
+      String? gameId = await SharedPreferencesUtil.read('gameID');
+      if (gameId != null) {
+      } else {}
+      if (fixedAssignments != null) {
+        autoFillLineups.value.fixedAssignments = fixedAssignments;
+      }
+      // Call the API to get the list of teams
+      final response = await TeamsApi.getLineupData(
+        autoFillLineups.value,
+        int.parse(gameId!),
+      );
+
+      // Check if the response contains data and update the teams list
+      // if (response.data != null) {
+      //   fetchAutoFillLineups.value = response.data!;
+      //   autoFillData.value = response.data!;
+
+      //   fetchAutoFillLineups.refresh();
+      //   lineupp.value = response.data!.lineupp!;
+
+      //   for (
+      //     int inning = 0;
+      //     inning < gameData.value.players!.length;
+      //     inning++
+      //   ) {
+      //     calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+      //   }
+
+      //   // calculateDynamicGameStats();
+      // } else {
+      //   SnackbarUtils.showErrorr(response.message.toString());
+      //   // Handle the case where no teams are returned
+      //   // teams.value = [];
+      // }
+      // if (response.data != null)
+      if (response.data!.lineupp != null &&
+          response.data!.lineupp!.isNotEmpty) {
+        fetchAutoFillLineups.value = response.data!;
+        autoFillData.value = response.data!;
+        fetchAutoFillLineups.refresh();
+
+        // Safely assign lineup if it exists
+        if (response.data!.lineupp!.isNotEmpty) {
+          lineupp.value = response.data!.lineupp!;
+
+          print("in if");
+          for (
+            int inning = 0;
+            inning < gameData.value.players!.length;
+            inning++
+          ) {
+          if (isShow) {
+              calculateTopPositionAndPlayingTime(
+              inning,
+              lineupp[0].innings.length,
+            );
+          }
+          }
+
+          // calculateDynamicGameStats();
+        } else {
+          // Do NOT assign empty list to lineupp or use index 0
+          // // lineupp.value = [];
+          // print("Lineup is empty. Skipping inning calculations.");
+        }
+        // lineupp.value = response.data!.lineupp!;
+
+        // print("in if");
+        // for (
+        //   int inning = 0;
+        //   inning < gameData.value.players!.length;
+        //   inning++
+        // ) {
+        //   calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+        // }
+      } else {
+        // SnackbarUtils.showErrorr(response.message.toString());
+      }
+    } catch (e) {
+      // Handle any errors that occur
+    }
+  }
+
   void recalculatePlayerStats(int index) {
     int playedInnings = 0;
     Map<String, int> positionCount = {};
@@ -348,7 +434,7 @@ class LineupController extends GetxController {
     int playedInnings = 0;
     Map<String, int> positionCount = {};
 
-    lineupp![index].innings!.forEach((inning, position) {
+    lineupp[index].innings.forEach((inning, position) {
       final pos = position.toUpperCase();
       if (pos != 'OUT' && pos != 'BENCH') {
         playedInnings++;

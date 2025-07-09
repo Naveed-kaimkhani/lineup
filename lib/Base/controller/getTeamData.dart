@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class TeamData {
   final int? id;
   final int? userId;
@@ -19,56 +21,90 @@ class TeamData {
   final List<TeamPlayer>? players;
 
   TeamData({
-  this.id,
+    this.id,
     this.userId,
     this.organizationId,
-   this.name,
-     this.season,
-     this.year,
-     this.sportType,
+    this.name,
+    this.season,
+    this.year,
+    this.sportType,
     this.teamType,
-     this.ageGroup,
+    this.ageGroup,
     this.city,
-     this.state,
-     this.accessStatus,
-     this.accessExpiresAt,
-     this.createdAt,
-   this.updatedAt,
-     this.organization,
+    this.state,
+    this.accessStatus,
+    this.accessExpiresAt,
+    this.createdAt,
+    this.updatedAt,
+    this.organization,
     this.games,
-     this.players,
+    this.players,
   });
 
-  factory TeamData.fromJson(Map<String, dynamic> json) => TeamData(
-    id: json['id'] ?? 0,
-    userId: json['user_id'] ?? 0,
-    organizationId: json['organization_id'] ?? 0,
-    name: json['name'] ?? '',
-    season: json['season'] ?? '',
-    year: json['year'] ?? 0,
-    sportType: json['sport_type'] ?? '',
-    teamType: json['team_type'] ?? '',
-    ageGroup: json['age_group'] ?? '',
-    city: json['city'] ?? '',
-    state: json['state'] ?? '',
-    accessStatus: json['access_status'] ?? '',
-    accessExpiresAt: json['access_expires_at'] != null
-        ? DateTime.tryParse(json['access_expires_at']) ?? DateTime.now()
-        : DateTime.now(),
-    createdAt:
-    DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-    updatedAt:
-    DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
-    organization:
-    TeamOrganization.fromJson(json['organization'] ?? {}),
-    games: (json['games'] as List<dynamic>? ?? [])
-        .map((e) => TeamGame.fromJson(e))
-        .toList(),
-    players: (json['players'] as List<dynamic>? ?? [])
-        .map((e) => TeamPlayer.fromJson(e))
-        .toList(),
-  );
+  // factory TeamData.fromJson(Map<String, dynamic> json) => TeamData(
+  //   id: json['id'] ?? 0,
+  //   userId: json['user_id'] ?? 0,
+  //   organizationId: json['organization_id'] ?? 0,
+  //   name: json['name'] ?? '',
+  //   season: json['season'] ?? '',
+  //   year: json['year'] ?? 0,
+  //   sportType: json['sport_type'] ?? '',
+  //   teamType: json['team_type'] ?? '',
+  //   ageGroup: json['age_group'] ?? '',
+  //   city: json['city'] ?? '',
+  //   state: json['state'] ?? '',
+  //   accessStatus: json['access_status'] ?? '',
+  //   accessExpiresAt: json['access_expires_at'] != null
+  //       ? DateTime.tryParse(json['access_expires_at']) ?? DateTime.now()
+  //       : DateTime.now(),
+  //   createdAt:
+  //   DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+  //   updatedAt:
+  //   DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+  //   organization:
+  //   TeamOrganization.fromJson(json['organization'] ?? {}),
+  //   games: (json['games'] as List<dynamic>? ?? [])
+  //       .map((e) => TeamGame.fromJson(e))
+  //       .toList(),
+  //   players: (json['players'] as List<dynamic>? ?? [])
+  //       .map((e) => TeamPlayer.fromJson(e))
+  //       .toList(),
+  // );
 
+  // After: With the print statement
+  factory TeamData.fromJson(Map<String, dynamic> json) {
+    // ✅ ADD THIS LINE TO PRINT THE RAW JSON MAP
+
+    return TeamData(
+      id: json['id'] ?? 0,
+      userId: json['user_id'] ?? 0,
+      organizationId: json['organization_id'] ?? 0,
+      name: json['name'] ?? '',
+      season: json['season'] ?? '',
+      year: json['year'] ?? 0,
+      sportType: json['sport_type'] ?? '',
+      teamType: json['team_type'] ?? '',
+      ageGroup: json['age_group'] ?? '',
+      city: json['city'] ?? '',
+      state: json['state'] ?? '',
+      accessStatus: json['access_status'] ?? '',
+      accessExpiresAt:
+          json['access_expires_at'] != null
+              ? DateTime.tryParse(json['access_expires_at']) ?? DateTime.now()
+              : DateTime.now(),
+      createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+      updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+      organization: TeamOrganization.fromJson(json['organization'] ?? {}),
+      games:
+          (json['games'] as List<dynamic>? ?? [])
+              .map((e) => TeamGame.fromJson(e))
+              .toList(),
+      players:
+          (json['players'] as List<dynamic>? ?? [])
+              .map((e) => TeamPlayer.fromJson(e))
+              .toList(),
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {
@@ -92,10 +128,6 @@ class TeamData {
       'players': players?.map((e) => e.toJson()).toList(),
     };
   }
-
-
-
-
 }
 
 class TeamOrganization {
@@ -113,17 +145,15 @@ class TeamOrganization {
     required this.updatedAt,
   });
 
-  factory TeamOrganization.fromJson(Map<String, dynamic> json) =>
-      TeamOrganization(
-        id: json['id'] ?? 0,
-        name: json['name'] ?? '',
-        email: json['email'] ?? '',
-        createdAt:
-        DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-        updatedAt:
-        DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
-      );
-
+  factory TeamOrganization.fromJson(
+    Map<String, dynamic> json,
+  ) => TeamOrganization(
+    id: json['id'] ?? 0,
+    name: json['name'] ?? '',
+    email: json['email'] ?? '',
+    createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+  );
 
   Map<String, dynamic> toJson() {
     return {
@@ -134,7 +164,6 @@ class TeamOrganization {
       'updated_at': updatedAt.toIso8601String(),
     };
   }
-
 }
 
 class TeamGame {
@@ -144,6 +173,8 @@ class TeamGame {
   final DateTime gameDate;
   final int innings;
   final String locationType;
+
+  final bool isLineupSubmitted;
   final List<LineupData> lineupData;
   final DateTime submittedAt;
   final DateTime createdAt;
@@ -154,6 +185,7 @@ class TeamGame {
     required this.teamId,
     required this.opponentName,
     required this.gameDate,
+    required this.isLineupSubmitted,
     required this.innings,
     required this.locationType,
     required this.lineupData,
@@ -163,26 +195,25 @@ class TeamGame {
   });
 
   factory TeamGame.fromJson(Map<String, dynamic> json) => TeamGame(
-    
     id: json['id'] ?? 0,
     teamId: json['team_id'] ?? 0,
+
+    isLineupSubmitted: json['is_lineup_submitted'] ?? false,
     opponentName: json['opponent_name'] ?? '',
-    gameDate:
-    DateTime.tryParse(json['game_date'] ?? '') ?? DateTime.now(),
+    gameDate: DateTime.tryParse(json['game_date'] ?? '') ?? DateTime.now(),
     innings: json['innings'] ?? 0,
     locationType: json['location_type'] ?? '',
-    lineupData: (json['lineup_data'] as List<dynamic>? ?? [])
-        .map((e) => LineupData.fromJson(e))
-        .toList(),
-    submittedAt: json['submitted_at'] != null
-        ? DateTime.tryParse(json['submitted_at']) ?? DateTime.now()
-        : DateTime.now(),
-    createdAt:
-    DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-    updatedAt:
-    DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+    lineupData:
+        (json['lineup_data'] as List<dynamic>? ?? [])
+            .map((e) => LineupData.fromJson(e))
+            .toList(),
+    submittedAt:
+        json['submitted_at'] != null
+            ? DateTime.tryParse(json['submitted_at']) ?? DateTime.now()
+            : DateTime.now(),
+    createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
   );
-
 
   Map<String, dynamic> toJson() {
     return {
@@ -207,17 +238,14 @@ class LineupData {
   LineupData({required this.innings, required this.playerId});
 
   factory LineupData.fromJson(Map<String, dynamic> json) => LineupData(
-    innings: (json['innings'] as Map<String, dynamic>? ?? {})
-        .map((k, v) => MapEntry(k, v?.toString() ?? '')),
+    innings: (json['innings'] as Map<String, dynamic>? ?? {}).map(
+      (k, v) => MapEntry(k, v?.toString() ?? ''),
+    ),
     playerId: json['player_id'] ?? '',
   );
   Map<String, dynamic> toJson() {
-    return {
-      'innings': innings,
-      'player_id': playerId,
-    };
+    return {'innings': innings, 'player_id': playerId};
   }
-
 }
 
 class TeamPlayer {
@@ -267,9 +295,6 @@ class TeamPlayer {
       'team': team.toJson(),
     };
   }
-
-
-
 }
 
 class PlayerStats {
@@ -289,8 +314,7 @@ class PlayerStats {
 
   factory PlayerStats.fromJson(Map<String, dynamic> json) => PlayerStats(
     pctInningsPlayed: (json['pct_innings_played'] ?? 0).toDouble(),
-    totalInningsParticipatedIn:
-    json['total_innings_participated_in'] ?? 0,
+    totalInningsParticipatedIn: json['total_innings_participated_in'] ?? 0,
     pctInfPlayed: (json['pct_inf_played'] ?? 0).toDouble(),
     topPosition: json['top_position'] ?? '',
     avgBattingLoc: (json['avg_batting_loc'] ?? 0).toDouble(),
@@ -353,13 +377,12 @@ class TeamInfo {
     city: json['city'] ?? '',
     state: json['state'] ?? '',
     accessStatus: json['access_status'] ?? '',
-    accessExpiresAt: json['access_expires_at'] != null
-        ? DateTime.tryParse(json['access_expires_at']) ?? DateTime.now()
-        : DateTime.now(),
-    createdAt:
-    DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
-    updatedAt:
-    DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
+    accessExpiresAt:
+        json['access_expires_at'] != null
+            ? DateTime.tryParse(json['access_expires_at']) ?? DateTime.now()
+            : DateTime.now(),
+    createdAt: DateTime.tryParse(json['created_at'] ?? '') ?? DateTime.now(),
+    updatedAt: DateTime.tryParse(json['updated_at'] ?? '') ?? DateTime.now(),
   );
 
   Map<String, dynamic> toJson() {
@@ -381,10 +404,4 @@ class TeamInfo {
       'updated_at': updatedAt.toIso8601String(),
     };
   }
-
-
-
-
 }
-
-

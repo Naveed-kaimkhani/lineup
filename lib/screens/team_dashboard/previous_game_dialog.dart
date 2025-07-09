@@ -94,107 +94,112 @@ class PreviousGameDialog extends StatelessWidget {
                           'dd-MM-yyyy',
                         ).format(parsedDate);
 
-                        return InkWell(
-                          onTap: () async {
-                            await SharedPreferencesUtil.save(
-                              'gameID',
-                              item.id.toString(),
-                            );
-                            await SharedPreferencesUtil.saveCurrentRoute(
-                              RoutesPath.teamDashboardScreen,
-                            );
-                            Navigator.pushNamed(
-                              context,
-                              RoutesPath.addNewPlayerScreen,
-                            );
-                          },
+                        return item.isLineupSubmitted
+                            ? InkWell(
+                              onTap: () async {
+                                await SharedPreferencesUtil.save(
+                                  'gameID',
+                                  item.id.toString(),
+                                );
+                                await SharedPreferencesUtil.saveCurrentRoute(
+                                  RoutesPath.teamDashboardScreen,
+                                );
+                                Navigator.pushNamed(
+                                  context,
+                                  RoutesPath.addNewPlayerScreen,
+                                );
+                              },
 
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(vertical: 10),
-                            child:
-                                isWideScreen
-                                    ? Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.spaceBetween,
-                                      children: [
-                                        ColoredNameText(
-                                          name: name,
-                                          textStyle: TextStyle(
-                                            fontSize: 10,
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                        ),
-                                        Row(
-                                          children: [
-                                            Text(
-                                              // DateFormat(
-                                              //   'MM-dd-yyyy',
-                                              // ).format(date),
-                                              formatted,
-                                              style: TextStyle(
-                                                fontSize: 12,
-                                                color: Colors.grey.shade700,
-                                              ),
-                                            ),
-                                            const SizedBox(width: 10),
-                                            InkWell(
-                                              onTap: () async {
-                                                await globleController
-                                                    .gameDelete(item.id);
-                                                controller.fetchTeams();
-                                                Navigator.pop(context);
-                                                // TODO: Delete logic
-                                              },
-                                              child: Image.asset(
-                                                'assets/images/delete_icon.png',
-                                                height: 32,
-                                                width: 32,
-                                              ),
-                                            ),
-                                          ],
-                                        ),
-                                      ],
-                                    )
-                                    : Column(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        ColoredNameText(name: name),
-                                        const SizedBox(height: 8),
-                                        Row(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                ),
+                                child:
+                                    isWideScreen
+                                        ? Row(
                                           mainAxisAlignment:
                                               MainAxisAlignment.spaceBetween,
                                           children: [
-                                            Text(
-                                              // _formatDate(date.toString()),
-                                              DateFormat(
-                                                'MM-dd-yyyy',
-                                              ).format(date),
-
-                                              style: TextStyle(
-                                                fontSize: 14,
-                                                color: Colors.grey.shade700,
+                                            ColoredNameText(
+                                              name: name,
+                                              textStyle: TextStyle(
+                                                fontSize: 10,
+                                                fontWeight: FontWeight.bold,
                                               ),
                                             ),
-                                            InkWell(
-                                              onTap: () {
-                                                globleController.gameDelete(
-                                                  item.id,
-                                                );
-                                                // TODO: Delete logic
-                                              },
-                                              child: Image.asset(
-                                                'assets/images/delete_icon.png',
-                                                height: 32,
-                                                width: 32,
-                                              ),
+                                            Row(
+                                              children: [
+                                                Text(
+                                                  // DateFormat(
+                                                  //   'MM-dd-yyyy',
+                                                  // ).format(date),
+                                                  formatted,
+                                                  style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: Colors.grey.shade700,
+                                                  ),
+                                                ),
+                                                const SizedBox(width: 10),
+                                                InkWell(
+                                                  onTap: () async {
+                                                    await globleController
+                                                        .gameDelete(item.id);
+                                                    controller.fetchTeams();
+                                                    Navigator.pop(context);
+                                                    // TODO: Delete logic
+                                                  },
+                                                  child: Image.asset(
+                                                    'assets/images/delete_icon.png',
+                                                    height: 32,
+                                                    width: 32,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        )
+                                        : Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            ColoredNameText(name: name),
+                                            const SizedBox(height: 8),
+                                            Row(
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment
+                                                      .spaceBetween,
+                                              children: [
+                                                Text(
+                                                  // _formatDate(date.toString()),
+                                                  DateFormat(
+                                                    'MM-dd-yyyy',
+                                                  ).format(date),
+
+                                                  style: TextStyle(
+                                                    fontSize: 14,
+                                                    color: Colors.grey.shade700,
+                                                  ),
+                                                ),
+                                                InkWell(
+                                                  onTap: () {
+                                                    globleController.gameDelete(
+                                                      item.id,
+                                                    );
+                                                    // TODO: Delete logic
+                                                  },
+                                                  child: Image.asset(
+                                                    'assets/images/delete_icon.png',
+                                                    height: 32,
+                                                    width: 32,
+                                                  ),
+                                                ),
+                                              ],
                                             ),
                                           ],
                                         ),
-                                      ],
-                                    ),
-                          ),
-                        );
+                              ),
+                            )
+                            : SizedBox();
                       },
                     ),
                   ),

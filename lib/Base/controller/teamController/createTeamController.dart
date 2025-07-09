@@ -146,7 +146,7 @@ class NewTeamController extends GetxController {
         _goToNext(context);
       }
     }
-// year wala dialgoue
+    // year wala dialgoue
     if (currentPage.value == 4) {
       if (ageGroupController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please Enter value '.toString());
@@ -158,7 +158,7 @@ class NewTeamController extends GetxController {
         }
       }
     }
-//season
+    //season
     if (currentPage.value == 5) {
       if (seasonController.text.trim().isEmpty) {
         SnackbarUtils.showErrorr('Please select  values'.toString());
@@ -166,7 +166,7 @@ class NewTeamController extends GetxController {
         _goToNext(context);
       }
     }
-//city state
+    //city state
     if (currentPage.value == 6) {
       if (cityController.text.isEmpty || stateController.text.isEmpty) {
         SnackbarUtils.showErrorr('Please select  values'.toString());
@@ -176,7 +176,7 @@ class NewTeamController extends GetxController {
       }
     }
 
-//positions list
+    //positions list
     if (currentPage.value == 7) {
       // CreateNewTeam(context);
       showConfirmationDialog(
@@ -723,7 +723,7 @@ class NewTeamController extends GetxController {
     );
 
     if (picked != null) {
-      String formattedDate = DateFormat('MM-dd-yyyy').format(picked);
+      String formattedDate = DateFormat('dd-MM-yyyy').format(picked);
 
       dateController.text = formattedDate;
       datess.value = dateController.text.toString();

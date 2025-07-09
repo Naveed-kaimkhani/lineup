@@ -380,7 +380,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
         "pricing_type": pricingType,
         "custom_price_amount": customPriceAmount,
       };
-      log(body.toString());
+      // log(body.toString());
       final response = await http.post(
         url,
         headers: {
@@ -390,7 +390,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
         },
         body: jsonEncode(body),
       );
-      log(response.body);
+      // log(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
@@ -855,7 +855,7 @@ class _TabletOrWebLayoutState extends State<TabletOrWebLayout> {
         "pricing_type": pricingType,
         "custom_price_amount": customPriceAmount,
       };
-      log(body.toString());
+      // log(body.toString());
       final response = await http.post(
         url,
         headers: {

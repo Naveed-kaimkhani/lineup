@@ -28,11 +28,13 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
-
-      controller.fetchSubmmittedLineupData();
+      controller.getLineup(true);
     });
 
-    WidgetsBinding.instance.addPostFrameCallback((_) {});
+    // controller.getLineup();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.getLineup(false);
+    });
   }
 
   @override
@@ -137,7 +139,8 @@ class _LineupWidgetState extends State<LineupWidget> {
           const SizedBox(height: 24),
           _buildActionButtons(context),
           const SizedBox(height: 24),
-          _buildOutSection(), // 🔁 NO fixed height here
+
+          _buildOutSecton(), // 🔁 NO fixed height here
         ],
       ),
     );
@@ -219,56 +222,6 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  // void handleArrowKeyNavigation(
-  //   RawKeyEvent event,
-  //   int rowIndex,
-  //   String colKey,
-  // ) {
-  //   if (event is! RawKeyDownEvent) return;
-  //   final key = event.logicalKey;
-
-  //   // ✅ Check for backspace
-  //   if (key == LogicalKeyboardKey.backspace) {
-  //     controller.isBackspacePressed.value = true;
-  //     return;
-  //   } else {
-  //     controller.isBackspacePressed.value = false;
-  //   }
-
-  //   final rows = controller.focusNodesGrid.keys.toList()..sort();
-  //   final cols = controller.focusNodesGrid[rowIndex]!.keys.toList()..sort();
-
-  //   int rowIdx = rows.indexOf(rowIndex);
-  //   int colIdx = cols.indexOf(colKey);
-
-  //   int newRow = rowIdx;
-  //   int newCol = colIdx;
-
-  //   switch (event.logicalKey.keyLabel) {
-  //     case 'Arrow Up':
-  //       newRow = (rowIdx - 1).clamp(0, rows.length - 1);
-  //       break;
-  //     case 'Arrow Down':
-  //       newRow = (rowIdx + 1).clamp(0, rows.length - 1);
-  //       break;
-  //     case 'Arrow Left':
-  //       newCol = (colIdx - 1).clamp(0, cols.length - 1);
-  //       break;
-  //     case 'Arrow Right':
-  //       newCol = (colIdx + 1).clamp(0, cols.length - 1);
-  //       break;
-  //     default:
-  //       return;
-  //   }
-
-  //   final nextRowKey = rows[newRow];
-  //   final nextColKey = cols[newCol];
-  //   final nextFocus = controller.focusNodesGrid[nextRowKey]?[nextColKey];
-  //   if (nextFocus != null) {
-  //     FocusScope.of(Get.context!).requestFocus(nextFocus);
-  //   }
-  // }
-  // The function now returns a KeyEventResult
   KeyEventResult handleArrowKeyNavigation(
     RawKeyEvent event,
     int rowIndex,
@@ -345,8 +298,7 @@ class _LineupWidgetState extends State<LineupWidget> {
 
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
-    // ffs
-    //   controller.fetchSubmmittedLineupData();
+
     int i = 1;
 
     double tableWidth =
@@ -1212,7 +1164,7 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  Widget _buildOutSection() {
+  Widget _buildOutSecton() {
     int i = 1;
 
     final LineupController controller = Get.find<LineupController>();

@@ -290,6 +290,22 @@ class TeamsApi {
     return response;
   }
 
+  //get lineup
+  static Future<BaseResponse<FetchAutoFillLineups>> getLineupData(
+    AutoFillLineups autoFillLineups,
+    int gameId,
+  ) async {
+    final response = await DioUtil.request<FetchAutoFillLineups>(
+      loadingText: 'Submitting players...',
+      endpoint: "/games/$gameId/lineup",
+      // requestBody: autoFillLineups.toJson(), // ✅ send request body
+      fromJsonT: FetchAutoFillLineups.fromJson, // ✅ parse response
+      httpRequestType: HttpRequestType.get,
+    );
+
+    return response;
+  }
+
   static Future<BaseResponse<void>> playerPositionedAdd(
     List<PlayerPreference> playerPreference,
     int? teamId,
