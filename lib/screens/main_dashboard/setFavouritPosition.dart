@@ -511,7 +511,10 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                 },
               )
               : SizedBox(),
-          SizedBox(height: 20),
+
+          controller.res.isNotEmpty
+              ? SizedBox(height: 10)
+              : SizedBox(height: 20),
           PrimaryButton(
             // width: double.infinity,
             width: 200,
