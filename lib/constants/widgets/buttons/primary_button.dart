@@ -14,6 +14,8 @@ class PrimaryButton extends StatelessWidget {
   final bool hasBorder;
   final Color? borderColor;
   final double? width;
+
+  final double? height;
   final TextStyle? textStyle;
 
   const PrimaryButton({
@@ -23,6 +25,7 @@ class PrimaryButton extends StatelessWidget {
     this.radius,
     this.backgroundColor,
     this.labelColor,
+    this.height=55,
     this.hasBorder = false,
     this.borderColor,
     this.width,
@@ -33,7 +36,7 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: width,
-      height: 55,
+      height: height,
       child: ElevatedButton(
         onPressed: onTap,
         style: ElevatedButton.styleFrom(

@@ -300,7 +300,8 @@ class _PlayerFavWidgetState extends State<PlayerFavWidget> {
               : SizedBox(),
           SizedBox(height: 20),
           PrimaryButton(
-            width: double.infinity,
+            width: 200,
+            height: 50,
             onTap: () {
               setState(() {
                 isShow = 1;
@@ -512,7 +513,9 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
               : SizedBox(),
           SizedBox(height: 20),
           PrimaryButton(
-            width: double.infinity,
+            // width: double.infinity,
+            width: 200,
+            height: 50,
             onTap: () {
               setState(() {
                 isShow = 1;
@@ -531,9 +534,7 @@ class _PlayerResWidgetState extends State<PlayerResWidget> {
                 teamController.playerPreference[index].restrictedPositionIds =
                     resIds;
                 SnackbarUtils.showSuccess("Successfully Added");
-              } else {
-                SnackbarUtils.showErrorr("Please Select Restrict Positioned");
-              }
+              } else {}
             },
             title: 'Add',
             backgroundColor: AppColors.descriptiveTextColor,

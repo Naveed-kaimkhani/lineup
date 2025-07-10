@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:get/get_core/src/get_main.dart';
-
 import '../../Base/controller/teamController/createTeamController.dart';
 import '../../constants/app_colors.dart';
 import '../../service/api/adminApi.dart';
 import '../../utils/snackbarUtils.dart';
 import '../admin/adminController/orginatizationDialog.dart';
-import 'create_a_new_team_dialog.dart';
 
 void showFullWidthDialogPay(BuildContext context) {
   final screenWidth = MediaQuery.of(context).size.width;
@@ -20,8 +17,14 @@ void showFullWidthDialogPay(BuildContext context) {
     context: context,
     builder: (BuildContext context) {
       return Dialog(
+        backgroundColor: Colors.transparent,
         insetPadding: EdgeInsets.zero,
         child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(16),
+            boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 12)],
+          ),
           width: dialogWidth,
           padding: EdgeInsets.all(16),
           child: Column(
@@ -43,7 +46,9 @@ void showFullWidthDialogPay(BuildContext context) {
                     onTap: () {
                       Get.back();
                     },
-                    child: Icon(Icons.cancel, size: 50, color: Colors.red),
+
+                    // child: Icon(Icons.cancel, size: 50, color: Colors.red),
+                    child: Icon(Icons.cancel, size: 40, color: Colors.red),
                   ),
                 ],
               ),
@@ -101,12 +106,9 @@ void showFullWidthDialogPay(BuildContext context) {
                               SnackbarUtils.showErrorr(
                                 response.message.toString(),
                               );
-                              // Handle the case where no teams are returned
-                              // teams.value = [];
+                 
                             }
-                            // Navigator.pop(
-                            //   context,
-                            // ); // optional: close dialog after selection
+                           
                           },
                         );
                       },

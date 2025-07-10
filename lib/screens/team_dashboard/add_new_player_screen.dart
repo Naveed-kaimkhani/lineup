@@ -27,12 +27,12 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
-      controller.getLineup(true);
+      // controller.getLineup(true);
     });
 
     // controller.getLineup();
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getLineup(false);
+      // controller.getLineup(false);
     });
   }
 
@@ -138,8 +138,6 @@ class _LineupWidgetState extends State<LineupWidget> {
           const SizedBox(height: 24),
           _buildActionButtons(context),
           const SizedBox(height: 24),
-
-          _buildOutSecton(), // 🔁 NO fixed height here
         ],
       ),
     );
@@ -980,6 +978,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                       : SizedBox(),
             ),
           ),
+          SizedBox(height: 40),
+          _buildOutSecton(), // 🔁 NO fixed height here
         ],
       ),
     );
@@ -1167,14 +1167,15 @@ class _LineupWidgetState extends State<LineupWidget> {
     int i = 1;
 
     final LineupController controller = Get.find<LineupController>();
-
+    double tableWidth =
+        60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Container(
-            width: 1050,
+            width: tableWidth,
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
             decoration: BoxDecoration(
               color: Colors.grey[200],
@@ -1192,7 +1193,7 @@ class _LineupWidgetState extends State<LineupWidget> {
           ClipRRect(
             borderRadius: BorderRadius.circular(8),
             child: Container(
-              width: 1050,
+              width: tableWidth,
 
               color: Colors.white,
               child: Obx(

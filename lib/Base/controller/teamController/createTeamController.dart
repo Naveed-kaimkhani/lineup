@@ -119,13 +119,6 @@ class NewTeamController extends GetxController {
           _goToNext(context); // ✅ Credit available, skip promo code check
         } else {
           _goToNext(context);
-          // loader.isLoading.value = false; // 🔄 Hide loader
-
-          // if (isValid) {
-          //   _goToNext(context);
-          // } else {
-          //   // SnackbarUtils.showErrorr('Invalid Organization Code');
-          // }
         }
       }
     }
@@ -679,14 +672,6 @@ class NewTeamController extends GetxController {
       SnackbarUtils.showErrorr('Please enter jersey number');
       return;
     }
-    // if (email.isEmpty || !email.contains('@')) {
-    //   showError(context, 'Please enter a valid email');
-    //   return;
-    // }
-    // if (phone.isEmpty || phone.length < 7) {
-    //   showError(context, 'Please enter a valid phone number');
-    //   return;
-    // }
 
     final player = PlayerInputModel(
       playerCountry: country,

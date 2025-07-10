@@ -23,8 +23,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
   int _selectedSportIndex = -1;
   final NewTeamController newTeamController = Get.find<NewTeamController>();
 
-  
-
   // final int totalPages = 11; // total number of pages
 
   String addPositionLabel = 'Back';
@@ -110,7 +108,6 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                             Spacer(),
                             Text(
                               'CREATE NEW TEAM',
-                              // 'Is the team part of an organization?',
                               style: TextStyle(
                                 fontSize: headerFontSize,
                                 fontWeight: FontWeight.bold,
@@ -130,7 +127,9 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                               },
                               child: Icon(
                                 Icons.cancel,
-                                size: 50,
+                                //
+                                // size: 50,
+                                size: 40,
                                 color: Colors.red,
                               ),
                             ),

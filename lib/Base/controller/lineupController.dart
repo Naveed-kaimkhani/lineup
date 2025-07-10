@@ -206,6 +206,9 @@ class LineupController extends GetxController {
         int.parse(gameId!),
       );
 
+      log("game iddd kya hy");
+
+      log(gameId);
       // Check if the response contains data and update the teams list
       // if (response.data != null) {
       //   fetchAutoFillLineups.value = response.data!;
@@ -245,12 +248,12 @@ class LineupController extends GetxController {
             inning < gameData.value.players!.length;
             inning++
           ) {
-          if (isShow) {
+            if (isShow) {
               calculateTopPositionAndPlayingTime(
-              inning,
-              lineupp[0].innings.length,
-            );
-          }
+                inning,
+                lineupp[0].innings.length,
+              );
+            }
           }
 
           // calculateDynamicGameStats();

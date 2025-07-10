@@ -95,7 +95,7 @@ class AddPlayerInTeamDialog extends StatelessWidget {
                       onTap: () {
                         Get.back();
                       },
-                      child: Icon(Icons.cancel, size: 50, color: Colors.red),
+                      child: Icon(Icons.cancel, size: 40, color: Colors.red),
                     ),
                   ],
                 ),

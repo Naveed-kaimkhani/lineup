@@ -25,7 +25,7 @@ class GlobleController extends GetxController {
     if (respone.success!) {
       final TeamController controller = Get.find<TeamController>();
       controller.fetchTeams();
-      SnackbarUtils.showSuccess(respone.message.toString());
+      // SnackbarUtils.showSuccess(respone.message.toString());
 
     }else{
       SnackbarUtils.showErrorr("Something wrong please try again");
