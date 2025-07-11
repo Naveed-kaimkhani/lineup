@@ -74,9 +74,14 @@ class Lineupp {
   });
 
   factory Lineupp.fromJson(Map<String, dynamic>? json) {
+
+
+
     if (json == null) {
       return Lineupp(playerId: '');
     }
+    log("player id dekho sahi arhi hy");
+    log(json['player_id']);
 
     return Lineupp(
       playerId: json['player_id']?.toString() ?? '',

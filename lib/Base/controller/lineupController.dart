@@ -164,8 +164,10 @@ class LineupController extends GetxController {
     final fixedAssignments = <String, Map<String, String>>{};
 
     for (final player in lineups) {
-      // final playerId = (player.playerId-12).tos;
-      final playerId = (int.parse(player.playerId) - 12).toString();
+      final playerId = (player.playerId);
+      log("fix assignent me galat arhi hy");
+      log(player.playerId);
+      // final playerId = (int.parse(player.playerId) - 12).toString();
       final playerAssignments = <String, String>{};
 
       // Process each inning assignment for this player
@@ -177,9 +179,6 @@ class LineupController extends GetxController {
         // Empty positions are automatically excluded by not being added
       });
 
-      // Only add player to assignments if they have at least one position
-
-      // fixedAssignments["1"] = playerAssignments;
       if (playerAssignments.isNotEmpty) {
         fixedAssignments[playerId] = playerAssignments;
       }
