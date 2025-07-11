@@ -686,50 +686,79 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       val =
                                                                                           val.trim().toUpperCase();
 
-                                                                                      // 🛑 If backspace is pressed, just clear and skip all logic
-                                                                                      // if (controller.isBackspacePressed.value) {
-                                                                                      //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                      //       '';
-                                                                                      //   controller.autoFillData.refresh();
-
-                                                                                      //   controller.isBackspacePressed.value = false;
-                                                                                      //   return;
-                                                                                      // }
                                                                                       if (controller.isBackspacePressed.value) {
                                                                                         // Clear lineup data
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             '';
+                                                                                        // controller.autoFillLineups.value.lineup![index].innings[inningNumber] =
+                                                                                        //     ''; autoFillLineups.value.fixedAssignments
+                                                                                        //  controller.autoFillLineups.value.fixedAssignments[]
 
-                                                                                        // ✅ Remove the fixed assignment
+                                                                                        // Get the player ID
                                                                                         final playerId =
                                                                                             controller.gameData.value.players![index].id.toString();
-                                                                                        controller.fixedAssignments?[playerId]?.remove(
-                                                                                          '$inningNumber',
-                                                                                        );
 
-                                                                                        // controller.fixedAssignments?[playerId]?.clear();
-                                                                                        log(
-                                                                                          "after clearr",
-                                                                                        );
-                                                                                        print(
-                                                                                          controller.fixedAssignments?[playerId].toString(),
-                                                                                        );
-
-                                                                                        // ✅ If no innings left for the player, remove the player key
-                                                                                        // if (controller.fixedAssignments?[playerId]?.isEmpty ??
-                                                                                        //     false) {
-                                                                                        //   controller.fixedAssignments?.remove(
-                                                                                        //     playerId,
+                                                                                        // controller.autoFillLineups.value.fixedAssignments![playerId]?.remove(
+                                                                                        //   inningNumber.toString(),
+                                                                                        // );
+                                                                                        // log(
+                                                                                        //   controller.autoFillLineups.value.fixedAssignments![playerId]?.remove(
+                                                                                        //         inningNumber.toString(),
+                                                                                        //       ) ??
+                                                                                        //       "value removed",
+                                                                                        // );
+                                                                                        // Safely remove the inning assignment for this player
+                                                                                        // if (controller.fixedAssignments !=
+                                                                                        //         null &&
+                                                                                        //     controller.fixedAssignments!.containsKey(
+                                                                                        //       playerId,
+                                                                                        //     )) {
+                                                                                        //   // Remove the specific inning entry
+                                                                                        //   controller.fixedAssignments![playerId]?.remove(
+                                                                                        //     '$inningNumber',
                                                                                         //   );
+
+                                                                                        //   // If the player's map is now empty, remove the entire player entry
+                                                                                        //   if (controller.fixedAssignments![playerId]!.isEmpty) {
+                                                                                        //     controller.fixedAssignments!.remove(
+                                                                                        //       playerId,
+                                                                                        //     );
+                                                                                        //   }
                                                                                         // }
-                                                                                        log(
-                                                                                          "in backspac",
-                                                                                        );
-                                                                                        // controller.autoFillData.refresh();
+
                                                                                         controller.isBackspacePressed.value = false;
                                                                                         return;
                                                                                       }
+                                                                                      // if (controller.isBackspacePressed.value) {
+                                                                                      //   // Clear lineup data
+                                                                                      //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                      //       '';
 
+                                                                                      //   // ✅ Remove the fixed assignment
+                                                                                      //   final playerId =
+                                                                                      //       controller.gameData.value.players![index].id.toString();
+                                                                                      //   controller.fixedAssignments?[playerId]?.remove(
+                                                                                      //     '$inningNumber',
+                                                                                      //   );
+
+                                                                                      //   // controller.fixedAssignments?[playerId]?.clear();
+                                                                                      //   log(
+                                                                                      //     "after clearr",
+                                                                                      //   );
+                                                                                      //   print(
+                                                                                      //     controller.fixedAssignments?[playerId].toString(),
+                                                                                      //   );
+
+                                                                                      //   log(
+                                                                                      //     "in backspac",
+                                                                                      //   );
+                                                                                      //   // controller.autoFillData.refresh();
+                                                                                      //   controller.isBackspacePressed.value = false;
+                                                                                      //   return;
+                                                                                      // }
+                                                                                      log(
+                                                                                        "running after backspace",
+                                                                                      );
                                                                                       // 🔁 If empty, just clear
                                                                                       if (val.isEmpty) {
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =

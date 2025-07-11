@@ -30,11 +30,10 @@ class AutoFillLineups {
   }
 
   Map<String, dynamic> toJson() {
-    
-    log("player in games");
-    log(playersInGame.toString());
-    log("fxied asignment");
-    log(fixedAssignments.toString());
+    // log("player in games");
+    // log(playersInGame.toString());
+    // log("fxied asignment");
+    // log(fixedAssignments.toString());
 
     // log(playersInGame.toString());
     return {

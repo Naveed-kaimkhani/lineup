@@ -37,7 +37,9 @@ class LineupController extends GetxController {
   Rx<FetchAutoFillLineups> fetchAutoFillLineups = FetchAutoFillLineups().obs;
 
   RxString enerLable = "".obs;
+
   var autoFillData = Rxn<FetchAutoFillLineups>();
+
   final Map<String, TextEditingController> textControllers = {};
   final Map<String, RxBool> labelFlags = {};
   RxBool isAuto = false.obs;
@@ -127,6 +129,65 @@ class LineupController extends GetxController {
     }
   }
 
+  // Map<String, Map<String, String>> calculateFixedAssignments(
+  //   List<Lineupp> lineups,
+  // ) {
+  //   final fixedAssignments = <String, Map<String, String>>{};
+
+  //   for (final player in lineups) {
+  //     log(player.playerId);
+  //     final playerId = player.playerId.toString();
+  //     final playerAssignments = <String, String>{};
+
+  //     // Process each inning assignment for this player
+  //     player.innings.forEach((inningNumber, position) {
+  //       if (position.isNotEmpty) {
+  //         // Only add non-empty positions
+  //         playerAssignments[inningNumber.toString()] = position;
+  //       }
+  //       // Empty positions are automatically excluded by not being added
+  //     });
+
+  //     // Only add player to assignments if they have at least one position
+  //     if (playerAssignments.isNotEmpty) {
+  //       fixedAssignments[playerId] = playerAssignments;
+  //     }
+  //   }
+  //   log("new fix alignment vlaue");
+  //   log(fixedAssignments.toString());
+  //   return fixedAssignments;
+  // }
+
+  Map<String, Map<String, String>> calculateFixedAssignments(
+    List<Lineupp> lineups,
+  ) {
+    final fixedAssignments = <String, Map<String, String>>{};
+
+    for (final player in lineups) {
+      // final playerId = (player.playerId-12).tos;
+      final playerId = (int.parse(player.playerId) - 12).toString();
+      final playerAssignments = <String, String>{};
+
+      // Process each inning assignment for this player
+      player.innings.forEach((inningNumber, position) {
+        if (position.isNotEmpty) {
+          // Only add non-empty positions
+          playerAssignments[inningNumber.toString()] = position;
+        }
+        // Empty positions are automatically excluded by not being added
+      });
+
+      // Only add player to assignments if they have at least one position
+
+      // fixedAssignments["1"] = playerAssignments;
+      if (playerAssignments.isNotEmpty) {
+        fixedAssignments[playerId] = playerAssignments;
+      }
+    }
+
+    return fixedAssignments;
+  }
+
   void addFixedAssignment(String playerId, String inning, String position) {
     fixedAssignments ??= {};
     fixedAssignments!.putIfAbsent(playerId, () => {});
@@ -153,12 +214,16 @@ class LineupController extends GetxController {
   Future<void> autoFillLinupUsingPlayesId() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
-      if (gameId != null) {
-      } else {}
-      if (fixedAssignments != null) {
-        autoFillLineups.value.fixedAssignments = fixedAssignments;
-      }
+
+      // log(autoFillData.value!.lineupp![0].innings);
+
+      autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
+        autoFillData.value!.lineupp!,
+      );
+      log("after calculation");
+      log(autoFillLineups.value.fixedAssignments.toString());
       // Call the API to get the list of teams
+
       final response = await TeamsApi.autolinupSubmitPlayesId(
         autoFillLineups.value,
         int.parse(gameId!),
