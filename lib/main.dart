@@ -6,7 +6,7 @@ import 'package:get/get.dart';
 import 'Base/controller/globlLoaderController.dart';
 import 'Base/controller/teamController/createTeamController.dart';
 import 'Base/controller/teamController/teamController.dart';
-
+// package:gaming_web_app/service/api/org_team_api.dart
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); // Required for async in main
   await SharedPreferencesUtil.init();
@@ -18,9 +18,8 @@ Future<void> main() async {
   Get.put(NewTeamController(), permanent: true);
 
   Get.put(LoaderController());
-  runApp(  BaseWidget());
+  runApp(BaseWidget());
 }
-
 
 // redirectToCheckout(context);
 
@@ -32,6 +31,4 @@ void toggleLoader(bool show) {
 
 // toggleLoader(true);  // Show
 // toggleLoader(false); // Hide
-
-
 

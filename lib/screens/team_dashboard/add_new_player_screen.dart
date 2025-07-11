@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -686,11 +687,45 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           val.trim().toUpperCase();
 
                                                                                       // 🛑 If backspace is pressed, just clear and skip all logic
+                                                                                      // if (controller.isBackspacePressed.value) {
+                                                                                      //   controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                      //       '';
+                                                                                      //   controller.autoFillData.refresh();
+
+                                                                                      //   controller.isBackspacePressed.value = false;
+                                                                                      //   return;
+                                                                                      // }
                                                                                       if (controller.isBackspacePressed.value) {
+                                                                                        // Clear lineup data
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             '';
-                                                                                        controller.autoFillData.refresh();
 
+                                                                                        // ✅ Remove the fixed assignment
+                                                                                        final playerId =
+                                                                                            controller.gameData.value.players![index].id.toString();
+                                                                                        controller.fixedAssignments?[playerId]?.remove(
+                                                                                          '$inningNumber',
+                                                                                        );
+
+                                                                                        // controller.fixedAssignments?[playerId]?.clear();
+                                                                                        log(
+                                                                                          "after clearr",
+                                                                                        );
+                                                                                        print(
+                                                                                          controller.fixedAssignments?[playerId].toString(),
+                                                                                        );
+
+                                                                                        // ✅ If no innings left for the player, remove the player key
+                                                                                        // if (controller.fixedAssignments?[playerId]?.isEmpty ??
+                                                                                        //     false) {
+                                                                                        //   controller.fixedAssignments?.remove(
+                                                                                        //     playerId,
+                                                                                        //   );
+                                                                                        // }
+                                                                                        log(
+                                                                                          "in backspac",
+                                                                                        );
+                                                                                        // controller.autoFillData.refresh();
                                                                                         controller.isBackspacePressed.value = false;
                                                                                         return;
                                                                                       }
@@ -699,6 +734,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       if (val.isEmpty) {
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             '';
+
                                                                                         controller.autoFillData.refresh();
                                                                                         return;
                                                                                       }
@@ -851,27 +887,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           result,
                                                                                         );
                                                                                       }
-                                                                                      // final validValues = [
-                                                                                      //   ...shortcuts.values,
-                                                                                      //   'OUT',
-                                                                                      //   'C',
-                                                                                      //   'CF',
-                                                                                      // ];
-
-                                                                                      // if (!validValues.contains(
-                                                                                      //   val,
-                                                                                      // )) {
-                                                                                      //   SnackbarUtils.showErrorr(
-                                                                                      //     "Invalid position '$val'. Please enter a valid fielding position.",
-                                                                                      //     onOkPressed: () {
-                                                                                      //       controllerNode.clear();
-                                                                                      //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                      //           '';
-                                                                                      //       controller.autoFillData.refresh();
-                                                                                      //     },
-                                                                                      //   );
-                                                                                      //   return;
-                                                                                      // }
                                                                                     },
                                                                                     onFieldSubmitted: (
                                                                                       val,
