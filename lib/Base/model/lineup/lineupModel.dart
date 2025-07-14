@@ -2,29 +2,84 @@ import 'dart:developer';
 
 import 'package:gaming_web_app/Base/model/lineup/fetchAutoLinup.dart';
 
+// class GameData {
+//   final int? gameId;
+//   final int? innings;
+//   final List<GamePlayer>? players;
+
+//   final List<GamePlayer>? playersout;
+//   final List<Lineupp>? lineupp;
+//   GameData({this.lineupp, this.gameId, this.innings, this.players ,this.playersout});
+
+//   factory GameData.fromJson(Map<String, dynamic> json) {
+//     return GameData(
+//       gameId: json['game_id'] as int?,
+//       innings: json['innings'] as int?,
+
+//       lineupp: _parseLineuppList(json['lineup']),
+//       players:
+//           (json['players'] as List<dynamic>?)
+//               ?.map((e) => GamePlayer.fromJson(e))
+//               .toList(),
+//     );
+//   }
+// }
 class GameData {
   final int? gameId;
   final int? innings;
   final List<GamePlayer>? players;
+  final List<GamePlayer>? playersout;
+  final List<GamePlayer>? playersNotOut;
   final List<Lineupp>? lineupp;
-  GameData({this.lineupp, this.gameId, this.innings, this.players});
+
+  GameData({
+    this.lineupp,
+    this.gameId,
+    this.innings,
+    this.players,
+    this.playersout,
+    this.playersNotOut,
+  });
 
   factory GameData.fromJson(Map<String, dynamic> json) {
+    final parsedLineup = _parseLineuppList(json['lineup']);
+    final parsedPlayers = (json['players'] as List<dynamic>?)
+        ?.map((e) => GamePlayer.fromJson(e))
+        .toList();
+
+    // Initialize empty lists for filtering
+    List<GamePlayer> out = [];
+    List<GamePlayer> notOut = [];
+
+    if (parsedLineup != null && parsedPlayers != null) {
+      for (int i = 0; i < parsedPlayers.length; i++) {
+        final player = parsedPlayers[i];
+
+        if (i < parsedLineup.length) {
+          final isOut = parsedLineup[i].isOut;
+
+          if (isOut) {
+            out.add(player);
+          } else {
+            notOut.add(player);
+          }
+        }
+      }
+    }
+
     return GameData(
       gameId: json['game_id'] as int?,
       innings: json['innings'] as int?,
-
-      lineupp: _parseLineuppList(json['lineup']),
-      players:
-          (json['players'] as List<dynamic>?)
-              ?.map((e) => GamePlayer.fromJson(e))
-              .toList(),
+      lineupp: parsedLineup,
+      players: parsedPlayers,
+      playersout: out,
+      playersNotOut: notOut,
     );
   }
 }
 
-List<Lineupp>? _parseLineuppList(dynamic json) {
 
+List<Lineupp>? _parseLineuppList(dynamic json) {
   if (json == null || json is! List) return null;
 
   return json

@@ -15,6 +15,7 @@ import 'package:gaming_web_app/screens/organization_dashboard/organization_signi
 import 'package:gaming_web_app/screens/organization_dashboard/payment_history_screen.dart';
 import 'package:gaming_web_app/screens/organization_dashboard/team_details_screen.dart';
 import 'package:gaming_web_app/screens/team_dashboard/add_new_player_screen.dart';
+import 'package:gaming_web_app/screens/team_dashboard/build_lineup.dart';
 import 'package:gaming_web_app/screens/team_dashboard/save_pdf_screen.dart';
 import 'package:gaming_web_app/screens/team_dashboard/team_dashboard_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
@@ -40,9 +41,15 @@ class AppPages {
       page: () => ChangePasswordScreen(),
     ),
 
+
     GetPage(
-      name: RoutesPath.ORGChangePasswordScreen,
-      page: () => ORGChangePasswordScreen(),
+      name: RoutesPath.changePasswordScreen,
+      page: () => ChangePasswordScreen(),
+    ),
+
+    GetPage(
+      name: RoutesPath.addNewPlayerScreenForBuildLineup,
+      page: () => AddNewPlayerScreenForBuildLineup(),
     ),
 
     GetPage(

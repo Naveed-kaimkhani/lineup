@@ -637,7 +637,9 @@ class NewTeamController extends GetxController {
         await SharedPreferencesUtil.saveCurrentRoute(
           RoutesPath.teamDashboardScreen,
         );
-        Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
+        // Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
+        
+        Navigator.pushNamed(context, RoutesPath.addNewPlayerScreenForBuildLineup);
       } catch (e) {
         Navigator.pop(context);
       }
