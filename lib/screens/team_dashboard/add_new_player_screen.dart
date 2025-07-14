@@ -1827,9 +1827,9 @@ class _LineupWidgetState extends State<LineupWidget> {
             scrollDirection: Axis.horizontal,
             child: Obx(
               () =>
-                  // controller.gameData.value.players!.isNotEmpty
+                  controller.gameData.value.players!.isNotEmpty
 
-                  controller.playersNotOut.isNotEmpty
+                  // controller.playersNotOut.isNotEmpty
                       ? Column(
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1848,12 +1848,12 @@ class _LineupWidgetState extends State<LineupWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: List.generate(
-                                        // controller
-                                        //     .gameData
-                                        //     .value
-                                        //     .players!
-                                        //     .length,
-                                        controller.playersNotOut.length,
+                                        controller
+                                            .gameData
+                                            .value
+                                            .players!
+                                            .length,
+                                        // controller.playersNotOut.length,
                                         (index) {
                                           if (controller.playersOut.contains(
                                             controller
@@ -1927,14 +1927,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                   // Status chip
                                                   InkWell(
                                                     onTap: () {
-                                                      // final player =
-                                                      //     controller
-                                                      //         .gameData
-                                                      //         .value
-                                                      //         .players?[index];
-                                                         final player =
+                                                      final player =
                                                           controller
-                                                              .playersNotOut[index];
+                                                              .gameData
+                                                              .value
+                                                              .players?[index];
+                                                        //  final player =
+                                                        //   controller
+                                                        //       .playersNotOut[index];
                                                       final exists =
                                                           controller.playersOut
                                                               .any(

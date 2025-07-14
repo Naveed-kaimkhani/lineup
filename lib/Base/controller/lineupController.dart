@@ -17,12 +17,8 @@ import '../model/lineup/pdfModel.dart';
 import '../model/positioned.dart';
 
 class LineupController extends GetxController {
-
-
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
   RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
-
-
 
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
@@ -109,27 +105,32 @@ class LineupController extends GetxController {
       if (response.data != null) {
         isLoading.value = true;
         gameData.value = response.data!;
-playersOut.clear();
-playersNotOut.clear();
+        playersOut.clear();
+        playersNotOut.clear();
 
-final allPlayers = gameData.value.players!;
-final lineups = gameData.value.lineupp ?? [];
+        final allPlayers = gameData.value.players!;
+        final lineups = gameData.value.lineupp ?? [];
 
-// Iterate through players, then check matching lineup by index
-for (int i = 0; i < allPlayers.length; i++) {
-  final player = allPlayers[i];
+        // Iterate through players, then check matching lineup by index
+        for (int i = 0; i < allPlayers.length; i++) {
+          final player = allPlayers[i];
 
-  // Safety check: ensure lineup and player lists are aligned
-  if (i < lineups.length) {
-    final isOut = lineups[i].isOut;
+          // Safety check: ensure lineup and player lists are aligned
+          if (i < lineups.length) {
+            final isOut = lineups[i].isOut;
 
-    if (isOut) {
-      playersOut.add(player);
-    } else {
-      playersNotOut.add(player);
-    }
-  }
-}
+            if (isOut) {
+              playersOut.add(player);
+            } else {
+              playersNotOut.add(player);
+            }
+            log("list of out");
+            log(playersOut.length.toString());
+
+            log("list of not out");
+            log(playersNotOut.length.toString());
+          }
+        }
 
         List<int> playersIds = [];
         statsList.clear();
