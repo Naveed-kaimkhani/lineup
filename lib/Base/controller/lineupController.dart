@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
 
@@ -16,7 +17,13 @@ import '../model/lineup/pdfModel.dart';
 import '../model/positioned.dart';
 
 class LineupController extends GetxController {
+
+
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
+  RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
+
+
+
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
   final focusNodesGrid = <int, Map<String, FocusNode>>{};
@@ -102,6 +109,27 @@ class LineupController extends GetxController {
       if (response.data != null) {
         isLoading.value = true;
         gameData.value = response.data!;
+playersOut.clear();
+playersNotOut.clear();
+
+final allPlayers = gameData.value.players!;
+final lineups = gameData.value.lineupp ?? [];
+
+// Iterate through players, then check matching lineup by index
+for (int i = 0; i < allPlayers.length; i++) {
+  final player = allPlayers[i];
+
+  // Safety check: ensure lineup and player lists are aligned
+  if (i < lineups.length) {
+    final isOut = lineups[i].isOut;
+
+    if (isOut) {
+      playersOut.add(player);
+    } else {
+      playersNotOut.add(player);
+    }
+  }
+}
 
         List<int> playersIds = [];
         statsList.clear();
@@ -129,54 +157,25 @@ class LineupController extends GetxController {
     }
   }
 
-  // Map<String, Map<String, String>> calculateFixedAssignments(
-  //   List<Lineupp> lineups,
-  // ) {
-  //   final fixedAssignments = <String, Map<String, String>>{};
-
-  //   for (final player in lineups) {
-  //     log(player.playerId);
-  //     final playerId = player.playerId.toString();
-  //     final playerAssignments = <String, String>{};
-
-  //     // Process each inning assignment for this player
-  //     player.innings.forEach((inningNumber, position) {
-  //       if (position.isNotEmpty) {
-  //         // Only add non-empty positions
-  //         playerAssignments[inningNumber.toString()] = position;
-  //       }
-  //       // Empty positions are automatically excluded by not being added
-  //     });
-
-  //     // Only add player to assignments if they have at least one position
-  //     if (playerAssignments.isNotEmpty) {
-  //       fixedAssignments[playerId] = playerAssignments;
-  //     }
-  //   }
-  //   log("new fix alignment vlaue");
-  //   log(fixedAssignments.toString());
-  //   return fixedAssignments;
-  // }
-
   Map<String, Map<String, String>> calculateFixedAssignments(
     List<Lineupp> lineups,
+    List<int> playerIds,
   ) {
     final fixedAssignments = <String, Map<String, String>>{};
 
-    for (final player in lineups) {
-      final playerId = (player.playerId);
-      log("fix assignent me galat arhi hy");
-      log(player.playerId);
-      // final playerId = (int.parse(player.playerId) - 12).toString();
+    for (int i = 0; i < lineups.length; i++) {
+      final player = lineups[i];
+
+      // ✅ Use player ID from playerIds list
+      final playerId = playerIds[i].toString();
+
       final playerAssignments = <String, String>{};
 
-      // Process each inning assignment for this player
+      // Collect non-empty positions
       player.innings.forEach((inningNumber, position) {
         if (position.isNotEmpty) {
-          // Only add non-empty positions
           playerAssignments[inningNumber.toString()] = position;
         }
-        // Empty positions are automatically excluded by not being added
       });
 
       if (playerAssignments.isNotEmpty) {
@@ -214,14 +213,12 @@ class LineupController extends GetxController {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
 
-      // log(autoFillData.value!.lineupp![0].innings);
-
+      // );
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
-        autoFillData.value!.lineupp!,
+        autoFillData.value?.lineupp ?? [],
+        autoFillLineups.value.playersInGame ?? [],
+        // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30],
       );
-      log("after calculation");
-      log(autoFillLineups.value.fixedAssignments.toString());
-      // Call the API to get the list of teams
 
       final response = await TeamsApi.autolinupSubmitPlayesId(
         autoFillLineups.value,
@@ -259,6 +256,14 @@ class LineupController extends GetxController {
   Future<void> getLineup(bool isShow) async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
+      String? token = await SharedPreferencesUtil.read(
+        SharedPreferencesKeysConstants.bearerToken,
+      );
+
+      log(gameId.toString());
+
+      log(token.toString());
+
       if (gameId != null) {
       } else {}
       if (fixedAssignments != null) {
@@ -270,32 +275,6 @@ class LineupController extends GetxController {
         int.parse(gameId!),
       );
 
-      log("game iddd kya hy");
-
-      log(gameId);
-      // Check if the response contains data and update the teams list
-      // if (response.data != null) {
-      //   fetchAutoFillLineups.value = response.data!;
-      //   autoFillData.value = response.data!;
-
-      //   fetchAutoFillLineups.refresh();
-      //   lineupp.value = response.data!.lineupp!;
-
-      //   for (
-      //     int inning = 0;
-      //     inning < gameData.value.players!.length;
-      //     inning++
-      //   ) {
-      //     calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-      //   }
-
-      //   // calculateDynamicGameStats();
-      // } else {
-      //   SnackbarUtils.showErrorr(response.message.toString());
-      //   // Handle the case where no teams are returned
-      //   // teams.value = [];
-      // }
-      // if (response.data != null)
       if (response.data!.lineupp != null &&
           response.data!.lineupp!.isNotEmpty) {
         fetchAutoFillLineups.value = response.data!;
@@ -306,7 +285,6 @@ class LineupController extends GetxController {
         if (response.data!.lineupp!.isNotEmpty) {
           lineupp.value = response.data!.lineupp!;
 
-          print("in if");
           for (
             int inning = 0;
             inning < gameData.value.players!.length;
@@ -321,21 +299,8 @@ class LineupController extends GetxController {
           }
 
           // calculateDynamicGameStats();
-        } else {
-          // Do NOT assign empty list to lineupp or use index 0
-          // // lineupp.value = [];
-          // print("Lineup is empty. Skipping inning calculations.");
-        }
+        } else {}
         // lineupp.value = response.data!.lineupp!;
-
-        // print("in if");
-        // for (
-        //   int inning = 0;
-        //   inning < gameData.value.players!.length;
-        //   inning++
-        // ) {
-        //   calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-        // }
       } else {
         // SnackbarUtils.showErrorr(response.message.toString());
       }
@@ -494,6 +459,57 @@ class LineupController extends GetxController {
     }
   }
 
+  // PlayerPositionStats calculateTopPositionAndPlayingTime(
+  //   int index,
+  //   int totalInnings,
+  // ) {
+  //   int playedInnings = 0;
+  //   Map<String, int> positionCount = {};
+
+  //   lineupp[index].innings.forEach((inning, position) {
+  //     final pos = position.toUpperCase();
+  //     if (pos != 'OUT' && pos != 'BENCH') {
+  //       playedInnings++;
+  //       positionCount[pos] = (positionCount[pos] ?? 0) + 1;
+  //     }
+  //   });
+  //   // Calculate percentage
+  //   double percentage =
+  //       totalInnings > 0 ? (playedInnings / totalInnings) * 100 : 0;
+  //   String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
+
+  //   // Determine top position
+  //   String topPosition = "OUT";
+  //   if (positionCount.isNotEmpty) {
+  //     int maxCount = 0;
+  //     List<String> topPositions = [];
+
+  //     positionCount.forEach((pos, count) {
+  //       if (count > maxCount) {
+  //         maxCount = count;
+  //         topPositions = [pos];
+  //       } else if (count == maxCount) {
+  //         topPositions.add(pos);
+  //       }
+  //     });
+
+  //     topPosition = topPositions.join(' / ');
+  //   }
+  //   final data = PlayerPositionStats(
+  //     topPosition: topPosition,
+  //     playingTimePercent: playingTimePercent,
+  //   );
+  //   statsList.add(data);
+
+  //   refresh();
+  //   statsList[0].topPosition;
+  //   statsList.refresh();
+  //   // print(statsList.length);
+  //   return PlayerPositionStats(
+  //     topPosition: topPosition,
+  //     playingTimePercent: playingTimePercent,
+  //   );
+  // }
   PlayerPositionStats calculateTopPositionAndPlayingTime(
     int index,
     int totalInnings,
@@ -508,12 +524,11 @@ class LineupController extends GetxController {
         positionCount[pos] = (positionCount[pos] ?? 0) + 1;
       }
     });
-    // Calculate percentage
+
     double percentage =
         totalInnings > 0 ? (playedInnings / totalInnings) * 100 : 0;
     String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
 
-    // Determine top position
     String topPosition = "OUT";
     if (positionCount.isNotEmpty) {
       int maxCount = 0;
@@ -530,20 +545,20 @@ class LineupController extends GetxController {
 
       topPosition = topPositions.join(' / ');
     }
+
     final data = PlayerPositionStats(
       topPosition: topPosition,
       playingTimePercent: playingTimePercent,
     );
-    statsList.value.add(data);
 
-    refresh();
-    statsList[0].topPosition;
+    if (index < statsList.length) {
+      statsList[index] = data;
+    } else {
+      statsList.add(data);
+    }
+
     statsList.refresh();
-    // print(statsList.length);
-    return PlayerPositionStats(
-      topPosition: topPosition,
-      playingTimePercent: playingTimePercent,
-    );
+    return data;
   }
 
   void refresh() {

@@ -33,10 +33,12 @@ void showFullWidthDialogPay(BuildContext context) {
               Row(
                 children: [
                   Spacer(),
+
                   Text(
                     'Is the team part of an organization?',
                     style: TextStyle(
-                      fontSize: 25,
+                      fontSize: 20,
+
                       fontWeight: FontWeight.bold,
                       color: AppColors.secondaryColor,
                     ),
@@ -106,9 +108,7 @@ void showFullWidthDialogPay(BuildContext context) {
                               SnackbarUtils.showErrorr(
                                 response.message.toString(),
                               );
-                 
                             }
-                           
                           },
                         );
                       },

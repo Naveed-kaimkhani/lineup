@@ -1,19 +1,17 @@
+import 'dart:developer';
+
 class BaseResponse<T> {
   final bool? success;
   final String? message;
   final T? data;
 
-  BaseResponse({
-    this.success,
-    this.message,
-    this.data,
-  });
+  BaseResponse({this.success, this.message, this.data});
 
   factory BaseResponse.fromJson(
-      Map<String, dynamic> json,
-      T Function(dynamic) fromJsonT,
-      ) {
-    // 👇 Supports both wrapped and direct responses
+    Map<String, dynamic> json,
+    T Function(dynamic) fromJsonT,
+  ) {
+    // log(json.toString());
     final dataJson = json['data'] ?? json;
     final data = fromJsonT(dataJson);
 
@@ -25,10 +23,6 @@ class BaseResponse<T> {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'success': success,
-      'message': message,
-      'data': data,
-    };
+    return {'success': success, 'message': message, 'data': data};
   }
 }

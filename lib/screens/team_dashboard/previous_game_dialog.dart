@@ -145,7 +145,17 @@ class PreviousGameDialog extends StatelessWidget {
                                                     await globleController
                                                         .gameDelete(item.id);
                                                     controller.fetchTeams();
-                                                    Navigator.pop(context);
+                                                    Future.microtask(() {
+                                                      controller.teamData
+                                                          .update((val) {
+                                                            val?.games
+                                                                ?.removeAt(
+                                                                  index,
+                                                                );
+                                                          });
+
+                                                      Navigator.pop(context);
+                                                    });
                                                     // TODO: Delete logic
                                                   },
                                                   child: Image.asset(
@@ -186,7 +196,17 @@ class PreviousGameDialog extends StatelessWidget {
                                                       item.id,
                                                     );
                                                     // TODO: Delete logic
+                                                    Future.microtask(() {
+                                                      controller.teamData
+                                                          .update((val) {
+                                                            val?.games
+                                                                ?.removeAt(
+                                                                  index,
+                                                                );
+                                                          });
+                                                    });
                                                   },
+
                                                   child: Image.asset(
                                                     'assets/images/delete_icon.png',
                                                     height: 32,

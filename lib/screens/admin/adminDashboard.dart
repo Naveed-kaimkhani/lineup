@@ -390,7 +390,7 @@ class _MobileLayoutState extends State<_MobileLayout> {
         },
         body: jsonEncode(body),
       );
-      // log(response.body);
+    
       if (response.statusCode == 200 || response.statusCode == 201) {
         final data = jsonDecode(response.body);
         if (data['success'] == true) {
@@ -403,7 +403,6 @@ class _MobileLayoutState extends State<_MobileLayout> {
         Get.snackbar("Error", "Server returned ${response.statusCode}");
       }
     } catch (e) {
-      log(e.toString());
       Get.snackbar("Error", "Exception: $e");
     }
   }

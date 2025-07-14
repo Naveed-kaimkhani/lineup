@@ -18,7 +18,7 @@ class FetchAutoFillLineups {
     // print("auto complete json");
     // print(json.toString());
     if (json == null) return FetchAutoFillLineups();
-    // log("response from autofill");
+
     return FetchAutoFillLineups(
       lineupp: _parseLineuppList(json['lineup']),
       playersInGame: _parseIntList(json['playersInGame']),
@@ -74,14 +74,9 @@ class Lineupp {
   });
 
   factory Lineupp.fromJson(Map<String, dynamic>? json) {
-
-
-
     if (json == null) {
       return Lineupp(playerId: '');
     }
-    log("player id dekho sahi arhi hy");
-    log(json['player_id']);
 
     return Lineupp(
       playerId: json['player_id']?.toString() ?? '',

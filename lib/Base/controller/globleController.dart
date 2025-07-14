@@ -13,21 +13,19 @@ class GlobleController extends GetxController {
       final TeamController controller = Get.find<TeamController>();
       controller.fetchTeams();
       SnackbarUtils.showSuccess(respone.message.toString());
-
-    }else{
+    } else {
       SnackbarUtils.showErrorr("Something wrong please try again");
     }
   }
+
   Future<void> gameDelete(int gameId) async {
     final respone = await GlobleApi.deleteGame(gameId);
-
 
     if (respone.success!) {
       final TeamController controller = Get.find<TeamController>();
       controller.fetchTeams();
       // SnackbarUtils.showSuccess(respone.message.toString());
-
-    }else{
+    } else {
       SnackbarUtils.showErrorr("Something wrong please try again");
     }
   }
@@ -35,21 +33,16 @@ class GlobleController extends GetxController {
   Future<void> playesDelete(int playerId) async {
     final respone = await GlobleApi.deletePlayes(playerId);
 
-
     if (respone.success!) {
       final controller = Get.find<TeamController>();
       final controlle = Get.find<NewTeamController>();
-        try {
-          controller.fetchGetTeamData();
-          controlle.getPlayer();
-        }catch(e){
-
-        }
+      try {
+        // controller.fetchGetTeamData();
+        // controlle.getPlayer();
+      } catch (e) {}
       SnackbarUtils.showSuccess(respone.message.toString());
-    }else{
+    } else {
       SnackbarUtils.showErrorr("Something wrong please try again");
     }
   }
-
-
 }

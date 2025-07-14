@@ -1,19 +1,35 @@
+import 'dart:developer';
+
+import 'package:gaming_web_app/Base/model/lineup/fetchAutoLinup.dart';
+
 class GameData {
   final int? gameId;
   final int? innings;
   final List<GamePlayer>? players;
-
-  GameData({this.gameId, this.innings, this.players});
+  final List<Lineupp>? lineupp;
+  GameData({this.lineupp, this.gameId, this.innings, this.players});
 
   factory GameData.fromJson(Map<String, dynamic> json) {
     return GameData(
       gameId: json['game_id'] as int?,
       innings: json['innings'] as int?,
-      players: (json['players'] as List<dynamic>?)
-          ?.map((e) => GamePlayer.fromJson(e))
-          .toList(),
+
+      lineupp: _parseLineuppList(json['lineup']),
+      players:
+          (json['players'] as List<dynamic>?)
+              ?.map((e) => GamePlayer.fromJson(e))
+              .toList(),
     );
   }
+}
+
+List<Lineupp>? _parseLineuppList(dynamic json) {
+
+  if (json == null || json is! List) return null;
+
+  return json
+      .map((e) => Lineupp.fromJson(Map<String, dynamic>.from(e)))
+      .toList();
 }
 
 class GamePlayer {
@@ -24,6 +40,8 @@ class GamePlayer {
   final String? jerseyNumber;
   final String? email;
   final GameStats? stats;
+
+  final bool? isOut;
   final String? fullName;
   final List<GamePosition>? preferredPositions;
   final List<GamePosition>? restrictedPositions;
@@ -34,6 +52,7 @@ class GamePlayer {
     this.teamId,
     this.firstName,
     this.lastName,
+    this.isOut,
     this.jerseyNumber,
     this.email,
     this.stats,
@@ -44,21 +63,27 @@ class GamePlayer {
   });
 
   factory GamePlayer.fromJson(Map<String, dynamic> json) {
+    // print("nh arha yrr isout");
+    // print(json);
     return GamePlayer(
       id: json['id'] as int?,
       teamId: json['team_id'] as int?,
+
+      isOut: json['isOut'] as bool?,
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
       jerseyNumber: json['jersey_number']?.toString(),
       email: json['email'] as String?,
       stats: json['stats'] != null ? GameStats.fromJson(json['stats']) : null,
       fullName: json['full_name'] as String?,
-      preferredPositions: (json['preferred_positions'] as List<dynamic>?)
-          ?.map((e) => GamePosition.fromJson(e))
-          .toList(),
-      restrictedPositions: (json['restricted_positions'] as List<dynamic>?)
-          ?.map((e) => GamePosition.fromJson(e))
-          .toList(),
+      preferredPositions:
+          (json['preferred_positions'] as List<dynamic>?)
+              ?.map((e) => GamePosition.fromJson(e))
+              .toList(),
+      restrictedPositions:
+          (json['restricted_positions'] as List<dynamic>?)
+              ?.map((e) => GamePosition.fromJson(e))
+              .toList(),
       team: json['team'] != null ? GameTeam.fromJson(json['team']) : null,
     );
   }
@@ -90,10 +115,10 @@ class GameStats {
       pctInningsPlayed: (json['pct_innings_played'] as num?)?.toDouble(),
       topPosition: json['top_position'] as String?,
       avgBattingLoc: json['avg_batting_loc'],
-      positionCounts: (json['position_counts'] as Map<String, dynamic>?)
-          ?.map((key, value) => MapEntry(key, value as int)),
-      totalInningsParticipatedIn:
-      json['total_innings_participated_in'] as int?,
+      positionCounts: (json['position_counts'] as Map<String, dynamic>?)?.map(
+        (key, value) => MapEntry(key, value as int),
+      ),
+      totalInningsParticipatedIn: json['total_innings_participated_in'] as int?,
       activeInningsPlayed: json['active_innings_played'] as int?,
       pctInfPlayed: (json['pct_inf_played'] as num?)?.toDouble(),
       pctOfPlayed: (json['pct_of_played'] as num?)?.toDouble(),
@@ -108,10 +133,7 @@ class GamePosition {
   GamePosition({this.id, this.name});
 
   factory GamePosition.fromJson(Map<String, dynamic> json) {
-    return GamePosition(
-      id: json['id'] as int?,
-      name: json['name'] as String?,
-    );
+    return GamePosition(id: json['id'] as int?, name: json['name'] as String?);
   }
 }
 
@@ -164,15 +186,18 @@ class GameTeam {
       city: json['city'] as String?,
       state: json['state'] as String?,
       accessStatus: json['access_status'] as String?,
-      accessExpiresAt: json['access_expires_at'] != null
-          ? DateTime.tryParse(json['access_expires_at'])
-          : null,
-      createdAt: json['created_at'] != null
-          ? DateTime.tryParse(json['created_at'])
-          : null,
-      updatedAt: json['updated_at'] != null
-          ? DateTime.tryParse(json['updated_at'])
-          : null,
+      accessExpiresAt:
+          json['access_expires_at'] != null
+              ? DateTime.tryParse(json['access_expires_at'])
+              : null,
+      createdAt:
+          json['created_at'] != null
+              ? DateTime.tryParse(json['created_at'])
+              : null,
+      updatedAt:
+          json['updated_at'] != null
+              ? DateTime.tryParse(json['updated_at'])
+              : null,
     );
   }
 }

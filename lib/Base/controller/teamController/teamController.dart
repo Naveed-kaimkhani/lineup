@@ -74,8 +74,7 @@ class TeamController extends GetxController {
       } else {
         teams.value = [];
       }
-    } catch (e) {
-    }
+    } catch (e) {}
   }
 
   Future<void> fetchTeamsPositioned() async {
