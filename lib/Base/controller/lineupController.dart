@@ -131,6 +131,9 @@ class LineupController extends GetxController {
             log(playersNotOut.length.toString());
           }
         }
+        // ✅ Force UI update
+        playersOut.refresh();
+        playersNotOut.refresh();
 
         List<int> playersIds = [];
         statsList.clear();
