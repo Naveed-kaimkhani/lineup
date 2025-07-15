@@ -315,7 +315,11 @@ class _LineupWidgetState extends State<LineupWidget> {
 
     double tableWidth =
         60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
-
+    if (controller.gameData.value.players!.length > 9) {
+      controller.playersOut.value = controller.gameData.value.players!.sublist(
+        9,
+      ); // players from index 9 onwards (i.e., 10th player onwards)
+    }
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(
@@ -423,11 +427,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: List.generate(
-                                        // controller
-                                        //     .gameData
-                                        //     .value
-                                        //     .players!
-                                        //     .length,
                                         controller.gameData.value.players!
                                             .take(9)
                                             .length,
@@ -513,23 +512,18 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                               .gameData
                                                               .value
                                                               .players?[index];
-                                                      // final player =
-                                                      //     controller
-                                                      //         .playersNotOut[index];
+
                                                       final exists =
                                                           controller.playersOut
-                                                          // controller
-                                                          //     .gameData
-                                                          //     .value
-                                                          //     .playersout!
-                                                          .any(
-                                                            (p) =>
-                                                                p.id ==
-                                                                player!.id,
-                                                          ) ??
+                                                              .any(
+                                                                (p) =>
+                                                                    p.id ==
+                                                                    player!.id,
+                                                              ) ??
                                                           false;
 
                                                       if (!exists) {
+                                                        log("added into out");
                                                         controller.playersOut
                                                             .add(player!);
 
@@ -1198,8 +1192,6 @@ class _LineupWidgetState extends State<LineupWidget> {
     final LineupController controller = Get.find<LineupController>();
     double tableWidth =
         60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
-    // controller.playersOut.value = controller.gameData.value.players!.sublist(9);
-
     return SingleChildScrollView(
       child: Column(
         mainAxisSize: MainAxisSize.max,
@@ -1229,15 +1221,12 @@ class _LineupWidgetState extends State<LineupWidget> {
               color: Colors.white,
               child: Obx(
                 () =>
-                    controller.playersOut.length <= 9
-                        // controller.gameData.value.playersout!.isEmpty
+                    controller.playersOut.isEmpty
                         ? SizedBox()
                         : Column(
                           mainAxisSize: MainAxisSize.max,
                           children:
-                              controller.gameData.value.players!
-                                  .skip(9)
-                                  // controller.gameData.value.playersout!
+                              controller.playersOut
                                   .map(
                                     (player) => Container(
                                       padding: const EdgeInsets.symmetric(
@@ -1283,11 +1272,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                 controller.playersOut.remove(
                                                   player,
                                                 );
-                                                // controller
-                                                //     .gameData
-                                                //     .value
-                                                //     .players!
-                                                //     .remove(player);
                                                 final indexInLineup = controller
                                                     .autoFillData
                                                     .value!
@@ -1305,8 +1289,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                       .isOut = false;
                                                 }
                                                 controller.playersOut.refresh();
-
-                                                // controller.gameData.value.playersout!.refresh();
                                               },
                                               style: ElevatedButton.styleFrom(
                                                 backgroundColor: const Color(

@@ -221,7 +221,6 @@ class LineupController extends GetxController {
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
         autoFillData.value?.lineupp ?? [],
         autoFillLineups.value.playersInGame ?? [],
-        // [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 30],
       );
 
       final response = await TeamsApi.autolinupSubmitPlayesId(
@@ -266,7 +265,7 @@ class LineupController extends GetxController {
 
       log(gameId.toString());
 
-      log(token.toString());
+      // log(token.toString());
 
       if (gameId != null) {
       } else {}
