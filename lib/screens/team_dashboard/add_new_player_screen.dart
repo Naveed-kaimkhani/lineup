@@ -545,16 +545,9 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                           controller
                                                               .gameData
                                                               .value
-                                                              .playersNotOut?[index];
-                                                      // final player =
-                                                      //     controller
-                                                      //         .playersNotOut[index];
+                                                              .players?[index];
                                                       final exists =
-                                                          // controller.playersOut
-                                                          controller
-                                                              .gameData
-                                                              .value
-                                                              .playersout!
+                                                          controller.playersOut
                                                               .any(
                                                                 (p) =>
                                                                     p.id ==
@@ -565,12 +558,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                       if (!exists) {
                                                         controller.playersOut
                                                             .add(player!);
-
-                                                        controller
-                                                            .gameData
-                                                            .value
-                                                            .playersout!
-                                                            .add(player);
                                                         // 2. Remove from players list
 
                                                         controller

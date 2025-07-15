@@ -308,6 +308,39 @@ class _LineupWidgetState extends State<LineupWidget> {
     return KeyEventResult.ignored;
   }
 
+  Widget _buildNavigationChips() {
+    final List<Map<String, dynamic>> keyGuides = [
+      {'label': 'Shift + ↑', 'action': 'Select Up'},
+      {'label': 'Shift + ↓', 'action': 'Select Down'},
+      {'label': 'Shift + →', 'action': 'Select Right'},
+      {'label': 'Shift + ←', 'action': 'Select Left'},
+    ];
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children:
+          keyGuides.map((guide) {
+            final bool isSelect = guide['label'].toString().contains('Shift');
+            return Container(
+              margin: const EdgeInsets.only(bottom: 6, left: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                color: isSelect ? const Color(0xFF2B4582) : Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                '${guide['label']} = ${guide['action']}',
+                style: TextStyle(
+                  color: isSelect ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              ),
+            );
+          }).toList(),
+    );
+  }
+
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
 
@@ -315,17 +348,14 @@ class _LineupWidgetState extends State<LineupWidget> {
 
     double tableWidth =
         60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
-    // if (controller.gameData.value.players!.length > 9) {
-    //   controller.playersOut.value = controller.gameData.value.players!.sublist(
-    //     9,
-    //   ); // players from index 9 onwards (i.e., 10th player onwards)
-    //   log("list reset");
-    // }
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
           // Header row
+          _buildNavigationChips(),
+          SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Obx(
@@ -545,13 +575,6 @@ class _LineupWidgetState extends State<LineupWidget> {
 
                                                         controller.gameData
                                                             .refresh();
-                                                        log("after into out");
-                                                        log(
-                                                          controller
-                                                              .playersOut
-                                                              .length
-                                                              .toString(),
-                                                        );
                                                       } else {}
 
                                                       controller.playersOut

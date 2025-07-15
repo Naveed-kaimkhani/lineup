@@ -11,7 +11,7 @@ class BaseResponse<T> {
     Map<String, dynamic> json,
     T Function(dynamic) fromJsonT,
   ) {
-    // log(json.toString());
+    
     final dataJson = json['data'] ?? json;
     final data = fromJsonT(dataJson);
 

@@ -126,11 +126,7 @@ class LineupController extends GetxController {
             } else {
               playersNotOut.add(player);
             }
-            log("list of out");
-            log(playersOut.length.toString());
-
-            log("list of not out");
-            log(playersNotOut.length.toString());
+            
           }
         }
         // ✅ Force UI update
@@ -265,9 +261,8 @@ class LineupController extends GetxController {
         SharedPreferencesKeysConstants.bearerToken,
       );
 
-      log(gameId.toString());
-
-      // log(token.toString());
+ 
+ 
 
       if (gameId != null) {
       } else {}
