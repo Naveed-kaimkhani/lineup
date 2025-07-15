@@ -428,20 +428,13 @@ class _LineupWidgetState extends State<LineupWidget> {
                                         controller.gameData.value.players!
                                             .take(9)
                                             .length,
-                                        // controller
-                                        //     .gameData
-                                        //     .value
-                                        //     .players!
-                                        //     .length,
 
-                                        // controller.playersNotOut.length,
                                         (index) {
-                                          if (controller.playersOut.contains(
-                                            controller
-                                                .gameData
-                                                .value
-                                                .players![index],
-                                          )) {
+                                          log(
+                                            "new length${controller.gameData.value.players!.length}",
+                                          );
+                                          if (false) {
+                                            log("value already contained");
                                             return SizedBox();
                                           } else {
                                             return Container(
@@ -507,81 +500,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                     ),
                                                   ),
 
-                                                  // Status chip
-                                                  // InkWell(
-                                                  //   onTap: () {
-                                                  //     final player =
-                                                  //         controller
-                                                  //             .gameData
-                                                  //             .value
-                                                  //             .players?[index];
-
-                                                  //     final exists =
-                                                  //         controller.playersOut
-                                                  //             .any(
-                                                  //               (p) =>
-                                                  //                   p.id ==
-                                                  //                   player!.id,
-                                                  //             ) ??
-                                                  //         false;
-
-                                                  //     if (!exists) {
-                                                  //       log("added into out");
-                                                  //       controller.playersOut
-                                                  //           .add(player!);
-
-                                                  //       // 2. Remove from players list
-
-                                                  //       controller
-                                                  //           .autoFillData
-                                                  //           .value!
-                                                  //           .lineupp![index]
-                                                  //           .isOut = true;
-
-                                                  //       controller.playersOut
-                                                  //           .refresh();
-                                                  //       controller.gameData
-                                                  //           .refresh();
-                                                  //     } else {}
-
-                                                  //     controller.playersOut
-                                                  //         .refresh();
-
-                                                  //     i = 1;
-                                                  //   },
-
-                                                  //   child: SizedBox(
-                                                  //     width: 70,
-                                                  //     child: Container(
-                                                  //       padding:
-                                                  //           const EdgeInsets.symmetric(
-                                                  //             horizontal: 8,
-                                                  //             vertical: 4,
-                                                  //           ),
-                                                  //       decoration: BoxDecoration(
-                                                  //         color: const Color(
-                                                  //           0xFFA33838,
-                                                  //         ),
-                                                  //         borderRadius:
-                                                  //             BorderRadius.circular(
-                                                  //               4,
-                                                  //             ),
-                                                  //       ),
-                                                  //       child: const Text(
-                                                  //         'Out',
-                                                  //         textAlign:
-                                                  //             TextAlign.center,
-                                                  //         style: TextStyle(
-                                                  //           color: Colors.white,
-                                                  //           fontSize: 12,
-                                                  //           fontWeight:
-                                                  //               FontWeight.w500,
-                                                  //         ),
-                                                  //       ),
-                                                  //     ),
-                                                  //   ),
-                                                  //   // child: SizedBox(),
-                                                  // ),
                                                   InkWell(
                                                     onTap: () {
                                                       final player =
@@ -611,7 +529,11 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                         controller.playersOut
                                                             .add(player!);
                                                         // 2. Remove from players list
-
+                                                        controller
+                                                            .gameData
+                                                            .value
+                                                            .players!
+                                                            .remove(player);
                                                         controller
                                                             .autoFillData
                                                             .value!
@@ -1360,9 +1282,15 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 i = 1;
+
                                                 controller.playersOut.remove(
                                                   player,
                                                 );
+                                                controller
+                                                    .gameData
+                                                    .value
+                                                    .players!
+                                                    .add(player);
                                                 final indexInLineup = controller
                                                     .autoFillData
                                                     .value!
