@@ -20,6 +20,8 @@ class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
   RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
 
+  RxList<GamePlayer> firstNinePlayers = <GamePlayer>[].obs;
+
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
   final focusNodesGrid = <int, Map<String, FocusNode>>{};
@@ -105,13 +107,11 @@ class LineupController extends GetxController {
       if (response.data != null) {
         isLoading.value = true;
         gameData.value = response.data!;
-        // playersOut.clear();
-        // playersNotOut.clear();
-
+        firstNinePlayers.value = gameData.value.players!.sublist(9);
 
         final allPlayers = gameData.value.players!;
         final lineups = gameData.value.lineupp ?? [];
-   playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
+        playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
 
         // Iterate through players, then check matching lineup by index
         for (int i = 0; i < allPlayers.length; i++) {
@@ -126,7 +126,6 @@ class LineupController extends GetxController {
             } else {
               playersNotOut.add(player);
             }
-            
           }
         }
         // ✅ Force UI update
@@ -260,9 +259,6 @@ class LineupController extends GetxController {
       String? token = await SharedPreferencesUtil.read(
         SharedPreferencesKeysConstants.bearerToken,
       );
-
- 
- 
 
       if (gameId != null) {
       } else {}
