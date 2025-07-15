@@ -54,9 +54,6 @@ class _AddNewPlayerScreenState extends State<AddNewPlayerScreen> {
         controller.autoFillLineups.value = AutoFillLineups(); // Empty object
         controller.autoFillData.value = null; // Set to null
 
-        log("autoFillLineups and autoFillData have been reset on dispose");
-        log(controller.autoFillLineups.value.toString());
-        print(controller.autoFillData.value);
         Get.toNamed(RoutesPath.teamDashboardScreen);
       },
       userImage: 'assets/images/dummy_image.png',
@@ -141,6 +138,9 @@ class _LineupWidgetState extends State<LineupWidget> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           const SizedBox(height: 16),
+          // _buildNavigationChips(),
+
+          // const SizedBox(height: 16),
           _buildPositionChips(),
           const SizedBox(height: 16),
           LayoutBuilder(
@@ -156,6 +156,39 @@ class _LineupWidgetState extends State<LineupWidget> {
           const SizedBox(height: 24),
         ],
       ),
+    );
+  }
+
+  Widget _buildNavigationChips() {
+    final List<Map<String, dynamic>> keyGuides = [
+      {'label': 'Shift + ↑', 'action': 'Select Up'},
+      {'label': 'Shift + ↓', 'action': 'Select Down'},
+      {'label': 'Shift + →', 'action': 'Select Right'},
+      {'label': 'Shift + ←', 'action': 'Select Left'},
+    ];
+
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children:
+          keyGuides.map((guide) {
+            final bool isSelect = guide['label'].toString().contains('Shift');
+            return Container(
+              margin: const EdgeInsets.only(bottom: 6, left: 10),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
+              decoration: BoxDecoration(
+                color: isSelect ? const Color(0xFF2B4582) : Colors.white,
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                '${guide['label']} = ${guide['action']}',
+                style: TextStyle(
+                  color: isSelect ? Colors.white : Colors.black,
+                  fontWeight: FontWeight.w500,
+                  fontSize: 12,
+                ),
+              ),
+            );
+          }).toList(),
     );
   }
 
@@ -322,6 +355,9 @@ class _LineupWidgetState extends State<LineupWidget> {
       child: Column(
         children: [
           // Header row
+          _buildNavigationChips(),
+
+          const SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
             child: Obx(
@@ -340,8 +376,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                       SizedBox(
                         width: 60,
                         child: Text(
-                          // 'Lineup',
-                          "${controller.gameData.value.playersNotOut!.length}",
+                          'Lineup',
                           style: TextStyle(
                             color: const Color(0xFF8B3A3A),
                             fontSize: 14,
@@ -408,9 +443,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                         mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          // Text(
-                          //   "lenhttttt ${controller.gameData.value.playersNotOut[]}",
-                          // ),
                           Container(
                             alignment: Alignment.bottomLeft,
                             // width: 1400,
@@ -425,26 +457,16 @@ class _LineupWidgetState extends State<LineupWidget> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.start,
                                       children: List.generate(
-                                        // controller
-                                        //     .gameData
-                                        //     .value
-                                        //     .players!
-                                        //     .length,
                                         controller
                                             .gameData
                                             .value
                                             .playersNotOut!
                                             .length,
-                                        // controller.playersNotOut.length,
                                         (index) {
-                                          if (
-                                          //   controller.playersOut.contains(
-                                          //   controller
-                                          //       .gameData
-                                          //       .value
-                                          //       .players![index],
-                                          // )
-                                          controller.gameData.value.playersout!
+                                          if (controller
+                                              .gameData
+                                              .value
+                                              .playersout!
                                               .contains(
                                                 controller
                                                     .gameData
@@ -492,7 +514,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                   SizedBox(
                                                     width: 140,
                                                     child: Text(
-                                                      "${controller.gameData.value.playersNotOut![index].id!} ${controller.gameData.value.playersNotOut![index].lastName}",
+                                                      "${controller.gameData.value.playersNotOut![index].firstName!} ${controller.gameData.value.playersNotOut![index].lastName}",
 
                                                       // "${ controller.playersNotOut[index].id!} ${ controller.playersNotOut[index].lastName}",
                                                       style: const TextStyle(
@@ -749,10 +771,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                             controller.gameData.value.players![index].id.toString();
                                                                                         controller.fixedAssignments?[playerId]?.remove(
                                                                                           '$inningNumber',
-                                                                                        );
-
-                                                                                        print(
-                                                                                          controller.fixedAssignments?[playerId].toString(),
                                                                                         );
 
                                                                                         // controller.autoFillData.refresh();
@@ -1293,9 +1311,9 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             child: ElevatedButton(
                                               onPressed: () {
                                                 i = 1;
-                                                controller.playersOut.remove(
-                                                  player,
-                                                );
+                                                // controller.gameData.value.playersout!.remove(
+                                                //   player,
+                                                // );
                                                 controller
                                                     .gameData
                                                     .value
@@ -1317,7 +1335,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                       .lineupp![indexInLineup]
                                                       .isOut = false;
                                                 }
-                                                controller.playersOut.refresh();
+                                                controller.gameData.refresh();
 
                                                 // controller.gameData.value.playersout!.refresh();
                                               },

@@ -105,11 +105,13 @@ class LineupController extends GetxController {
       if (response.data != null) {
         isLoading.value = true;
         gameData.value = response.data!;
-        playersOut.clear();
-        playersNotOut.clear();
+        // playersOut.clear();
+        // playersNotOut.clear();
+
 
         final allPlayers = gameData.value.players!;
         final lineups = gameData.value.lineupp ?? [];
+   playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
 
         // Iterate through players, then check matching lineup by index
         for (int i = 0; i < allPlayers.length; i++) {

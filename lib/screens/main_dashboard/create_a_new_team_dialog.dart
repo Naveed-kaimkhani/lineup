@@ -107,7 +107,8 @@ class _CreateTeamDialogState extends State<CreateTeamDialog> {
                           children: [
                             Spacer(),
                             Text(
-                              'CREATE NEW TEAM',
+                              // textAlign: TextAlign.center,
+                              '       CREATE NEW TEAM',
                               style: TextStyle(
                                 fontSize: headerFontSize,
                                 fontWeight: FontWeight.bold,
