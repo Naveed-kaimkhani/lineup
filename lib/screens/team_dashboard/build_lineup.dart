@@ -1211,10 +1211,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                 SizedBox(
                                                   width: 140,
                                                   child: Text(
-                                                    // "${controller.gameData.value.players![index].firstName!} ${controller.gameData.value.players![index].lastName}",
                                                     "${controller.firstNinePlayers1[index].firstName} ${controller.firstNinePlayers1[index].lastName}",
 
-                                                    // "${ controller.playersNotOut[index].id!} ${ controller.playersNotOut[index].lastName}",
                                                     style: const TextStyle(
                                                       fontWeight:
                                                           FontWeight.bold,
@@ -1227,12 +1225,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                 SizedBox(
                                                   width: 40,
                                                   child: Text(
-                                                    // controller
-                                                    //     .gameData
-                                                    //     .value
-                                                    //     .players![index]
-                                                    //     .jerseyNumber
-                                                    //     .toString(),
                                                     controller
                                                         .firstNinePlayers1[index]
                                                         .jerseyNumber

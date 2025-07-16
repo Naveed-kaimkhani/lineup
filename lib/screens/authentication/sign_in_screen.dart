@@ -6,6 +6,7 @@ import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
 import 'package:gaming_web_app/constants/widgets/custom_form.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/player_background_scaffold.dart';
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
+import 'package:gaming_web_app/drag_drop.dart';
 import 'package:gaming_web_app/screens/team_dashboard/arrow_test.dart';
 import 'package:get/get.dart';
 import '../../Base/controller/authController/auth_controller.dart';
@@ -173,17 +174,18 @@ class SignInScreen extends StatelessWidget {
 
                                   // Sign In Button
                                   PrimaryButton(
-                                    onTap: controller.signIn,
+                                    // onTap: controller.signIn,
+                                    
                                     // },
-                                    // onTap:
-                                    //     () => Navigator.push(
-                                    //       context,
-                                    //       MaterialPageRoute(
-                                    //         builder:
-                                    //             (context) =>
-                                    //                 const TextFieldGridScreen(),
-                                    //       ),
-                                    //     ),
+                                    onTap:
+                                        () => Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder:
+                                                (context) =>
+                                                    const DragDropListScreen(),
+                                          ),
+                                        ),
                                     title: 'Sign in',
                                     width: double.infinity,
                                     radius: 4.89.r,
