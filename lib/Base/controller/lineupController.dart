@@ -250,6 +250,8 @@ class LineupController extends GetxController {
       // log(SharedPreferencesKeysConstants.bearerToken);
       // Check if the response contains data and update the teams list
       if (response.data != null) {
+        log(response.data.toString());
+        log(response.message.toString());
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
