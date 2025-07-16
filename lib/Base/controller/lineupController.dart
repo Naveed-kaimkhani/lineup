@@ -132,26 +132,26 @@ class LineupController extends GetxController {
 
         final allPlayers = gameData.value.players!;
         final lineups = gameData.value.lineupp ?? [];
-        playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
+        // playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
 
         // Iterate through players, then check matching lineup by index
-        for (int i = 0; i < allPlayers.length; i++) {
-          final player = allPlayers[i];
+        // for (int i = 0; i < allPlayers.length; i++) {
+        //   final player = allPlayers[i];
 
-          // Safety check: ensure lineup and player lists are aligned
-          if (i < lineups.length) {
-            final isOut = lineups[i].isOut;
+        //   // Safety check: ensure lineup and player lists are aligned
+        //   if (i < lineups.length) {
+        //     final isOut = lineups[i].isOut;
 
-            if (isOut) {
-              playersOut.add(player);
-            } else {
-              playersNotOut.add(player);
-            }
-          }
-        }
+        //     if (isOut) {
+        //       playersOut.add(player);
+        //     } else {
+        //       playersNotOut.add(player);
+        //     }
+        //   }
+        // }
         // ✅ Force UI update
-        playersOut.refresh();
-        playersNotOut.refresh();
+        // playersOut.refresh();
+        // playersNotOut.refresh();
 
         List<int> playersIds = [];
         statsList.clear();
@@ -245,6 +245,8 @@ class LineupController extends GetxController {
         autoFillLineups.value,
         int.parse(gameId!),
       );
+
+      log(response.message.toString());
       // log(autoFillLineups.value.playersInGame.toString());
       // log(gameId);
       // log(SharedPreferencesKeysConstants.bearerToken);

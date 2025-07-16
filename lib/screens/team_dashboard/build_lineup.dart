@@ -33,7 +33,7 @@ class _AddNewPlayerScreenForBuildLineupState
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
       controller.getLineup(true);
-      controller.splitPlayers();
+      // controller.splitPlayers();
     });
 
     // controller.getLineup();
@@ -966,7 +966,87 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     onFieldSubmitted:
                                                                                         (
                                                                                           val,
-                                                                                        ) async {},
+                                                                                        ) async {
+                                                                                    val =
+                                                                                        val.trim().toUpperCase(); // Normalize for consistent matching
+
+                                                                                    // Allow OUT always
+                                                                                    if (val ==
+                                                                                        "OUT") {
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                          "OUT";
+                                                                                      controller.autoFillData.refresh();
+
+                                                                                      // return;
+                                                                                      // controller.againCalculateStatsandTopPositions();
+                                                                                      controller.recalculatePlayerStats(
+                                                                                        index,
+                                                                                      );
+                                                                                    } else {
+                                                                                      final allLineups =
+                                                                                          controller.autoFillData.value?.lineupp ??
+                                                                                          [];
+                                                                                      final inningValues =
+                                                                                          allLineups
+                                                                                              .asMap()
+                                                                                              .entries
+                                                                                              .where(
+                                                                                                (
+                                                                                                  e,
+                                                                                                ) =>
+                                                                                                    e.key !=
+                                                                                                    index,
+                                                                                              ) // Exclude current row
+                                                                                              .map(
+                                                                                                (
+                                                                                                  e,
+                                                                                                ) =>
+                                                                                                    e.value.innings[inningNumber]?.trim().toUpperCase(),
+                                                                                              )
+                                                                                              .toList();
+
+                                                                                      // ✅ Check for duplicate (excluding empty and OUT)
+                                                                                      if (inningValues.contains(
+                                                                                        val,
+                                                                                      )) {
+                                                                                        SnackbarUtils.showErrorr(
+                                                                                          "This position $val is already used in this inning (column). Duplicate values are not allowed.",
+                                                                                          onOkPressed: () {
+                                                                                            controllerNode.clear();
+                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                                '';
+                                                                                            controller.autoFillData.refresh();
+                                                                                          },
+                                                                                        );
+                                                                                        return;
+                                                                                      }
+                                                                                    }
+                                                                                    // ✅ Get all values in current inning column
+
+                                                                                    // ✅ Save entered value
+                                                                                    controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                        val;
+                                                                                    controller.autoFillData.refresh();
+
+                                                                                    // Optional auto-fill from team positions
+                                                                                    String result = await filterPositionsByNamePrefix(
+                                                                                      controller.teamPositioned,
+                                                                                      controller.enerLable.value,
+                                                                                    );
+
+                                                                                    if (result !=
+                                                                                        "") {
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                          result;
+                                                                                      controller.autoFillData.refresh();
+                                                                                      textEditingController.text = result;
+                                                                                      controller.addFixedAssignment(
+                                                                                        controller.gameData.value.players![index].id.toString(),
+                                                                                        '$inningNumber',
+                                                                                        result,
+                                                                                      );
+                                                                                    }
+                                                                                  },
                                                                                   ),
                                                                                 ),
                                                                               ),
@@ -1256,15 +1336,15 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             width: 80,
                                             child: ElevatedButton(
                                               onPressed: () {
-                                                if (controller
-                                                        .firstNinePlayers1
-                                                        .length >=
-                                                    11) {
-                                                  SnackbarUtils.showErrorr(
-                                                    "You can only add 9 or 11 players to the lineup. To add more, please remove a player from the current lineup above.",
-                                                  );
-                                                  return;
-                                                }
+                                                // if (controller
+                                                //         .firstNinePlayers1
+                                                //         .length >=
+                                                //     11) {
+                                                //   SnackbarUtils.showErrorr(
+                                                //     "You can only add 9 or 11 players to the lineup. To add more, please remove a player from the current lineup above.",
+                                                //   );
+                                                //   return;
+                                                // }
 
                                                 i = 1;
 
