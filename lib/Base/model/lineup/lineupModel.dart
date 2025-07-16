@@ -1,4 +1,3 @@
-import 'dart:developer';
 
 import 'package:gaming_web_app/Base/model/lineup/fetchAutoLinup.dart';
 
@@ -24,6 +23,9 @@ import 'package:gaming_web_app/Base/model/lineup/fetchAutoLinup.dart';
 //     );
 //   }
 // }
+
+
+
 class GameData {
   final int? gameId;
   final int? innings;
