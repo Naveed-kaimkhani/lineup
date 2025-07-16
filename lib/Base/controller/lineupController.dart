@@ -245,7 +245,9 @@ class LineupController extends GetxController {
         autoFillLineups.value,
         int.parse(gameId!),
       );
-
+      // log(autoFillLineups.value.playersInGame.toString());
+      // log(gameId);
+      // log(SharedPreferencesKeysConstants.bearerToken);
       // Check if the response contains data and update the teams list
       if (response.data != null) {
         fetchAutoFillLineups.value = response.data!;
