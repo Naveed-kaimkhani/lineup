@@ -1,3 +1,4 @@
+import 'package:gaming_web_app/Base/controller/lineupController.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/screens/main_dashboard/create_a_new_team_dialog.dart';
@@ -591,17 +592,49 @@ class NewTeamController extends GetxController {
   final TextEditingController insController = TextEditingController();
   final TextEditingController locationController = TextEditingController();
 
+  // final TeamController controller = Get.find<TeamController>();
+
+  // final LineupController lineupController = Get.find<LineupController>();
   // Validate and submit match
   Future<void> validateAndSubmitAddGame(
     BuildContext context,
     int? teamId,
   ) async {
-    if (opponentController.text.trim().isEmpty ||
-        dateController.text.trim().isEmpty ||
-        insController.text.trim().isEmpty) {
+    if (opponentController.text.trim().isEmpty) {
       Get.snackbar(
         "Missing Fields",
-        "Please fill all fields before submitting.",
+        "Please add opponent name.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+    if (dateController.text.trim().isEmpty) {
+      Get.snackbar(
+        "Missing Fields",
+        "Please add date.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+
+    if (dateController.text.trim().isEmpty) {
+      Get.snackbar(
+        "Missing Fields",
+        "Please add data.",
+        snackPosition: SnackPosition.BOTTOM,
+        backgroundColor: Colors.redAccent,
+        colorText: Colors.white,
+      );
+      return;
+    }
+    if (insController.text.trim().isEmpty) {
+      Get.snackbar(
+        "Missing Fields",
+        "Please add IN's.",
         snackPosition: SnackPosition.BOTTOM,
         backgroundColor: Colors.redAccent,
         colorText: Colors.white,
@@ -637,9 +670,11 @@ class NewTeamController extends GetxController {
         await SharedPreferencesUtil.saveCurrentRoute(
           RoutesPath.teamDashboardScreen,
         );
-        // Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
-        
-        Navigator.pushNamed(context, RoutesPath.addNewPlayerScreenForBuildLineup);
+
+        Navigator.pushNamed(
+          context,
+          RoutesPath.addNewPlayerScreenForBuildLineup,
+        );
       } catch (e) {
         Navigator.pop(context);
       }
@@ -781,6 +816,8 @@ class NewTeamController extends GetxController {
   }
 
   void clearGameFormFields() {
+    datess.value = "";
+
     opponentController.clear();
     dateController.clear();
     insController.clear();

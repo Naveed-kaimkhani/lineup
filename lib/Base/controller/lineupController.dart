@@ -2,6 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaming_web_app/Base/controller/getTeamData.dart';
+import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:get/get.dart';
 import 'package:intl/intl.dart';
@@ -21,6 +23,9 @@ class LineupController extends GetxController {
   RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
 
   RxList<GamePlayer> firstNinePlayers = <GamePlayer>[].obs;
+
+  RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
+  RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
 
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
@@ -47,7 +52,23 @@ class LineupController extends GetxController {
 
   final Map<String, TextEditingController> textControllers = {};
   final Map<String, RxBool> labelFlags = {};
+
   RxBool isAuto = false.obs;
+
+  void splitPlayers() {
+    final TeamController controller = Get.find<TeamController>();
+    final allPlayers = controller.teamData.value!.players ?? [];
+    // log("list of all players");
+    // log(allPlayers.length.toString());
+    firstNinePlayers1.value = allPlayers.take(9).toList();
+    // log("list of nine players");
+    // log(firstNinePlayers1.length.toString());
+    playersOut1.value = allPlayers.skip(9).toList();
+
+    // log("list of remaing players");
+    // log(playersOut1.length.toString());
+  }
+
   String _generateKey(int index, dynamic inningNumber) =>
       "$index-$inningNumber";
   Future<void> getPDF() async {
@@ -370,6 +391,29 @@ class LineupController extends GetxController {
       // Check if the response contains data and update the teams list
       if (response.data != null) {
         Get.toNamed(RoutesPath.savePdfScreen);
+      } else {
+        SnackbarUtils.showErrorr(response.message.toString());
+      }
+    } catch (e) {
+      // Handle any errors that occur
+      print('Error fetching teams: $e');
+    }
+  }
+
+  Future<void> submmitLineupDataPlayesIdFromBuildLineupScreen() async {
+    try {
+      String? gameId = await SharedPreferencesUtil.read('gameID');
+      if (gameId != null) {
+      } else {}
+      // Call the API to get the list of teams
+      final response = await TeamsApi.submmitLineupData(
+        fetchAutoFillLineups.value,
+        int.parse(gameId!),
+      );
+
+      // Check if the response contains data and update the teams list
+      if (response.data != null) {
+        Get.toNamed(RoutesPath.savePdfScreenForBuildLineup);
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
       }

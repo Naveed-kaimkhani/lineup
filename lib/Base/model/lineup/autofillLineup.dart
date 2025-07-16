@@ -30,7 +30,6 @@ class AutoFillLineups {
   }
 
   Map<String, dynamic> toJson() {
-    
     return {
       'players_in_game': playersInGame,
       'fixed_assignments': fixedAssignments,
@@ -55,7 +54,7 @@ class Lineup {
   }
 
   Map<String, dynamic> toJson() {
-
+    log(innings.toString());
     return {
       'player_id': playerId,
       'innings': innings.map((key, value) => MapEntry(key.toString(), value)),

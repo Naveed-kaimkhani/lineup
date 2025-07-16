@@ -4,12 +4,7 @@ class AddGame {
   final int? innings;
   final String? locationType;
 
-  AddGame({
-    this.opponentName,
-    this.gameDate,
-    this.innings,
-    this.locationType,
-  });
+  AddGame({this.opponentName, this.gameDate, this.innings, this.locationType});
 
   factory AddGame.fromJson(Map<String, dynamic> json) {
     return AddGame(
@@ -25,7 +20,7 @@ class AddGame {
       'opponent_name': opponentName,
       'game_date': gameDate,
       'innings': innings,
-      'location_type': locationType,
+      'location_type': 'home',
     };
   }
 
