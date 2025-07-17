@@ -514,93 +514,6 @@ class LineupController extends GetxController {
       throw ArgumentError('Starting player ID must be positive');
     }
   }
-
-  // PlayerPositionStats calculateTopPositionAndPlayingTime(
-  //   int index,
-  //   int totalInnings,
-  // ) {
-  //   int playedInnings = 0;
-  //   Map<String, int> positionCount = {};
-
-  //   lineupp[index].innings.forEach((inning, position) {
-  //     final pos = position.toUpperCase();
-  //     if (pos != 'OUT' && pos != 'BENCH') {
-  //       playedInnings++;
-  //       positionCount[pos] = (positionCount[pos] ?? 0) + 1;
-  //     }
-  //   });
-  //   // Calculate percentage
-  //   double percentage =
-  //       totalInnings > 0 ? (playedInnings / totalInnings) * 100 : 0;
-  //   String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
-
-  //   // Determine top position
-  //   String topPosition = "OUT";
-  //   if (positionCount.isNotEmpty) {
-  //     int maxCount = 0;
-  //     List<String> topPositions = [];
-
-  //     positionCount.forEach((pos, count) {
-  //       if (count > maxCount) {
-  //         maxCount = count;
-  //         topPositions = [pos];
-  //       } else if (count == maxCount) {
-  //         topPositions.add(pos);
-  //       }
-  //     });
-
-  //     topPosition = topPositions.join(' / ');
-  //   }
-  //   final data = PlayerPositionStats(
-  //     topPosition: topPosition,
-  //     playingTimePercent: playingTimePercent,
-  //   );
-  //   statsList.add(data);
-
-  //   refresh();
-  //   statsList[0].topPosition;
-  //   statsList.refresh();
-  //   // print(statsList.length);
-  //   return PlayerPositionStats(
-  //     topPosition: topPosition,
-  //     playingTimePercent: playingTimePercent,
-  //   );
-  // }
-
-  //   void updateTextColor({
-  //   required int index,
-  //   required int inningNumber,
-  //   required String val,
-  // }) {
-  //   val = val.trim().toUpperCase();
-
-  //   // ✅ Check if position exists
-  //   bool isValidPosition = filterPositionsByNameMatch(teamPositioned, val);
-
-  //   // ✅ Get inning values from other rows
-  //   final allLineups = autoFillData.value?.lineupp ?? [];
-  //   final inningValues = allLineups
-  //       .asMap()
-  //       .entries
-  //       .where((e) => e.key != index)
-  //       .map((e) => e.value.innings[inningNumber]?.trim().toUpperCase())
-  //       .where((v) => v != null)
-  //       .cast<String>()
-  //       .toList();
-
-  //   // ✅ Determine color
-  //   Color newColor;
-  //   if (val.isEmpty) {
-  //     newColor = Colors.black;
-  //   } else if (!isValidPosition || inningValues.contains(val)) {
-  //     newColor = Colors.red; // Invalid OR duplicate
-  //   } else {
-  //     newColor = Colors.black; // Valid
-  //   }
-
-  //   // ✅ Update observable color
-  //   textColors["${index}_$inningNumber"] = newColor;
-  // }
   void updateTextColor({
     required int index,
     required int inningNumber,
@@ -612,7 +525,7 @@ class LineupController extends GetxController {
     bool isValidPosition = filterPositionsByNameMatch(teamPositioned, val);
 
     // ✅ Exempt values
-    const exemptPositions = ['C', 'CC', 'OUT'];
+    const exemptPositions = ['CC', 'OUT'];
 
     // ✅ Get inning values from other rows
     final allLineups = autoFillData.value?.lineupp ?? [];
@@ -641,21 +554,22 @@ class LineupController extends GetxController {
     // ✅ Update observable color
     textColors["${index}_$inningNumber"] = newColor;
   }
-void updateColorsAfterReorder() {
-  final allLineups = autoFillData.value?.lineupp ?? [];
 
-  for (int i = 0; i < allLineups.length; i++) {
-    final inningsMap = allLineups[i].innings;
+  void updateColorsAfterReorder() {
+    final allLineups = autoFillData.value?.lineupp ?? [];
 
-    inningsMap.forEach((inningNumber, val) {
-      updateTextColor(
-        index: i,
-        inningNumber: int.parse(inningNumber.toString()),
-        val: val,
-      );
-    });
+    for (int i = 0; i < allLineups.length; i++) {
+      final inningsMap = allLineups[i].innings;
+
+      inningsMap.forEach((inningNumber, val) {
+        updateTextColor(
+          index: i,
+          inningNumber: int.parse(inningNumber.toString()),
+          val: val,
+        );
+      });
+    }
   }
-}
 
   PlayerPositionStats calculateTopPositionAndPlayingTime(
     int index,
