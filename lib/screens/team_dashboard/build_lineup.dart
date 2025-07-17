@@ -240,79 +240,8 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  KeyEventResult handleArrowKeyNavigation(
-    RawKeyEvent event,
-    int rowIndex,
-    String colKey,
-  ) {
-    if (event is! RawKeyDownEvent)
-      return KeyEventResult.ignored; // Ignore key-up events
-
-    final key = event.logicalKey;
-
-    if (key == LogicalKeyboardKey.backspace) {
-      controller.isBackspacePressed.value = true;
-      return KeyEventResult.ignored; // Let the TextField handle backspace
-    } else {
-      controller.isBackspacePressed.value = false;
-    }
-
-    // Only handle arrow keys for navigation
-    if (key != LogicalKeyboardKey.arrowUp &&
-        key != LogicalKeyboardKey.arrowDown &&
-        key != LogicalKeyboardKey.arrowLeft &&
-        key != LogicalKeyboardKey.arrowRight) {
-      return KeyEventResult
-          .ignored; // Ignore all other keys (letters, numbers, etc.)
-    }
-
-    final rows = controller.focusNodesGrid.keys.toList()..sort();
-    final cols = controller.focusNodesGrid[rowIndex]!.keys.toList()..sort();
-
-    int rowIdx = rows.indexOf(rowIndex);
-    int colIdx = cols.indexOf(colKey);
-
-    int newRow = rowIdx;
-    int newCol = colIdx;
-
-    if (event.logicalKey == LogicalKeyboardKey.arrowUp) {
-      newRow = (rowIdx - 1).clamp(0, rows.length - 1);
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
-      newRow = (rowIdx + 1).clamp(0, rows.length - 1);
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
-      newCol = (colIdx - 1).clamp(0, cols.length - 1);
-    } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
-      newCol = (colIdx + 1).clamp(0, cols.length - 1);
-    }
-
-    // If no movement happened (already at an edge), ignore the event
-    if (newRow == rowIdx && newCol == colIdx) {
-      return KeyEventResult.ignored;
-    }
-
-    final nextRowKey = rows[newRow];
-    final nextColKey = cols[newCol];
-
-    final nextFocus = controller.focusNodesGrid[nextRowKey]?[nextColKey];
-    final nextController =
-        controller.textControllersGrid[nextRowKey]?[nextColKey];
-
-    if (nextFocus != null && nextController != null) {
-      FocusScope.of(Get.context!).requestFocus(nextFocus);
-      // You can still keep the Future.delayed for robustness, but it's less critical now
-      Future.delayed(Duration.zero, () {
-        nextController.selection = TextSelection.fromPosition(
-          TextPosition(offset: nextController.text.length),
-        );
-      });
-
-      // ✅ CRITICAL FIX: Tell Flutter we handled this key event!
-      return KeyEventResult.handled;
-    }
-
-    // If something went wrong, ignore the event.
-    return KeyEventResult.ignored;
-  }
+ 
+ 
 
   Widget _buildNavigationChips() {
     final List<Map<String, dynamic>> keyGuides = [
@@ -780,6 +709,10 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       ) => handleArrowKeyNavigation(
                                                                                         event,
                                                                                         index,
+                                                                                        TextEditingController(
+                                                                                          text:
+                                                                                              controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                        ),
                                                                                         inningNumber.toString(),
                                                                                       ),
                                                                                   child: LineupTextField(
@@ -804,10 +737,34 @@ class _LineupWidgetState extends State<LineupWidget> {
 
                                                                                     onChanged: (
                                                                                       val,
-                                                                                    ) async {},
+                                                                                    ) async {
+                                                                                      // FocusScope.of(Get.context!).requestFocus(nextFocus);
+                                                                                      TextEditingController f = TextEditingController(
+                                                                                        text:
+                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                      );
+                                                                                      log(
+                                                                                        f.text,
+                                                                                      );
+                                                                                      // _moveFocusAndSetCursorAtEnd(
+                                                                                      //   focusNode,
+                                                                                      //   TextEditingController(
+                                                                                      //     text:
+                                                                                      //         controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                      //   ),
+                                                                                      // );
+                                                                                    },
                                                                                     onFieldSubmitted: (
                                                                                       val,
-                                                                                    ) async {}
+                                                                                    ) async {
+                                                                                      TextEditingController f = TextEditingController(
+                                                                                        text:
+                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                      );
+                                                                                      log(
+                                                                                        f.text,
+                                                                                      );
+                                                                                    },
                                                                                   ),
                                                                                 ),
                                                                               ),

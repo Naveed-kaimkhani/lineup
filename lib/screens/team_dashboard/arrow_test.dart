@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -61,8 +63,13 @@ class _GridNavigationScreenState extends State<GridNavigationScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.selection = TextSelection.fromPosition(
         TextPosition(offset: controller.text.length),
+    
       );
     });
+       log("cursor moved");
+
+      log( controller.text.length.toString());
+      log( controller.text.toString());
   }
 
   /// Main handler for keyboard events.
