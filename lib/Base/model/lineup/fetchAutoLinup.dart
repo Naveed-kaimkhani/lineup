@@ -42,11 +42,30 @@ class FetchAutoFillLineups {
     return json.cast<String, dynamic>();
   }
 
-  Map<String, dynamic> toJson() => {
-    'lineup': lineupp?.map((e) => e.toJson()).toList(),
-    'playersInGame': playersInGame,
-    'fixedAssignments': fixedAssignments,
-  };
+  // Map<String, dynamic> toJson() => {
+
+  //   'lineup': lineupp?.map((e) => e.toJson()).toList(),
+  //   'playersInGame': playersInGame,
+  //   'fixedAssignments': fixedAssignments,
+  // };
+
+  Map<String, dynamic> toJson() {
+    if (lineupp != null) {
+      for (var item in lineupp!) {
+        print('Player ID: ${item.playerId}');
+        print('Batting Order: ${item.battingOrder}');
+        print('Is Out: ${item.isOut}');
+        print('Innings: ${item.innings}');
+        print('-----------------------------');
+      }
+    }
+
+    return {
+      'lineup': lineupp?.map((e) => e.toJson()).toList(),
+      'playersInGame': playersInGame,
+      'fixedAssignments': fixedAssignments,
+    };
+  }
 
   FetchAutoFillLineups copyWith({
     List<Lineupp>? lineupp,

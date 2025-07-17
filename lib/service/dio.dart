@@ -22,10 +22,10 @@ class DioUtil {
     final options = BaseOptions(
       baseUrl: APIEndPoints.baseUrl,
       contentType: 'application/json',
-      connectTimeout: const Duration(seconds: 15),
-      receiveTimeout: const Duration(seconds: 15),
+      connectTimeout: const Duration(minutes: 2),
+      receiveTimeout: const Duration(minutes: 2),
       sendTimeout:
-          kIsWeb ? null : const Duration(seconds: 15), // Only set on non-web
+          kIsWeb ? null : const Duration(minutes: 2), // Only set on non-web
     );
 
     final dio = Dio(options);

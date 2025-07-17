@@ -1063,6 +1063,7 @@ class _LineupWidgetState extends State<LineupWidget> {
       child: Column(
         children: [
           // Header
+          SizedBox(height: 55),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             // padding: const EdgeInsets.symmetric(horizontal: 16),

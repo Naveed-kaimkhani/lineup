@@ -83,6 +83,11 @@ class _TeamDashboardBody extends StatelessWidget {
   // This method builds the summary statistics header and action buttons
   // It's responsive - changes layout based on screen width
   Widget _buildSummaryAndActions(BuildContext context) {
+    final games =
+        controller.teamData.value?.games
+            ?.where((game) => game.isLineupSubmitted == true)
+            .toList();
+
     return LayoutBuilder(
       builder: (context, constraints) {
         final width = constraints.maxWidth; // Get available width
@@ -133,25 +138,60 @@ class _TeamDashboardBody extends StatelessWidget {
               SizedBox(height: 10.h),
 
               // "Previous Game" button - shows dialog with past games
-              _buildActionButton(
-                'Games',
-                Color(0xFF9B1C1C), // Dark red color
-                () async {
-                  // Show a dialog with list of previous games
-                  await showDialog(
-                    context: context,
-                    builder:
-                        (context) => PreviousGameDialog(
-                          items: [
-                            // Sample past game data
-                            {'name': 'At Tigers', 'date': 'April 03, 2025'},
-                            {'name': 'Vs Commanders', 'date': 'April 06, 2025'},
-                            {'name': 'At Wildcats', 'date': 'April 10, 2025'},
-                          ],
-                        ),
-                  );
-                },
-              ),
+              // controller.teamData.value?.games?.length == 0
+              //     ? _buildActionButton(
+              //       'Games',
+              //       Color(0xFF9B1C1C), // Dark red color
+              //       () async {
+              //         // Show a dialog with list of previous games
+              //         await showDialog(
+              //           context: context,
+              //           builder:
+              //               (context) => PreviousGameDialog(
+              //                 items: [
+              //                   // Sample past game data
+              //                   {'name': 'At Tigers', 'date': 'April 03, 2025'},
+              //                   {
+              //                     'name': 'Vs Commanders',
+              //                     'date': 'April 06, 2025',
+              //                   },
+              //                   {
+              //                     'name': 'At Wildcats',
+              //                     'date': 'April 10, 2025',
+              //                   },
+              //                 ],
+              //               ),
+              //         );
+              //       },
+              //     )
+              //     : SizedBox(),
+              games!.isEmpty
+                  ? SizedBox()
+                  : _buildActionButton(
+                    'Games',
+                    Color(0xFF9B1C1C), // Dark red color
+                    () async {
+                      // Show a dialog with list of previous games
+                      await showDialog(
+                        context: context,
+                        builder:
+                            (context) => PreviousGameDialog(
+                              items: [
+                                // Sample past game data
+                                {'name': 'At Tigers', 'date': 'April 03, 2025'},
+                                {
+                                  'name': 'Vs Commanders',
+                                  'date': 'April 06, 2025',
+                                },
+                                {
+                                  'name': 'At Wildcats',
+                                  'date': 'April 10, 2025',
+                                },
+                              ],
+                            ),
+                      );
+                    },
+                  ),
               SizedBox(height: 10.h),
 
               // "Add New Game" button - shows dialog to create a game
@@ -228,16 +268,14 @@ class _TeamDashboardBody extends StatelessWidget {
                               Get.back();
                             },
                           );
-                      // Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
-                      // showAddTeamPlayerDialog();
-                      // Navigator.pushNamed(context, RoutesPath.addNewPlayerScreen);
+                          
                     },
                     width: 180.w,
                   ),
                   SizedBox(width: 15.w),
 
                   // "Previous Game" button with fixed width
-                  controller.teamData.value?.games?.length == 0
+                  games!.isEmpty
                       ? SizedBox()
                       : _buildActionButton(
                         'Previous Games',

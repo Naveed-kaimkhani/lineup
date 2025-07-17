@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
@@ -9,6 +10,7 @@ import 'package:gaming_web_app/constants/widgets/drop_down/custom_drop_down.dart
 import 'package:gaming_web_app/constants/widgets/text_fields/primary_text_field.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:intl/intl.dart';
 
 import '../../Base/controller/teamController/createTeamController.dart';
 import '../../Base/controller/teamController/teamController.dart'; // Custom text field widget
@@ -148,8 +150,9 @@ class AddNewGameDialog extends StatelessWidget {
                                         teamController.datess.value == ""
                                             ? Text("Select Date")
                                             : Text(
-                                              teamController.datess.value
-                                                  .toString(),
+                                              convertToMMddyyyy(
+                                                teamController.datess.value,
+                                              ),
                                             ),
                                         Spacer(),
                                         Icon(Icons.arrow_drop_down),
@@ -284,5 +287,17 @@ class AddNewGameDialog extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+String convertToMMddyyyy(String dateString) {
+  try {
+    // Parse the input date (dd-MM-yyyy)
+    DateTime parsedDate = DateFormat('dd-MM-yyyy').parse(dateString);
+
+    // Format to MM-dd-yyyy
+    return DateFormat('MM-dd-yyyy').format(parsedDate);
+  } catch (e) {
+    return 'Invalid date';
   }
 }

@@ -173,7 +173,7 @@ class TeamGame {
   final DateTime gameDate;
   final int innings;
   final String locationType;
-
+  
   final bool isLineupSubmitted;
   final List<LineupData> lineupData;
   final DateTime submittedAt;

@@ -20,9 +20,13 @@ import '../model/positioned.dart';
 
 class LineupController extends GetxController {
   RxList<GamePlayer> playersOut = <GamePlayer>[].obs;
-  RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
 
-  RxList<GamePlayer> firstNinePlayers = <GamePlayer>[].obs;
+  RxList<GamePlayer> updatedOutListAfterReorder = <GamePlayer>[].obs;
+
+  RxList<GamePlayer> updatedPlayerListAfterReorder = <GamePlayer>[].obs;
+  // RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
+
+  // RxList<GamePlayer> firstNinePlayers = <GamePlayer>[].obs;
 
   RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
   RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
@@ -128,7 +132,7 @@ class LineupController extends GetxController {
       if (response.data != null) {
         isLoading.value = true;
         gameData.value = response.data!;
-        firstNinePlayers.value = gameData.value.players!.sublist(9);
+        // firstNinePlayers.value = gameData.value.players!.sublist(9);
 
         final allPlayers = gameData.value.players!;
         final lineups = gameData.value.lineupp ?? [];
@@ -419,6 +423,12 @@ class LineupController extends GetxController {
 
       // Check if the response contains data and update the teams list
       if (response.data != null) {
+        updatedPlayerListAfterReorder.value = gameData.value.players!;
+        updatedOutListAfterReorder.value = playersOut;
+
+        log("updated list");
+
+        log("updated list");
         Get.toNamed(RoutesPath.savePdfScreenForBuildLineup);
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
