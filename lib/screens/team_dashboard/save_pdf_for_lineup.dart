@@ -1353,7 +1353,7 @@ class SavePdfScreenForBuildLineup extends StatelessWidget {
       onTab: () {
         final LineupController controller = Get.put(LineupController());
 
-        controller.playersOut.value = [];
+        // controller.playersOut.value = [];
 
         Get.toNamed(RoutesPath.mainDashboardScreen);
       },
@@ -1381,7 +1381,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
     // TODO: implement dispose
     super.dispose();
 
-    controller.playersOut.value = [];
+    // controller.playersOut.value = [];
   }
 
   @override

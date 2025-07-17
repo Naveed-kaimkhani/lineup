@@ -34,15 +34,10 @@ dependencies:
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.8
-  flutter_svg: ^2.1.0
   flutter_screenutil: ^5.9.3
-  responsive_framework: ^1.5.1
   dio: ^5.8.0+1
-  connectivity_plus: ^6.1.4
   shared_preferences: ^2.5.3
   fluttertoast: ^8.2.12
-#  dropdown_search: ^6.0.2
-  flutter_easyloading: ^3.0.5
   flutter_spinkit: ^5.2.1
   intl: ^0.18.0
   url_launcher: ^6.3.1
@@ -50,10 +45,7 @@ dependencies:
   pdf: ^3.10.8
   path_provider: ^2.1.4
   open_file: ^3.3.2  # To open the PDF after saving
-  universal_html: ^2.2.4  # Use the latest version from pub.dev
-#  flutter_stripe: ^11.5.0
-#  flutter_stripe_web: ^6.5.0
-#  js: ^0.6.2
+  universal_html: ^2.2.4  # Use the la
   webview_flutter: ^4.10.0
   get:
   reorderables: ^0.6.0

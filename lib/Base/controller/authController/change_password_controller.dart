@@ -8,9 +8,6 @@ import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
 
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'dart:developer';
 
 class ChangePasswordController extends GetxController {
   final currentPasswordController = TextEditingController();

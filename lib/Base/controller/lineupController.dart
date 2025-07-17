@@ -32,7 +32,7 @@ class LineupController extends GetxController {
   RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
   RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
   var textColors = <String, Color>{}.obs;
-  // Key = "${index}_$inningNumber", Value = Color
+   final Map<String, TextEditingController> cellControllers = {};
 
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
@@ -61,6 +61,39 @@ class LineupController extends GetxController {
   final Map<String, RxBool> labelFlags = {};
 
   RxBool isAuto = false.obs;
+  TextEditingController getCellController({
+    required int rowIndex,
+    required int inningNumber,
+    required String initialText,
+  }) {
+    final key = "${rowIndex}_$inningNumber";
+    if (!cellControllers.containsKey(key)) {
+      final c = TextEditingController(text: initialText);
+      // Ensure caret at end after initial build
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (c.text.isNotEmpty) {
+          c.selection = TextSelection.collapsed(offset: c.text.length);
+        }
+      });
+      cellControllers[key] = c;
+    } else {
+      final c = cellControllers[key]!;
+      // Keep controller text in sync with model (avoid endless loops)
+      if (c.text != initialText) {
+        c.text = initialText;
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          c.selection = TextSelection.collapsed(offset: c.text.length);
+        });
+      }
+    }
+    return cellControllers[key]!;
+  }
+  void disposeCellControllers() {
+    for (final c in cellControllers.values) {
+      c.dispose();
+    }
+    cellControllers.clear();
+  }
 
   void splitPlayers() {
     final TeamController controller = Get.find<TeamController>();

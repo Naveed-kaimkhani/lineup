@@ -138,6 +138,19 @@ class _LineupWidgetState extends State<LineupWidget> {
     isAutoCompletePressed.value = true;
   }
 
+  late final FocusNode _topLeftFocus;
+
+  late final TextEditingController _topLeftController;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _topLeftFocus = FocusNode(debugLabel: 'Top-Left');
+
+    _topLeftController = TextEditingController(text: 'C');
+  }
+
   @override
   Widget build(BuildContext context) {
     return SingleChildScrollView(
@@ -244,6 +257,8 @@ class _LineupWidgetState extends State<LineupWidget> {
     RawKeyEvent event,
     int rowIndex,
     String colKey,
+    FocusNode focus,
+    TextEditingController editingController,
   ) {
     if (event is! RawKeyDownEvent)
       return KeyEventResult.ignored; // Ignore key-up events
@@ -280,7 +295,9 @@ class _LineupWidgetState extends State<LineupWidget> {
     } else if (event.logicalKey == LogicalKeyboardKey.arrowDown) {
       newRow = (rowIdx + 1).clamp(0, rows.length - 1);
     } else if (event.logicalKey == LogicalKeyboardKey.arrowLeft) {
+      _moveFocusAndSetCursorAtEnd(focus, editingController);
       newCol = (colIdx - 1).clamp(0, cols.length - 1);
+      // _moveFocusAndSetCursorAtEnd(focus, editingController);
     } else if (event.logicalKey == LogicalKeyboardKey.arrowRight) {
       newCol = (colIdx + 1).clamp(0, cols.length - 1);
     }
@@ -314,6 +331,27 @@ class _LineupWidgetState extends State<LineupWidget> {
     return KeyEventResult.ignored;
   }
 
+  void _moveFocusAndSetCursorAtEnd(
+    FocusNode focusNode,
+    TextEditingController controller,
+  ) {
+    focusNode.requestFocus();
+    // By default, requestFocus() selects all text. To prevent this, we schedule a
+    // post-frame callback to manually set the cursor position after the focus change has completed.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      // controller.selection = TextSelection.fromPosition(
+      //   TextPosition(offset: controller.text.length),
+      // );
+      controller.selection = TextSelection.collapsed(
+        offset: controller.text.length,
+      );
+    });
+    log("cursor moved");
+
+    log(controller.text.length.toString());
+    log(controller.text.toString());
+  }
+
   Widget _buildNavigationChips() {
     final List<Map<String, dynamic>> keyGuides = [
       {'label': 'Shift + ↑', 'action': 'Select Up'},
@@ -345,6 +383,20 @@ class _LineupWidgetState extends State<LineupWidget> {
             );
           }).toList(),
     );
+  }
+
+  void swapLineupData(int oldIndex, int newIndex) {
+    final lineups = controller.autoFillData.value?.lineupp;
+    if (lineups == null ||
+        oldIndex >= lineups.length ||
+        newIndex >= lineups.length)
+      return;
+
+    final temp = lineups[oldIndex];
+    lineups[oldIndex] = lineups[newIndex];
+    lineups[newIndex] = temp;
+
+    controller.autoFillData.refresh();
   }
 
   //list from firstNinePlayer
@@ -475,16 +527,17 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             .insert(newIndex, player);
 
                                         if (isAutoCompletePressed.value) {
-                                          final lineup = controller
-                                              .autoFillData
-                                              .value!
-                                              .lineupp!
-                                              .removeAt(oldIndex);
-                                          controller
-                                              .autoFillData
-                                              .value!
-                                              .lineupp!
-                                              .insert(newIndex, lineup);
+                                          // final lineup = controller
+                                          //     .autoFillData
+                                          //     .value!
+                                          //     .lineupp!
+                                          //     .removeAt(oldIndex);
+                                          // controller
+                                          //     .autoFillData
+                                          //     .value!
+                                          //     .lineupp!
+                                          //     .insert(newIndex, lineup);
+                                          swapLineupData(oldIndex, newIndex);
 
                                           final firstIndex = newIndex;
                                           final secondIndex = oldIndex;
@@ -722,9 +775,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                   index,
                                                                                   () =>
                                                                                       {},
-                                                                                )[inningNumber.toString()] ??= TextEditingController(
-                                                                                  text:
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                )[inningNumber.toString()] ??= controller.getCellController(
+                                                                                  rowIndex:
+                                                                                      index,
+                                                                                  inningNumber:
+                                                                                      inningNumber,
+                                                                                  initialText:
+                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                      '',
                                                                                 );
 
                                                                             bool
@@ -733,6 +791,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                             TextEditingController
                                                                             textEditingController =
                                                                                 TextEditingController();
+
                                                                             return Focus(
                                                                               onFocusChange: (
                                                                                 hasFocus,
@@ -783,6 +842,21 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         index,
 
                                                                                         inningNumber.toString(),
+                                                                                        focusNode,
+
+                                                                                        TextEditingController(
+                                                                                          text:
+                                                                                              controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                        ),
+                                                                                        // controller.getCellController(
+                                                                                        //   rowIndex:
+                                                                                        //       index,
+                                                                                        //   inningNumber:
+                                                                                        //       inningNumber,
+                                                                                        //   initialText:
+                                                                                        //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                        //       '',
+                                                                                        // ),
                                                                                       ),
                                                                                   child: LineupTextField(
                                                                                     textColor:
@@ -792,16 +866,37 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     // color
                                                                                     positions:
                                                                                         controller.teamPositioned,
-                                                                                    controller: TextEditingController(
-                                                                                      text:
-                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber],
-                                                                                    ),
 
+                                                                                    // controller: TextEditingController(
+                                                                                    //   text:
+                                                                                    //       controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                    // ),
+                                                                                    controller: controller.getCellController(
+                                                                                      rowIndex:
+                                                                                          index,
+                                                                                      inningNumber:
+                                                                                          inningNumber,
+                                                                                      initialText:
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                          '',
+                                                                                    ),
                                                                                     focusNode:
                                                                                         focusNode,
+
                                                                                     isLable: filterPositionsByNameMatch(
                                                                                       controller.teamPositioned,
                                                                                       textEditingController.text,
+                                                                                      // controller
+                                                                                      //     .getCellController(
+                                                                                      //       rowIndex:
+                                                                                      //           index,
+                                                                                      //       inningNumber:
+                                                                                      //           inningNumber,
+                                                                                      //       initialText:
+                                                                                      //           controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                      //           '',
+                                                                                      //     )
+                                                                                      //     .text,
                                                                                     ),
 
                                                                                     onChanged: (
@@ -869,7 +964,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           controllerNode.selection = TextSelection.fromPosition(
                                                                                             TextPosition(
                                                                                               offset:
-                                                                                                  completed.length,
+                                                                                                  controllerNode.text.length,
                                                                                             ),
                                                                                           );
 
@@ -915,8 +1010,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           val;
                                                                                       controller.enerLable.value = val;
                                                                                       controller.autoFillData.refresh();
-                                                                                      onAutoCompletePressed();
-                                                                                      // 🔁 OUT: recalculate stats
+
                                                                                       if (val ==
                                                                                           "OUT") {
                                                                                         controller.recalculatePlayerStats(
@@ -1049,7 +1143,18 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             result;
                                                                                         controller.autoFillData.refresh();
-                                                                                        textEditingController.text = result;
+                                                                                        // textEditingController.text = result;
+                                                                                        controller
+                                                                                            .getCellController(
+                                                                                              rowIndex:
+                                                                                                  index,
+                                                                                              inningNumber:
+                                                                                                  inningNumber,
+                                                                                              initialText:
+                                                                                                  controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                                  '',
+                                                                                            )
+                                                                                            .text = result;
                                                                                         controller.addFixedAssignment(
                                                                                           controller.gameData.value.players![index].id.toString(),
                                                                                           '$inningNumber',

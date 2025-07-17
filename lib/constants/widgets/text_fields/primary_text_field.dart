@@ -140,7 +140,6 @@ class LineupTextField extends StatelessWidget {
     this.controller,
     this.onFieldSubmitted,
     this.focusNode, // Pass focusNode to the TextField
-
     // required this.inningValues, // ✅
     required this.textColor, // ✅ New
     required this.positions,
@@ -195,12 +194,13 @@ class LineupTextField extends StatelessWidget {
                 style: tableLabel.copyWith(
                   fontSize: isLable ? 16 : 14,
                   fontWeight: isLable ? FontWeight.bold : FontWeight.normal,
-                //   color:
-                //       filterPositionsByNameMatch(positions, controller!.text)
-                //           ? AppColors.primaryColor
-                //           : Colors.red,
-                // ),
-                color: textColor,),
+                  //   color:
+                  //       filterPositionsByNameMatch(positions, controller!.text)
+                  //           ? AppColors.primaryColor
+                  //           : Colors.red,
+                  // ),
+                  color: textColor,
+                ),
 
                 // color:
                 decoration: InputDecoration(
