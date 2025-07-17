@@ -3,11 +3,11 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
-import 'package:gaming_web_app/service/api_end_point.dart';
 import 'package:gaming_web_app/utils/SharedPreferencesUtil.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
 import 'package:get/get.dart';
 
+import 'package:http/http.dart' as http;
 
 class ChangePasswordController extends GetxController {
   final currentPasswordController = TextEditingController();

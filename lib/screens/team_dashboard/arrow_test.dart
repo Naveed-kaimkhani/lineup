@@ -66,10 +66,6 @@ class _GridNavigationScreenState extends State<GridNavigationScreen> {
     
       );
     });
-       log("cursor moved");
-
-      log( controller.text.length.toString());
-      log( controller.text.toString());
   }
 
   /// Main handler for keyboard events.

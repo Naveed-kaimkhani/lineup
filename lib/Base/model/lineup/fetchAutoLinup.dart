@@ -15,9 +15,7 @@ class FetchAutoFillLineups {
   });
 
   factory FetchAutoFillLineups.fromJson(Map<String, dynamic>? json) {
-    // log("autolineup response on 15 players");
-    // print("auto complete json");
-    // print(json.toString());
+
     if (json == null) return FetchAutoFillLineups();
 
     return FetchAutoFillLineups(

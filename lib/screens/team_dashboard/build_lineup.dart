@@ -346,10 +346,6 @@ class _LineupWidgetState extends State<LineupWidget> {
         offset: controller.text.length,
       );
     });
-    log("cursor moved");
-
-    log(controller.text.length.toString());
-    log(controller.text.toString());
   }
 
   Widget _buildNavigationChips() {
@@ -527,17 +523,17 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             .insert(newIndex, player);
 
                                         if (isAutoCompletePressed.value) {
-                                          // final lineup = controller
-                                          //     .autoFillData
-                                          //     .value!
-                                          //     .lineupp!
-                                          //     .removeAt(oldIndex);
-                                          // controller
-                                          //     .autoFillData
-                                          //     .value!
-                                          //     .lineupp!
-                                          //     .insert(newIndex, lineup);
-                                          swapLineupData(oldIndex, newIndex);
+                                          final lineup = controller
+                                              .autoFillData
+                                              .value!
+                                              .lineupp!
+                                              .removeAt(oldIndex);
+                                          controller
+                                              .autoFillData
+                                              .value!
+                                              .lineupp!
+                                              .insert(newIndex, lineup);
+                                          // swapLineupData(oldIndex, newIndex);
 
                                           final firstIndex = newIndex;
                                           final secondIndex = oldIndex;
@@ -565,7 +561,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             .length,
                                         (index) {
                                           if (false) {
-                                            log("value already contained");
                                             return SizedBox();
                                           } else {
                                             return Container(
