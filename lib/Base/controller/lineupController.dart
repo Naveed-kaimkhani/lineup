@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:gaming_web_app/Base/controller/getTeamData.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
@@ -30,6 +31,8 @@ class LineupController extends GetxController {
 
   RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
   RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
+  var textColors = <String, Color>{}.obs;
+  // Key = "${index}_$inningNumber", Value = Color
 
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
@@ -426,9 +429,6 @@ class LineupController extends GetxController {
         updatedPlayerListAfterReorder.value = gameData.value.players!;
         updatedOutListAfterReorder.value = playersOut;
 
-        log("updated list");
-
-        log("updated list");
         Get.toNamed(RoutesPath.savePdfScreenForBuildLineup);
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
@@ -566,6 +566,97 @@ class LineupController extends GetxController {
   //     playingTimePercent: playingTimePercent,
   //   );
   // }
+
+  //   void updateTextColor({
+  //   required int index,
+  //   required int inningNumber,
+  //   required String val,
+  // }) {
+  //   val = val.trim().toUpperCase();
+
+  //   // ✅ Check if position exists
+  //   bool isValidPosition = filterPositionsByNameMatch(teamPositioned, val);
+
+  //   // ✅ Get inning values from other rows
+  //   final allLineups = autoFillData.value?.lineupp ?? [];
+  //   final inningValues = allLineups
+  //       .asMap()
+  //       .entries
+  //       .where((e) => e.key != index)
+  //       .map((e) => e.value.innings[inningNumber]?.trim().toUpperCase())
+  //       .where((v) => v != null)
+  //       .cast<String>()
+  //       .toList();
+
+  //   // ✅ Determine color
+  //   Color newColor;
+  //   if (val.isEmpty) {
+  //     newColor = Colors.black;
+  //   } else if (!isValidPosition || inningValues.contains(val)) {
+  //     newColor = Colors.red; // Invalid OR duplicate
+  //   } else {
+  //     newColor = Colors.black; // Valid
+  //   }
+
+  //   // ✅ Update observable color
+  //   textColors["${index}_$inningNumber"] = newColor;
+  // }
+  void updateTextColor({
+    required int index,
+    required int inningNumber,
+    required String val,
+  }) {
+    val = val.trim().toUpperCase();
+
+    // ✅ Check if position exists in team positions
+    bool isValidPosition = filterPositionsByNameMatch(teamPositioned, val);
+
+    // ✅ Exempt values
+    const exemptPositions = ['C', 'CC', 'OUT'];
+
+    // ✅ Get inning values from other rows
+    final allLineups = autoFillData.value?.lineupp ?? [];
+    final inningValues =
+        allLineups
+            .asMap()
+            .entries
+            .where((e) => e.key != index)
+            .map((e) => e.value.innings[inningNumber]?.trim().toUpperCase())
+            .where((v) => v != null)
+            .cast<String>()
+            .toList();
+
+    // ✅ Determine color
+    Color newColor;
+    if (val.isEmpty) {
+      newColor = Colors.black;
+    } else if (exemptPositions.contains(val)) {
+      newColor = Colors.black; // Don't mark exempt values as invalid
+    } else if (!isValidPosition || inningValues.contains(val)) {
+      newColor = Colors.red; // Invalid OR duplicate
+    } else {
+      newColor = Colors.black; // Valid
+    }
+
+    // ✅ Update observable color
+    textColors["${index}_$inningNumber"] = newColor;
+  }
+void updateColorsAfterReorder() {
+  final allLineups = autoFillData.value?.lineupp ?? [];
+
+  for (int i = 0; i < allLineups.length; i++) {
+    final inningsMap = allLineups[i].innings;
+
+    inningsMap.forEach((inningNumber, val) {
+      updateTextColor(
+        index: i,
+        inningNumber: int.parse(inningNumber.toString()),
+        val: val,
+      );
+    });
+  }
+}
+
   PlayerPositionStats calculateTopPositionAndPlayingTime(
     int index,
     int totalInnings,

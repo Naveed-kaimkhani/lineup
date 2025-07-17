@@ -2374,6 +2374,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
                                         padding: const EdgeInsets.all(8),
                                         color: Colors.white,
                                         child: LineupTextField(
+                                          textColor: Colors.black,
                                           readAble: true,
                                           positions: controller.teamPositioned,
                                           controller: TextEditingController(

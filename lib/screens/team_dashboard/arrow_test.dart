@@ -1,148 +1,174 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-class TextFieldGridScreen extends StatefulWidget {
-  const TextFieldGridScreen({super.key});
+class GridNavigationScreen extends StatefulWidget {
+  const GridNavigationScreen({super.key});
 
   @override
-  State<TextFieldGridScreen> createState() => _TextFieldGridScreenState();
+  State<GridNavigationScreen> createState() => _GridNavigationScreenState();
 }
 
-class _TextFieldGridScreenState extends State<TextFieldGridScreen> {
-  final List<FocusNode> _focusNodes = List.generate(4, (index) => FocusNode());
-  final List<TextEditingController> _controllers = List.generate(
-    4,
-    (index) => TextEditingController(),
-  );
-  int _currentFocusIndex = 0;
+class _GridNavigationScreenState extends State<GridNavigationScreen> {
+  // FocusNode and TextEditingController for each field
+  late final FocusNode _topLeftFocus,
+      _topRightFocus,
+      _bottomLeftFocus,
+      _bottomRightFocus;
+  late final TextEditingController _topLeftController,
+      _topRightController,
+      _bottomLeftController,
+      _bottomRightController;
 
   @override
   void initState() {
     super.initState();
 
-    for (var node in _focusNodes) {
-      node.addListener(() {
-        if (node.hasFocus) {
-          final newIndex = _focusNodes.indexOf(node);
-          if (newIndex != _currentFocusIndex) {
-            // Select all text when focus changes via keyboard
-            _controllers[newIndex].selection = TextSelection(
-              baseOffset: 0,
-              extentOffset: _controllers[newIndex].text.length,
-            );
-          }
-          _currentFocusIndex = newIndex;
-        }
-      });
-    }
+    _topLeftFocus = FocusNode(debugLabel: 'Top-Left');
+    _topRightFocus = FocusNode(debugLabel: 'Top-Right');
+    _bottomLeftFocus = FocusNode(debugLabel: 'Bottom-Left');
+    _bottomRightFocus = FocusNode(debugLabel: 'Bottom-Right');
+
+    // Initialize Controllers with the specified text: C, CF, LF, RF
+    _topLeftController = TextEditingController(text: 'C');
+    _topRightController = TextEditingController(text: 'CF');
+    _bottomLeftController = TextEditingController(text: 'LF');
+    _bottomRightController = TextEditingController(text: 'RF');
   }
 
   @override
   void dispose() {
-    for (var node in _focusNodes) {
-      node.dispose();
-    }
-    for (var controller in _controllers) {
-      controller.dispose();
-    }
+    _topLeftFocus.dispose();
+    _topRightFocus.dispose();
+    _bottomLeftFocus.dispose();
+    _bottomRightFocus.dispose();
+
+    _topLeftController.dispose();
+    _topRightController.dispose();
+    _bottomLeftController.dispose();
+    _bottomRightController.dispose();
+
     super.dispose();
   }
 
-  void _handleKeyEvent(RawKeyEvent event) {
-    if (event is RawKeyDownEvent) {
-      final key = event.logicalKey;
+  /// Helper to move focus and place cursor at the end of the text, preventing selection.
+  void _moveFocusAndSetCursorAtEnd(
+    FocusNode focusNode,
+    TextEditingController controller,
+  ) {
+    focusNode.requestFocus();
+    // By default, requestFocus() selects all text. To prevent this, we schedule a
+    // post-frame callback to manually set the cursor position after the focus change has completed.
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      controller.selection = TextSelection.fromPosition(
+        TextPosition(offset: controller.text.length),
+      );
+    });
+  }
 
-      if (key == LogicalKeyboardKey.arrowRight) {
-        _moveFocusRight();
-      } else if (key == LogicalKeyboardKey.arrowLeft) {
-        _moveFocusLeft();
-      } else if (key == LogicalKeyboardKey.arrowDown) {
-        _moveFocusDown();
-      } else if (key == LogicalKeyboardKey.arrowUp) {
-        _moveFocusUp();
-      }
+  /// Main handler for keyboard events.
+  KeyEventResult _handleKeyEvent(FocusNode node, RawKeyEvent event) {
+    if (event is! RawKeyDownEvent) {
+      return KeyEventResult.ignored;
     }
-  }
 
-  void _moveFocusRight() {
-    final newIndex = (_currentFocusIndex + 1) % 4;
-    _focusNodes[newIndex].requestFocus();
-  }
+    final key = event.logicalKey;
 
-  void _moveFocusLeft() {
-    final newIndex = (_currentFocusIndex - 1) % 4;
-    _focusNodes[newIndex < 0 ? 3 : newIndex].requestFocus();
-  }
+    if (key == LogicalKeyboardKey.arrowDown) {
+      if (_topLeftFocus.hasFocus)
+        _bottomLeftFocus.requestFocus();
+      else if (_topRightFocus.hasFocus)
+        _bottomRightFocus.requestFocus();
+      return KeyEventResult.handled;
+    } else if (key == LogicalKeyboardKey.arrowUp) {
+      if (_bottomLeftFocus.hasFocus)
+        _topLeftFocus.requestFocus();
+      else if (_bottomRightFocus.hasFocus)
+        _topRightFocus.requestFocus();
+      return KeyEventResult.handled;
+    } else if (key == LogicalKeyboardKey.arrowRight) {
+      if (_topLeftFocus.hasFocus)
+        _topRightFocus.requestFocus();
+      else if (_bottomLeftFocus.hasFocus)
+        _bottomRightFocus.requestFocus();
+      return KeyEventResult.handled;
+    } else if (key == LogicalKeyboardKey.arrowLeft) {
+      if (_topRightFocus.hasFocus) {
+        // Move focus to the left field and place cursor at the end.
+        _moveFocusAndSetCursorAtEnd(_topLeftFocus, _topLeftController);
+      } else if (_bottomRightFocus.hasFocus) {
+        // Move focus to the left field and place cursor at the end.
+        _moveFocusAndSetCursorAtEnd(_bottomLeftFocus, _bottomLeftController);
+      }
+      return KeyEventResult.handled;
+    }
 
-  void _moveFocusDown() {
-    final newIndex =
-        _currentFocusIndex < 2 ? _currentFocusIndex + 2 : _currentFocusIndex;
-    _focusNodes[newIndex].requestFocus();
-  }
-
-  void _moveFocusUp() {
-    final newIndex =
-        _currentFocusIndex >= 2 ? _currentFocusIndex - 2 : _currentFocusIndex;
-    _focusNodes[newIndex].requestFocus();
+    return KeyEventResult.ignored;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TextField Grid with Selection')),
-      body: RawKeyboardListener(
-        focusNode: FocusNode(),
+      appBar: AppBar(title: const Text('Corrected Cursor Navigation')),
+      body: Focus(
         onKey: _handleKeyEvent,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                // First row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildTextField(0, 'Field 1'),
-                    const SizedBox(width: 16),
-                    _buildTextField(1, 'Field 2'),
-                  ],
-                ),
-                const SizedBox(height: 16),
-                // Second row
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    _buildTextField(2, 'Field 3'),
-                    const SizedBox(width: 16),
-                    _buildTextField(3, 'Field 4'),
-                  ],
-                ),
-              ],
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Text(
+                'Use arrow keys to navigate the grid.',
+                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              const SizedBox(height: 24),
+              // Top Row
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _topLeftController,
+                      focusNode: _topLeftFocus,
+                      decoration: const InputDecoration(labelText: 'Top-Left'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextField(
+                      controller: _topRightController,
+                      focusNode: _topRightFocus,
+                      decoration: const InputDecoration(labelText: 'Top-Right'),
+                    ),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 16),
+              // Bottom Row
+              Row(
+                children: [
+                  Expanded(
+                    child: TextField(
+                      controller: _bottomLeftController,
+                      focusNode: _bottomLeftFocus,
+                      decoration: const InputDecoration(
+                        labelText: 'Bottom-Left',
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    child: TextField(
+                      controller: _bottomRightController,
+                      focusNode: _bottomRightFocus,
+                      decoration: const InputDecoration(
+                        labelText: 'Bottom-Right',
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           ),
         ),
-      ),
-    );
-  }
-
-  Widget _buildTextField(int index, String hintText) {
-    return SizedBox(
-      width: 150,
-      child: TextField(
-        controller: _controllers[index],
-        focusNode: _focusNodes[index],
-        decoration: InputDecoration(
-          border: const OutlineInputBorder(),
-          hintText: hintText,
-        ),
-        onTap: () {
-          // Select all text when tapped directly
-          _controllers[index].selection = TextSelection(
-            baseOffset: 0,
-            extentOffset: _controllers[index].text.length,
-          );
-        },
       ),
     );
   }

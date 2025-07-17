@@ -728,6 +728,8 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         inningNumber.toString(),
                                                                                       ),
                                                                                   child: LineupTextField(
+                                                                                    textColor:
+                                                                                        Colors.black,
                                                                                     positions:
                                                                                         controller.teamPositioned,
                                                                                     controller: TextEditingController(

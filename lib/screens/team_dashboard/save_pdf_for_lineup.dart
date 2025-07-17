@@ -1956,6 +1956,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
                                     color: Colors.white,
                                     child: LineupTextField(
                                       readAble: true,
+                                      textColor: Colors.black,
                                       positions: controller.teamPositioned,
                                       controller: TextEditingController(
                                         text: inningNumber,
