@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/model/lineup/autofillLineup.dart';
+import 'package:gaming_web_app/Base/model/lineup/fetchAutoLinup.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/custom_scaffold/dashboard_scaffold.dart';
 import 'package:gaming_web_app/utils/snackbarUtils.dart';
@@ -32,14 +33,16 @@ class _AddNewPlayerScreenForBuildLineupState
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
-      controller.getLineup(true);
-      controller.playersOut.clear();
+      // controller.getLineup(true);
+      controller.autoFillData.value = controller.getDummyAutoFillData();
+
+      // controller.playersOut.clear();
     });
 
     // controller.getLineup();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller.getLineup(true);
-    });
+    // WidgetsBinding.instance.addPostFrameCallback((_) {
+    //   controller.getLineup(true);
+    // });
   }
 
   @override
@@ -142,7 +145,6 @@ class _LineupWidgetState extends State<LineupWidget> {
   void initState() {
     // TODO: implement initState
     super.initState();
-
   }
 
   @override
@@ -381,7 +383,8 @@ class _LineupWidgetState extends State<LineupWidget> {
         oldIndex >= lineups.length ||
         newIndex >= lineups.length)
       return;
-
+    log(oldIndex.toString());
+    log(newIndex.toString());
     final temp = lineups[oldIndex];
     lineups[oldIndex] = lineups[newIndex];
     lineups[newIndex] = temp;
@@ -515,13 +518,32 @@ class _LineupWidgetState extends State<LineupWidget> {
 
                                         controller.gameData.value.players!
                                             .insert(newIndex, player);
+                                        if (true)
+                                        // if (isAutoCompletePressed.value)
+                                        {
+                                          // final lineup = controller
+                                          //     .autoFillData
+                                          //     .value!
+                                          //     .lineupp!
+                                          //     .removeAt(oldIndex);
+                                         
 
-                                        if (isAutoCompletePressed.value) {
-                                          final lineup = controller
+                                          // Now update the state with the modified list
+                                          controller
                                               .autoFillData
-                                              .value!
-                                              .lineupp!
-                                              .removeAt(oldIndex);
+                                              .value = FetchAutoFillLineups(
+                                            lineupp: updatedLineup,
+                                            playersInGame:
+                                                controller
+                                                    .autoFillData
+                                                    .value!
+                                                    .playersInGame,
+                                            fixedAssignments:
+                                                controller
+                                                    .autoFillData
+                                                    .value!
+                                                    .fixedAssignments,
+                                          );
                                           controller
                                               .autoFillData
                                               .value!
@@ -540,13 +562,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             secondIndex,
                                           );
 
-                                          controller.updateColorsAfterReorder();
+                                          // controller.updateColorsAfterReorder();
                                         }
 
                                         controller.gameData.refresh();
                                         controller.autoFillData.refresh();
                                         // reorderLineup(oldIndex, newIndex);
                                       },
+                                     
                                       children: List.generate(
                                         controller
                                             .gameData

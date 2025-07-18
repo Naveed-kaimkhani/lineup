@@ -61,6 +61,15 @@ class LineupController extends GetxController {
   final Map<String, RxBool> labelFlags = {};
 
   RxBool isAuto = false.obs;
+
+  FetchAutoFillLineups getDummyAutoFillData() {
+  return FetchAutoFillLineups(
+    lineupp: [],
+    playersInGame: [],
+    fixedAssignments: {},
+  );
+}
+
   TextEditingController getCellController({
     required int rowIndex,
     required int inningNumber,
@@ -286,14 +295,7 @@ class LineupController extends GetxController {
         int.parse(gameId!),
       );
 
-      log(response.message.toString());
-      // log(autoFillLineups.value.playersInGame.toString());
-      // log(gameId);
-      // log(SharedPreferencesKeysConstants.bearerToken);
-      // Check if the response contains data and update the teams list
       if (response.data != null) {
-        log(response.data.toString());
-        log(response.message.toString());
         fetchAutoFillLineups.value = response.data!;
         autoFillData.value = response.data!;
 
@@ -376,7 +378,7 @@ class LineupController extends GetxController {
     int playedInnings = 0;
     Map<String, int> positionCount = {};
 
-    lineupp![index].innings!.forEach((inning, position) {
+    lineupp[index].innings.forEach((inning, position) {
       final pos = position.toUpperCase();
       if (pos != 'OUT' && pos != 'BENCH') {
         playedInnings++;
