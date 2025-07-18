@@ -138,17 +138,11 @@ class _LineupWidgetState extends State<LineupWidget> {
     isAutoCompletePressed.value = true;
   }
 
-  late final FocusNode _topLeftFocus;
-
-  late final TextEditingController _topLeftController;
   @override
   void initState() {
     // TODO: implement initState
     super.initState();
 
-    _topLeftFocus = FocusNode(debugLabel: 'Top-Left');
-
-    _topLeftController = TextEditingController(text: 'C');
   }
 
   @override
