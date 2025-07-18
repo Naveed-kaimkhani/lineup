@@ -34,9 +34,8 @@ class _AddNewPlayerScreenForBuildLineupState
       controller.fetchTeamsPositioned();
       controller.getGamePlayer();
       // controller.getLineup(true);
-      controller.autoFillData.value = controller.getDummyAutoFillData();
 
-      // controller.playersOut.clear();
+      controller.playersOut.clear();
     });
 
     // controller.getLineup();
@@ -55,6 +54,8 @@ class _AddNewPlayerScreenForBuildLineupState
 
   @override
   Widget build(BuildContext context) {
+    // controller.setAutoFillWithEmptyData();
+
     return DashboardScaffold(
       onTab: () {
         // controller.playersOut.value = [];
@@ -144,11 +145,17 @@ class _LineupWidgetState extends State<LineupWidget> {
   @override
   void initState() {
     // TODO: implement initState
+
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
+    // controller.autoFillLinupUsingPlayesId();
+    Future.delayed(Duration(seconds: 2), () {
+      controller.setAutoFillWithEmptyData();
+    });
+
     return SingleChildScrollView(
       // ✅ Add vertical scroll
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
@@ -526,29 +533,61 @@ class _LineupWidgetState extends State<LineupWidget> {
                                           //     .value!
                                           //     .lineupp!
                                           //     .removeAt(oldIndex);
-                                         
+                                          // controller
+                                          //     .autoFillData
+                                          //     .value!
+                                          //     .lineupp!
+                                          //     .insert(newIndex, lineup);
+                                          print("Before reorder:");
+                                          for (
+                                            int i = 0;
+                                            i <
+                                                controller
+                                                    .autoFillData
+                                                    .value!
+                                                    .lineupp!
+                                                    .length;
+                                            i++
+                                          ) {
+                                            print(
+                                              "Index $i: ${controller.autoFillData.value!.lineupp![i].innings}",
+                                            );
 
-                                          // Now update the state with the modified list
-                                          controller
+                                            print(
+                                              "Batting order $i: ${controller.autoFillData.value!.lineupp![i].battingOrder}",
+                                            );
+                                          }
+
+                                          // reorder logic...
+                                          final lineup = controller
                                               .autoFillData
-                                              .value = FetchAutoFillLineups(
-                                            lineupp: updatedLineup,
-                                            playersInGame:
-                                                controller
-                                                    .autoFillData
-                                                    .value!
-                                                    .playersInGame,
-                                            fixedAssignments:
-                                                controller
-                                                    .autoFillData
-                                                    .value!
-                                                    .fixedAssignments,
-                                          );
+                                              .value!
+                                              .lineupp!
+                                              .removeAt(oldIndex);
                                           controller
                                               .autoFillData
                                               .value!
                                               .lineupp!
                                               .insert(newIndex, lineup);
+
+                                          print("After reorder:");
+                                          for (
+                                            int i = 0;
+                                            i <
+                                                controller
+                                                    .autoFillData
+                                                    .value!
+                                                    .lineupp!
+                                                    .length;
+                                            i++
+                                          ) {
+                                            print(
+                                              "Index $i: ${controller.autoFillData.value!.lineupp![i].innings}",
+                                            );
+                                            print(
+                                              "Batting order $i: ${controller.autoFillData.value!.lineupp![i].battingOrder}",
+                                            );
+                                          }
                                           // swapLineupData(oldIndex, newIndex);
 
                                           final firstIndex = newIndex;
@@ -562,14 +601,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                             secondIndex,
                                           );
 
-                                          // controller.updateColorsAfterReorder();
+                                          controller.updateColorsAfterReorder();
                                         }
 
                                         controller.gameData.refresh();
                                         controller.autoFillData.refresh();
                                         // reorderLineup(oldIndex, newIndex);
                                       },
-                                     
+
                                       children: List.generate(
                                         controller
                                             .gameData
@@ -891,6 +930,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       initialText:
                                                                                           controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
                                                                                           '',
+                                                                                      // '',
                                                                                     ),
                                                                                     focusNode:
                                                                                         focusNode,

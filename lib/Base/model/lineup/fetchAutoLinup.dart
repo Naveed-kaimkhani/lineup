@@ -3,7 +3,7 @@ import 'dart:developer';
 import 'package:get/get.dart';
 
 class FetchAutoFillLineups {
-  final List<Lineupp>? lineupp;
+  List<Lineupp>? lineupp;
   final List<int>? playersInGame;
   final Map<String, dynamic>? fixedAssignments;
 
@@ -15,7 +15,6 @@ class FetchAutoFillLineups {
   });
 
   factory FetchAutoFillLineups.fromJson(Map<String, dynamic>? json) {
-
     if (json == null) return FetchAutoFillLineups();
 
     return FetchAutoFillLineups(
@@ -50,11 +49,7 @@ class FetchAutoFillLineups {
   Map<String, dynamic> toJson() {
     if (lineupp != null) {
       for (var item in lineupp!) {
-        print('Player ID: ${item.playerId}');
-        print('Batting Order: ${item.battingOrder}');
-        print('Is Out: ${item.isOut}');
-        print('Innings: ${item.innings}');
-        print('-----------------------------');
+        
       }
     }
 
@@ -108,6 +103,8 @@ class Lineupp {
     if (json is! Map) return {};
     return json.map(
       (k, v) => MapEntry(int.tryParse(k.toString()) ?? 0, v?.toString() ?? ''),
+
+      // (k, v) => MapEntry(int.tryParse(k.toString()) ?? 0,  ''),
     );
   }
 

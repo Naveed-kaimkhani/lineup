@@ -90,8 +90,7 @@ class SignInController extends GetxController {
     bool isPasswordValid = _validatePassword(password);
 
     // if (isEmailValid && isPasswordValid)
-    if (true) 
-    {
+    if (true) {
       // final request = LoginModel(email: email, password: password);
 
       final request = LoginModel(
