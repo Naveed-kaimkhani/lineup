@@ -32,7 +32,7 @@ class LineupController extends GetxController {
   RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
   RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
   var textColors = <String, Color>{}.obs;
-   final Map<String, TextEditingController> cellControllers = {};
+  final Map<String, TextEditingController> cellControllers = {};
 
   final previewText = 'PREVIEW       '.obs;
   List<List<FocusNode>> fieldFocusNodes = [];
@@ -63,12 +63,12 @@ class LineupController extends GetxController {
   RxBool isAuto = false.obs;
 
   FetchAutoFillLineups getDummyAutoFillData() {
-  return FetchAutoFillLineups(
-    lineupp: [],
-    playersInGame: [],
-    fixedAssignments: {},
-  );
-}
+    return FetchAutoFillLineups(
+      lineupp: [],
+      playersInGame: [],
+      fixedAssignments: {},
+    );
+  }
 
   TextEditingController getCellController({
     required int rowIndex,
@@ -97,6 +97,7 @@ class LineupController extends GetxController {
     }
     return cellControllers[key]!;
   }
+
   void disposeCellControllers() {
     for (final c in cellControllers.values) {
       c.dispose();
@@ -321,6 +322,53 @@ class LineupController extends GetxController {
     }
   }
 
+  Future<void> setAutoFillWithEmptyData() async {
+    try {
+      String? gameId = await SharedPreferencesUtil.read('gameID');
+
+      // );
+      autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
+        autoFillData.value?.lineupp ?? [],
+        autoFillLineups.value.playersInGame ?? [],
+      );
+
+      final response = await TeamsApi.autolinupSubmitPlayesId(
+        autoFillLineups.value,
+        int.parse(gameId!),
+      );
+
+      if (response.data != null) {
+        fetchAutoFillLineups.value = response.data!;
+        autoFillData.value = response.data!;
+        if (autoFillData.value!.lineupp != null) {
+          for (var lineup in autoFillData.value!.lineupp!) {
+            lineup.innings.updateAll(
+              (key, value) => '',
+            ); // Set every inning value to ""
+          }
+        }
+        fetchAutoFillLineups.refresh();
+        lineupp.value = response.data!.lineupp!;
+
+        // for (
+        //   int inning = 0;
+        //   inning < gameData.value.players!.length;
+        //   inning++
+        // ) {
+        //   calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+        // }
+
+        // calculateDynamicGameStats();
+      } else {
+        SnackbarUtils.showErrorr(response.message.toString());
+        // Handle the case where no teams are returned
+        // teams.value = [];
+      }
+    } catch (e) {
+      // Handle any errors that occur
+    }
+  }
+
   //get lineup
   Future<void> getLineup(bool isShow) async {
     try {
@@ -335,6 +383,8 @@ class LineupController extends GetxController {
         autoFillLineups.value.fixedAssignments = fixedAssignments;
       }
       // Call the API to get the list of teams
+      log("gaaa");
+      log(gameId.toString());
       final response = await TeamsApi.getLineupData(
         autoFillLineups.value,
         int.parse(gameId!),
@@ -549,6 +599,7 @@ class LineupController extends GetxController {
       throw ArgumentError('Starting player ID must be positive');
     }
   }
+
   void updateTextColor({
     required int index,
     required int inningNumber,
