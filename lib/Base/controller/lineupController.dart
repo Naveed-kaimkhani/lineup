@@ -349,8 +349,8 @@ class LineupController extends GetxController {
   Future<void> setAutoFillWithEmptyData() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
-      log(gameId.toString());
-      
+      // log(gameId.toString());
+
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
         autoFillData.value?.lineupp ?? [],
         autoFillLineups.value.playersInGame ?? [],
@@ -374,13 +374,13 @@ class LineupController extends GetxController {
         fetchAutoFillLineups.refresh();
         lineupp.value = response.data!.lineupp!;
 
-        // for (
-        //   int inning = 0;
-        //   inning < gameData.value.players!.length;
-        //   inning++
-        // ) {
-        //   calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
-        // }
+        for (
+          int inning = 0;
+          inning < gameData.value.players!.length;
+          inning++
+        ) {
+          calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
+        }
 
         // calculateDynamicGameStats();
       } else {
@@ -406,9 +406,7 @@ class LineupController extends GetxController {
       if (fixedAssignments != null) {
         autoFillLineups.value.fixedAssignments = fixedAssignments;
       }
-      // Call the API to get the list of teams
-      log("gaaa");
-      log(gameId.toString());
+
       final response = await TeamsApi.getLineupData(
         autoFillLineups.value,
         int.parse(gameId!),
@@ -656,7 +654,7 @@ class LineupController extends GetxController {
     } else if (exemptPositions.contains(val)) {
       newColor = Colors.black; // Don't mark exempt values as invalid
     } else if (!isValidPosition || inningValues.contains(val)) {
-      newColor = Colors.red; // Invalid OR duplicate
+      newColor = const Color.fromARGB(255, 164, 60, 60); // Invalid OR duplicate
     } else {
       newColor = Colors.black; // Valid
     }

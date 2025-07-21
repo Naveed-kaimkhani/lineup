@@ -1,5 +1,3 @@
-
-
 class AutoFillLineups {
   final List<int>? playersInGame;
   Map<String, Map<String, String>>? fixedAssignments;

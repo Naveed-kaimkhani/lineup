@@ -515,16 +515,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                       needsLongPressDraggable:
                                           false, // drag by mouse click
                                       onReorder: (oldIndex, newIndex) {
-                                        // final Lineupp a =
-                                        //     controller
-                                        //         .autoFillData
-                                        //         .value!
-                                        //         .lineupp![oldIndex]; // item being dragged
-                                        // final Lineupp b = controller
-                                        //                                             .autoFillData
-                                        //                                             .value!
-                                        //                                             .lineupp![newIndex]; // item currently at drop position
-
                                         final player = controller
                                             // .firstNinePlayers1
                                             .gameData
@@ -537,17 +527,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                         if (true)
                                         // if (isAutoCompletePressed.value)
                                         {
-                                          // final lineup = controller
-                                          //     .autoFillData
-                                          //     .value!
-                                          //     .lineupp!
-                                          //     .removeAt(oldIndex);
-                                          // controller
-                                          //     .autoFillData
-                                          //     .value!
-                                          //     .lineupp!
-                                          //     .insert(newIndex, lineup);
-
                                           // reorder logic...
                                           final lineup = controller
                                               .autoFillData
@@ -560,13 +539,6 @@ class _LineupWidgetState extends State<LineupWidget> {
                                               .lineupp!
                                               .insert(newIndex, lineup);
 
-                                          // swapLineupData(oldIndex, newIndex);
-                                          // final oldOrderA = a.battingOrder;
-                                          // final oldOrderAId = a.playerId;
-                                          //   final oldOrderB = b.battingOrder;
-
-                                          //   final oldOrderBId = b.playerId;
-                                          // _swapFixedOrders(a, b);
                                           final firstIndex = newIndex;
                                           final secondIndex = oldIndex;
 
@@ -759,315 +731,207 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                 ? Column(
                                                                   children: [],
                                                                 )
-                                                                : Column(
-                                                                  mainAxisAlignment:
-                                                                      MainAxisAlignment
-                                                                          .start,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment
-                                                                          .start,
-                                                                  children: List.generate(1, (
-                                                                    i,
-                                                                  ) {
-                                                                    final valuesList =
-                                                                        controller
-                                                                            .autoFillData
-                                                                            .value!
-                                                                            .lineupp![index]
-                                                                            .innings
-                                                                            .keys;
+                                                                : Padding(
+                                                                  padding:
+                                                                      const EdgeInsets.only(
+                                                                        left:
+                                                                            14.0,
+                                                                      ),
+                                                                  child: Column(
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment
+                                                                            .start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment
+                                                                            .start,
+                                                                    children: List.generate(1, (
+                                                                      i,
+                                                                    ) {
+                                                                      final valuesList =
+                                                                          controller
+                                                                              .autoFillData
+                                                                              .value!
+                                                                              .lineupp![index]
+                                                                              .innings
+                                                                              .keys;
 
-                                                                    return Row(
-                                                                      mainAxisAlignment:
-                                                                          MainAxisAlignment
-                                                                              .start,
-                                                                      crossAxisAlignment:
-                                                                          CrossAxisAlignment
-                                                                              .start,
-                                                                      children:
-                                                                          valuesList.map((
-                                                                            inningNumber,
-                                                                          ) {
-                                                                            final key =
-                                                                                "${index}_$inningNumber"; // ✅ unique key for player-row + inning-column
+                                                                      return Row(
+                                                                        mainAxisAlignment:
+                                                                            MainAxisAlignment.start,
+                                                                        crossAxisAlignment:
+                                                                            CrossAxisAlignment.start,
+                                                                        children:
+                                                                            valuesList.map((
+                                                                              inningNumber,
+                                                                            ) {
+                                                                              final key =
+                                                                                  "${index}_$inningNumber"; // ✅ unique key for player-row + inning-column
 
-                                                                            final focusNode =
-                                                                                controller.focusNodesGrid.putIfAbsent(
-                                                                                      index,
-                                                                                      () =>
-                                                                                          {},
-                                                                                    )[inningNumber.toString()] ??=
-                                                                                    FocusNode();
-                                                                            final controllerNode =
-                                                                                controller.textControllersGrid.putIfAbsent(
-                                                                                  index,
-                                                                                  () =>
-                                                                                      {},
-                                                                                )[inningNumber.toString()] ??= controller.getCellController(
-                                                                                  rowIndex:
-                                                                                      index,
-                                                                                  inningNumber:
-                                                                                      inningNumber,
-                                                                                  initialText:
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                      '',
-                                                                                );
-
-                                                                            bool
-                                                                            isLable =
-                                                                                false;
-                                                                            TextEditingController
-                                                                            textEditingController =
-                                                                                TextEditingController();
-
-                                                                            return Focus(
-                                                                              onFocusChange: (
-                                                                                hasFocus,
-                                                                              ) async {
-                                                                                if (!hasFocus) {
-                                                                                  yourFunction(
+                                                                              final focusNode =
+                                                                                  controller.focusNodesGrid.putIfAbsent(
+                                                                                        index,
+                                                                                        () =>
+                                                                                            {},
+                                                                                      )[inningNumber.toString()] ??=
+                                                                                      FocusNode();
+                                                                              final controllerNode =
+                                                                                  controller.textControllersGrid.putIfAbsent(
                                                                                     index,
-                                                                                  );
-                                                                                  // controller.teamPositioned
-                                                                                  String result = await filterPositionsByNamePrefix(
-                                                                                    controller.teamPositioned,
-                                                                                    controller.enerLable.value,
+                                                                                    () =>
+                                                                                        {},
+                                                                                  )[inningNumber.toString()] ??= controller.getCellController(
+                                                                                    rowIndex:
+                                                                                        index,
+                                                                                    inningNumber:
+                                                                                        inningNumber,
+                                                                                    initialText:
+                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                        '',
                                                                                   );
 
-                                                                                  if (result !=
-                                                                                      "") {
-                                                                                    isLable =
-                                                                                        true;
+                                                                              bool
+                                                                              isLable =
+                                                                                  false;
+                                                                              TextEditingController
+                                                                              textEditingController =
+                                                                                  TextEditingController();
 
-                                                                                    // controller.fixedAssignments!.add({});
-                                                                                    controller.addFixedAssignment(
-                                                                                      controller.gameData.value.players![index].id.toString(),
-                                                                                      '${inningNumber}',
-                                                                                      result,
+                                                                              return Focus(
+                                                                                onFocusChange: (
+                                                                                  hasFocus,
+                                                                                ) async {
+                                                                                  if (!hasFocus) {
+                                                                                    yourFunction(
+                                                                                      index,
+                                                                                    );
+                                                                                    // controller.teamPositioned
+                                                                                    String result = await filterPositionsByNamePrefix(
+                                                                                      controller.teamPositioned,
+                                                                                      controller.enerLable.value,
                                                                                     );
 
-                                                                                    // });
+                                                                                    if (result !=
+                                                                                        "") {
+                                                                                      isLable =
+                                                                                          true;
+
+                                                                                      // controller.fixedAssignments!.add({});
+                                                                                      controller.addFixedAssignment(
+                                                                                        controller.gameData.value.players![index].id.toString(),
+                                                                                        '${inningNumber}',
+                                                                                        result,
+                                                                                      );
+
+                                                                                      // });
+                                                                                    }
+                                                                                    // The widget lost focus, run your function here
                                                                                   }
-                                                                                  // The widget lost focus, run your function here
-                                                                                }
-                                                                              },
-                                                                              child: Container(
-                                                                                padding: const EdgeInsets.all(
-                                                                                  8,
-                                                                                ),
-                                                                                color:
-                                                                                    Colors.white,
-                                                                                child: RawKeyboardListener(
-                                                                                  focusNode: FocusNode(
-                                                                                    skipTraversal:
-                                                                                        true,
+                                                                                },
+                                                                                child: Container(
+                                                                                  padding: const EdgeInsets.all(
+                                                                                    8,
                                                                                   ),
-                                                                                  onKey:
-                                                                                      (
-                                                                                        event,
-                                                                                      ) => handleArrowKeyNavigation(
-                                                                                        event,
-                                                                                        index,
-
-                                                                                        inningNumber.toString(),
-                                                                                        focusNode,
-
-                                                                                        TextEditingController(
-                                                                                          text:
-                                                                                              controller.autoFillData.value!.lineupp![index].innings[inningNumber],
-                                                                                        ),
-                                                                                        // controller.getCellController(
-                                                                                        //   rowIndex:
-                                                                                        //       index,
-                                                                                        //   inningNumber:
-                                                                                        //       inningNumber,
-                                                                                        //   initialText:
-                                                                                        //       controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                        //       '',
-                                                                                        // ),
-                                                                                      ),
-                                                                                  child: LineupTextField(
-                                                                                    textColor:
-                                                                                        controller.textColors[key] ??
-                                                                                        Colors.black,
-
-                                                                                    // color
-                                                                                    positions:
-                                                                                        controller.teamPositioned,
-
-                                                                                    // controller: TextEditingController(
-                                                                                    //   text:
-                                                                                    //       controller.autoFillData.value!.lineupp![index].innings[inningNumber],
-                                                                                    // ),
-                                                                                    controller: controller.getCellController(
-                                                                                      rowIndex:
+                                                                                  color:
+                                                                                      Colors.white,
+                                                                                  child: RawKeyboardListener(
+                                                                                    focusNode: FocusNode(
+                                                                                      skipTraversal:
+                                                                                          true,
+                                                                                    ),
+                                                                                    onKey:
+                                                                                        (
+                                                                                          event,
+                                                                                        ) => handleArrowKeyNavigation(
+                                                                                          event,
                                                                                           index,
-                                                                                      inningNumber:
-                                                                                          inningNumber,
-                                                                                      initialText:
-                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                          '',
-                                                                                      // '',
-                                                                                    ),
-                                                                                    focusNode:
-                                                                                        focusNode,
 
-                                                                                    isLable: filterPositionsByNameMatch(
-                                                                                      controller.teamPositioned,
-                                                                                      textEditingController.text,
-                                                                                      // controller
-                                                                                      //     .getCellController(
-                                                                                      //       rowIndex:
-                                                                                      //           index,
-                                                                                      //       inningNumber:
-                                                                                      //           inningNumber,
-                                                                                      //       initialText:
-                                                                                      //           controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                      //           '',
-                                                                                      //     )
-                                                                                      //     .text,
-                                                                                    ),
+                                                                                          inningNumber.toString(),
+                                                                                          focusNode,
 
-                                                                                    onChanged: (
-                                                                                      val,
-                                                                                    ) async {
-                                                                                      val =
-                                                                                          val.trim().toUpperCase();
+                                                                                          TextEditingController(
+                                                                                            text:
+                                                                                                controller.autoFillData.value!.lineupp![index].innings[inningNumber],
+                                                                                          ),
+                                                                                        ),
+                                                                                    child: LineupTextField(
+                                                                                      textColor:
+                                                                                          controller.textColors[key] ??
+                                                                                          Colors.black,
 
-                                                                                      if (controller.isBackspacePressed.value) {
-                                                                                        // Clear lineup data
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                            '';
+                                                                                      // color
+                                                                                      positions:
+                                                                                          controller.teamPositioned,
 
-                                                                                        // ✅ Remove the fixed assignment
-                                                                                        final playerId =
-                                                                                            controller.gameData.value.players![index].id.toString();
-                                                                                        controller.fixedAssignments?[playerId]?.remove(
-                                                                                          '$inningNumber',
-                                                                                        );
-
-                                                                                        // controller.autoFillData.refresh();
-                                                                                        controller.isBackspacePressed.value = false;
-                                                                                        return;
-                                                                                      }
-
-                                                                                      // 🔁 If empty, just clear
-                                                                                      if (val.isEmpty) {
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                            '';
-
-                                                                                        controller.autoFillData.refresh();
-                                                                                        return;
-                                                                                      }
-
-                                                                                      // 🔁 Shortcuts
-                                                                                      final shortcuts = {
-                                                                                        'L':
-                                                                                            'LF',
-                                                                                        'P':
-                                                                                            'P',
-                                                                                        'R':
-                                                                                            'RF',
-                                                                                        'O':
-                                                                                            'OUT',
-                                                                                        'S':
-                                                                                            'SS',
-                                                                                        '1':
-                                                                                            '1B',
-                                                                                        '2':
-                                                                                            '2B',
-                                                                                        '3':
-                                                                                            '3B',
-                                                                                      };
-
-                                                                                      if (val.length ==
-                                                                                              1 &&
-                                                                                          shortcuts.containsKey(
-                                                                                            val,
-                                                                                          )) {
-                                                                                        final completed =
-                                                                                            shortcuts[val]!;
-                                                                                        if (controllerNode.text !=
-                                                                                            completed) {
-                                                                                          controllerNode.text = completed;
-                                                                                          controllerNode.selection = TextSelection.fromPosition(
-                                                                                            TextPosition(
-                                                                                              offset:
-                                                                                                  controllerNode.text.length,
-                                                                                            ),
-                                                                                          );
-
-                                                                                          val =
-                                                                                              completed;
-                                                                                        }
-                                                                                      }
-
-                                                                                      // 🔁 Check for duplicate (ignore if OUT or empty)
-                                                                                      final allLineups =
-                                                                                          controller.autoFillData.value?.lineupp ??
-                                                                                          [];
-                                                                                      final inningValues =
-                                                                                          allLineups
-                                                                                              .asMap()
-                                                                                              .entries
-                                                                                              .where(
-                                                                                                (
-                                                                                                  e,
-                                                                                                ) =>
-                                                                                                    e.key !=
-                                                                                                    index,
-                                                                                              )
-                                                                                              .map(
-                                                                                                (
-                                                                                                  e,
-                                                                                                ) =>
-                                                                                                    e.value.innings[inningNumber]?.trim().toUpperCase(),
-                                                                                              )
-                                                                                              .toList();
-
-                                                                                      controller.updateTextColor(
-                                                                                        index:
+                                                                                      controller: controller.getCellController(
+                                                                                        rowIndex:
                                                                                             index,
                                                                                         inningNumber:
                                                                                             inningNumber,
-                                                                                        val:
-                                                                                            val,
-                                                                                      );
+                                                                                        initialText:
+                                                                                            controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                            '',
+                                                                                        // '',
+                                                                                      ),
+                                                                                      focusNode:
+                                                                                          focusNode,
 
-                                                                                      // ✅ Save input
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                          val;
-                                                                                      controller.enerLable.value = val;
-                                                                                      controller.autoFillData.refresh();
-
-                                                                                      if (val ==
-                                                                                          "OUT") {
-                                                                                        controller.recalculatePlayerStats(
-                                                                                          index,
-                                                                                        );
-                                                                                        return;
-                                                                                      }
-
-                                                                                      // 🔁 Prefix autocomplete using team positions
-                                                                                      final result = await filterPositionsByNamePrefix(
+                                                                                      isLable: filterPositionsByNameMatch(
                                                                                         controller.teamPositioned,
+                                                                                        textEditingController.text,
+                                                                                      ),
+
+                                                                                      onChanged: (
                                                                                         val,
-                                                                                      );
+                                                                                      ) async {
+                                                                                        val =
+                                                                                            val.trim().toUpperCase();
 
-                                                                                      if (result.isNotEmpty &&
-                                                                                          result !=
-                                                                                              val) {
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                            result;
-                                                                                        controllerNode.text = result;
-                                                                                        controllerNode.selection = TextSelection.fromPosition(
-                                                                                          TextPosition(
-                                                                                            offset:
-                                                                                                result.length,
-                                                                                          ),
-                                                                                        );
+                                                                                        if (controller.isBackspacePressed.value) {
+                                                                                          // Clear lineup data
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                              '';
 
-                                                                                        // new
+                                                                                          // ✅ Remove the fixed assignment
+                                                                                          final playerId =
+                                                                                              controller.gameData.value.players![index].id.toString();
+                                                                                          controller.fixedAssignments?[playerId]?.remove(
+                                                                                            '$inningNumber',
+                                                                                          );
+
+                                                                                          // controller.autoFillData.refresh();
+                                                                                          controller.isBackspacePressed.value = false;
+                                                                                          return;
+                                                                                        }
+
+                                                                                        // 🔁 If empty, just clear
+                                                                                        if (val.isEmpty) {
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                              '';
+
+                                                                                          controller.autoFillData.refresh();
+                                                                                          return;
+                                                                                        }
+
+                                                                                        // 🔁 Shortcuts
+                                                                                        final shortcuts = {
+                                                                                          'L':
+                                                                                              'LF',
+                                                                                          'P':
+                                                                                              'P',
+                                                                                          'R':
+                                                                                              'RF',
+                                                                                          'O':
+                                                                                              'OUT',
+                                                                                          'S':
+                                                                                              'SS',
+                                                                                          '1':
+                                                                                              '1B',
+                                                                                          '2':
+                                                                                              '2B',
+                                                                                          '3':
+                                                                                              '3B',
+                                                                                        };
+
                                                                                         if (val.length ==
                                                                                                 1 &&
                                                                                             shortcuts.containsKey(
@@ -1081,7 +945,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                             controllerNode.selection = TextSelection.fromPosition(
                                                                                               TextPosition(
                                                                                                 offset:
-                                                                                                    completed.length,
+                                                                                                    controllerNode.text.length,
                                                                                               ),
                                                                                             );
 
@@ -1090,32 +954,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           }
                                                                                         }
 
-                                                                                        controller.addFixedAssignment(
-                                                                                          controller.gameData.value.players![index].id.toString(),
-                                                                                          '$inningNumber',
-                                                                                          result,
-                                                                                        );
-                                                                                      }
-                                                                                    },
-                                                                                    onFieldSubmitted: (
-                                                                                      val,
-                                                                                    ) async {
-                                                                                      val =
-                                                                                          val.trim().toUpperCase(); // Normalize for consistent matching
-
-                                                                                      // Allow OUT always
-                                                                                      if (val ==
-                                                                                          "OUT") {
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                            "OUT";
-                                                                                        controller.autoFillData.refresh();
-
-                                                                                        // return;
-                                                                                        // controller.againCalculateStatsandTopPositions();
-                                                                                        controller.recalculatePlayerStats(
-                                                                                          index,
-                                                                                        );
-                                                                                      } else {
+                                                                                        // 🔁 Check for duplicate (ignore if OUT or empty)
                                                                                         final allLineups =
                                                                                             controller.autoFillData.value?.lineupp ??
                                                                                             [];
@@ -1129,7 +968,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                   ) =>
                                                                                                       e.key !=
                                                                                                       index,
-                                                                                                ) // Exclude current row
+                                                                                                )
                                                                                                 .map(
                                                                                                   (
                                                                                                     e,
@@ -1138,66 +977,180 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                 )
                                                                                                 .toList();
 
-                                                                                        // ✅ Check for duplicate (excluding empty and OUT)
-                                                                                        if (inningValues.contains(
-                                                                                          val,
-                                                                                        )) {
-                                                                                          SnackbarUtils.showErrorr(
-                                                                                            "This position $val is already used in this inning (column). Duplicate values are not allowed.",
-                                                                                            onOkPressed: () {
-                                                                                              controllerNode.clear();
-                                                                                              controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                                  '';
-                                                                                              controller.autoFillData.refresh();
-                                                                                            },
+                                                                                        controller.updateTextColor(
+                                                                                          index:
+                                                                                              index,
+                                                                                          inningNumber:
+                                                                                              inningNumber,
+                                                                                          val:
+                                                                                              val,
+                                                                                        );
+
+                                                                                        // ✅ Save input
+                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                            val;
+                                                                                        controller.enerLable.value = val;
+                                                                                        controller.autoFillData.refresh();
+
+                                                                                        if (val ==
+                                                                                            "OUT") {
+                                                                                          controller.recalculatePlayerStats(
+                                                                                            index,
                                                                                           );
                                                                                           return;
                                                                                         }
-                                                                                      }
-                                                                                      // ✅ Get all values in current inning column
 
-                                                                                      // ✅ Save entered value
-                                                                                      controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                          val;
-                                                                                      controller.autoFillData.refresh();
-
-                                                                                      // Optional auto-fill from team positions
-                                                                                      String result = await filterPositionsByNamePrefix(
-                                                                                        controller.teamPositioned,
-                                                                                        controller.enerLable.value,
-                                                                                      );
-
-                                                                                      if (result !=
-                                                                                          "") {
-                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
-                                                                                            result;
-                                                                                        controller.autoFillData.refresh();
-                                                                                        // textEditingController.text = result;
-                                                                                        controller
-                                                                                            .getCellController(
-                                                                                              rowIndex:
-                                                                                                  index,
-                                                                                              inningNumber:
-                                                                                                  inningNumber,
-                                                                                              initialText:
-                                                                                                  controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
-                                                                                                  '',
-                                                                                            )
-                                                                                            .text = result;
-                                                                                        controller.addFixedAssignment(
-                                                                                          controller.gameData.value.players![index].id.toString(),
-                                                                                          '$inningNumber',
-                                                                                          result,
+                                                                                        // 🔁 Prefix autocomplete using team positions
+                                                                                        final result = await filterPositionsByNamePrefix(
+                                                                                          controller.teamPositioned,
+                                                                                          val,
                                                                                         );
-                                                                                      }
-                                                                                    },
+
+                                                                                        if (result.isNotEmpty &&
+                                                                                            result !=
+                                                                                                val) {
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                              result;
+                                                                                          controllerNode.text = result;
+                                                                                          controllerNode.selection = TextSelection.fromPosition(
+                                                                                            TextPosition(
+                                                                                              offset:
+                                                                                                  result.length,
+                                                                                            ),
+                                                                                          );
+
+                                                                                          // new
+                                                                                          if (val.length ==
+                                                                                                  1 &&
+                                                                                              shortcuts.containsKey(
+                                                                                                val,
+                                                                                              )) {
+                                                                                            final completed =
+                                                                                                shortcuts[val]!;
+                                                                                            if (controllerNode.text !=
+                                                                                                completed) {
+                                                                                              controllerNode.text = completed;
+                                                                                              controllerNode.selection = TextSelection.fromPosition(
+                                                                                                TextPosition(
+                                                                                                  offset:
+                                                                                                      completed.length,
+                                                                                                ),
+                                                                                              );
+
+                                                                                              val =
+                                                                                                  completed;
+                                                                                            }
+                                                                                          }
+
+                                                                                          controller.addFixedAssignment(
+                                                                                            controller.gameData.value.players![index].id.toString(),
+                                                                                            '$inningNumber',
+                                                                                            result,
+                                                                                          );
+                                                                                        }
+                                                                                      },
+                                                                                      onFieldSubmitted: (
+                                                                                        val,
+                                                                                      ) async {
+                                                                                        val =
+                                                                                            val.trim().toUpperCase(); // Normalize for consistent matching
+
+                                                                                        // Allow OUT always
+                                                                                        if (val ==
+                                                                                            "OUT") {
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                              "OUT";
+                                                                                          controller.autoFillData.refresh();
+
+                                                                                          // return;
+                                                                                          // controller.againCalculateStatsandTopPositions();
+                                                                                          controller.recalculatePlayerStats(
+                                                                                            index,
+                                                                                          );
+                                                                                        } else {
+                                                                                          final allLineups =
+                                                                                              controller.autoFillData.value?.lineupp ??
+                                                                                              [];
+                                                                                          final inningValues =
+                                                                                              allLineups
+                                                                                                  .asMap()
+                                                                                                  .entries
+                                                                                                  .where(
+                                                                                                    (
+                                                                                                      e,
+                                                                                                    ) =>
+                                                                                                        e.key !=
+                                                                                                        index,
+                                                                                                  ) // Exclude current row
+                                                                                                  .map(
+                                                                                                    (
+                                                                                                      e,
+                                                                                                    ) =>
+                                                                                                        e.value.innings[inningNumber]?.trim().toUpperCase(),
+                                                                                                  )
+                                                                                                  .toList();
+
+                                                                                          // ✅ Check for duplicate (excluding empty and OUT)
+                                                                                          if (inningValues.contains(
+                                                                                            val,
+                                                                                          )) {
+                                                                                            SnackbarUtils.showErrorr(
+                                                                                              "This position $val is already used in this inning (column). Duplicate values are not allowed.",
+                                                                                              onOkPressed: () {
+                                                                                                controllerNode.clear();
+                                                                                                controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                                    '';
+                                                                                                controller.autoFillData.refresh();
+                                                                                              },
+                                                                                            );
+                                                                                            return;
+                                                                                          }
+                                                                                        }
+                                                                                        // ✅ Get all values in current inning column
+
+                                                                                        // ✅ Save entered value
+                                                                                        controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                            val;
+                                                                                        controller.autoFillData.refresh();
+
+                                                                                        // Optional auto-fill from team positions
+                                                                                        String result = await filterPositionsByNamePrefix(
+                                                                                          controller.teamPositioned,
+                                                                                          controller.enerLable.value,
+                                                                                        );
+
+                                                                                        if (result !=
+                                                                                            "") {
+                                                                                          controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
+                                                                                              result;
+                                                                                          controller.autoFillData.refresh();
+                                                                                          // textEditingController.text = result;
+                                                                                          controller
+                                                                                              .getCellController(
+                                                                                                rowIndex:
+                                                                                                    index,
+                                                                                                inningNumber:
+                                                                                                    inningNumber,
+                                                                                                initialText:
+                                                                                                    controller.autoFillData.value!.lineupp![index].innings[inningNumber] ??
+                                                                                                    '',
+                                                                                              )
+                                                                                              .text = result;
+                                                                                          controller.addFixedAssignment(
+                                                                                            controller.gameData.value.players![index].id.toString(),
+                                                                                            '$inningNumber',
+                                                                                            result,
+                                                                                          );
+                                                                                        }
+                                                                                      },
+                                                                                    ),
                                                                                   ),
                                                                                 ),
-                                                                              ),
-                                                                            );
-                                                                          }).toList(),
-                                                                    );
-                                                                  }),
+                                                                              );
+                                                                            }).toList(),
+                                                                      );
+                                                                    }),
+                                                                  ),
                                                                 ),
                                                       ),
                                                 ],
@@ -1238,25 +1191,112 @@ class _LineupWidgetState extends State<LineupWidget> {
     // Your custom logic here
   }
 
-  Widget _buildStatsTable() {
-    // Mock data for playing time and positions
+  // Widget _buildStatsTable() {
+  //   // Mock data for playing time and positions
 
+  //   final LineupController controller = Get.find<LineupController>();
+  //   // controller.statsList.clear();
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(8),
+  //     child: Column(
+  //       children: [
+  //         // Header
+  //         SizedBox(height: 55),
+  //         Container(
+  //           padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  //           // padding: const EdgeInsets.symmetric(horizontal: 16),
+  //           color: Colors.grey[200],
+  //           child: Row(
+  //             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //             children: [
+  //               Expanded(
+  //                 child: Text(
+  //                   'Playing time %',
+  //                   style: TextStyle(
+  //                     color: const Color(0xFF8B3A3A),
+  //                     fontSize: 14,
+  //                     fontWeight: FontWeight.w600,
+  //                   ),
+  //                 ),
+  //               ),
+  //               Expanded(
+  //                 child: Text(
+  //                   'Top Position',
+  //                   style: TextStyle(
+  //                     color: const Color(0xFF8B3A3A),
+  //                     fontSize: 14,
+  //                     fontWeight: FontWeight.w600,
+  //                   ),
+  //                   textAlign: TextAlign.right,
+  //                 ),
+  //               ),
+  //             ],
+  //           ),
+  //         ),
+
+  //         // SizedBox(height: 5),
+  //         // Rows
+  //         Container(
+  //           color: Colors.white,
+  //           child: Obx(
+  //             () =>
+  //                 controller.statsList.isEmpty
+  //                     ? SizedBox()
+  //                     : Column(
+  //                       children: List.generate(
+  //                         controller.statsList.length,
+  //                         (index) => Container(
+  //                           padding: const EdgeInsets.symmetric(
+  //                             vertical: 12.7,
+  //                             horizontal: 16,
+  //                           ),
+  //                           decoration: BoxDecoration(
+  //                             border: Border(
+  //                               bottom: BorderSide(color: Colors.grey.shade200),
+  //                             ),
+  //                           ),
+  //                           child: Row(
+  //                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+  //                             children: [
+  //                               Text(
+  //                                 controller.statsList[index].playingTimePercent
+  //                                     .toString(),
+  //                                 // stats[index]['time']!,
+  //                                 style: const TextStyle(fontSize: 14),
+  //                               ),
+  //                               Text(
+  //                                 controller.statsList[index].topPosition
+  //                                     .toString(),
+  //                                 // stats[index]['position']!,
+  //                                 style: const TextStyle(fontSize: 14),
+  //                               ),
+  //                             ],
+  //                           ),
+  //                         ),
+  //                       ),
+  //                     ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
+
+  Widget _buildStatsTable() {
     final LineupController controller = Get.find<LineupController>();
-    // controller.statsList.clear();
+
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
-          // Header
-          SizedBox(height: 55),
+          SizedBox(height: 57),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-            // padding: const EdgeInsets.symmetric(horizontal: 16),
             color: Colors.grey[200],
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Expanded(
+                  flex: 1, // Make this column narrower
                   child: Text(
                     'Playing time %',
                     style: TextStyle(
@@ -1264,9 +1304,11 @@ class _LineupWidgetState extends State<LineupWidget> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
+                    textAlign: TextAlign.center,
                   ),
                 ),
                 Expanded(
+                  flex: 1, // Make this column narrower
                   child: Text(
                     'Top Position',
                     style: TextStyle(
@@ -1274,21 +1316,20 @@ class _LineupWidgetState extends State<LineupWidget> {
                       fontSize: 14,
                       fontWeight: FontWeight.w600,
                     ),
-                    textAlign: TextAlign.right,
+                    textAlign: TextAlign.center,
                   ),
                 ),
               ],
             ),
           ),
 
-          SizedBox(height: 5),
           // Rows
           Container(
             color: Colors.white,
             child: Obx(
               () =>
                   controller.statsList.isEmpty
-                      ? SizedBox()
+                      ? const SizedBox()
                       : Column(
                         children: List.generate(
                           controller.statsList.length,
@@ -1303,19 +1344,26 @@ class _LineupWidgetState extends State<LineupWidget> {
                               ),
                             ),
                             child: Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
                               children: [
-                                Text(
-                                  controller.statsList[index].playingTimePercent
-                                      .toString(),
-                                  // stats[index]['time']!,
-                                  style: const TextStyle(fontSize: 14),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    controller
+                                        .statsList[index]
+                                        .playingTimePercent
+                                        .toString(),
+                                    style: const TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
-                                Text(
-                                  controller.statsList[index].topPosition
-                                      .toString(),
-                                  // stats[index]['position']!,
-                                  style: const TextStyle(fontSize: 14),
+                                Expanded(
+                                  flex: 1,
+                                  child: Text(
+                                    controller.statsList[index].topPosition
+                                        .toString(),
+                                    style: const TextStyle(fontSize: 14),
+                                    textAlign: TextAlign.center,
+                                  ),
                                 ),
                               ],
                             ),
