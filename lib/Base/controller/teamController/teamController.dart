@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/main.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -66,6 +67,10 @@ class TeamController extends GetxController {
   // Fetch teams from the API and update the teams list
   Future<void> fetchTeams() async {
     try {
+      String? kk = await SharedPreferencesUtil.read(
+        SharedPreferencesKeysConstants.bearerToken,
+      );
+      log(kk ?? "");
       // Call the API to get the list of teams
       final response = await TeamsApi.getTeam();
       if (response.data != null && response.data!.isNotEmpty) {

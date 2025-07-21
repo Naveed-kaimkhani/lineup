@@ -7,6 +7,7 @@ import 'package:gaming_web_app/Base/controller/teamController/createTeamControll
 import 'package:gaming_web_app/Base/controller/teamController/edit_team_dialogue.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
 import 'package:gaming_web_app/Base/model/teamModel/teamModel.dart';
+import 'package:gaming_web_app/constants/SharedPreferencesKeysConstants.dart';
 import 'package:gaming_web_app/constants/app_colors.dart';
 import 'package:gaming_web_app/constants/app_text_styles.dart';
 import 'package:gaming_web_app/constants/widgets/buttons/primary_button.dart';
@@ -41,12 +42,15 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
 
     WidgetsBinding.instance.addPostFrameCallback((_) {
       controller.fetchTeams();
+     
       availableSlotsController.fetchAvailableSlots();
     });
   }
 
   @override
   Widget build(BuildContext context) {
+    
+    log(SharedPreferencesKeysConstants.bearerToken);
     return DashboardScaffold(
       userImage: 'assets/images/dummy_image.png',
       userName: 'Test User',
@@ -104,7 +108,7 @@ class _MainDashboardScreenState extends State<MainDashboardScreen> {
                                 .teamSlot
                                 .value
                                 ?.availableTeamSlotsCount;
-            
+
                         return PrimaryButton(
                           width: 300,
                           backgroundColor: AppColors.primaryColor,

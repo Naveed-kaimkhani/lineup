@@ -25,9 +25,9 @@ class LineupController extends GetxController {
   RxList<GamePlayer> updatedOutListAfterReorder = <GamePlayer>[].obs;
 
   RxList<GamePlayer> updatedPlayerListAfterReorder = <GamePlayer>[].obs;
-  // RxList<GamePlayer> playersNotOut = <GamePlayer>[].obs;
+  final fixedBattingOrder = <int, int>{}.obs;
 
-  // RxList<GamePlayer> firstNinePlayers = <GamePlayer>[].obs;
+  bool get hasFixedSlots => fixedBattingOrder.isNotEmpty;
 
   RxList<TeamPlayer> playersOut1 = <TeamPlayer>[].obs;
   RxList<TeamPlayer> firstNinePlayers1 = <TeamPlayer>[].obs;
@@ -68,6 +68,30 @@ class LineupController extends GetxController {
       playersInGame: [],
       fixedAssignments: {},
     );
+  }
+
+  /// Update the fixed batting order map for the two swapped players.
+  /// Example before: {115:1, 109:2}
+  /// After swap & reassign: {115:2, 109:1}
+  void updateFixedAfterSwap({
+    required Lineupp a,
+    required Lineupp b,
+    required Map<String, int> fixedBattingOrder,
+  }) {
+    final pidA = a.playerId;
+    final pidB = b.playerId;
+    if (pidA == null && pidB == null) return;
+
+    // Agar map mein in players ke entries pehle se nahi, to bhi set kar do.
+    if (pidA != null) {
+      fixedBattingOrder[pidA] = int.parse(a.battingOrder!);
+    }
+    if (pidB != null) {
+      fixedBattingOrder[pidB] = int.parse(b.battingOrder!);
+    }
+
+    // NOTE: Agar ye RxMap hai: (comment out if not)
+    (fixedBattingOrder as RxMap<int, int>).refresh();
   }
 
   TextEditingController getCellController({
@@ -325,14 +349,14 @@ class LineupController extends GetxController {
   Future<void> setAutoFillWithEmptyData() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
-
-      // );
+      log(gameId.toString());
+      
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
         autoFillData.value?.lineupp ?? [],
         autoFillLineups.value.playersInGame ?? [],
       );
 
-      final response = await TeamsApi.autolinupSubmitPlayesId(
+      final response = await TeamsApi.setEmptyautolinupSubmitPlayesId(
         autoFillLineups.value,
         int.parse(gameId!),
       );

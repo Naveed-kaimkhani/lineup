@@ -279,10 +279,27 @@ class TeamsApi {
     AutoFillLineups autoFillLineups,
     int gameId,
   ) async {
+    // log(gameId.toString());
     final response = await DioUtil.request<FetchAutoFillLineups>(
       loadingText: 'Submitting players...',
       endpoint: "/games/$gameId/autocomplete-lineup",
       requestBody: autoFillLineups.toJson(), // ✅ send request body
+      fromJsonT: FetchAutoFillLineups.fromJson, // ✅ parse response
+      httpRequestType: HttpRequestType.post,
+    );
+
+    return response;
+  }
+
+  static Future<BaseResponse<FetchAutoFillLineups>>
+  setEmptyautolinupSubmitPlayesId(
+    AutoFillLineups autoFillLineups,
+    int gameId,
+  ) async {
+    final response = await DioUtil.request<FetchAutoFillLineups>(
+      loadingText: 'Submitting players...',
+      endpoint: "/games/$gameId/placeholder-lineup",
+      requestBody: autoFillLineups.tooJson(), // ✅ send request body
       fromJsonT: FetchAutoFillLineups.fromJson, // ✅ parse response
       httpRequestType: HttpRequestType.post,
     );

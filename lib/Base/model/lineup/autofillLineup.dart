@@ -1,4 +1,4 @@
-import 'dart:developer';
+
 
 class AutoFillLineups {
   final List<int>? playersInGame;
@@ -30,11 +30,26 @@ class AutoFillLineups {
   }
 
   Map<String, dynamic> toJson() {
-    
+    // log(playersInGame!.first.toString());
+    // log(playersInGame.toString());
+    // log(fixedAssignments.toString());
+
     return {
       'players_in_game': playersInGame,
       'fixed_assignments': fixedAssignments,
       'lineup': lineup?.map((e) => e.toJson()).toList(),
+
+      // 'fixed_batting_order': {playersInGame!.first: 2, playersInGame![1]: 1},
+    };
+  }
+
+  Map<String, dynamic> tooJson() {
+    return {
+      'players_in_game': playersInGame,
+      'fixed_assignments': fixedAssignments,
+      'lineup': lineup?.map((e) => e.toJson()).toList(),
+
+      // 'fixed_batting_order': {playersInGame!.first: 2, playersInGame![1]: 1},
     };
   }
 }
@@ -56,6 +71,7 @@ class Lineup {
 
   Map<String, dynamic> toJson() {
     return {
+      // log(playerId.toString())
       'player_id': playerId,
       'innings': innings.map((key, value) => MapEntry(key.toString(), value)),
     };
