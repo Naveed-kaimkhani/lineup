@@ -1321,6 +1321,8 @@
 //   );
 // }
 
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gaming_web_app/Base/controller/teamController/teamController.dart';
@@ -1572,185 +1574,392 @@ class _LineupWidgetState extends State<_LineupWidget> {
     );
   }
 
+  // Widget _buildMainLineupTable() {
+  //   double tableWidth =
+  //       60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
+
+  //   return ClipRRect(
+  //     borderRadius: BorderRadius.circular(8),
+  //     child: Column(
+  //       children: [
+  //         // ✅ Scrollable header
+  //         SingleChildScrollView(
+  //           scrollDirection: Axis.horizontal,
+  //           child: Container(
+  //             width: tableWidth,
+  //             color: Colors.grey[200],
+  //             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+  //             child: Row(
+  //               children: [
+  //                 SizedBox(
+  //                   width: 60,
+  //                   child: Text(
+  //                     'Lineup',
+  //                     style: TextStyle(
+  //                       color: const Color(0xFF8B3A3A),
+  //                       fontSize: 14,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 140,
+  //                   child: Text(
+  //                     'Player Name',
+  //                     style: TextStyle(
+  //                       color: const Color(0xFF8B3A3A),
+  //                       fontSize: 14,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 SizedBox(
+  //                   width: 40,
+  //                   child: Text(
+  //                     '#',
+  //                     style: TextStyle(
+  //                       color: const Color(0xFF8B3A3A),
+  //                       fontSize: 14,
+  //                       fontWeight: FontWeight.w600,
+  //                     ),
+  //                   ),
+  //                 ),
+  //                 Row(
+  //                   children: List.generate(
+  //                     controller.gameData.value.innings ?? 0,
+  //                     (i) => SizedBox(
+  //                       width: 75,
+  //                       child: Text(
+  //                         '${i + 1}',
+  //                         textAlign: TextAlign.center,
+  //                         style: TextStyle(
+  //                           color: const Color(0xFF8B3A3A),
+  //                           fontSize: 14,
+  //                           fontWeight: FontWeight.w600,
+  //                         ),
+  //                       ),
+  //                     ),
+  //                   ),
+  //                 ),
+  //               ],
+  //             ),
+  //           ),
+  //         ),
+
+  //         const SizedBox(height: 5),
+
+  //         // ✅ Player Rows
+  //         Obx(() {
+  //           final players = controller.updatedPlayerListAfterReorder;
+  //           if (players.isEmpty) return SizedBox();
+
+  //           return SingleChildScrollView(
+  //             scrollDirection: Axis.horizontal,
+  //             child: Column(
+  //               children: List.generate(players.length, (index) {
+  //                 final player = players[index];
+
+  //                 if (controller
+  //                     .pDFMODEL
+  //                     .value
+  //                     .lineupAssignments![index]
+  //                     .isOut!) {
+  //                   return SizedBox();
+  //                 }
+
+  //                 final valuesList =
+  //                     controller
+  //                         .pDFMODEL
+  //                         .value
+  //                         .lineupAssignments![index]
+  //                         .innings
+  //                         .values;
+
+  //                 return Container(
+  //                   width: tableWidth,
+  //                   padding: const EdgeInsets.symmetric(
+  //                     vertical: 12,
+  //                     horizontal: 16,
+  //                   ),
+  //                   decoration: BoxDecoration(
+  //                     border: Border(
+  //                       bottom: BorderSide(color: Colors.grey.shade200),
+  //                     ),
+  //                     color: Colors.white,
+  //                   ),
+  //                   child: Row(
+  //                     children: [
+  //                       SizedBox(
+  //                         width: 60,
+  //                         child: Text(
+  //                           '${index + 1}',
+  //                           textAlign: TextAlign.center,
+  //                           style: const TextStyle(
+  //                             color: Color(0xFF8B3A3A),
+  //                             fontSize: 14,
+  //                             fontWeight: FontWeight.w600,
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       Padding(
+  //                         padding: const EdgeInsets.only(left: 33),
+  //                         child: SizedBox(
+  //                           width: 140,
+  //                           child: Text(
+  //                             // "${player.firstName ?? ''} ${player.lastName ?? ''}",
+  //                             "${player.fullName ?? ''} ",
+
+  //                             overflow: TextOverflow.ellipsis,
+  //                             style: const TextStyle(
+  //                               fontWeight: FontWeight.bold,
+  //                             ),
+  //                           ),
+  //                         ),
+  //                       ),
+  //                       SizedBox(
+  //                         width: 40,
+  //                         child: Text(player.jerseyNumber ?? ''),
+  //                       ),
+  //                       Row(
+  //                         children:
+  //                             valuesList.map((inningNumber) {
+  //                               return SizedBox(
+  //                                 width: 75,
+  //                                 child: Container(
+  //                                   padding: const EdgeInsets.all(8),
+  //                                   color: Colors.white,
+  //                                   child: LineupTextField(
+  //                                     readAble: true,
+  //                                     textColor: Colors.black,
+  //                                     positions: controller.teamPositioned,
+  //                                     controller: TextEditingController(
+  //                                       text: inningNumber,
+  //                                     ),
+  //                                     onChanged: (val) {},
+  //                                   ),
+  //                                 ),
+  //                               );
+  //                             }).toList(),
+  //                       ),
+  //                     ],
+  //                   ),
+  //                 );
+  //               }),
+  //             ),
+  //           );
+  //         }),
+
+  //         SizedBox(height: 20),
+  //         _buildOutSection(),
+  //       ],
+  //     ),
+  //   );
+  // }
 
   Widget _buildMainLineupTable() {
-    double tableWidth =
-        60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
+    final int inningCount = controller.gameData.value.innings ?? 9;
+
+    // Calculate exact width needed based on content
+    final double lineNumberWidth = 80;
+    final double playerNameWidth = 160;
+    final double jerseyNumberWidth = 50;
+    final double inningCellWidth = 100;
+    final double tableWidth =
+        lineNumberWidth +
+        playerNameWidth +
+        jerseyNumberWidth +
+        (inningCount * inningCellWidth);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
-      child: Column(
-        children: [
-          // ✅ Scrollable header
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              width: tableWidth,
-              color: Colors.grey[200],
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 60,
-                    child: Text(
-                      'Lineup',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 140,
-                    child: Text(
-                      'Player Name',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 40,
-                    child: Text(
-                      '#',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: List.generate(
-                      controller.gameData.value.innings ?? 0,
-                      (i) => SizedBox(
-                        width: 75,
-                        child: Text(
-                          '${i + 1}',
-                          textAlign: TextAlign.center,
-                          style: TextStyle(
-                            color: const Color(0xFF8B3A3A),
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                          ),
+      child: SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: MediaQuery.of(context).size.width, // Minimum screen width
+            maxWidth: tableWidth, // Exact content width
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              // Header Row
+              Container(
+                width: tableWidth, // Fixed width based on content
+                color: Colors.grey[200],
+                padding: const EdgeInsets.symmetric(
+                  vertical: 10,
+                  horizontal: 12,
+                ),
+                child: Row(
+                  children: [
+                    SizedBox(
+                      width: lineNumberWidth,
+                      child: Text(
+                        'Lineup',
+                        style: TextStyle(
+                          color: const Color(0xFF8B3A3A),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 5),
-
-          // ✅ Player Rows
-          Obx(() {
-            final players = controller.updatedPlayerListAfterReorder;
-            if (players.isEmpty) return SizedBox();
-
-            return SingleChildScrollView(
-              scrollDirection: Axis.horizontal,
-              child: Column(
-                children: List.generate(players.length, (index) {
-                  final player = players[index];
-
-                  if (controller
-                      .pDFMODEL
-                      .value
-                      .lineupAssignments![index]
-                      .isOut!) {
-                    return SizedBox();
-                  }
-
-                  final valuesList =
-                      controller
-                          .pDFMODEL
-                          .value
-                          .lineupAssignments![index]
-                          .innings
-                          .values;
-
-                  return Container(
-                    width: tableWidth,
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 12,
-                      horizontal: 16,
-                    ),
-                    decoration: BoxDecoration(
-                      border: Border(
-                        bottom: BorderSide(color: Colors.grey.shade200),
+                    SizedBox(
+                      width: playerNameWidth,
+                      child: Text(
+                        'Player Name',
+                        style: TextStyle(
+                          color: const Color(0xFF8B3A3A),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
                       ),
-                      color: Colors.white,
                     ),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          width: 60,
+                    SizedBox(
+                      width: jerseyNumberWidth,
+                      child: Text(
+                        '#',
+                        style: TextStyle(
+                          color: const Color(0xFF8B3A3A),
+                          fontSize: 15,
+                          fontWeight: FontWeight.w700,
+                        ),
+                      ),
+                    ),
+                    Row(
+                      children: List.generate(
+                        inningCount,
+                        (i) => SizedBox(
+                          width: inningCellWidth,
                           child: Text(
-                            '${index + 1}',
+                            '${i + 1}',
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
-                              color: Color(0xFF8B3A3A),
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
+                            style: TextStyle(
+                              color: const Color(0xFF8B3A3A),
+                              fontSize: 15,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 33),
-                          child: SizedBox(
-                            width: 140,
-                            child: Text(
-                              // "${player.firstName ?? ''} ${player.lastName ?? ''}",
-                              "${player.fullName ?? ''} ",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
 
-                              overflow: TextOverflow.ellipsis,
-                              style: const TextStyle(
-                                fontWeight: FontWeight.bold,
+              const SizedBox(height: 4),
+
+              // Player Rows
+              Obx(() {
+                final players = controller.updatedPlayerListAfterReorder;
+                if (players.isEmpty) return const SizedBox();
+
+                return SizedBox(
+                  width: tableWidth, // Fixed width based on content
+                  child: ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: players.length,
+                    itemBuilder: (context, index) {
+                      final player = players[index];
+                      final assignment =
+                          controller.pDFMODEL.value.lineupAssignments?[index];
+
+                      if (assignment?.isOut ?? false) return const SizedBox();
+
+                      final valuesList =
+                          assignment?.innings.values.toList() ??
+                          List.filled(inningCount, '');
+
+                      return Container(
+                        width: tableWidth,
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 12,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey.shade200),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: lineNumberWidth,
+                              child: Text(
+                                '${index + 1}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFF8B3A3A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
-                          ),
-                        ),
-                        SizedBox(
-                          width: 40,
-                          child: Text(player.jerseyNumber ?? ''),
-                        ),
-                        Row(
-                          children:
-                              valuesList.map((inningNumber) {
-                                return SizedBox(
-                                  width: 75,
+                            SizedBox(
+                              width: playerNameWidth,
+                              child: Padding(
+                                padding: const EdgeInsets.only(left: 4),
+                                child: Text(
+                                  player.fullName ?? '',
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: jerseyNumberWidth,
+                              child: Text(
+                                player.jerseyNumber ?? '',
+                                style: const TextStyle(fontSize: 14),
+                              ),
+                            ),
+                            Row(
+                              children: List.generate(
+                                inningCount,
+                                (inningIndex) => SizedBox(
+                                  width: inningCellWidth,
                                   child: Container(
-                                    padding: const EdgeInsets.all(8),
-                                    color: Colors.white,
+                                    padding: const EdgeInsets.all(6),
+                                    decoration: BoxDecoration(
+                                      border: Border(
+                                        left: BorderSide(
+                                          color: Colors.grey.shade100,
+                                        ),
+                                      ),
+                                    ),
                                     child: LineupTextField(
                                       readAble: true,
                                       textColor: Colors.black,
                                       positions: controller.teamPositioned,
                                       controller: TextEditingController(
-                                        text: inningNumber,
+                                        text:
+                                            valuesList.length > inningIndex
+                                                ? valuesList[inningIndex]
+                                                : '',
                                       ),
                                       onChanged: (val) {},
                                     ),
                                   ),
-                                );
-                              }).toList(),
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                  );
-                }),
-              ),
-            );
-          }),
+                      );
+                    },
+                  ),
+                );
+              }),
 
-          SizedBox(height: 20),
-          _buildOutSection(),
-        ],
+              const SizedBox(height: 12),
+              _buildOutSection(),
+            ],
+          ),
+        ),
       ),
     );
   }

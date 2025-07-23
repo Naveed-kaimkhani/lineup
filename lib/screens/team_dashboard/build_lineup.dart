@@ -1591,7 +1591,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                 controller.autoFillData.value!.lineupp![index].innings[inningNumber],
                                                                                           ),
                                                                                         ),
-                                                                                    child: LineupTextField(
+                                                                                    child: LineupTextFieldForPdf(
                                                                                       textColor:
                                                                                           controller.textColors[key] ??
                                                                                           Colors.black,
@@ -1737,7 +1737,9 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           );
                                                                                           return;
                                                                                         }
-
+                                                                                        controller.recalculatePlayerStats(
+                                                                                          index,
+                                                                                        );
                                                                                         // 🔁 Prefix autocomplete using team positions
                                                                                         final result = await filterPositionsByNamePrefix(
                                                                                           controller.teamPositioned,
@@ -1801,7 +1803,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           controller.autoFillData.refresh();
 
                                                                                           // ye change kya hyyy
-                                                                                          controller.lineupp.value = controller.autoFillData.value!.lineupp!;
+                                                                                          // controller.lineupp.value = controller.autoFillData.value!.lineupp!;
 
                                                                                           controller.recalculatePlayerStats(
                                                                                             index,
@@ -1851,7 +1853,9 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             val;
                                                                                         controller.autoFillData.refresh();
-
+                                                                                        controller.recalculatePlayerStats(
+                                                                                          index,
+                                                                                        );
                                                                                         // Optional auto-fill from team positions
                                                                                         String result = await filterPositionsByNamePrefix(
                                                                                           controller.teamPositioned,
