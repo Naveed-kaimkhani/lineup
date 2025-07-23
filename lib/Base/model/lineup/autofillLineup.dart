@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 class AutoFillLineups {
   final List<int>? playersInGame;
   Map<String, Map<String, String>>? fixedAssignments;
@@ -28,9 +30,9 @@ class AutoFillLineups {
   }
 
   Map<String, dynamic> toJson() {
-    // log(playersInGame!.first.toString());
-    // log(playersInGame.toString());
-    // log(fixedAssignments.toString());
+    log(playersInGame!.first.toString());
+    log(playersInGame.toString());
+    log(fixedAssignments.toString());
 
     return {
       'players_in_game': playersInGame,

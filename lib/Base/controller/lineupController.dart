@@ -208,7 +208,6 @@ class LineupController extends GetxController {
         final lineups = gameData.value.lineupp ?? [];
         // playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
 
-
         List<int> playersIds = [];
         statsList.clear();
         for (int i = 0; i < gameData.value.players!.length; i++) {
@@ -290,8 +289,8 @@ class LineupController extends GetxController {
   Future<void> autoFillLinupUsingPlayesId() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
+      log(gameId.toString());
 
-      // );
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
         autoFillData.value?.lineupp ?? [],
         autoFillLineups.value.playersInGame ?? [],
@@ -441,7 +440,7 @@ class LineupController extends GetxController {
     });
 
     double percentage =
-        lineupp![index].innings!.length > 0
+        lineupp[index].innings.length > 0
             ? (playedInnings / lineupp[index].innings.length) * 100
             : 0;
     String playingTimePercent = "${percentage.toStringAsFixed(0)}%";

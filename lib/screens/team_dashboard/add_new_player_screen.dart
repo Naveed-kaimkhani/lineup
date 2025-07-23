@@ -159,39 +159,6 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-  Widget _buildNavigationChips() {
-    final List<Map<String, dynamic>> keyGuides = [
-      {'label': 'Shift + ↑', 'action': 'Select Up'},
-      {'label': 'Shift + ↓', 'action': 'Select Down'},
-      {'label': 'Shift + →', 'action': 'Select Right'},
-      {'label': 'Shift + ←', 'action': 'Select Left'},
-    ];
-
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children:
-          keyGuides.map((guide) {
-            final bool isSelect = guide['label'].toString().contains('Shift');
-            return Container(
-              margin: const EdgeInsets.only(bottom: 6, left: 10),
-              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 12),
-              decoration: BoxDecoration(
-                color: isSelect ? const Color(0xFF2B4582) : Colors.white,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: Text(
-                '${guide['label']} = ${guide['action']}',
-                style: TextStyle(
-                  color: isSelect ? Colors.white : Colors.black,
-                  fontWeight: FontWeight.w500,
-                  fontSize: 12,
-                ),
-              ),
-            );
-          }).toList(),
-    );
-  }
-
   Widget _buildPositionChips() {
     final LineupController controller = Get.find<LineupController>();
 
@@ -354,9 +321,6 @@ class _LineupWidgetState extends State<LineupWidget> {
       borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
-          // Header row
-          _buildNavigationChips(),
-
           const SizedBox(height: 12),
           SingleChildScrollView(
             scrollDirection: Axis.horizontal,
@@ -626,7 +590,11 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                   children: [],
                                                                 )
                                                                 : Padding(
-                                                                  padding: const EdgeInsets.only(left:  14.0),
+                                                                  padding:
+                                                                      const EdgeInsets.only(
+                                                                        left:
+                                                                            14.0,
+                                                                      ),
                                                                   child: Column(
                                                                     mainAxisAlignment:
                                                                         MainAxisAlignment
@@ -644,14 +612,12 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                               .lineupp![index]
                                                                               .innings
                                                                               .keys;
-                                                                  
+
                                                                       return Row(
                                                                         mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .start,
+                                                                            MainAxisAlignment.start,
                                                                         crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .start,
+                                                                            CrossAxisAlignment.start,
                                                                         children:
                                                                             valuesList.map((
                                                                               inningNumber,
@@ -672,7 +638,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                     text:
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber],
                                                                                   );
-                                                                  
+
                                                                               bool
                                                                               isLable =
                                                                                   false;
@@ -692,19 +658,19 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       controller.teamPositioned,
                                                                                       controller.enerLable.value,
                                                                                     );
-                                                                  
+
                                                                                     if (result !=
                                                                                         "") {
                                                                                       isLable =
                                                                                           true;
-                                                                  
+
                                                                                       // controller.fixedAssignments!.add({});
                                                                                       controller.addFixedAssignment(
                                                                                         controller.gameData.value.players![index].id.toString(),
                                                                                         '${inningNumber}',
                                                                                         result,
                                                                                       );
-                                                                  
+
                                                                                       // });
                                                                                     }
                                                                                     // The widget lost focus, run your function here
@@ -738,46 +704,46 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                         text:
                                                                                             controller.autoFillData.value!.lineupp![index].innings[inningNumber],
                                                                                       ),
-                                                                  
+
                                                                                       focusNode:
                                                                                           focusNode,
                                                                                       isLable: filterPositionsByNameMatch(
                                                                                         controller.teamPositioned,
                                                                                         textEditingController.text,
                                                                                       ),
-                                                                  
+
                                                                                       onChanged: (
                                                                                         val,
                                                                                       ) async {
                                                                                         val =
                                                                                             val.trim().toUpperCase();
-                                                                  
+
                                                                                         if (controller.isBackspacePressed.value) {
                                                                                           // Clear lineup data
                                                                                           controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                               '';
-                                                                  
+
                                                                                           // ✅ Remove the fixed assignment
                                                                                           final playerId =
                                                                                               controller.gameData.value.players![index].id.toString();
                                                                                           controller.fixedAssignments?[playerId]?.remove(
                                                                                             '$inningNumber',
                                                                                           );
-                                                                  
+
                                                                                           // controller.autoFillData.refresh();
                                                                                           controller.isBackspacePressed.value = false;
                                                                                           return;
                                                                                         }
-                                                                  
+
                                                                                         // 🔁 If empty, just clear
                                                                                         if (val.isEmpty) {
                                                                                           controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                               '';
-                                                                  
+
                                                                                           controller.autoFillData.refresh();
                                                                                           return;
                                                                                         }
-                                                                  
+
                                                                                         // 🔁 Shortcuts
                                                                                         final shortcuts = {
                                                                                           'L':
@@ -797,7 +763,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           '3':
                                                                                               '3B',
                                                                                         };
-                                                                  
+
                                                                                         if (val.length ==
                                                                                                 1 &&
                                                                                             shortcuts.containsKey(
@@ -814,12 +780,12 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                     completed.length,
                                                                                               ),
                                                                                             );
-                                                                  
+
                                                                                             val =
                                                                                                 completed;
                                                                                           }
                                                                                         }
-                                                                  
+
                                                                                         // 🔁 Check for duplicate (ignore if OUT or empty)
                                                                                         final allLineups =
                                                                                             controller.autoFillData.value?.lineupp ??
@@ -842,7 +808,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                       e.value.innings[inningNumber]?.trim().toUpperCase(),
                                                                                                 )
                                                                                                 .toList();
-                                                                  
+
                                                                                         if (val.isNotEmpty &&
                                                                                             val !=
                                                                                                 'OUT' &&
@@ -862,13 +828,13 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           );
                                                                                           return;
                                                                                         }
-                                                                  
+
                                                                                         // ✅ Save input
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             val;
                                                                                         controller.enerLable.value = val;
                                                                                         controller.autoFillData.refresh();
-                                                                  
+
                                                                                         // 🔁 OUT: recalculate stats
                                                                                         if (val ==
                                                                                             "OUT") {
@@ -877,13 +843,13 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           );
                                                                                           return;
                                                                                         }
-                                                                  
+
                                                                                         // 🔁 Prefix autocomplete using team positions
                                                                                         final result = await filterPositionsByNamePrefix(
                                                                                           controller.teamPositioned,
                                                                                           val,
                                                                                         );
-                                                                  
+
                                                                                         if (result.isNotEmpty &&
                                                                                             result !=
                                                                                                 val) {
@@ -896,7 +862,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                   result.length,
                                                                                             ),
                                                                                           );
-                                                                  
+
                                                                                           // new
                                                                                           if (val.length ==
                                                                                                   1 &&
@@ -914,12 +880,12 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                       completed.length,
                                                                                                 ),
                                                                                               );
-                                                                  
+
                                                                                               val =
                                                                                                   completed;
                                                                                             }
                                                                                           }
-                                                                  
+
                                                                                           controller.addFixedAssignment(
                                                                                             controller.gameData.value.players![index].id.toString(),
                                                                                             '$inningNumber',
@@ -932,14 +898,14 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                       ) async {
                                                                                         val =
                                                                                             val.trim().toUpperCase(); // Normalize for consistent matching
-                                                                  
+
                                                                                         // Allow OUT always
                                                                                         if (val ==
                                                                                             "OUT") {
                                                                                           controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                               "OUT";
                                                                                           controller.autoFillData.refresh();
-                                                                  
+
                                                                                           // return;
                                                                                           // controller.againCalculateStatsandTopPositions();
                                                                                           controller.recalculatePlayerStats(
@@ -967,7 +933,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                                         e.value.innings[inningNumber]?.trim().toUpperCase(),
                                                                                                   )
                                                                                                   .toList();
-                                                                  
+
                                                                                           // ✅ Check for duplicate (excluding empty and OUT)
                                                                                           if (inningValues.contains(
                                                                                             val,
@@ -985,18 +951,18 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           }
                                                                                         }
                                                                                         // ✅ Get all values in current inning column
-                                                                  
+
                                                                                         // ✅ Save entered value
                                                                                         controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
                                                                                             val;
                                                                                         controller.autoFillData.refresh();
-                                                                  
+
                                                                                         // Optional auto-fill from team positions
                                                                                         String result = await filterPositionsByNamePrefix(
                                                                                           controller.teamPositioned,
                                                                                           controller.enerLable.value,
                                                                                         );
-                                                                  
+
                                                                                         if (result !=
                                                                                             "") {
                                                                                           controller.autoFillData.value!.lineupp![index].innings[inningNumber] =
@@ -1156,7 +1122,7 @@ class _LineupWidgetState extends State<LineupWidget> {
       borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
-          SizedBox(height: 57),
+          SizedBox(height: 5),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             color: Colors.grey[200],
@@ -1243,6 +1209,7 @@ class _LineupWidgetState extends State<LineupWidget> {
       ),
     );
   }
+
   Widget _buildActionButtons(BuildContext context) {
     return LayoutBuilder(
       builder: (context, constraints) {
