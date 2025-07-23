@@ -208,24 +208,6 @@ class LineupController extends GetxController {
         final lineups = gameData.value.lineupp ?? [];
         // playersOut.value = allPlayers.length > 9 ? allPlayers.sublist(9) : [];
 
-        // Iterate through players, then check matching lineup by index
-        // for (int i = 0; i < allPlayers.length; i++) {
-        //   final player = allPlayers[i];
-
-        //   // Safety check: ensure lineup and player lists are aligned
-        //   if (i < lineups.length) {
-        //     final isOut = lineups[i].isOut;
-
-        //     if (isOut) {
-        //       playersOut.add(player);
-        //     } else {
-        //       playersNotOut.add(player);
-        //     }
-        //   }
-        // }
-        // ✅ Force UI update
-        // playersOut.refresh();
-        // playersNotOut.refresh();
 
         List<int> playersIds = [];
         statsList.clear();
@@ -460,7 +442,7 @@ class LineupController extends GetxController {
 
     double percentage =
         lineupp![index].innings!.length > 0
-            ? (playedInnings / lineupp![index].innings.length) * 100
+            ? (playedInnings / lineupp[index].innings.length) * 100
             : 0;
     String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
 
