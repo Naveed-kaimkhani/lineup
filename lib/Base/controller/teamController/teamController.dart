@@ -67,10 +67,10 @@ class TeamController extends GetxController {
   // Fetch teams from the API and update the teams list
   Future<void> fetchTeams() async {
     try {
-      String? kk = await SharedPreferencesUtil.read(
-        SharedPreferencesKeysConstants.bearerToken,
-      );
-      log(kk ?? "");
+      // String? kk = await SharedPreferencesUtil.read(
+      //   SharedPreferencesKeysConstants.bearerToken,
+      // );
+      // log(kk ?? "");
       // Call the API to get the list of teams
       final response = await TeamsApi.getTeam();
       if (response.data != null && response.data!.isNotEmpty) {

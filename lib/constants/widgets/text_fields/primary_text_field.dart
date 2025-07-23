@@ -313,7 +313,7 @@ class LineupTextFieldForPdf extends StatelessWidget {
                 onChanged: onChanged,
                 readOnly: readAble,
                 onFieldSubmitted: onFieldSubmitted,
-
+                textAlign: TextAlign.center,
                 controller: controller,
                 obscureText: obscureText,
                 keyboardType: keyboardType,

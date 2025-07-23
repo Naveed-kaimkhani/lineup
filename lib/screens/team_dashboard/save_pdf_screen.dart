@@ -2412,65 +2412,32 @@ class _LineupWidgetState extends State<_LineupWidget> {
   //   );
   // }
 
-  //linep wala
   Widget _buildMainLineupTable() {
     double tableWidth =
-        60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
+        60 + 140 + 40 + (controller.gameData.value.innings! * 79);
 
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(8),
-      child: Column(
-        children: [
-          // ✅ Scrollable header
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Container(
-              width: tableWidth,
-              color: Colors.grey[200],
-              padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
-              child: Row(
-                children: [
-                  SizedBox(
-                    width: 60,
-                    child: Text(
-                      'Lineup',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
+    return Center(
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(8),
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: SizedBox(
+            width: tableWidth + 50, // extra padding buffer
+            child: Column(
+              children: [
+                // Header row
+                Container(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 12,
+                    horizontal: 16,
                   ),
-                  SizedBox(
-                    width: 140,
-                    child: Text(
-                      'Player Name',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  SizedBox(
-                    width: 40,
-                    child: Text(
-                      '#',
-                      style: TextStyle(
-                        color: const Color(0xFF8B3A3A),
-                        fontSize: 14,
-                        fontWeight: FontWeight.w600,
-                      ),
-                    ),
-                  ),
-                  Row(
-                    children: List.generate(
-                      controller.gameData.value.innings ?? 0,
-                      (i) => SizedBox(
-                        width: 75,
+                  color: Colors.grey[200],
+                  child: Row(
+                    children: [
+                      SizedBox(
+                        width: 60,
                         child: Text(
-                          '${i + 1}',
-                          textAlign: TextAlign.center,
+                          'Lineup',
                           style: TextStyle(
                             color: const Color(0xFF8B3A3A),
                             fontSize: 14,
@@ -2478,129 +2445,155 @@ class _LineupWidgetState extends State<_LineupWidget> {
                           ),
                         ),
                       ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-
-          const SizedBox(height: 5),
-
-          // ✅ Player Rows
-          Obx(() {
-            final players = controller.gameData.value.playersNotOut;
-            // controller.gameData.value.playersNotOut!;
-
-            if (players == null || players.isEmpty) return SizedBox();
-
-            return Column(
-              children: List.generate(players.length, (index) {
-                final player = players[index];
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 18,
-                    horizontal: 10,
-                  ),
-                  decoration: BoxDecoration(
-                    border: Border(
-                      bottom: BorderSide(color: Colors.grey.shade200),
-                    ),
-                    color: Colors.white,
-                  ),
-                  child: Row(
-                    children: [
                       SizedBox(
-                        width: 30,
+                        width: 140,
                         child: Text(
-                          '${index + 1}',
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(
-                            color: Color(0xFF8B3A3A),
+                          'Player Name',
+                          style: TextStyle(
+                            color: const Color(0xFF8B3A3A),
                             fontSize: 14,
                             fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 33),
-                        child: SizedBox(
-                          width: 140,
-                          child: Text(
-                            player.firstName ?? '',
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(fontWeight: FontWeight.bold),
+                      SizedBox(
+                        width: 40,
+                        child: Text(
+                          '#',
+                          style: TextStyle(
+                            color: const Color(0xFF8B3A3A),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
-                      SizedBox(
-                        width: 40,
-                        child: Text(player.jerseyNumber?.toString() ?? ''),
-                      ),
-
                       Row(
-                        children: List.generate(1, (i) {
-                          final valuesList =
-                              controller
-                                  .pDFMODEL
-                                  .value
-                                  .lineupAssignments![index]
-                                  .innings
-                                  .values;
-
-                          return
-                          // controller
-                          //         .pDFMODEL
-                          //         .value
-                          //         .lineupAssignments![index]
-                          //         .isOut!
-                          //     ? SizedBox()
-                          //     :
-                          Row(
-                            children:
-                                valuesList.map((inningNumber) {
-                                  TextEditingController textEditingController =
-                                      TextEditingController();
-                                  return Focus(
-                                    onFocusChange: (hasFocus) async {},
-                                    child: Container(
-                                      padding: const EdgeInsets.all(8),
-                                      color: Colors.white,
-                                      child: LineupTextField(
-                                        textColor: Colors.black,
-                                        readAble: true,
-                                        positions: controller.teamPositioned,
-                                        controller: TextEditingController(
-                                          text: inningNumber,
-                                        ),
-
-                                        isLable: filterPositionsByNameMatch(
-                                          controller.teamPositioned,
-                                          textEditingController.text,
-                                        ),
-                                        onChanged: (val) {},
-                                      ),
-                                      //   position,
-                                      //   style: const TextStyle(
-                                      //     fontSize: 16,
-                                      //     color: Colors.black87,
-                                      //   ),
-                                      // ),
-                                    ),
-                                  );
-                                }).toList(),
-                          );
-                        }),
+                        children: List.generate(
+                          controller.gameData.value.innings ?? 0,
+                          (i) => SizedBox(
+                            width: 75,
+                            child: Text(
+                              '${i + 1}',
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                color: const Color(0xFF8B3A3A),
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ),
+                        ),
                       ),
                     ],
                   ),
-                );
-              }),
-            );
-          }),
-          SizedBox(height: 20),
-          _buildOutSection(),
-        ],
+                ),
+                const SizedBox(height: 5),
+
+                // Player rows
+                Obx(() {
+                  final players = controller.gameData.value.playersNotOut;
+
+                  if (players == null || players.isEmpty) return SizedBox();
+
+                  return Column(
+                    children: List.generate(players.length, (index) {
+                      final player = players[index];
+                      return Container(
+                        padding: const EdgeInsets.symmetric(
+                          vertical: 8,
+                          horizontal: 10,
+                        ),
+                        decoration: BoxDecoration(
+                          border: Border(
+                            bottom: BorderSide(color: Colors.grey.shade200),
+                          ),
+                          color: Colors.white,
+                        ),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              width: 60,
+                              child: Text(
+                                '${index + 1}',
+                                textAlign: TextAlign.center,
+                                style: const TextStyle(
+                                  color: Color(0xFF8B3A3A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 140,
+                              child: Text(
+                                player.firstName ?? '',
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            SizedBox(
+                              width: 40,
+                              child: Text(
+                                player.jerseyNumber?.toString() ?? '',
+                              ),
+                            ),
+                            Row(
+                              children: List.generate(1, (i) {
+                                final valuesList =
+                                    controller
+                                        .pDFMODEL
+                                        .value
+                                        .lineupAssignments![index]
+                                        .innings
+                                        .values;
+
+                                return Row(
+                                  children:
+                                      valuesList.map((inningNumber) {
+                                        TextEditingController
+                                        textEditingController =
+                                            TextEditingController();
+                                        return Focus(
+                                          onFocusChange: (hasFocus) async {},
+                                          child: Container(
+                                            padding: const EdgeInsets.all(8),
+                                            color: Colors.white,
+                                            width: 75,
+                                            child: LineupTextField(
+                                              textColor: Colors.black,
+                                              readAble: true,
+                                              positions:
+                                                  controller.teamPositioned,
+                                              controller: TextEditingController(
+                                                text: inningNumber,
+                                              ),
+                                              isLable:
+                                                  filterPositionsByNameMatch(
+                                                    controller.teamPositioned,
+                                                    textEditingController.text,
+                                                  ),
+                                              onChanged: (val) {},
+                                            ),
+                                          ),
+                                        );
+                                      }).toList(),
+                                );
+                              }),
+                            ),
+                          ],
+                        ),
+                      );
+                    }),
+                  );
+                }),
+                const SizedBox(height: 20),
+                _buildOutSection(),
+              ],
+            ),
+          ),
+        ),
       ),
     );
   }
