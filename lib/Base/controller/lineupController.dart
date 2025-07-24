@@ -330,8 +330,7 @@ class LineupController extends GetxController {
   Future<void> setAutoFillWithEmptyData() async {
     try {
       String? gameId = await SharedPreferencesUtil.read('gameID');
-      // log(gameId.toString());
-
+     
       autoFillLineups.value.fixedAssignments = calculateFixedAssignments(
         autoFillData.value?.lineupp ?? [],
         autoFillLineups.value.playersInGame ?? [],
