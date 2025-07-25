@@ -2422,7 +2422,7 @@ class _LineupWidgetState extends State<_LineupWidget> {
         child: SingleChildScrollView(
           scrollDirection: Axis.horizontal,
           child: SizedBox(
-            width: tableWidth + 50, // extra padding buffer
+            width: tableWidth + 20, // extra padding buffer
             child: Column(
               children: [
                 // Header row

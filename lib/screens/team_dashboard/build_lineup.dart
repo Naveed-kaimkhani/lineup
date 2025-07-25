@@ -255,9 +255,7 @@ class _LineupWidgetState extends State<LineupWidget> {
     );
   }
 
-
-
-KeyEventResult handleArrowKeyNavigation(
+  KeyEventResult handleArrowKeyNavigation(
     RawKeyEvent event,
     int rowIndex,
     String colKey,
@@ -335,11 +333,6 @@ KeyEventResult handleArrowKeyNavigation(
     return KeyEventResult.ignored;
   }
 
-
-
-
-
-
   void _moveFocusAndSetCursorAtEnd(
     FocusNode focusNode,
     TextEditingController controller,
@@ -356,6 +349,7 @@ KeyEventResult handleArrowKeyNavigation(
       );
     });
   }
+
   void swapLineupData(int oldIndex, int newIndex) {
     final lineups = controller.autoFillData.value?.lineupp;
     if (lineups == null ||
@@ -370,7 +364,6 @@ KeyEventResult handleArrowKeyNavigation(
 
     controller.autoFillData.refresh();
   }
-
 
   Widget _buildMainLineupTable() {
     final LineupController controller = Get.find<LineupController>();
@@ -644,7 +637,10 @@ KeyEventResult handleArrowKeyNavigation(
                                                             .refresh();
                                                         controller.gameData
                                                             .refresh();
-
+                                                        controller.statsList
+                                                            .removeAt(index);
+                                                        controller.statsList
+                                                            .refresh();
                                                         // controller.gameData
                                                         //     .refresh();
                                                       } else {}
@@ -968,12 +964,19 @@ KeyEventResult handleArrowKeyNavigation(
                                                                                           controller.recalculatePlayerStats(
                                                                                             index,
                                                                                           );
+                                                                                          controller.updatePlayingTimePercentUsingNewFormula(
+                                                                                            index,
+                                                                                          );
                                                                                           return;
                                                                                         }
                                                                                         controller.recalculatePlayerStats(
                                                                                           index,
                                                                                         );
-                                                                                        // 🔁 Prefix autocomplete using team positions
+
+                                                                                        controller.updatePlayingTimePercentUsingNewFormula(
+                                                                                          index,
+                                                                                        );
+
                                                                                         final result = await filterPositionsByNamePrefix(
                                                                                           controller.teamPositioned,
                                                                                           val,

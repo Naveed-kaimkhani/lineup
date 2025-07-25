@@ -48,9 +48,7 @@ class FetchAutoFillLineups {
 
   Map<String, dynamic> toJson() {
     if (lineupp != null) {
-      for (var item in lineupp!) {
-        
-      }
+      for (var item in lineupp!) {}
     }
 
     return {
@@ -78,12 +76,15 @@ class Lineupp {
   final String? battingOrder;
   bool isOut;
   final Map<int, String> innings;
+  final PlayerStats? stats; // ✅ Add this line
+
 
   Lineupp({
     required this.playerId,
     this.battingOrder,
     this.isOut = false,
     this.innings = const {},
+    this.stats, // ✅ Add this line
   });
 
   factory Lineupp.fromJson(Map<String, dynamic>? json) {
@@ -96,6 +97,7 @@ class Lineupp {
       battingOrder: json['batting_order']?.toString(),
       isOut: json['isOut'] ?? false,
       innings: _parseInnings(json['innings']),
+      stats: PlayerStats.fromJson(json['stats']), // ✅ Parse stats
     );
   }
 
@@ -128,6 +130,65 @@ class Lineupp {
       innings: innings ?? this.innings,
     );
   }
+}
+
+class PlayerStats {
+  final double pctInningsPlayed;
+  final String topPosition;
+  final double avgBattingLoc;
+  final Map<String, int> positionCounts;
+  final double totalInningsParticipatedIn;
+  final double activeInningsPlayed;
+  final double pctInfPlayed;
+  final double pctOfPlayed;
+
+  PlayerStats({
+    required this.pctInningsPlayed,
+    required this.topPosition,
+    required this.avgBattingLoc,
+    required this.positionCounts,
+    required this.totalInningsParticipatedIn,
+    required this.activeInningsPlayed,
+    required this.pctInfPlayed,
+    required this.pctOfPlayed,
+  });
+
+  factory PlayerStats.fromJson(Map<String, dynamic>? json) {
+    if (json == null) {
+      return PlayerStats(
+        pctInningsPlayed: 0,
+        topPosition: 'OUT',
+        avgBattingLoc: 0.0,
+        positionCounts: {},
+        totalInningsParticipatedIn: 0,
+        activeInningsPlayed: 0,
+        pctInfPlayed: 0,
+        pctOfPlayed: 0,
+      );
+    }
+
+    return PlayerStats(
+      pctInningsPlayed: json['pct_innings_played'] ?? 0,
+      topPosition: json['top_position'] ?? 'OUT',
+      avgBattingLoc: (json['avg_batting_loc'] ?? 0).toDouble(),
+      positionCounts: Map<String, int>.from(json['position_counts'] ?? {}),
+      totalInningsParticipatedIn: json['total_innings_participated_in'] ?? 0,
+      activeInningsPlayed: json['active_innings_played'] ?? 0,
+      pctInfPlayed: json['pct_inf_played'] ?? 0,
+      pctOfPlayed: json['pct_of_played'] ?? 0,
+    );
+  }
+
+  Map<String, dynamic> toJson() => {
+    'pct_innings_played': pctInningsPlayed,
+    'top_position': topPosition,
+    'avg_batting_loc': avgBattingLoc,
+    'position_counts': positionCounts,
+    'total_innings_participated_in': totalInningsParticipatedIn,
+    'active_innings_played': activeInningsPlayed,
+    'pct_inf_played': pctInfPlayed,
+    'pct_of_played': pctOfPlayed,
+  };
 }
 
 enum BaseballPosition {
