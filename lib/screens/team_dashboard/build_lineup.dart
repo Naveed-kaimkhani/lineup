@@ -969,6 +969,7 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           );
                                                                                           return;
                                                                                         }
+
                                                                                         controller.recalculatePlayerStats(
                                                                                           index,
                                                                                         );
