@@ -362,7 +362,7 @@ class LineupController extends GetxController {
         //   calculateTopPositionAndPlayingTime(inning, lineupp[0].innings.length);
         // }
         initializeStatsFromApi(lineupp);
-        
+        initializePlayingTimePercentForAll();
       } else {
         SnackbarUtils.showErrorr(response.message.toString());
         // Handle the case where no teams are returned
@@ -524,7 +524,9 @@ class LineupController extends GetxController {
   void updatePlayingTimePercentUsingNewFormula(int index) {
     final stats = lineupp[index].stats;
 
-    int outFromSaved = stats?.positionCounts['OUT'] ?? 0;
+    int outFromSaved =
+        stats?.positionCounts['OUT'] ??
+        0; // first we are getting out values from saved lineup
     int outInCurrent = 0;
     int currentValidInnings = 0;
 
@@ -534,7 +536,7 @@ class LineupController extends GetxController {
       if (pos.isEmpty) return;
 
       if (pos == 'OUT') {
-        outInCurrent++;
+        outInCurrent++; // calculating out position in current lineup
       } else if (pos != 'BENCH') {
         currentValidInnings++;
       }
@@ -558,17 +560,6 @@ class LineupController extends GetxController {
 
     String playingTimePercent = "${playingPercentage.toStringAsFixed(0)}%";
 
-    // 🔍 Debug prints
-    print("=== Playing Time Calculation Debug ===");
-    print("Saved OUT innings: $outFromSaved");
-    print("Current OUT innings: $outInCurrent");
-    print("Total OUT innings: $totalOut");
-    print("Saved Valid Innings: $savedValidInnings");
-    print("Current Valid Innings: $currentValidInnings");
-    print("Total Innings: $totalInnings");
-    print("Final Playing Time % (100 - OUT%): $playingTimePercent");
-    print("=====================================");
-
     final existing = statsList[index];
 
     statsList[index] = PlayerPositionStats(
@@ -579,6 +570,102 @@ class LineupController extends GetxController {
 
     statsList.refresh();
   }
+
+  // void initializePlayingTimePercentForAll() {
+  //   for (int i = 0; i < lineupp.length; i++) {
+  //     final stats = lineupp[i].stats;
+
+  //     int outFromSaved = stats?.positionCounts['OUT'] ?? 0;
+  //     int outInCurrent = 0;
+  //     int currentValidInnings = 0;
+
+  //     int savedValidInnings = 0;
+  //     stats?.positionCounts.forEach((pos, count) {
+  //       if (pos != 'OUT' && pos != 'BENCH') {
+  //         savedValidInnings += count;
+  //       }
+  //     });
+
+  //     int totalOut = outFromSaved + outInCurrent;
+  //     int totalInnings = savedValidInnings + currentValidInnings;
+
+  //     double rawOutPercentage =
+  //         totalInnings > 0 ? (totalOut / totalInnings) * 100 : 0;
+  //     double playingPercentage = 100 - rawOutPercentage;
+
+  //     String playingTimePercent = "${playingPercentage.toStringAsFixed(0)}%";
+
+  //     final existingTopPosition = stats?.topPosition ?? 'OUT';
+  //     final existingPositionCounts = stats?.positionCounts ?? {};
+
+  //     final newStats = PlayerPositionStats(
+  //       topPosition: existingTopPosition,
+  //       playingTimePercent: playingTimePercent,
+  //       positionCounts: existingPositionCounts,
+  //     );
+
+  //     if (i < statsList.length) {
+  //       statsList[i] = newStats;
+  //     } else {
+  //       statsList.add(newStats);
+  //     }
+  //   }
+
+  //   statsList.refresh();
+  // }
+
+  void initializePlayingTimePercentForAll() {
+    for (int i = 0; i < lineupp.length; i++) {
+      final stats = lineupp[i].stats;
+
+      // ✅ Get the percent innings played directly from stats
+      double pctPlayed = stats?.pctInningsPlayed ?? 0;
+      String playingTimePercent = "${pctPlayed.toStringAsFixed(0)}%";
+
+      final existingTopPosition = stats?.topPosition ?? 'OUT';
+      final existingPositionCounts = stats?.positionCounts ?? {};
+
+      final newStats = PlayerPositionStats(
+        topPosition: existingTopPosition,
+        playingTimePercent: playingTimePercent,
+        positionCounts: existingPositionCounts,
+      );
+
+      if (i < statsList.length) {
+        statsList[i] = newStats;
+      } else {
+        statsList.add(newStats);
+      }
+    }
+
+    statsList.refresh();
+  }
+void initializePlayingTimePercentForIndex(int index) {
+  if (index < 0 || index >= lineupp.length) return;
+
+  final stats = lineupp[index].stats;
+
+  // ✅ Get the percent innings played directly from stats
+  double pctPlayed = stats?.pctInningsPlayed ?? 0;
+  String playingTimePercent = "${pctPlayed.toStringAsFixed(0)}%";
+
+  final existingTopPosition = stats?.topPosition ?? 'OUT';
+  final existingPositionCounts = stats?.positionCounts ?? {};
+
+  final newStats = PlayerPositionStats(
+    topPosition: existingTopPosition,
+    playingTimePercent: playingTimePercent,
+    positionCounts: existingPositionCounts,
+  );
+
+  if (index < statsList.length) {
+    statsList[index] = newStats;
+  } else {
+    statsList.add(newStats);
+  }
+
+  statsList.refresh();
+}
 
   Future<void> submmitLineupDataPlayesId() async {
     try {
@@ -877,27 +964,27 @@ class LineupController extends GetxController {
   //   statsList.refresh();
   // }
 
-void initializeStatsFromApi(List<Lineupp> lineupp) {
-  statsList.clear();
+  void initializeStatsFromApi(List<Lineupp> lineupp) {
+    statsList.clear();
 
-  for (int i = 0; i < lineupp.length; i++) {
-    final stats = lineupp[i].stats;
+    for (int i = 0; i < lineupp.length; i++) {
+      final stats = lineupp[i].stats;
 
-    final data = PlayerPositionStats(
-      topPosition: stats?.topPosition ?? 'OUT',
-      playingTimePercent: '', // Skip setting playing time
-      positionCounts: const {}, // You can leave this empty if not needed here
-    );
+      final data = PlayerPositionStats(
+        topPosition: stats?.topPosition ?? 'OUT',
+        playingTimePercent: '', // Skip setting playing time
+        positionCounts: const {}, // You can leave this empty if not needed here
+      );
 
-    if (i < statsList.length) {
-      statsList[i] = data;
-    } else {
-      statsList.add(data);
+      if (i < statsList.length) {
+        statsList[i] = data;
+      } else {
+        statsList.add(data);
+      }
     }
-  }
 
-  statsList.refresh();
-}
+    statsList.refresh();
+  }
 
   PlayerPositionStats calculateTopPositionAndPlayingTime(
     int index,

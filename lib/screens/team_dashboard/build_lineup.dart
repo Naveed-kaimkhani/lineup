@@ -366,6 +366,12 @@ class _LineupWidgetState extends State<LineupWidget> {
   }
 
   Widget _buildMainLineupTable() {
+    const validPositions = [
+      'P', 'C', '1B', '2B', '3B', 'SS',
+      'LF', 'CF', 'RF', 'OF', // optional: include outfield shorthand
+      'DH', 'PH', 'PR', // optional: designated hitter etc.
+    ];
+
     final LineupController controller = Get.find<LineupController>();
 
     int i = 1;
@@ -433,15 +439,18 @@ class _LineupWidgetState extends State<LineupWidget> {
                           controller.gameData.value.innings!,
 
                           // controller.gameData.value.!,
-                          (i) => SizedBox(
-                            width: 75,
-                            child: Text(
-                              '${i + 1}',
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: const Color(0xFF8B3A3A),
-                                fontSize: 14,
-                                fontWeight: FontWeight.w600,
+                          (i) => Padding(
+                            padding: const EdgeInsets.only(left: 3),
+                            child: SizedBox(
+                              width: 75,
+                              child: Text(
+                                '${i + 1}',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  color: const Color(0xFF8B3A3A),
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
                               ),
                             ),
                           ),
@@ -864,6 +873,38 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                           controller.fixedAssignments?[playerId]?.remove(
                                                                                             '$inningNumber',
                                                                                           );
+                                                                                          controller.autoFillData.refresh(); // 🔁 Refresh lineup to ensure data is in sync
+                                                                                          controller.lineupp[index].innings[inningNumber] =
+                                                                                              '';
+                                                                                          controller.lineupp.refresh(); // 🔁 Refresh lineup to ensure data is in sync
+                                                                                          final allEmpty = controller.lineupp[index].innings.values.every(
+                                                                                            (
+                                                                                              value,
+                                                                                            ) =>
+                                                                                                value.trim().isEmpty,
+                                                                                          );
+
+                                                                                          if (allEmpty) {
+                                                                                            controller.initializePlayingTimePercentForIndex(
+                                                                                              index,
+                                                                                            );
+                                                                                            controller.lineupp.refresh();
+                                                                                            return;
+                                                                                          }
+
+                                                                                          controller.recalculatePlayerStats(
+                                                                                            index,
+                                                                                          );
+
+                                                                                          controller.updatePlayingTimePercentUsingNewFormula(
+                                                                                            index,
+                                                                                          );
+
+                                                                                          // initializePlayingTimePercentForIndex
+                                                                                          // controller.autoFillData.refresh(); // 🔁 Refresh lineup to ensure data is in sync
+                                                                                          // controller.lineupp.refresh(); // 🔁 Refresh lineup to ensure data is in sync
+
+                                                                                          // controller.autoFillData.refresh(); // 🔁 Refresh lineup to ensure data is in sync
 
                                                                                           // controller.autoFillData.refresh();
                                                                                           controller.isBackspacePressed.value = false;
@@ -958,12 +999,17 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                                                             val;
                                                                                         controller.enerLable.value = val;
                                                                                         controller.autoFillData.refresh();
-
+                                                                                        if (!validPositions.contains(
+                                                                                          val,
+                                                                                        )) {
+                                                                                          return;
+                                                                                        }
                                                                                         if (val ==
                                                                                             "OUT") {
                                                                                           controller.recalculatePlayerStats(
                                                                                             index,
                                                                                           );
+
                                                                                           controller.updatePlayingTimePercentUsingNewFormula(
                                                                                             index,
                                                                                           );
@@ -1178,7 +1224,7 @@ class _LineupWidgetState extends State<LineupWidget> {
       borderRadius: BorderRadius.circular(8),
       child: Column(
         children: [
-          SizedBox(height: 5),
+          SizedBox(height: 9),
           Container(
             padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
             color: Colors.grey[200],
