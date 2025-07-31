@@ -369,7 +369,7 @@ class _LineupWidgetState extends State<LineupWidget> {
     const validPositions = [
       'P', 'C', '1B', '2B', '3B', 'SS',
       'LF', 'CF', 'RF', 'OF', // optional: include outfield shorthand
-      'DH', 'PH', 'PR', // optional: designated hitter etc.
+      'DH', 'PH', 'PR', 'OUT', // optional: designated hitter etc.
     ];
 
     final LineupController controller = Get.find<LineupController>();
@@ -377,7 +377,7 @@ class _LineupWidgetState extends State<LineupWidget> {
     int i = 1;
 
     double tableWidth =
-        60 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
+        95 + 140 + 40 + 70 + (controller.gameData.value.innings! * 79);
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(8),
@@ -440,11 +440,11 @@ class _LineupWidgetState extends State<LineupWidget> {
 
                           // controller.gameData.value.!,
                           (i) => Padding(
-                            padding: const EdgeInsets.only(left: 3),
+                            padding: const EdgeInsets.only(left: 5),
                             child: SizedBox(
                               width: 75,
                               child: Text(
-                                '${i + 1}',
+                                '  ${i + 1}',
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   color: const Color(0xFF8B3A3A),
@@ -585,19 +585,26 @@ class _LineupWidgetState extends State<LineupWidget> {
                                                       ),
                                                     ),
                                                   ),
-                                                  SizedBox(
-                                                    width: 140,
-                                                    child: Text(
-                                                      // "${controller.firstNinePlayers1[index].firstName} ${controller.firstNinePlayers1[index].lastName}",
-                                                      "${controller.gameData.value.players![index].firstName} ${controller.gameData.value.players![index].lastName}",
+                                                  Padding(
+                                                    padding:
+                                                        const EdgeInsets.only(
+                                                          left: 12.0,
+                                                        ),
+                                                    child: SizedBox(
+                                                      width: 140,
+                                                      child: Text(
+                                                        // "${controller.firstNinePlayers1[index].firstName} ${controller.firstNinePlayers1[index].lastName}",
+                                                        "${controller.gameData.value.players![index].firstName} ${controller.gameData.value.players![index].lastName}",
 
-                                                      style: const TextStyle(
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                        fontSize: 14,
+                                                        style: const TextStyle(
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                          fontSize: 14,
+                                                        ),
+                                                        overflow:
+                                                            TextOverflow
+                                                                .ellipsis,
                                                       ),
-                                                      overflow:
-                                                          TextOverflow.ellipsis,
                                                     ),
                                                   ),
                                                   SizedBox(

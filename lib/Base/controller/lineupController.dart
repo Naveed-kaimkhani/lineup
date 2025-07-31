@@ -533,45 +533,52 @@ class LineupController extends GetxController {
     statsList.refresh();
   }
 
-
   void updatePlayingTimePercentUsingNewFormula(int index) {
     final stats = lineupp[index].stats;
 
-    int outFromSaved =
-        stats?.positionCounts['OUT'] ??
-        0; // first we are getting out values from saved lineup
-    int outInCurrent = 0;
-    int currentValidInnings = 0;
+    // Backend values (cast to int)
+    int activeInningsFromSaved = (stats?.activeInningsPlayed ?? 0).toInt();
+    int totalInningsFromSaved =
+        (stats?.totalInningsParticipatedIn ?? 0).toInt();
+
+    // print(
+    //   "🧮 Backend -> Active: $activeInningsFromSaved, Total: $totalInningsFromSaved",
+    // );
+
+    // New data tracking
+    int newActiveInnings = 0;
+    int newTotalInnings = 0;
 
     lineupp[index].innings.forEach((inning, position) {
       final pos = position.trim().toUpperCase();
-
-      if (pos.isEmpty) return;
+      // print("➡️ Inning $inning -> Position: '$pos'");
 
       if (pos == 'OUT') {
-        outInCurrent++; // calculating out position in current lineup
-      } else if (pos != 'BENCH') {
-        currentValidInnings++;
+        newTotalInnings++;
+        // print("⚪ Counted as OUT inning (TotalInnings += 1)");
+      } else if (pos.isNotEmpty && pos != 'BENCH') {
+        newTotalInnings++;
+        newActiveInnings++;
+        // print(
+        //   "✅ Counted as active inning (TotalInnings += 1, ActiveInnings += 1)",
+        // );
+      } else {
+        // print("⛔ Ignored (Empty or BENCH)");
       }
     });
 
-    // Calculate total saved innings (excluding OUT)
-    int savedValidInnings = 0;
-    stats?.positionCounts.forEach((pos, count) {
-      if (pos != 'OUT' && pos != 'BENCH') {
-        savedValidInnings += count;
-      }
-    });
+    // print("🆕 New -> Active: $newActiveInnings, Total: $newTotalInnings");
 
-    int totalOut = outFromSaved + outInCurrent;
-    int totalInnings = savedValidInnings + currentValidInnings;
+    int totalActive = activeInningsFromSaved + newActiveInnings;
+    int totalInnings = totalInningsFromSaved + newTotalInnings;
 
-    // Original percentage was OUT%, now we want PLAYING%
-    double rawOutPercentage =
-        totalInnings > 0 ? (totalOut / totalInnings) * 100 : 0;
-    double playingPercentage = 100 - rawOutPercentage;
+    // print("📊 Final -> Active: $totalActive, Total: $totalInnings");
 
-    String playingTimePercent = "${playingPercentage.toStringAsFixed(0)}%";
+    double percentage =
+        totalInnings > 0 ? (totalActive / totalInnings) * 100 : 0;
+    String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
+
+    // print("🎯 Calculated Playing Time: $playingTimePercent");
 
     final existing = statsList[index];
 
@@ -584,6 +591,50 @@ class LineupController extends GetxController {
     statsList.refresh();
   }
 
+  // void updatePlayingTimePercentUsingNewFormula(int index) {
+  //   final stats = lineupp[index].stats;
+
+  //   // Backend values (cast to int)
+  //   int activeInningsFromSaved = (stats?.activeInningsPlayed ?? 0).toInt();
+  //   int totalInningsFromSaved =
+  //       (stats?.totalInningsParticipatedIn ?? 0).toInt();
+
+  //   // New data tracking
+  //   int newActiveInnings = 0;
+  //   int newTotalInnings = 0;
+
+  //   lineupp[index].innings.forEach((inning, position) {
+  //     final pos = position.trim().toUpperCase();
+
+  //     // Count all innings including OUT (as long as non-empty)
+  //     if (pos == 'OUT') {
+  //       newTotalInnings++;
+
+  //       // Count active only if not OUT or BENCH
+  //       if (pos.isNotEmpty && pos != 'BENCH') {
+  //         newTotalInnings++;
+  //         newActiveInnings++;
+  //       }
+  //     }
+  //   });
+
+  //   int totalActive = activeInningsFromSaved + newActiveInnings;
+  //   int totalInnings = totalInningsFromSaved + newTotalInnings;
+
+  //   double percentage =
+  //       totalInnings > 0 ? (totalActive / totalInnings) * 100 : 0;
+  //   String playingTimePercent = "${percentage.toStringAsFixed(0)}%";
+
+  //   final existing = statsList[index];
+
+  //   statsList[index] = PlayerPositionStats(
+  //     topPosition: existing.topPosition,
+  //     playingTimePercent: playingTimePercent,
+  //     positionCounts: existing.positionCounts,
+  //   );
+
+  //   statsList.refresh();
+  // }
 
   void initializePlayingTimePercentForAll() {
     for (int i = 0; i < lineupp.length; i++) {
